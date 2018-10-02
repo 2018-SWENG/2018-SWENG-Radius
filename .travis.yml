@@ -1,13 +1,5 @@
+sudo: false
 language: android
-
-install:
-  - echo y | android update sdk -u -a -t tools
-  - echo y | android update sdk -u -a -t platform-tools
-  - echo y | android update sdk -u -a -t build-tools-27.0.3
-  - echo y | android update sdk -u -a -t android-28
-  - echo y | android update sdk -u -a -t extra-google-m2repository
-  - echo y | android update sdk -u -a -t extra-android-m2repository
-
 android:
   components:
     # The BuildTools version used by your project
@@ -18,19 +10,11 @@ android:
     - android-22
     # The system image, to run an emulator during the tests
     - sys-img-armeabi-v7a-android-22
-
-before_install:
-  - yes | sdkmanager "platforms;android-28"
 before_script:
   # Emulator Management: Create, Start and Wait
-  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
-  - emulator -avd test -no-audio -no-window &
+  - "echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a"
+  - "emulator -avd test -no-audio -no-window &"
   - android-wait-for-emulator
-  - adb shell input keyevent 82
-
-licenses:
-  - android-sdk-preview-license-.+
-  - android-sdk-license-.+
-  - google-gdk-license-.+
+  - "adb shell input keyevent 82"
 
 
