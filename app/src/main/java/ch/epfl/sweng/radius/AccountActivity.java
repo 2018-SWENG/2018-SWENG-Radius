@@ -1,7 +1,7 @@
 package ch.epfl.sweng.radius;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 public class AccountActivity extends AppCompatActivity {
 

@@ -19,5 +19,6 @@ public class MainActivityTest {
         // perform(closeSoftKeyboard());
         //onView(withId(R.id.mainButton)).perform(click());
         // onView(withId(R.id.greetingMessage)).check(matches(withText("Hello from unit test!")));
+
     }
 }
