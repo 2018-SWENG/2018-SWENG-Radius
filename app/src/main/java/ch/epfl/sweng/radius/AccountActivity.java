@@ -16,8 +16,9 @@ public class AccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_account);
         loadFragment(new HomeFragment());
 
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.navigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView
+                                                            .OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Fragment fragment;
@@ -38,6 +39,8 @@ public class AccountActivity extends AppCompatActivity {
                         fragment = new ProfileFragment();
                         loadFragment(fragment);
                         break;
+                    default:
+                        System.out.println("Unknown item id selected: " + item.getItemId());
                 }
                 return true;
             }
