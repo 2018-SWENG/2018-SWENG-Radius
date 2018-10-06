@@ -1,4 +1,5 @@
 <resources>
+    <string name="google_maps_API_key">AIzaSyCLn0wqVq9M3pH4ce918J0T5iHEZvK-ta4</string> <!-- API Key for Google Maps-->
     <string name="app_name">Radius</string>
 
     <!-- TODO: Remove or change this placeholder text -->
