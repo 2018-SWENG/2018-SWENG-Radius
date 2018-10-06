@@ -2,6 +2,7 @@ package ch.epfl.sweng.radius;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,27 +23,37 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.ArrayList;
 
-public class HomeFragment extends Fragment implements OnMapReadyCallback {
+
+public class HomeFragment extends Fragment implements OnMapReadyCallback, RadiusCircle {
 
     //constants
-    private static final String TAG = "MapActivity";
+    private static final String TAG = "HomeFragment";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
+    private static final double DEFAULT_RADIUS = 1500;
 
     //properties
     private boolean mLocationPermissionGranted = false;
+    private MapView mapView;
     private GoogleMap mMap;
+    private Location currentLocation;
+    private CircleOptions radiusOptions;
+    private Circle radiusCircle;
     private FusedLocationProviderClient mFusedLocationClient;
 
-    private MapView mapView;
-    //private GoogleMap googleMap;
+    //testing
+    private ArrayList<User> users;
 
     /**
      * Use this factory method to create a new instance of
@@ -63,7 +74,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        users = new ArrayList<User>();
+        users.add(new User(46.518532, 6.556455));
+        users.add(new User(46.519331, 6.580971));
+        users.add(new User(48.854457, 2.348560));
+        //radiusCircle = new Circle( 5);
         getLocationPermission();
     }
     @Override
@@ -94,6 +109,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 return;
             }
             mMap.setMyLocationEnabled(true);
+            //markNearbyUsers(); // I don't know if this should go here
         }
     }
 
@@ -110,11 +126,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     public void onComplete(@NonNull Task task) {
                         if ( task.isSuccessful()) {
                             Log.d( TAG, "onComplete: found location.");
-                            Location currentLocation = (Location) task.getResult();
+                            currentLocation = (Location) task.getResult();
 
                             System.out.println( currentLocation.getLatitude() + " " + currentLocation.getLongitude());
 
                             LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(), currentLocation.getLongitude());
+                            radiusOptions = new CircleOptions().center(currentCoordinates).strokeColor(Color.RED).fillColor(Color.parseColor("#22FF0000")).radius(DEFAULT_RADIUS);
+                            radiusCircle = mMap.addCircle(radiusOptions);
+                            markNearbyUsers();
                             moveCamera( currentCoordinates, DEFAULT_ZOOM);
                         }
                         else {
@@ -135,13 +154,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom( latLng, zoom));
     }
 
-    /*private void initMap() {
-        Log.d( TAG, "initMap: initializing map");
-        SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map);
-
-        mapFragment.getMapAsync( this);
-    }*/
-
     private void getLocationPermission() {
         Log.d( TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -149,7 +161,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         if ( ContextCompat.checkSelfPermission(getContext(), FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             if ( ContextCompat.checkSelfPermission( getContext(), COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionGranted = true;
-                //initMap();
             }
             else {
                 ActivityCompat.requestPermissions( getActivity(), permissions, LOCATION_PERMISSION_REQUEST_CODE);
@@ -176,12 +187,59 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     }
                     Log.d( TAG, "onRequestPermissionResult: permission granted.");
                     mLocationPermissionGranted = true;
-
-                    //initialize our map
-                    //initMap();
                 }
             }
         }
+    }
+
+    public double getRadius() {
+        return radiusCircle.getRadius();
+    }
+
+    public double getLatitude() {
+        return currentLocation.getLatitude();
+    }
+
+    public double getLongtitude() {
+        return currentLocation.getLongitude();
+    }
+
+    public void setRadius(double radius) {
+        radiusCircle.setRadius(radius);
+    }
+
+    public void setLatitude(double latitude) {
+        currentLocation.setLatitude(latitude);
+    }
+
+    public void setLongtitude(double longtitude) {
+        currentLocation.setLongitude(longtitude);
+    }
+
+    public boolean contains(double p2latitude, double p2longtitude) {
+        double distance = findDistance(p2latitude, p2longtitude);
+
+        if ( radiusCircle.getRadius() >= distance) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public double findDistance(double p2latitude, double p2longtitude) {
+        float[] distance = new float[3];
+        Location.distanceBetween( currentLocation.getLatitude(), currentLocation.getLongitude(), p2latitude, p2longtitude, distance);
+
+        return distance[0];
+    }
+
+    public void markNearbyUsers() {
+        for (int i = 0; i < users.size(); i++) {
+            if ( contains(users.get(i).getLocation().latitude, users.get(i).getLocation().longitude) ) {
+                mMap.addMarker(new MarkerOptions().position(users.get(i).getLocation()).title(users.get(i).getUserName() + ": "  + users.get(i).getStatus()));
+            }
+        }
+
     }
 
 }
