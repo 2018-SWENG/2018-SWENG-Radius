@@ -12,11 +12,11 @@
         android:paddingBottom="10dp"
         android:text="john doe"
         android:textAlignment="center"
-        android:textSize="35dp"
-        android:textStyle="bold" />
+        android:textSize="20dp"
+        android:textStyle="italic" />
 
     <ImageView
         android:id="@+id/profilePic"
-        android:layout_width="150dp"
-        android:layout_height="150dp" />
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
 </android.support.constraint.ConstraintLayout>

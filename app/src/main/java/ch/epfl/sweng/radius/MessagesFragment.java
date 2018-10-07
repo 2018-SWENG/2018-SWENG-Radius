@@ -1,10 +1,12 @@
 package ch.epfl.sweng.radius;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -39,8 +41,11 @@ public class MessagesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_messages, container, false);
+
+        //THIS CAUSES A CRASH IN THE MESSAGES FRAGMENT
         chatList = new ArrayList<>();
-        listView = getView().findViewById(R.id.listView);
+        listView = view.findViewById(R.id.listView);
 
         chatList.add(new ChatListItem(R.drawable.image1, "john doe"));
         chatList.add(new ChatListItem(R.drawable.image2, "jane doe"));
@@ -50,7 +55,7 @@ public class MessagesFragment extends Fragment {
 
         CustomAdapter adapter = new CustomAdapter(getActivity(), R.layout.chat_list_view, chatList);
         listView.setAdapter(adapter);
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_messages, container, false);
+
+        return view;
     }
 }

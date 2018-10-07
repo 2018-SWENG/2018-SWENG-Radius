@@ -1,6 +1,7 @@
 package ch.epfl.sweng.radius;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+
+import static android.support.v4.content.ContextCompat.startActivity;
 
 public class CustomAdapter extends ArrayAdapter<ChatListItem> {
 
@@ -45,7 +48,8 @@ public class CustomAdapter extends ArrayAdapter<ChatListItem> {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //GO TO PROFILE
+                Intent i = new Intent(context, BrowseProfilesActivity.class);
+                context.startActivity(i);
             }
         });
 
