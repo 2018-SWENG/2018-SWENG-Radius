@@ -12,6 +12,11 @@ public class User {
     private LatLng location;
 
     //constructor
+    /**
+     * Dummy class to represent users
+     * @param latitude - double - initial latitude of the user
+     * @param longtitude - double - initial longtitude of the user
+     * */
     public User(double latitude, double longtitude) {
         totalNoOfUsers++;
         userName = "user" + totalNoOfUsers;
