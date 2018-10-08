@@ -29,8 +29,8 @@ public class CustomAdapter extends ArrayAdapter<ChatListItem> {
      * @param context Parameter 1.
      * @param resource Parameter 2.
      * @param chatList Parameter 3.
-     * @return A new instance of CustomAdapter.
      */
+
     public CustomAdapter(Context context, int resource, List<ChatListItem> chatList) {
         super(context, resource, chatList);
         this.context = context;
