@@ -12,6 +12,7 @@ public class ChatListItem {
     public int getImage() {
         return image;
     }
+
     public String getName() {
         return name;
     }

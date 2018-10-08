@@ -12,6 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.List;
 
+/**
+ * CustomAdapter class that extends the ArrayAdapter class
+ * to work with the custom chat list view layout.
+ *
+ * @author  Pinar Ayaz
+ */
 public class CustomAdapter extends ArrayAdapter<ChatListItem> {
 
 
@@ -48,10 +54,10 @@ public class CustomAdapter extends ArrayAdapter<ChatListItem> {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(context, BrowseProfilesActivity.class);
-                i.putExtra("Clicked Picture", clickedPic);
-                i.putExtra("Clicked Name", clickedName);
-                context.startActivity(i);
+                Intent intent = new Intent(context, BrowseProfilesActivity.class);
+                intent.putExtra("Clicked Picture", clickedPic);
+                intent.putExtra("Clicked Name", clickedName);
+                context.startActivity(intent);
             }
         });
 
