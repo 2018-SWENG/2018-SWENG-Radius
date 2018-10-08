@@ -229,7 +229,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     }
 
     /**
-     * Checks whether the other users in the list of users are within the specified distance of the user.
+     * Checks if the other users in the list of users are within the specified distance of the user.
      * @param p2latitude - double - latitude of the user that is being checked
      * @param p2longtitude - double - longtitude of the user that is being checked
      * */
@@ -273,7 +273,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     /**
      * Adds a user.
      * @param latitude - double - latitude of the new user that is being added to the list of users
-     * @param longtitude-double- longtitude of the new user that is being added to the list of users
+     * @param longtitude -double-longtitude of the new user that is being added to the list of users
      * */
     public void addUser(double latitude, double longtitude) {
         if ( latitude >= -90 && latitude <= 90 && longtitude >= -180 && longtitude <= 180) {
@@ -281,6 +281,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         }
     }
 
+    /**
+     * Deletes user.
+     * @param index - int - index of the user
+     * */
     public void deleteUser(int index) {
         if ( index < users.size() && index >= 0) {
             users.remove(index);
