@@ -2,34 +2,32 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SettingsFragment"
-    android:id="@+id/constraintLayout">
+    tools:layout_editor_absoluteY="81dp">
 
     <!-- TODO: Update blank fragment layout -->
+
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings"
+        android:text="@string/settings"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:layout_conversion_absoluteHeight="0dp"
-        tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="0dp"
         tools:layout_conversion_absoluteWidth="0dp" />
 
     <Button
         android:id="@+id/logOutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="296dp"
-        android:layout_marginEnd="94dp"
-        android:layout_marginStart="94dp"
         android:layout_marginTop="167dp"
-        android:text="Log Out of My Account"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/log_out_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

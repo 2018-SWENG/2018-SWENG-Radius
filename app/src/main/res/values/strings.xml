@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Radius</string>
-
+    <string name="settings">Settings</string>
+    <string name="log_out_button">Log Out of My Account</string>
+    </resources>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
