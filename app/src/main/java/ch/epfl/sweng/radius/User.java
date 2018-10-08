@@ -13,7 +13,7 @@ public class User {
 
     //constructor
     /**
-     * Dummy class to represent users
+     * Dummy class to represent users.
      * @param latitude - double - initial latitude of the user
      * @param longtitude - double - initial longtitude of the user
      * */

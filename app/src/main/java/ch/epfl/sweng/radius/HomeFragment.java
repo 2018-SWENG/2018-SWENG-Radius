@@ -88,10 +88,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         users.add(new User(48.854457, 2.348560));
         getLocationPermission();
     }
+    
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater infltr, ViewGroup containr, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return infltr.inflate(R.layout.fragment_home, containr, false);
     }
 
     @Override
@@ -227,7 +228,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     }
 
     /**
-     * Checks whether the other users in the list of users are within the specified distance of the user
+     * Checks whether the other users in the list of users are within the specified distance of the user.
      * @param p2latitude - double - latitude of the user that is being checked
      * @param p2longtitude - double - longtitude of the user that is being checked
      * */
@@ -242,9 +243,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     }
 
     /**
+     * Finds the distance between two users.
      * @param p2latitude - double - latitude of the second location
      * @param p2longtitude - double - longtitude of the second location
-     * @return distance - double - the distance between the current location and the a second location
+     * @return distance-double- the distance between the current location and the a second location
      * */
     public double findDistance(double p2latitude, double p2longtitude) {
         float[] distance = new float[3];
@@ -254,20 +256,23 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     }
 
     /**
-     * Marks the other users that are within the distance specified by the users
+     * Marks the other users that are within the distance specified by the users.
      * */
     public void markNearbyUsers() {
         for (int i = 0; i < users.size(); i++) {
             if ( contains(users.get(i).getLocation().latitude, users.get(i).getLocation().longitude) ) {
-                mobileMap.addMarker(new MarkerOptions().position(users.get(i).getLocation()).title(users.get(i).getUserName() + ": "  + users.get(i).getStatus()));
+                String status = users.get(i).getStatus();
+                String userName = users.get(i).getUserName();
+                mobileMap.addMarker(new MarkerOptions().position(users.get(i).getLocation()).title(userName + ": "  + status));
             }
         }
 
     }
 
     /**
+     * Adds a user.
      * @param latitude - double - latitude of the new user that is being added to the list of users
-     * @param longtitude - double - longtitude of the new user that is being added to the list of users
+     * @param longtitude-double- longtitude of the new user that is being added to the list of users
      * */
     public void addUser(double latitude, double longtitude) {
         if ( latitude >= -90 && latitude <= 90 && longtitude >= -180 && longtitude <= 180) {
