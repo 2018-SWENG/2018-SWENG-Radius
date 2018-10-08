@@ -37,7 +37,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     private static final String TAG = "HomeFragment";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+    private static final int LOC_PERMIT_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
     private static final double DEFAULT_RADIUS = 1500;
 
@@ -88,7 +88,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         users.add(new User(48.854457, 2.348560));
         getLocationPermission();
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater infltr, ViewGroup containr, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -170,11 +170,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
                 mblLocationPermissionGranted = true;
             }
             else {
-                ActivityCompat.requestPermissions( getActivity(), permissions, LOCATION_PERMISSION_REQUEST_CODE);
+                ActivityCompat.requestPermissions( getActivity(), permissions, LOC_PERMIT_REQUEST_CODE);
             }
         }
         else {
-            ActivityCompat.requestPermissions( getActivity(), permissions, LOCATION_PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions( getActivity(), permissions, LOC_PERMIT_REQUEST_CODE);
         }
 
         if (mblLocationPermissionGranted) {
