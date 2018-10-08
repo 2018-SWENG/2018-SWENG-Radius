@@ -42,9 +42,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     private static final double DEFAULT_RADIUS = 1500;
 
     //properties
+    private static GoogleMap mobileMap;
     private boolean mblLocationPermissionGranted;
     private MapView mapView;
-    private GoogleMap mobileMap;
     private Location currentLocation;
     private CircleOptions radiusOptions;
     private Circle radiusCircle;
