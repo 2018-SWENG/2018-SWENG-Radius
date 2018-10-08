@@ -156,7 +156,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     }
 
     private void moveCamera(LatLng latLng, float zoom) {
-        Log.d( TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + " long: " + latLng.longitude);
+        //Log.d( TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + " long: " + latLng.longitude);
         mobileMap.moveCamera(CameraUpdateFactory.newLatLngZoom( latLng, zoom));
     }
 
