@@ -164,7 +164,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         Log.d( TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
-        //if we have permission to access location set location permission to true else ask for permissions
+        //if we have permission to access location set
+        // location permission to true else ask for permissions
         if ( ContextCompat.checkSelfPermission(getContext(), FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             if ( ContextCompat.checkSelfPermission( getContext(), COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mblLocationPermissionGranted = true;
