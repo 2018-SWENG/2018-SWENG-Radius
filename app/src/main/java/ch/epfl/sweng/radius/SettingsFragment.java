@@ -53,7 +53,7 @@ public class SettingsFragment extends Fragment {
         logOutButton = getView().findViewById(R.id.logOutButton);
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 logOut();
             }
         });
@@ -62,8 +62,8 @@ public class SettingsFragment extends Fragment {
     private void logOut() {
         if (MainActivity.googleSignInClient != null) {
             FirebaseAuth.getInstance().signOut();
-            MainActivity.googleSignInClient.signOut().
-                    addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+            MainActivity.googleSignInClient.signOut()
+                    .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             revokeAccess();
@@ -73,8 +73,8 @@ public class SettingsFragment extends Fragment {
     }
 
     private void revokeAccess() {
-        MainActivity.googleSignInClient.revokeAccess().
-                addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+        MainActivity.googleSignInClient.revokeAccess()
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         startActivity(new Intent(getActivity(), MainActivity.class));
