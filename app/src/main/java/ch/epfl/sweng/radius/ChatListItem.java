@@ -1,8 +1,8 @@
 package ch.epfl.sweng.radius;
 
 public class ChatListItem {
-    int image;
-    String name;
+    private int image;
+    private String name;
 
     public ChatListItem(int image, String name){
         this.image = image;
@@ -12,7 +12,6 @@ public class ChatListItem {
     public int getImage() {
         return image;
     }
-
     public String getName() {
         return name;
     }

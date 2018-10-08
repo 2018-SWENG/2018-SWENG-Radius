@@ -10,10 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.List;
-
-import static android.support.v4.content.ContextCompat.startActivity;
 
 public class CustomAdapter extends ArrayAdapter<ChatListItem> {
 
@@ -40,13 +37,13 @@ public class CustomAdapter extends ArrayAdapter<ChatListItem> {
         ImageView imageView = view.findViewById(R.id.profilePic);
         TextView textViewName = view.findViewById(R.id.username);
 
-        ChatListItem c = chatList.get(position);
+        ChatListItem chatListItem = chatList.get(position);
 
-        imageView.setImageDrawable(context.getResources().getDrawable(c.getImage()));
-        textViewName.setText(c.getName());
+        imageView.setImageDrawable(context.getResources().getDrawable(chatListItem.getImage()));
+        textViewName.setText(chatListItem.getName());
 
-        final int clickedPic = c.getImage();
-        final String clickedName = c.getName();
+        final int clickedPic = chatListItem.getImage();
+        final String clickedName = chatListItem.getName();
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
