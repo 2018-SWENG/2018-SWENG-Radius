@@ -19,12 +19,18 @@ import java.util.List;
  * @author  Pinar Ayaz
  */
 public class CustomAdapter extends ArrayAdapter<ChatListItem> {
-
-
     List<ChatListItem> chatList;
     Context context;
     int resource;
-
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param context Parameter 1.
+     * @param resource Parameter 2.
+     * @param chatList Parameter 3.
+     * @return A new instance of CustomAdapter.
+     */
     public CustomAdapter(Context context, int resource, List<ChatListItem> chatList) {
         super(context, resource, chatList);
         this.context = context;
