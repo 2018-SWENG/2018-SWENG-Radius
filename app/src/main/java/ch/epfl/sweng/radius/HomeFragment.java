@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     private static final double DEFAULT_RADIUS = 1500;
 
     //properties
-    private boolean mLocationPermissionGranted = false;
+    private boolean mLocationPermissionGranted;
     private MapView mapView;
     private GoogleMap mMap;
     private Location currentLocation;
@@ -54,6 +54,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
 
     //testing
     private ArrayList<User> users;
+
+    public HomeFragment() {
+        mLocationPermissionGranted = false;
+        mMap = null;
+        currentLocation = null;
+        radiusCircle = null;
+        radiusOptions = null;
+        mFusedLocationClient = null;
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -71,6 +80,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +88,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         users.add(new User(46.518532, 6.556455));
         users.add(new User(46.519331, 6.580971));
         users.add(new User(48.854457, 2.348560));
-        //radiusCircle = new Circle( 5);
         getLocationPermission();
     }
     @Override
@@ -128,8 +137,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
                             Log.d( TAG, "onComplete: found location.");
                             currentLocation = (Location) task.getResult();
 
-                            System.out.println( currentLocation.getLatitude() + " " + currentLocation.getLongitude());
-
                             LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(), currentLocation.getLongitude());
                             radiusOptions = new CircleOptions().center(currentCoordinates).strokeColor(Color.RED).fillColor(Color.parseColor("#22FF0000")).radius(DEFAULT_RADIUS);
                             radiusCircle = mMap.addCircle(radiusOptions);
@@ -138,7 +145,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
                         }
                         else {
                             Log.d( TAG, "onComplete: current location is null.");
-                            System.out.println( "cry you little baby");
                             Toast.makeText( getContext(), "Unable to get current location", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -168,6 +174,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         }
         else {
             ActivityCompat.requestPermissions( getActivity(), permissions, LOCATION_PERMISSION_REQUEST_CODE);
+        }
+
+        if (mLocationPermissionGranted) {
+            getDeviceLocation();
         }
     }
 
@@ -240,6 +250,18 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
             }
         }
 
+    }
+
+    public void addUser(double latitude, double longtitude) {
+        if ( latitude >= -90 && latitude <= 90 && longtitude >= -180 && longtitude <= 180) {
+            users.add(new User(latitude, longtitude));
+        }
+    }
+
+    public void deleteUser(int i) {
+        if ( i < users.size() && i >= 0) {
+            users.remove(i);
+        }
     }
 
 }
