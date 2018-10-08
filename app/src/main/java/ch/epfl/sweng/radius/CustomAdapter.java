@@ -45,10 +45,15 @@ public class CustomAdapter extends ArrayAdapter<ChatListItem> {
         imageView.setImageDrawable(context.getResources().getDrawable(c.getImage()));
         textViewName.setText(c.getName());
 
+        final int clickedPic = c.getImage();
+        final String clickedName = c.getName();
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(context, BrowseProfilesActivity.class);
+                i.putExtra("Clicked Picture", clickedPic);
+                i.putExtra("Clicked Name", clickedName);
                 context.startActivity(i);
             }
         });

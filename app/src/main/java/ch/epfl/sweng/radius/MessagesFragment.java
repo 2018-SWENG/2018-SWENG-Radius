@@ -43,7 +43,6 @@ public class MessagesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
 
-        //THIS CAUSES A CRASH IN THE MESSAGES FRAGMENT
         chatList = new ArrayList<>();
         listView = view.findViewById(R.id.listView);
 

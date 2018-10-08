@@ -9,11 +9,9 @@
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/profilePic"
         android:layout_toRightOf="@+id/profilePic"
-        android:paddingBottom="10dp"
         android:text="john doe"
         android:textAlignment="center"
-        android:textSize="20dp"
-        android:textStyle="italic" />
+        android:textSize="20dp" />
 
     <ImageView
         android:id="@+id/profilePic"
