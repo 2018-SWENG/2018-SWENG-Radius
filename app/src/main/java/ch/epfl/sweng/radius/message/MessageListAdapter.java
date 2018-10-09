@@ -61,7 +61,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                 break;
             case VIEW_TYPE_MESSAGE_RECEIVED:
                 ((ReceivedMessageHolder) holder).bind(message);
-                default:
+                break;
+            default:
+                break;
         }
     }
 
@@ -108,7 +110,8 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             nameText.setText(message.getSender().getNickname());
 
             // Insert the profile image from the URL into the ImageView.
-            //Utils.displayRoundImageFromUrl(myContext, message.getSender().getProfileUrl(), profileImage);
+            //Utils.displayRoundImageFromUrl(
+            // myContext, message.getSender().getProfileUrl(), profileImage);
         }
     }
 
@@ -131,7 +134,8 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             timeText.setText(DateUtils.formatDateTime(myContext, message.getCreatedAt(), flags));
 
             // Insert the profile image from the URL into the ImageView.
-            //Utils.displayRoundImageFromUrl(myContext, message.getSender().getProfileUrl(), profileImage);
+            //Utils.displayRoundImageFromUrl(
+            // myContext, message.getSender().getProfileUrl(), profileImage);
         }
     }
 }

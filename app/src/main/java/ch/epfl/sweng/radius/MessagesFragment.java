@@ -63,7 +63,7 @@ public class MessagesFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 
-                Object o = listView.getItemAtPosition(position);
+                Object object = listView.getItemAtPosition(position);
                     /*
                     write you handling code like...
                     String st = "sdcard/";

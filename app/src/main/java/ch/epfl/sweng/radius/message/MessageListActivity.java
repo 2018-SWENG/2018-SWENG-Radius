@@ -60,7 +60,7 @@ public class MessageListActivity extends AppCompatActivity {
 
         findViewById(R.id.button_chatbox_send).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 //send
                 Log.println(Log.INFO, "info", "In the future, a message will be sent");
             }
