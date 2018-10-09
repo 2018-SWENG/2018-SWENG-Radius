@@ -112,10 +112,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         if (mblLocationPermissionGranted) {
             getDeviceLocation();
 
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                if ( ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(getContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED)
+            {
+                if ( ActivityCompat.checkSelfPermission(getContext(),
+                        Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED)
+                {
                     return;
                 }
             }
@@ -142,8 +146,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
                             LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(),
                                     currentLocation.getLongitude());
                             radiusOptions = new CircleOptions().center(currentCoordinates)
-                                    .strokeColor(Color.RED).fillColor(Color.parseColor("#22FF0000"))
+                                    .strokeColor(Color.RED)
+                                    .fillColor(Color.parseColor("#22FF0000"))
                                     .radius(DEFAULT_RADIUS);
+
                             radiusCircle = mobileMap.addCircle(radiusOptions);
                             markNearbyUsers();
                             moveCamera( currentCoordinates, DEFAULT_ZOOM);
@@ -162,7 +168,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     }
 
     private void moveCamera(LatLng latLng, float zoom) {
-        //Log.d( TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + " long: " + latLng.longitude);
+        //Log.d( TAG, "moveCamera: moving the camera to: lat: "
+        //             + latLng.latitude + " long: " + latLng.longitude);
         mobileMap.moveCamera(CameraUpdateFactory.newLatLngZoom( latLng, zoom));
     }
 
@@ -193,7 +200,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         }
     }
 
-    /*public void onRequestPermissionResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    /*public void onRequestPermissionResult(int requestCode, @NonNull String[] permissions,
+                                            @NonNull int[] grantResults) {
         Log.d( TAG, "onRequestPermissionResult: called.");
         mLocationPermissionGranted = false;
 
@@ -269,7 +277,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
      * */
     public void markNearbyUsers() {
         for (int i = 0; i < users.size(); i++) {
-            if ( contains(users.get(i).getLocation().latitude, users.get(i).getLocation().longitude))
+            if ( contains(users.get(i).getLocation().latitude,
+                    users.get(i).getLocation().longitude))
             {
                 String status = users.get(i).getStatus();
                 String userName = users.get(i).getUserName();
