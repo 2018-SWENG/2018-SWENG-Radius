@@ -11,6 +11,7 @@ android {
     compileSdkVersion 28
     buildToolsVersion '28.0.2'
     defaultConfig {
+        android.defaultConfig.vectorDrawables.useSupportLibrary = true
         applicationId "ch.epfl.sweng.radius"
         minSdkVersion 18
         targetSdkVersion 28
