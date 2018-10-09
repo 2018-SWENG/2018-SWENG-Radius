@@ -2,11 +2,11 @@ package ch.epfl.sweng.radius;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,9 +43,21 @@ class FirebaseUtility {
      * Method to check whether the current authentication is the first one
      *  in order to create a new user profile in the DB if need be
      */
-    public void checkNewUser(){
-
+    public boolean checkNewUser(){
+        FirebaseUserMetadata metadata = auth.getCurrentUser().getMetadata();
+        if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
+            // TODO : Push new default profile entry to DB and go to profile Activity
+            return true;
+        } else {
+            // TODO : Goto home activity
+            return false;
+        }
     }
+
+    /*
+    TODO : When userProfile class ready, add method to create whole userProfile
+    entry based on UID
+    */
 
     /**
      * Writes single value in provided table and field
