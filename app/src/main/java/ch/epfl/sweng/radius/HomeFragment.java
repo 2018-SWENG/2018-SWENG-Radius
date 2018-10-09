@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -30,7 +31,6 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 
-
 public class HomeFragment extends Fragment implements OnMapReadyCallback, RadiusCircle {
 
     //constants
@@ -43,24 +43,19 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
 
     //properties
     private static GoogleMap mobileMap;
-    private boolean mblLocationPermissionGranted;
-    private MapView mapView;
-    private Location currentLocation;
-    private CircleOptions radiusOptions;
-    private Circle radiusCircle;
+    private static boolean mblLocationPermissionGranted;
+    private static MapView mapView;
+    private static Location currentLocation;
+    private static CircleOptions radiusOptions;
+    private static Circle radiusCircle;
     private FusedLocationProviderClient mblFusedLocationClient;
 
     //testing
-    private ArrayList<User> users;
-
-    /*public HomeFragment() {
-        mblLocationPermissionGranted = false;
-        mobileMap = null;
-        currentLocation = null;
-        radiusCircle = null;
-        radiusOptions = null;
-        mblFusedLocationClient = null;
-    }*/
+    private static ArrayList<User> users;
+    private Button testMark;
+    private Button testLoc;
+    private Button testRad;
+    private Button testRad2;
 
     /**
      * Use this factory method to create a new instance of
@@ -85,7 +80,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         users = new ArrayList<User>();
         users.add(new User(46.518532, 6.556455));
         users.add(new User(46.519331, 6.580971));
-        users.add(new User(48.854457, 2.348560));
         getLocationPermission();
     }
 
@@ -97,6 +91,56 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        //For testing purposes,delete later
+        testMark = view.findViewById(R.id.testMark);
+        testMark.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                users.add(new User(46.524434, 6.570222));
+                users.add(new User(46.514874, 6.567602));
+                users.add(new User(46.521877, 6.588810));
+
+                markNearbyUsers();
+            }
+        });
+
+        testRad = view.findViewById(R.id.testRad);
+        testRad.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setRadius(500);
+                markNearbyUsers();
+            }
+        });
+
+        testRad2 = view.findViewById(R.id.testRad2);
+        testRad2.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setRadius(2000);
+                markNearbyUsers();
+            }
+        });
+
+        testLoc = view.findViewById(R.id.testLoc);
+        testLoc.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mobileMap.clear();
+                LatLng newLocation = new LatLng(46.521202, 6.552371);
+                currentLocation.setLongitude(newLocation.longitude);
+                currentLocation.setLatitude(newLocation.latitude);
+                radiusOptions = new CircleOptions().center(newLocation)
+                        .strokeColor(Color.RED)
+                        .fillColor(Color.parseColor("#22FF0000"))
+                        .radius(getRadius());
+                radiusCircle = mobileMap.addCircle(radiusOptions);
+                markNearbyUsers();
+                //mobileMap.addCircle(radiusOptions);
+            }
+        });
+
+        //------------------------------------
         mapView = view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
@@ -223,8 +267,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         return currentLocation.getLongitude();
     }
 
+    /**
+     * Sets a new radius for the circle and updates the UI.
+     * @param radius - double - new radius of the circle (in meters)
+     * */
     public void setRadius(double radius) {
-        radiusCircle.setRadius(radius);
+        mobileMap.clear();
+        LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(),
+                currentLocation.getLongitude());
+        radiusOptions = new CircleOptions().center(currentCoordinates)
+                .strokeColor(Color.RED)
+                .fillColor(Color.parseColor("#22FF0000"))
+                .radius(radius);
+        radiusCircle = mobileMap.addCircle(radiusOptions);
+        //radiusCircle.setRadius(radius);
     }
 
     public void setLatitude(double latitude) {
@@ -244,7 +300,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         double distance = findDistance(p2latitude, p2longtitude);
 
         return radiusCircle.getRadius() >= distance;
-
     }
 
     /**
@@ -265,12 +320,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
      * Marks the other users that are within the distance specified by the users.
      * */
     public void markNearbyUsers() {
+        mobileMap.clear();
+        radiusCircle = mobileMap.addCircle(radiusOptions);
         for (int i = 0; i < users.size(); i++) {
             if ( contains(users.get(i).getLocation().latitude,
                     users.get(i).getLocation().longitude))
             {
                 String status = users.get(i).getStatus();
                 String userName = users.get(i).getUserName();
+                //radiusCircle = mobileMap.addCircle(radiusOptions);
                 mobileMap.addMarker(new MarkerOptions().position(users.get(i).getLocation())
                         .title(userName + ": "  + status));
             }
@@ -297,6 +355,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         if ( index < users.size() && index >= 0) {
             users.remove(index);
         }
+    }
+
+    public int returnNoOfUsers() {
+        return users.size();
     }
 
 }
