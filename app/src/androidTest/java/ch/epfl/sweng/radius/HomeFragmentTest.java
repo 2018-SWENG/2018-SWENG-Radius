@@ -1,14 +1,16 @@
 package ch.epfl.sweng.radius;
 
 import android.support.test.rule.ActivityTestRule;
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import org.junit.After;
+
 import static org.junit.Assert.*;
+
 import org.junit.Before;
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -23,7 +25,7 @@ public class HomeFragmentTest {
     private Fragment fragment;
 
     /**
-     * Set up the test
+     * Set up the test.
      * */
     @Before
     public void setUp() throws Exception {
@@ -38,8 +40,8 @@ public class HomeFragmentTest {
         assertNotNull(fcontainer);
 
         //Fragment fragment = new HomeFragment();
-        mblAccountActivity.getSupportFragmentManager().beginTransaction().
-                add(fcontainer.getId(), fragment).commitAllowingStateLoss();
+        mblAccountActivity.getSupportFragmentManager().beginTransaction()
+                .add(fcontainer.getId(), fragment).commitAllowingStateLoss();
         getInstrumentation().waitForIdleSync();
 
         View view = fragment.getView().findViewById(R.id.map);
