@@ -1,25 +1,21 @@
 package ch.epfl.sweng.radius;
 
-import android.location.Location;
-
-import com.google.android.gms.maps.model.Circle;
-
 public interface RadiusCircle {
 
     //methods
-    public double getRadius();
+    double getRadius();
 
-    public double getLatitude();
+    double getLatitude();
 
-    public double getLongtitude();
+    double getLongtitude();
 
-    public void setRadius(double radius);
+    void setRadius(double radius);
 
-    public void setLatitude(double latitude);
+    void setLatitude(double latitude);
 
-    public void setLongtitude(double longtitude);
+    void setLongtitude(double longtitude);
 
-    public boolean contains(double p2latitude, double p2longtitude);
+    boolean contains(double p2latitude, double p2longtitude);
 
-    public double findDistance(double p2latitude, double p2longtitude);
+    double findDistance(double p2latitude, double p2longtitude);
 }
