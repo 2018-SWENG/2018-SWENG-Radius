@@ -1,7 +1,8 @@
 package ch.epfl.sweng.radius;
 
-import android.support.test.rule.ActivityTestRule;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+
+import android.support.test.rule.ActivityTestRule;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.FrameLayout;
