@@ -61,10 +61,10 @@ public class HomeFragmentTest {
         ((HomeFragment)fragment).addUser(91, 181);
         ((HomeFragment)fragment).addUser(91, -181);
 
-        assertTrue(((HomeFragment) fragment).returnNoOfUsers() == 6);
-
-        ((HomeFragment) fragment).deleteUser(5);
         assertTrue(((HomeFragment) fragment).returnNoOfUsers() == 5);
+
+        ((HomeFragment) fragment).deleteUser(4);
+        assertTrue(((HomeFragment) fragment).returnNoOfUsers() == 4);
     }
 
     @After
