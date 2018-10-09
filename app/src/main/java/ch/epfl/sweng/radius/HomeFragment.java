@@ -114,7 +114,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
 
             if (ActivityCompat.checkSelfPermission(getContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(),
+                    != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getContext(),
                     Manifest.permission.ACCESS_COARSE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED)
             {
@@ -177,8 +178,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         //if we have permission to access location set
         // location permission to true else ask for permissions
         if ( ContextCompat.checkSelfPermission(getContext(), FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission( getContext(), COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission( getContext(), COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
                 mblLocationPermissionGranted = true;
         }
