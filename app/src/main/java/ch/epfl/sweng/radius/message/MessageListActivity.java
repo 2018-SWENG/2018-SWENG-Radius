@@ -4,39 +4,66 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.utils.UserInfos;
 
-import static ch.epfl.sweng.radius.R.layout.activity_message_list;
-
+/**
+ * Activity that hosts messages between two users
+ * MessageListActivity and many layout file comes in part from https://blog.sendbird.com/android-chat-tutorial-building-a-messaging-ui
+ */
 public class MessageListActivity extends AppCompatActivity {
     private RecyclerView mMessageRecycler;
     private MessageListAdapter mMessageAdapter;
-    @Override
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_list);
 
-        User alfred = new User("alfred",1235);
-        User mika = new User("Mika",1234);
+        // Test the chat view
+        User alfred = new User("alfred", 1235);
+        User mika = new User(UserInfos.getUserUsername(), UserInfos.getUserId());
 
-        UserMessage m1 = new UserMessage("Hello",11111,alfred);
-        UserMessage m2 = new UserMessage("Hello alfred",11112,mika);
-        UserMessage m3 = new UserMessage("how are you ?",11113,alfred);
+        UserMessage m1 = new UserMessage("Hello", new Date().getTime() - 1000000, alfred);
+        UserMessage m2 = new UserMessage("Hello alfred", new Date().getTime() - 10000, mika);
+        UserMessage m3 = new UserMessage("how are you ?", new Date().getTime(), alfred);
 
 
         List messageList = new ArrayList();
         messageList.add(m1);
-        messageList.add(m2);
         messageList.add(m3);
+        messageList.add(m2);
 
-        mMessageRecycler = (RecyclerView) findViewById(R.id.reyclerview_message_list);
+        //sort by date
+        Collections.sort(messageList, new Comparator<UserMessage>() {
+            @Override
+            public int compare(UserMessage o1, UserMessage o2) {
+                return (int) (o1.getCreatedAt() - o2.getCreatedAt());
+            }
+        });
+
+        // End Test
+
+        mMessageRecycler = findViewById(R.id.reyclerview_message_list);
         mMessageAdapter = new MessageListAdapter(this, messageList);
         mMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         mMessageRecycler.setAdapter(mMessageAdapter);
+
+        findViewById(R.id.button_chatbox_send).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //send
+                Log.println(Log.INFO,"info","In the future, a message will be sent");
+            }
+        });
     }
 }
