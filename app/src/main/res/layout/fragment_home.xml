@@ -16,4 +16,22 @@
         android:layout_height="match_parent"
         android:text="Home" />
 
+    <Button
+        android:id="@+id/testMark"
+        android:layout_width="216dp"
+        android:layout_height="wrap_content"
+        android:text="Mark" />
+
+    <Button
+        android:id="@+id/testRad"
+        android:layout_width="62dp"
+        android:layout_height="184dp"
+        android:text="Rad" />
+
+    <Button
+        android:id="@+id/testLoc"
+        android:layout_width="107dp"
+        android:layout_height="86dp"
+        android:text="Location" />
+
 </FrameLayout>
