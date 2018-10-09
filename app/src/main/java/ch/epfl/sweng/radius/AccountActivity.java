@@ -7,13 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.ListView;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 
 public class AccountActivity extends AppCompatActivity {
 
