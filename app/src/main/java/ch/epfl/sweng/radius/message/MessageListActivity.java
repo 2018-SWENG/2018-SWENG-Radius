@@ -7,22 +7,22 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.utils.UserInfos;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.utils.UserInfos;
-
 /**
  * Activity that hosts messages between two users
  * MessageListActivity and many layout file comes in part from https://blog.sendbird.com/android-chat-tutorial-building-a-messaging-ui
  */
 public class MessageListActivity extends AppCompatActivity {
-    private RecyclerView mMessageRecycler;
-    private MessageListAdapter mMessageAdapter;
+    private RecyclerView myMessageRecycler;
+    private MessageListAdapter myMessageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,16 +53,16 @@ public class MessageListActivity extends AppCompatActivity {
 
         // End Test
 
-        mMessageRecycler = findViewById(R.id.reyclerview_message_list);
-        mMessageAdapter = new MessageListAdapter(this, messageList);
-        mMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
-        mMessageRecycler.setAdapter(mMessageAdapter);
+        myMessageRecycler = findViewById(R.id.reyclerview_message_list);
+        myMessageAdapter = new MessageListAdapter(this, messageList);
+        myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
+        myMessageRecycler.setAdapter(myMessageAdapter);
 
         findViewById(R.id.button_chatbox_send).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //send
-                Log.println(Log.INFO,"info","In the future, a message will be sent");
+                Log.println(Log.INFO, "info", "In the future, a message will be sent");
             }
         });
     }

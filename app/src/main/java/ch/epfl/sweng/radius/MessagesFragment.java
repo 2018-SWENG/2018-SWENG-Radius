@@ -7,13 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
+
+import ch.epfl.sweng.radius.message.MessageListActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import ch.epfl.sweng.radius.message.MessageListActivity;
 
 
 public class MessagesFragment extends Fragment {
@@ -65,7 +64,8 @@ public class MessagesFragment extends Fragment {
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 
                 Object o = listView.getItemAtPosition(position);
-                    /* write you handling code like...
+                    /*
+                    write you handling code like...
                     String st = "sdcard/";
                     File f = new File(st+o.toString());
                     // do whatever u want to do with 'f' File object
