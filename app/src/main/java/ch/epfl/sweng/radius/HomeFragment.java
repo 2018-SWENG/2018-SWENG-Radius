@@ -121,7 +121,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
                 return;
             }
             mobileMap.setMyLocationEnabled(true);
-            //markNearbyUsers(); // I don't know if this should go here
         }
     }
 
@@ -165,8 +164,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     }
 
     private void moveCamera(LatLng latLng, float zoom) {
-        //Log.d( TAG, "moveCamera: moving the camera to: lat: "
-        //             + latLng.latitude + " long: " + latLng.longitude);
+        Log.d( TAG, "moveCamera: moving the camera to: lat: "
+                     + latLng.latitude + " long: " + latLng.longitude);
         mobileMap.moveCamera(CameraUpdateFactory.newLatLngZoom( latLng, zoom));
     }
 
@@ -181,22 +180,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
                 == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission( getContext(), COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            /*if ( ContextCompat.checkSelfPermission( getContext(), COARSE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {*/
                 mblLocationPermissionGranted = true;
-            //}
-            /*else {
-                ActivityCompat.requestPermissions( getActivity(), permissions,
-                        LOC_PERMIT_REQUEST_CODE);
-            }*/
         }
         else {
             ActivityCompat.requestPermissions( getActivity(), permissions, LOC_PERMIT_REQUEST_CODE);
         }
 
-        /*if (mblLocationPermissionGranted) {
-            getDeviceLocation();
-        }*/
     }
 
     /*public void onRequestPermissionResult(int requestCode, @NonNull String[] permissions,
