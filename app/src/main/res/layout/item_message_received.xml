@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:paddingTop="8dp">
 
-    <View
+    <ImageView
         android:id="@+id/avatar"
         android:layout_alignParentLeft="true"
         android:scaleType="centerInside"
