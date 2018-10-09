@@ -1,28 +1,30 @@
 package ch.epfl.sweng.radius;
 
-import android.accounts.Account;
 import android.support.test.rule.ActivityTestRule;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import org.junit.After;
+import static org.junit.Assert.*;
 import org.junit.Before;
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import org.junit.Rule;
 import org.junit.Test;
-
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static org.junit.Assert.*;
 
 public class HomeFragmentTest {
 
     @Rule
-    public ActivityTestRule<AccountActivity> mblActivityTestRule = new ActivityTestRule<AccountActivity>(AccountActivity.class);
+    public ActivityTestRule<AccountActivity> mblActivityTestRule
+            = new ActivityTestRule<AccountActivity>(AccountActivity.class);
 
     private AccountActivity mblAccountActivity;
     private FrameLayout fcontainer;
     private Fragment fragment;
 
+    /**
+     * Set up the test
+     * */
     @Before
     public void setUp() throws Exception {
         mblAccountActivity = mblActivityTestRule.getActivity();
@@ -36,7 +38,8 @@ public class HomeFragmentTest {
         assertNotNull(fcontainer);
 
         //Fragment fragment = new HomeFragment();
-        mblAccountActivity.getSupportFragmentManager().beginTransaction().add(fcontainer.getId(), fragment).commitAllowingStateLoss();
+        mblAccountActivity.getSupportFragmentManager().beginTransaction().
+                add(fcontainer.getId(), fragment).commitAllowingStateLoss();
         getInstrumentation().waitForIdleSync();
 
         View view = fragment.getView().findViewById(R.id.map);

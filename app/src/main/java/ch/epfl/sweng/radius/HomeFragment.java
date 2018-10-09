@@ -31,7 +31,6 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 
-
 public class HomeFragment extends Fragment implements OnMapReadyCallback, RadiusCircle {
 
     //constants
@@ -58,15 +57,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     private Button testRad;
     private Button testRad2;
 
-    /*public HomeFragment() {
-        mblLocationPermissionGranted = false;
-        mobileMap = null;
-        currentLocation = null;
-        radiusCircle = null;
-        radiusOptions = null;
-        mblFusedLocationClient = null;
-    }*/
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -90,7 +80,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         users = new ArrayList<User>();
         users.add(new User(46.518532, 6.556455));
         users.add(new User(46.519331, 6.580971));
-        users.add(new User(48.854457, 2.348560));
         getLocationPermission();
     }
 
@@ -278,6 +267,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         return currentLocation.getLongitude();
     }
 
+    /**
+     * Sets a new radius for the circle and updates the UI.
+     * @param radius - double - new radius of the circle (in meters)
+     * */
     public void setRadius(double radius) {
         mobileMap.clear();
         LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(),
