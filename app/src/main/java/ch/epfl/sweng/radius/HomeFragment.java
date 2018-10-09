@@ -114,14 +114,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
 
             if (ActivityCompat.checkSelfPermission(getContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED)
             {
-                if ( ActivityCompat.checkSelfPermission(getContext(),
-                        Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED)
-                {
-                    return;
-                }
+                return;
             }
             mobileMap.setMyLocationEnabled(true);
             //markNearbyUsers(); // I don't know if this should go here
@@ -181,23 +178,25 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         //if we have permission to access location set
         // location permission to true else ask for permissions
         if ( ContextCompat.checkSelfPermission(getContext(), FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission( getContext(), COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            if ( ContextCompat.checkSelfPermission( getContext(), COARSE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
+            /*if ( ContextCompat.checkSelfPermission( getContext(), COARSE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {*/
                 mblLocationPermissionGranted = true;
-            }
-            else {
+            //}
+            /*else {
                 ActivityCompat.requestPermissions( getActivity(), permissions,
                         LOC_PERMIT_REQUEST_CODE);
-            }
+            }*/
         }
         else {
             ActivityCompat.requestPermissions( getActivity(), permissions, LOC_PERMIT_REQUEST_CODE);
         }
 
-        if (mblLocationPermissionGranted) {
+        /*if (mblLocationPermissionGranted) {
             getDeviceLocation();
-        }
+        }*/
     }
 
     /*public void onRequestPermissionResult(int requestCode, @NonNull String[] permissions,
