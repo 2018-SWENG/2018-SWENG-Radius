@@ -45,13 +45,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     private static GoogleMap mobileMap;
     private boolean mblLocationPermissionGranted;
     private MapView mapView;
-    private Location currentLocation;
-    private CircleOptions radiusOptions;
-    private Circle radiusCircle;
+    private static Location currentLocation;
+    private static CircleOptions radiusOptions;
+    private static Circle radiusCircle;
     private FusedLocationProviderClient mblFusedLocationClient;
 
     //testing
-    private ArrayList<User> users;
+    private static ArrayList<User> users;
 
     /*public HomeFragment() {
         mblLocationPermissionGranted = false;
@@ -244,7 +244,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         double distance = findDistance(p2latitude, p2longtitude);
 
         return radiusCircle.getRadius() >= distance;
-
     }
 
     /**
@@ -297,6 +296,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         if ( index < users.size() && index >= 0) {
             users.remove(index);
         }
+    }
+
+    public int returnNoOfUsers() {
+        return users.size();
     }
 
 }
