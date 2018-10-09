@@ -56,6 +56,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     private Button testMark;
     private Button testLoc;
     private Button testRad;
+    private Button testRad2;
 
     /*public HomeFragment() {
         mblLocationPermissionGranted = false;
@@ -118,6 +119,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         testRad.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setRadius(500);
+                markNearbyUsers();
+            }
+        });
+
+        testRad2 = view.findViewById(R.id.testRad2);
+        testRad2.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 setRadius(2000);
                 markNearbyUsers();
             }
@@ -136,6 +146,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
                         .fillColor(Color.parseColor("#22FF0000"))
                         .radius(getRadius());
                 radiusCircle = mobileMap.addCircle(radiusOptions);
+                markNearbyUsers();
                 //mobileMap.addCircle(radiusOptions);
             }
         });
