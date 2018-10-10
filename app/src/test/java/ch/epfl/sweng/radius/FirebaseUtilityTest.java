@@ -64,8 +64,10 @@ import static org.junit.Assert.*;
 public class FirebaseUtilityTest {
 
   //  private FirebaseAuth auth;
-    private FirebaseDatabase firedb;
-    private DatabaseReference database;
+    private FirebaseDatabase    firedb;
+    private DatabaseReference   database;
+    private String              listenerStr;
+    private Integer             listenerInt;
     /*
     @Test
     public void checkNewUser() {
@@ -75,10 +77,12 @@ public class FirebaseUtilityTest {
 
     @Test
     public void writeToDB() {
+        firedb = FirebaseDatabase.getInstance();
+        database = firedb.getReference("users");
         // Try writing to existing user
         database.child("arthur").child("nickname").setValue("Archie");
 
-        firedb.getReference("users").child("arthur").child("nickname").addValueEventListener(new ValueEventListener() {
+        firedb.getReference("users").child("arthur").child("nickname").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.e("FirebaseTest", "Data updated");
@@ -86,7 +90,7 @@ public class FirebaseUtilityTest {
                 String res = dataSnapshot.getValue(String.class);
 
                 // update toolbar title
-                assertEquals(res, "Archie");
+                assertEquals("Archie", res);
                 }
 
             @Override
@@ -99,7 +103,7 @@ public class FirebaseUtilityTest {
         // Try writing to non-existing user
         database.child("arthur").child("status").setValue("Asleep");
 
-        firedb.getReference("users").child("arthur").child("status").addValueEventListener(new ValueEventListener() {
+        firedb.getReference("users").child("arthur").child("status").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.e("FirebaseTest", "Data updated");
@@ -107,7 +111,7 @@ public class FirebaseUtilityTest {
                 String res = dataSnapshot.getValue(String.class);
 
                 // update toolbar title
-                assertEquals(res, "Asleep");
+                assertEquals("Asleep", res);
             }
 
             @Override
@@ -121,23 +125,92 @@ public class FirebaseUtilityTest {
 
     @Test
     public void readFromDB() {
-        // Try reading to existing data
-        database.child("arthur")
-        // Try reading to non-existing data
+        // Try reading existing data
+        firedb.getReference("users").child("arthur").child("username").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.e("FirebaseTest", "Data updated");
+
+                String res = dataSnapshot.getValue(String.class);
+
+                // update toolbar title
+                assertEquals("arthur", res);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.e("FirebaseTest", "Failed to read data.", error.toException());
+            }
+        });
+        // Try reading non-existing data
+        firedb.getReference("users").child("arthur").child("picture").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.e("FirebaseTest", "Data updated");
+
+                String res = dataSnapshot.getValue(String.class);
+
+                // update toolbar title
+                assertNull(res);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.e("FirebaseTest", "Failed to read data.", error.toException());
+            }
+        });
     }
 
     @Test
     public void addStringListenerToDB() {
-        // Try writing to String field
+        // Initiate listener
+        firedb.getReference("users").child("arthur").child("username").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.e("FirebaseTest", "Data updated");
 
-        // Try writing to non-String field
+                listenerStr = dataSnapshot.getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.e("FirebaseTest", "Failed to read data.", error.toException());
+            }
+        });
+
+        // Modifiy field
+        database.child("arthur").child("username").setValue("Archie");
+
+        // Verify field was updated
+        assertEquals("Archie", listenerStr);
     }
 
     @Test
     public void addIntListenerToDB() {
-        // Try writing to int field
+        // Initiate listener
+        firedb.getReference("users").child("arthur").child("username").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.e("FirebaseTest", "Data updated");
 
-        // Try writing to non-int field
+                listenerInt = dataSnapshot.getValue(Integer.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.e("FirebaseTest", "Failed to read data.", error.toException());
+            }
+        });
+
+        // Modifiy field
+        database.child("arthur").child("age").setValue("98");
+
+        // Verify field was updated
+        assertEquals(98, listenerInt.intValue());
     }
 
     @Before
