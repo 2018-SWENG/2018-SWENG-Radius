@@ -30,7 +30,7 @@ public class HomeFragmentTest {
      * Set up the test.
      * */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mblAccountActivity = mblActivityTestRule.getActivity();
         fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
         fragment = new HomeFragment();
@@ -68,7 +68,7 @@ public class HomeFragmentTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mblAccountActivity = null;
     }
 }

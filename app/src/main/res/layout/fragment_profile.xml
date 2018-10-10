@@ -19,7 +19,7 @@
                 android:background="#fff"
                 android:paddingBottom="24dp">
 
-                <android.support.v7.widget.AppCompatImageView
+                <ImageView
                     android:id="@+id/userPhoto"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
@@ -29,9 +29,10 @@
                     android:elevation="5dp"
                     android:padding="5dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_man" />
+                    android:src="@drawable/ic_man"
+                    tools:ignore="MissingPrefix"/>
 
-                <android.support.v7.widget.AppCompatImageButton
+                <ImageButton
                     android:id="@+id/changeProfilePictureButton"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -40,7 +41,8 @@
                     android:layout_marginTop="16dp"
                     android:background="@color/white"
                     android:src="@drawable/ic_baseline_edit_24px"
-                    android:tint="#636e72" />
+                    android:tint="#636e72"
+                    tools:ignore="MissingPrefix"/>
 
                 <TextView
                     android:id="@+id/userNickname"
