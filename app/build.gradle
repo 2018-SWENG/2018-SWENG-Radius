@@ -6,7 +6,6 @@ apply plugin: 'com.google.gms.google-services'
 jacoco {
     toolVersion = "0.8.0"
 }
-
 android {
     compileSdkVersion 28
     buildToolsVersion '28.0.2'
