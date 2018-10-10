@@ -19,7 +19,7 @@
                 android:background="#fff"
                 android:paddingBottom="24dp">
 
-                <ImageView
+                <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/userPhoto"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
@@ -31,7 +31,7 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_man" />
 
-                <ImageButton
+                <android.support.v7.widget.AppCompatImageButton
                     android:id="@+id/changeProfilePictureButton"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
