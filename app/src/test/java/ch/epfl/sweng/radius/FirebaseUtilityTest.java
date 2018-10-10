@@ -63,24 +63,66 @@ import static org.junit.Assert.*;
 
 public class FirebaseUtilityTest {
 
-    private FirebaseAuth auth;
-
+  //  private FirebaseAuth auth;
+    private FirebaseDatabase firedb;
+    private DatabaseReference database;
+    /*
     @Test
     public void checkNewUser() {
         // Try with other account
     }
+    */
 
     @Test
     public void writeToDB() {
         // Try writing to existing user
+        database.child("arthur").child("nickname").setValue("Archie");
+
+        firedb.getReference("users").child("arthur").child("nickname").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.e("FirebaseTest", "Data updated");
+
+                String res = dataSnapshot.getValue(String.class);
+
+                // update toolbar title
+                assertEquals(res, "Archie");
+                }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.e("FirebaseTest", "Failed to read data.", error.toException());
+            }
+        });
 
         // Try writing to non-existing user
+        database.child("arthur").child("status").setValue("Asleep");
+
+        firedb.getReference("users").child("arthur").child("status").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.e("FirebaseTest", "Data updated");
+
+                String res = dataSnapshot.getValue(String.class);
+
+                // update toolbar title
+                assertEquals(res, "Asleep");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.e("FirebaseTest", "Failed to read data.", error.toException());
+            }
+        });
+
     }
 
     @Test
     public void readFromDB() {
         // Try reading to existing data
-
+        database.child("arthur")
         // Try reading to non-existing data
     }
 
@@ -101,22 +143,27 @@ public class FirebaseUtilityTest {
     @Before
     public void setUp() throws Exception {
 
+        firedb = FirebaseDatabase.getInstance();
+        database = firedb.getReference("users");
+
+        // Will be added when testing auth features
+     /*   auth = FirebaseAuth.getInstance();
+
         if (auth.getCurrentUser() != null) {
-            auth = FirebaseAuth.getInstance();
 
             return;
         } else {
             // TODO Authenticate with hard-coded credentials
 
             return;
-        }
+        }*/
     }
 
     @After
     public void tearDown() throws Exception {
-
-        auth.getInstance().signOut();
-                    }
+        // Will be added when testing auth features
+        //auth.getInstance().signOut()
+    }
 
 
 }
