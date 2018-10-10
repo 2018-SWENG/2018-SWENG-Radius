@@ -9,11 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 public class AccountActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+
         loadFragment(new HomeFragment());
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigationView);
