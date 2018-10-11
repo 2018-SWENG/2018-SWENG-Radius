@@ -4,7 +4,6 @@ import android.renderscript.Sampler;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.firebase.ui.auth.data.model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +30,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 
+
+import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.database.User;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -94,13 +97,10 @@ public class FirebaseUtilityTest {
                     case "user" : {
                         ret_obj = getUser(parsed_path[1]);
 
-                        switch(parsed_path[1]) {
 
-                            case()
-                        }
                     }
-     //               case "chatlogs" : ret = getChatlogs(parsed_path[1]);
-     //               case "messages" : ret = getMessages(parsed_path[1]);
+                    case "chatlogs" : ret_obj = getChatlogs(parsed_path[1]);
+                    case "messages" : ret_obj = getMessages(parsed_path[1]);
                 };
 
                 DataSnapshot mockedDataSnapshot = Mockito.mock(DataSnapshot.class);
@@ -167,12 +167,10 @@ public class FirebaseUtilityTest {
             BufferedReader br = new BufferedReader(new FileReader(mockUserDBPath));
             userdb = gson.fromJson(br, UserDB.class);
 
-       //     userdb.addUser(user.uID, user);
+            userdb.addUser(Long.toString(user.getUserID()), user);
 
-            String json = gson.toJson(userdb);
-
-            FileWriter writer = new FileWriter(mockUserDBPath, true);
-            writer.write(json);
+            FileWriter writer = new FileWriter(mockUserDBPath, false);
+            writer.write(gson.toJson(userdb));
             writer.close();
 
         } catch (IOException e) {
@@ -196,9 +194,11 @@ public class FirebaseUtilityTest {
 
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
 
     }
+
     private void removeUser(String key){
 
         Gson gson = new Gson();
@@ -222,14 +222,63 @@ public class FirebaseUtilityTest {
 
     }
 
-    /*
-    private void writeChatlogs(Chatlogs chatlogs){
+    private void writeChatLogs(ChatLogs chatlogs){
         Gson gson = new Gson();
 
-        String json = gson.toJson(chatlogs);
+        ChatLogsDB chatLogsDB;
 
         try{
-            FileWriter writer = new FileWriter(mockChatLogDBPath);
+            BufferedReader br = new BufferedReader((new FileReader(mockChatLogDBPath)));
+            chatLogsDB = gson.fromJson(br, ChatLogsDB.class);
+
+            chatLogsDB.addChatLogs(Long.toString(chatlogs.getParticipants().get(0).getUserID()),
+                    chatlogs);
+
+            FileWriter writer = new FileWriter(mockChatLogDBPath, false);
+            writer.write(gson.toJson(chatLogsDB));
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private Message getMessage(String key){
+
+        Gson gson = new Gson();
+        MessageDB msgDB;
+        Message ret;
+
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(mockChatLogDBPath));
+            msgDB = gson.fromJson(br, MessageDB.class);
+
+            ret = msgDB.getMsg(key);
+
+            return ret;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    private void removeMessage(String key){
+
+        Gson gson = new Gson();
+        MessageDB msgDB;
+
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(mockChatLogDBPath));
+            msgDB = gson.fromJson(br, MessageDB.class);
+
+            msgDB.removeMsg(key);
+
+            String json = gson.toJson(msgDB);
+            // Overwrites existing file
+            FileWriter writer = new FileWriter(mockChatLogDBPath, true);
             writer.write(json);
             writer.close();
 
@@ -242,10 +291,59 @@ public class FirebaseUtilityTest {
     private void writeMessage(Message msg){
         Gson gson = new Gson();
 
-        String json = gson.toJson(msg);
+        MessageDB msgDB;
 
         try{
-            FileWriter writer = new FileWriter(mockMsgDBPath);
+            BufferedReader br = new BufferedReader(new FileReader(mockMsgDBPath));
+            msgDB = gson.fromJson(br, MessageDB.class);
+
+            msgDB.addMsg(Long.toString(msg.getMessageID()), msg);
+
+            FileWriter writer = new FileWriter(mockMsgDBPath, false);
+            writer.write(gson.toJson(msgDB));
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private ChatLogs getChatLogs(String key){
+
+        Gson gson = new Gson();
+        ChatLogsDB chatLogsDB;
+        ChatLogs ret;
+
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(mockChatLogDBPath));
+            chatLogsDB = gson.fromJson(br, ChatLogsDB.class);
+
+            ret = chatLogsDB.getChatLogs(key);
+
+            return ret;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    private void removeChatLogs(String key){
+
+        Gson gson = new Gson();
+        ChatLogsDB chatLogsDB;
+
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(mockChatLogDBPath));
+            chatLogsDB = gson.fromJson(br, ChatLogsDB.class);
+
+            chatLogsDB.removeChatLogs(key);
+
+            String json = gson.toJson(chatLogsDB);
+            // Overwrites existing file
+            FileWriter writer = new FileWriter(mockChatLogDBPath, true);
             writer.write(json);
             writer.close();
 
@@ -253,7 +351,7 @@ public class FirebaseUtilityTest {
             e.printStackTrace();
         }
 
-    }*/
+    }
 
 }
 
@@ -268,6 +366,9 @@ class UserDB {
 
     public void addUser(String uID, User user){
 
+        if(database.containsKey(uID))
+            database.remove(uID);
+
         database.put(uID, user);
     }
 
@@ -276,22 +377,25 @@ class UserDB {
         database.remove(uID);
     }
 }
-/*
+
 class ChatLogsDB {
 
-    private Map<String, Chatlogs> database;
+    private Map<String, ChatLogs> database;
 
-    public Chatlogs getUser(String uID){
+    public ChatLogs getChatLogs(String uID){
 
         return database.get(uID);
     }
 
-    public void addUser(String uID, Chatlogs chatlog){
+    public void addChatLogs(String uID, ChatLogs chatlog){
+
+        if(!database.containsKey(uID))
+            database.remove(uID, chatlog);
 
         database.put(uID, chatlog);
     }
 
-    public void removeUser(String uID){
+    public void removeChatLogs(String uID){
 
         database.remove(uID);
     }
@@ -308,6 +412,9 @@ class MessageDB {
 
     public void addMsg(String uID, Message msg){
 
+        if(database.containsKey(uID))
+            database.remove(uID);
+
         database.put(uID, msg);
     }
 
@@ -317,4 +424,3 @@ class MessageDB {
     }
 }
 
-*/
