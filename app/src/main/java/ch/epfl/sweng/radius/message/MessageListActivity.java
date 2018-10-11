@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.View;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
 import java.util.ArrayList;
@@ -30,26 +33,29 @@ public class MessageListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_message_list);
 
         // Test the chat view
-        User alfred = new User("alfred", 1235);
-        User mika = new User(UserInfos.getUserUsername(), UserInfos.getUserId());
+        User alfred = new User(1);
+        User mika = new User(UserInfos.getUserId());
+        ArrayList<User> participants = new ArrayList<>();
+        participants.add(alfred);
+        participants.add(mika);
 
-        UserMessage m1 = new UserMessage("Hello", new Date().getTime() - 1000000, alfred);
-        UserMessage m2 = new UserMessage("Hello alfred", new Date().getTime() - 10000, mika);
-        UserMessage m3 = new UserMessage("how are you ?", new Date().getTime(), alfred);
+        Message m1 = new Message(1, alfred, "Hello", new Date());
+        Message m2 = new Message(2, mika,"Hello alfred", new Date());
+        Message m3 = new Message(3, alfred,"how are you ?", new Date());
 
+        ChatLogs messageList= new ChatLogs(participants);
+        messageList.addMessage(m1);
+        messageList.addMessage(m2);
+        messageList.addMessage(m3);
 
-        List messageList = new ArrayList();
-        messageList.add(m1);
-        messageList.add(m3);
-        messageList.add(m2);
-
-        //sort by date
+        /*sort by date
         Collections.sort(messageList, new Comparator<UserMessage>() {
             @Override
             public int compare(UserMessage o1, UserMessage o2) {
                 return (int) (o1.getCreatedAt() - o2.getCreatedAt());
             }
         });
+        */
 
         // End Test
 

@@ -1,5 +1,6 @@
 package ch.epfl.sweng.radius.database;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import static java.lang.Math.*;
@@ -8,15 +9,15 @@ import static java.lang.Math.*;
  * This class represent a Chat conversation with a list of participants and a List of Messages
  */
 public class ChatLogs {
-    private List<Integer> participants;
+    private List<User> participants;
     private LinkedList<Message> conversations; // List LIFO of all the message in the chat
-    public ChatLogs(List<Integer> participants){
+    public ChatLogs(ArrayList<User> participants){
         this.participants = participants;
         this.conversations = new LinkedList<>();
     }
 
     // Getters
-    public List<Integer> getParticipants() {
+    public List<User> getParticipants() {
         return participants;
     }
 
@@ -33,9 +34,9 @@ public class ChatLogs {
     }
 
     // Setters
-    public void addParticipant(Integer userID){
-        if(!participants.contains(userID))
-            participants.add(userID);
+    public void addParticipant(User user){
+        if(!participants.contains(user))
+            participants.add(user);
     }
     public void addMessage(Message message){
         conversations.addFirst(message);

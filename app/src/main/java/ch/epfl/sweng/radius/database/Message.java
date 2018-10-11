@@ -10,13 +10,13 @@ import java.util.Date;
  */
 public class Message {
     private final long messageID;
-    private final  int ownerID;
+    private final  User owner;
     private final String contentMessage;
     private final Date sendingTime;
 
-    public Message(long messageID, int ownerID, String contentMessage, Date sendingTime){
+    public Message(long messageID, User owner, String contentMessage, Date sendingTime){
         this.messageID = messageID;
-        this.ownerID = ownerID;
+        this.owner = owner;
         this.contentMessage = contentMessage;
         this.sendingTime = sendingTime;
     }
@@ -26,8 +26,8 @@ public class Message {
         return messageID;
     }
 
-    public int getOwnerID() {
-        return ownerID;
+    public User getOwner() {
+        return owner;
     }
 
     public String getContentMessage() {

@@ -10,7 +10,7 @@ import java.util.List;
  * We can then store/access the states of each user in the database
  */
 public class User {
-    private final int userID;
+    private final long userID;
     private String nickname;
     private String urlProfilePhoto;
     private int radius; // meters
@@ -21,7 +21,7 @@ public class User {
     private List<Integer> blockedUsers;
     private LatLng location;
 
-    public User(int userID){
+    public User(long userID){
         this.userID = userID;
         this.nickname = "New User " + userID;
         this.urlProfilePhoto = "";
@@ -34,7 +34,7 @@ public class User {
     }
 
     // Getter
-    public int getUserID() {
+    public long getUserID() {
         return userID;
     }
 
