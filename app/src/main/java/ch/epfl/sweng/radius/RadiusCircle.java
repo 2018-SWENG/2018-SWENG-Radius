@@ -7,13 +7,13 @@ public interface RadiusCircle {
 
     double getLatitude();
 
-    double getLongtitude();
+    double getLongitude();
 
     void setRadius(double radius);
 
     void setLatitude(double latitude);
 
-    void setLongtitude(double longtitude);
+    void setLongitude(double longtitude);
 
     boolean contains(double p2latitude, double p2longtitude);
 
