@@ -1,101 +1,120 @@
 package ch.epfl.sweng.radius;
 
-import android.content.Context;
+import android.renderscript.Sampler;
 import android.support.annotation.NonNull;
-import android.support.test.InstrumentationRegistry;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.firebase.ui.auth.data.model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+import org.mockito.ArgumentMatcher;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Map;
+
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.doAnswer;
 
-public class FirebaseUtilityTest  {
+@RunWith(PowerMockRunner.class)
+@PowerMockRunnerDelegate(JUnit4.class)
+@PrepareForTest({ FirebaseDatabase.class})
+public class FirebaseUtilityTest {
 
-    private FirebaseAuth auth;
-    private FirebaseDatabase    firedb;
-    private DatabaseReference   database;
-    private FirebaseApp         fbApp;
-    private String              listenerStr;
-    private Integer             listenerInt;
+    private FirebaseUtility uT;
+    private final static    String mockUserDBPath       = "../../db/user.json";
+    private final static    String mockMsgDBPath        = "../../db/msg.json";
+    private final static    String mockChatLogDBPath    = "../../db/chatlog.json";
 
-    private CountDownLatch authSignal = null;
+    private DatabaseReference mockedDatabaseReference;
+    private FirebaseDatabase  mockedFirebaseDatabase;
+    String  path = "/";
+    ValueEventListener listener;
+    User mock_user;
+    public DatabaseReference updateString(String s){
+
+        return mockedDatabaseReference;
+    }
 
     @Before
-    public void setUp() throws InterruptedException {
-        authSignal = new CountDownLatch(1);
-        Context cont = InstrumentationRegistry.getContext();
+    public void before() {
+        mockedDatabaseReference = Mockito.mock(DatabaseReference.class);
 
-        fbApp = FirebaseApp.initializeApp(cont);
+        mockedFirebaseDatabase = Mockito.mock(FirebaseDatabase.class);
+        when(mockedFirebaseDatabase.getReference()).thenReturn(mockedDatabaseReference);
 
-        auth = FirebaseAuth.getInstance();
-        if(auth.getCurrentUser() == null) {
-            auth.signInWithEmailAndPassword("passuello.arthur@gmail.com", "3S-n1035*70").addOnCompleteListener(
-                    new OnCompleteListener<AuthResult>() {
+        PowerMockito.mockStatic(FirebaseDatabase.class);
+        when(FirebaseDatabase.getInstance()).thenReturn(mockedFirebaseDatabase);
 
-                        @Override
-                        public void onComplete(@NonNull final Task<AuthResult> task) {
+        PowerMockito.mock(DatabaseReference.class);
+        // When the child() method is called, the current path is updated
+        //     PATH MUST BE CLEARED BETWEEN OPERATIONS
+        when(mockedDatabaseReference.child((String) argThat(new ArgumentMatcher(){
 
-                            final AuthResult result = task.getResult();
-                            final FirebaseUser user = result.getUser();
-                            authSignal.countDown();
+            // Update current and print to console path to console
+            @Override
+            public boolean matches(Object argument) {
+                System.out.println(path);
+                path += argument + "/";
+                return true;
+            }
+
+        }))).thenReturn(mockedDatabaseReference);
+        doAnswer(new Answer<Void>() {
+            @Override
+            public Void answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener valueEventListener = (ValueEventListener) invocation.getArguments()[0];
+                Object ret_obj;
+                String ret;
+                String [] parsed_path = path.split("/");
+
+                switch (parsed_path[0]) {
+                    case "user" : {
+                        ret_obj = getUser(parsed_path[1]);
+
+                        switch(parsed_path[1]) {
+
+                            case()
                         }
-                    });
-        } else {
-            authSignal.countDown();
-        }
-        authSignal.await(10, TimeUnit.SECONDS);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        if(auth != null) {
-            auth.signOut();
-            auth = null;
-        }
-    }
-
-    @Test
-    public void testWrite() throws InterruptedException {
-        final CountDownLatch writeSignal = new CountDownLatch(1);
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
-
-        myRef.setValue("Do you have data? You'll love Firebase. - 3")
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-
-                    @Override
-                    public void onComplete(@NonNull final Task<Void> task) {
-                        writeSignal.countDown();
                     }
-                });
+     //               case "chatlogs" : ret = getChatlogs(parsed_path[1]);
+     //               case "messages" : ret = getMessages(parsed_path[1]);
+                };
 
-        writeSignal.await(10, TimeUnit.SECONDS);
-    }
-}
-/*
-    @Test
-    public void checkNewUser() {
-        // Try with other account
+                DataSnapshot mockedDataSnapshot = Mockito.mock(DataSnapshot.class);
+                when(mockedDataSnapshot.getValue(User.class)).thenReturn(getUser(parsed_path[parsed_path.length -1]));
+                // ADD cases here for different data type
+                when(mockedDataSnapshot.getValue(String.class)).thenReturn(ret);
+
+                valueEventListener.onDataChange(mockedDataSnapshot);
+                //valueEventListener.onCancelled(...);
+
+                return null;
+            }
+        }).when(mockedDatabaseReference).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
     }
 
 
@@ -103,162 +122,199 @@ public class FirebaseUtilityTest  {
     public void writeToDB() {
 
         // Try writing to existing user
-        database.child("arthur").child("nickname").setValue("Archie");
+        mockedDatabaseReference.child("arthur").child("nickname").setValue("Archie");
 
-        firedb.getReference("users").child("arthur").child("nickname").addListenerForSingleValueEvent(new ValueEventListener() {
+        mockedDatabaseReference.child("arthurrrrr");
+
+    }
+
+
+    @Test
+    public void getSignedInUserProfileTest() {
+      //  when(mockedDatabaseReference.child(anyString())).thenReturn(mockedDatabaseReference);
+
+
+
+        ValueEventListener listener = new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e("FirebaseTest", "Data updated");
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String val = dataSnapshot.getValue(String.class);
 
-                String res = dataSnapshot.getValue(String.class);
-
-                // update toolbar title
-                assertEquals("Archie", res);
+                if (val == null){
+                    System.out.println("User data is null!");
+                    return;
                 }
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.e("FirebaseTest", "Failed to read data.", error.toException());
-            }
-        });
 
-        // Try writing to non-existing user
-        database.child("arthur").child("status").setValue("Asleep");
-
-        firedb.getReference("users").child("arthur").child("status").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e("FirebaseTest", "Data updated");
-
-                String res = dataSnapshot.getValue(String.class);
-
-                // update toolbar title
-                assertEquals("Asleep", res);
+                System.out.println("User data is changed : " + val);
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.e("FirebaseTest", "Failed to read data.", error.toException());
-            }
-        });
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        };
+        mockedDatabaseReference.child("arthur").addListenerForSingleValueEvent(listener);
+        // check preferences are updated
     }
 
-    @Test
-    public void readFromDB() {
-        // Try reading existing data
-        firedb.getReference("users").child("arthur").child("username").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e("FirebaseTest", "Data updated");
+    private void writeUser(User user) throws IOException {
 
-                String res = dataSnapshot.getValue(String.class);
+        Gson gson = new Gson();
+        UserDB userdb;
 
-                // update toolbar title
-                assertEquals("arthur", res);
-            }
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(mockUserDBPath));
+            userdb = gson.fromJson(br, UserDB.class);
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.e("FirebaseTest", "Failed to read data.", error.toException());
-            }
-        });
-        // Try reading non-existing data
-        firedb.getReference("users").child("arthur").child("picture").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e("FirebaseTest", "Data updated");
+       //     userdb.addUser(user.uID, user);
 
-                String res = dataSnapshot.getValue(String.class);
+            String json = gson.toJson(userdb);
 
-                // update toolbar title
-                assertNull(res);
-            }
+            FileWriter writer = new FileWriter(mockUserDBPath, true);
+            writer.write(json);
+            writer.close();
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.e("FirebaseTest", "Failed to read data.", error.toException());
-            }
-        });
-    }
-
-    @Test
-    public void addStringListenerToDB() {
-        // Initiate listener
-        firedb.getReference("users").child("arthur").child("username").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e("FirebaseTest", "Data updated");
-
-                listenerStr = dataSnapshot.getValue(String.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.e("FirebaseTest", "Failed to read data.", error.toException());
-            }
-        });
-
-        // Modifiy field
-        database.child("arthur").child("username").setValue("Archie");
-
-        // Verify field was updated
-        assertEquals("Archie", listenerStr);
-    }
-
-    @Test
-    public void addIntListenerToDB() {
-        // Initiate listener
-        firedb.getReference("sweng-radius").child("arthur").child("username").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e("FirebaseTest", "Data updated");
-
-                listenerInt = dataSnapshot.getValue(Integer.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.e("FirebaseTest", "Failed to read data.", error.toException());
-            }
-        });
-
-        // Modifiy field
-        database.child("arthur").child("age").setValue("98");
-
-        // Verify field was updatedi
-        assertEquals(98, listenerInt.intValue());
-    }
-
-    @Before
-    public void setUp() throws Exception {
-
-        firedb = FirebaseDatabase.getInstance("https://sweng-radius.firebaseio.com");
-        database = firedb.getReference("sweng-radius");
-
-        // Will be added when testing auth features
-        auth = FirebaseAuth.getInstance();
-
-        if (auth.getCurrentUser() != null) {
-
-            return;
-        } else {
-            // TODO Authenticate with hard-coded credentials
-
-            return;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    @After
-    public void tearDown() throws Exception {
-        // Will be added when testing auth features
-        //auth.getInstance().signOut()
+    private User getUser(String key){
+
+        Gson gson = new Gson();
+        UserDB userdb;
+        User ret;
+
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(mockUserDBPath));
+            userdb = gson.fromJson(br, UserDB.class);
+
+            ret = userdb.getUser(key);
+
+            return ret;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    private void removeUser(String key){
+
+        Gson gson = new Gson();
+        UserDB userdb;
+
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(mockUserDBPath));
+            userdb = gson.fromJson(br, UserDB.class);
+
+            userdb.removeUser(key);
+
+            String json = gson.toJson(userdb);
+            // Overwrites existing file
+            FileWriter writer = new FileWriter(mockUserDBPath, true);
+            writer.write(json);
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    */
+    /*
+    private void writeChatlogs(Chatlogs chatlogs){
+        Gson gson = new Gson();
+
+        String json = gson.toJson(chatlogs);
+
+        try{
+            FileWriter writer = new FileWriter(mockChatLogDBPath);
+            writer.write(json);
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void writeMessage(Message msg){
+        Gson gson = new Gson();
+
+        String json = gson.toJson(msg);
+
+        try{
+            FileWriter writer = new FileWriter(mockMsgDBPath);
+            writer.write(json);
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }*/
+
+}
+
+class UserDB {
+
+    private Map<String, User> database;
+
+    public User getUser(String uID){
+
+        return database.get(uID);
+    }
+
+    public void addUser(String uID, User user){
+
+        database.put(uID, user);
+    }
+
+    public void removeUser(String uID){
+
+        database.remove(uID);
+    }
+}
+/*
+class ChatLogsDB {
+
+    private Map<String, Chatlogs> database;
+
+    public Chatlogs getUser(String uID){
+
+        return database.get(uID);
+    }
+
+    public void addUser(String uID, Chatlogs chatlog){
+
+        database.put(uID, chatlog);
+    }
+
+    public void removeUser(String uID){
+
+        database.remove(uID);
+    }
+}
+
+class MessageDB {
+
+    private Map<String, Message> database;
+
+    public Message getMsg(String uID){
+
+        return database.get(uID);
+    }
+
+    public void addMsg(String uID, Message msg){
+
+        database.put(uID, msg);
+    }
+
+    public void removeMsg(String uID){
+
+        database.remove(uID);
+    }
+}
+
+*/
