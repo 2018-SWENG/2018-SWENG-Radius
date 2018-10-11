@@ -103,17 +103,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         testMark.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                User marc = new User();
-                User jean = new User();
-                User marie = new User();
+                User marc = new User(); marc.setLocation(new LatLng(46.524434, 6.570222));
+                User jean = new User(); jean.setLocation(new LatLng(46.514874, 6.567602));
+                User marie = new User(); marie.setLocation(new LatLng(46.521877, 6.588810));
 
-                marc.setLocation(new LatLng(46.524434, 6.570222));
-                jean.setLocation(new LatLng(46.514874, 6.567602));
-                marie.setLocation(new LatLng(46.521877, 6.588810));
-
-                users.add(marc);
-                users.add(jean);
-                users.add(marie);
+                users.add(marc); users.add(jean); users.add(marie);
 
                 markNearbyUsers();
             }
@@ -155,7 +149,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
             }
         });
 
-        //------------------------------------
         mapView = view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
@@ -302,8 +295,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         currentLocation.setLatitude(latitude);
     }
 
-    public void setLongitude(double longtitude) {
-        currentLocation.setLongitude(longtitude);
+    public void setLongitude(double longitude) {
+        currentLocation.setLongitude(longitude);
     }
 
     /**
@@ -348,7 +341,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
                         .title(userName + ": "  + status));
             }
         }
-
     }
 
     /**
@@ -377,5 +369,4 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     public int returnNoOfUsers() {
         return users.size();
     }
-
 }
