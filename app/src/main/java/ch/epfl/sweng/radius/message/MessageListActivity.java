@@ -7,17 +7,14 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.UserInfos;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Activity that hosts messages between two users
@@ -33,7 +30,7 @@ public class MessageListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_message_list);
 
         // Test the chat view
-        User alfred = new User(1);
+        User alfred = new User();
         User mika = new User(UserInfos.getUserId());
         ArrayList<User> participants = new ArrayList<>();
         participants.add(alfred);

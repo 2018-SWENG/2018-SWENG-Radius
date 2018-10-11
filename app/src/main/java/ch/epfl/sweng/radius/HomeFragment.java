@@ -31,6 +31,8 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.radius.database.User;
+
 public class HomeFragment extends Fragment implements OnMapReadyCallback, RadiusCircle {
 
     //constants
@@ -78,8 +80,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         users = new ArrayList<User>();
-        users.add(new User(46.518532, 6.556455));
-        users.add(new User(46.519331, 6.580971));
+        User alfred = new User();
+        User bob = new User();
+
+        alfred.setLocation(new LatLng(46.518532, 6.556455));
+        bob.setLocation(new LatLng(46.519331, 6.580971));
+        users.add(alfred);
+        users.add(bob);
         getLocationPermission();
     }
 
@@ -96,9 +103,17 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         testMark.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                users.add(new User(46.524434, 6.570222));
-                users.add(new User(46.514874, 6.567602));
-                users.add(new User(46.521877, 6.588810));
+                User marc = new User();
+                User jean = new User();
+                User marie = new User();
+
+                marc.setLocation(new LatLng(46.524434, 6.570222));
+                jean.setLocation(new LatLng(46.514874, 6.567602));
+                marie.setLocation(new LatLng(46.521877, 6.588810));
+
+                users.add(marc);
+                users.add(jean);
+                users.add(marie);
 
                 markNearbyUsers();
             }
@@ -263,7 +278,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         return currentLocation.getLatitude();
     }
 
-    public double getLongtitude() {
+    public double getLongitude() {
         return currentLocation.getLongitude();
     }
 
@@ -287,7 +302,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         currentLocation.setLatitude(latitude);
     }
 
-    public void setLongtitude(double longtitude) {
+    public void setLongitude(double longtitude) {
         currentLocation.setLongitude(longtitude);
     }
 
@@ -327,7 +342,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
                     users.get(i).getLocation().longitude))
             {
                 String status = users.get(i).getStatus();
-                String userName = users.get(i).getUserName();
+                String userName = users.get(i).getNickname();
                 //radiusCircle = mobileMap.addCircle(radiusOptions);
                 mobileMap.addMarker(new MarkerOptions().position(users.get(i).getLocation())
                         .title(userName + ": "  + status));
@@ -343,7 +358,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
      * */
     public void addUser(double latitude, double longtitude) {
         if ( latitude >= -90 && latitude <= 90 && longtitude >= -180 && longtitude <= 180) {
-            users.add(new User(latitude, longtitude));
+            User temp = new User();
+            temp.setLocation(new LatLng(latitude, longtitude));
+            users.add(temp);
         }
     }
 

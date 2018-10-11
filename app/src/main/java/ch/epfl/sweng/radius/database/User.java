@@ -10,6 +10,8 @@ import java.util.List;
  * We can then store/access the states of each user in the database
  */
 public class User {
+    private static long idGenerator = 0;// Debugging purpose only
+
     private final long userID;
     private String nickname;
     private String urlProfilePhoto;
@@ -24,6 +26,19 @@ public class User {
     public User(long userID){
         this.userID = userID;
         this.nickname = "New User " + userID;
+        this.urlProfilePhoto = "";
+        this.radius = 500;
+        this.status = "Hi, I'm new to radius !";
+        this.friendsRequests = new ArrayList<>();
+        this.friendsInvitations = new ArrayList<>();
+        this.friends = new ArrayList<>();
+        this.blockedUsers = new ArrayList<>();
+    }
+
+    // Debugging purpose only
+    public User(){
+        this.userID = idGenerator++;
+        this.nickname = "New User " + this.userID;
         this.urlProfilePhoto = "";
         this.radius = 500;
         this.status = "Hi, I'm new to radius !";
