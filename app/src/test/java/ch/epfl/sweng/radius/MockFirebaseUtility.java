@@ -44,7 +44,7 @@ import static org.powermock.api.mockito.PowerMockito.doAnswer;
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(JUnit4.class)
 @PrepareForTest({ FirebaseDatabase.class})
-public class FirebaseUtilityTest {
+public class MockFirebaseUtility {
 
     private FirebaseUtility uT;
     private final static    String mockUserDBPath       = "../../db/user.json";
@@ -54,12 +54,6 @@ public class FirebaseUtilityTest {
     private DatabaseReference mockedDatabaseReference;
     private FirebaseDatabase  mockedFirebaseDatabase;
     String  path = "/";
-    ValueEventListener listener;
-    User mock_user;
-    public DatabaseReference updateString(String s){
-
-        return mockedDatabaseReference;
-    }
 
     @Before
     public void before() {
@@ -80,6 +74,8 @@ public class FirebaseUtilityTest {
             @Override
             public boolean matches(Object argument) {
                 System.out.println(path);
+                User usr = new User();
+                System.out.print(User.class.getSimpleName());
                 path += argument + "/";
                 return true;
             }
@@ -89,27 +85,29 @@ public class FirebaseUtilityTest {
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 ValueEventListener valueEventListener = (ValueEventListener) invocation.getArguments()[0];
-                Object ret_obj;
-                String ret;
+                Object ret_obj = null;
+                String ret = null;
                 String [] parsed_path = path.split("/");
 
                 switch (parsed_path[0]) {
-                    case "user" : {
-                        ret_obj = getUser(parsed_path[1]);
-
-
-                    }
-                    case "chatlogs" : ret_obj = getChatlogs(parsed_path[1]);
-                    case "messages" : ret_obj = getMessages(parsed_path[1]);
+                    case "user"     : ret_obj = getUser(parsed_path[1]);
+                    case "chatlogs" : ret_obj = getChatLogs(parsed_path[1]);
+                    case "messages" : ret_obj = getMessage(parsed_path[1]);
                 };
 
+                if(parsed_path.length > 1){
+                    // TODO : Implement class specific, attribute-wise methods
+                }
                 DataSnapshot mockedDataSnapshot = Mockito.mock(DataSnapshot.class);
-                when(mockedDataSnapshot.getValue(User.class)).thenReturn(getUser(parsed_path[parsed_path.length -1]));
-                // ADD cases here for different data type
-                when(mockedDataSnapshot.getValue(String.class)).thenReturn(ret);
+                when(mockedDataSnapshot.getValue()).thenReturn(ret_obj);
 
+                /*
+                  TODO : Implement class specific, attribute-wise methods
+                when(mockedDataSnapshot.getValue(User.class)).thenReturn(getUser(parsed_path[parsed_path.length -1]));
+                when(mockedDataSnapshot.getValue(ChatLogs.class)).thenReturn(ret);
+                when(mockedDataSnapshot.getValue(Message.class)).thenReturn(ret)
+                */
                 valueEventListener.onDataChange(mockedDataSnapshot);
-                //valueEventListener.onCancelled(...);
 
                 return null;
             }

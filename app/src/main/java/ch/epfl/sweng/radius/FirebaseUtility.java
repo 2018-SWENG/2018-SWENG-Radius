@@ -13,45 +13,56 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.database.User;
 
 class FirebaseUtility {
 
     private FirebaseDatabase fireDB;
     private FirebaseAuth     auth;
-    private FirebaseUser     user;
 
     private DatabaseReference   database;
 
-    private String           uID;
-    private String           retBuffer;
+    private Long        uID;
+    private User        user;
+    private Message     msg;
+    private ChatLogs    chatLogs;
 
     // TODO Check if user is logged in by checking userID is not NULL
     // TODO Include authentication into constructor so all Firebase operations are done within here
-    public FirebaseUtility(){
+    public FirebaseUtility(User user){
 
-        // TODO : Either move it into separate method or first auth user
         // Instanciate References Object
-        auth        = FirebaseAuth.getInstance();
-        fireDB      = FirebaseDatabase.getInstance();
-        user        = auth.getCurrentUser();
-        database    = fireDB.getReference();
-        uID         = user.getUid();
+        this.auth      = FirebaseAuth.getInstance();
+        this.fireDB    = FirebaseDatabase.getInstance();
+        this.uID       = user.getUserID();
+
+        this.user      = user;
+        this.database  = fireDB.getReference("users");
+    }
+
+    public FirebaseUtility(Message dataType){
+
+        // Instanciate References Object
+        this.auth       = FirebaseAuth.getInstance();
+        this.fireDB     = FirebaseDatabase.getInstance();
+        this.uID        = dataType.getMessageID();
+
+        this.msg        = dataType;
+        this.database   = fireDB.getReference("messages")
 
     }
 
-    /**
-     * Method to check whether the current authentication is the first one
-     *  in order to create a new user profile in the DB if need be
-     */
-    public boolean checkNewUser(){
-        FirebaseUserMetadata metadata = auth.getCurrentUser().getMetadata();
-        if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
-            // TODO : Push new default profile entry to DB and go to profile Activity
-            return true;
-        } else {
-            // TODO : Goto home activity
-            return false;
-        }
+    public FirebaseUtility(ChatLogs dataType){
+
+        // Instanciate References Object
+        this.auth        = FirebaseAuth.getInstance();
+        this.fireDB      = FirebaseDatabase.getInstance();
+        this.uID         = dataType.getParticipants().get(0).getUserID();
+
+        this.chatLogs    = dataType;
+        this.database    = fireDB.getReference("chatlogs");
     }
 
     /*
@@ -67,7 +78,7 @@ class FirebaseUtility {
      */
     public void writeToDB(String table, String field, Object value){
 
-        database.child(table).child(uID).child(field).setValue(value);
+        database.child(table).child(Long.toString(uID)).child(field).setValue(value);
     }
 
 
@@ -77,16 +88,16 @@ class FirebaseUtility {
      * @param field Field to read
      * @return String representation of the object read in the database
      */
-    public String readFromDB(String table, String field){
+    public void listenUser(){
 
         ValueEventListener  listener;
 
         listener = new ValueEventListener() {
             @Override
             public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                retBuffer = dataSnapshot.getValue().toString();
+                user = dataSnapshot.getValue(User.class);
 
-                Log.e("Firebase", "User data has been read : " + retBuffer);
+                Log.e("Firebase", "User data has been read.");
 
             }
 
@@ -99,67 +110,112 @@ class FirebaseUtility {
 
         database.addListenerForSingleValueEvent(listener);
 
-        return retBuffer;
+        return;
 
     }
 
+    public void writeUser(){
 
-    // TODO : When table ready, only one method for whole class
-    public void addStringListenerToDB(String table, final String field, final TextView view){
+        database.child(Long.toString(user.getUserID())).setValue(user);
 
-        ValueEventListener listener = new ValueEventListener() {
+        return;
+
+    }
+
+    public void writeUser(User new_user){
+
+        database.child(Long.toString(new_user.getUserID())).setValue(new_user);
+
+        return;
+
+    }
+
+    public void listenMessage(){
+
+        ValueEventListener  listener;
+
+        listener = new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                msg = dataSnapshot.getValue(Message.class);
 
-                String val = dataSnapshot.getValue(String.class);
-
-                if (val == null){
-                    Log.e("Firebase", "User data is null!");
-                    return;
-                }
-
-                view.setText(val);
-
-                Log.e("Firebase", "User data is changed : " + field);
+                Log.e("Firebase", "Message data has been read.");
 
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("Firebase", "Unable to read user data.", databaseError.toException());
+                Log.e("Firebase", "Failed to read message", databaseError.toException());
 
             }
         };
 
+        database.addListenerForSingleValueEvent(listener);
+
+        return;
+
     }
 
-    public void addIntListenerToDB(String table, final String field, final TextView view){
+    public void writeMessage(){
 
-        ValueEventListener listener = new ValueEventListener() {
+        database.child(Long.toString(msg.getMessageID())).setValue(msg);
+
+        return;
+
+    }
+
+    public void writeMessage(Message new_msg){
+
+        database.child(Long.toString(new_msg.getMessageID())).setValue(new_msg);
+
+        return;
+
+    }
+
+    public void listenChatLogs(){
+
+        ValueEventListener  listener;
+
+        listener = new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                chatLogs = dataSnapshot.getValue(ChatLogs.class);
 
-                Integer val = dataSnapshot.getValue(Integer.class);
-
-                if (val == null){
-                    Log.e("Firebase", "User data is null!");
-                    return;
-                }
-
-                view.setText(val);
-
-                Log.e("Firebase", "User data is changed : " + field);
+                Log.e("Firebase", "Chatlogs data has been read.");
 
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("Firebase", "Unable to read user data.", databaseError.toException());
+                Log.e("Firebase", "Failed to read Chatlogs", databaseError.toException());
 
             }
         };
 
+        database.addListenerForSingleValueEvent(listener);
+
+        return;
+
     }
+
+    public void writeChatLogs(){
+
+        database.child(Long.toString(msg.getMessageID())).setValue(msg);
+
+        return;
+
+    }
+
+    public void writeChatLogs(ChatLogs new_chatlogs){
+        database.child(Long.toString(new_chatlogs.getParticipants().get(0).getUserID()))
+                .setValue(new_chatlogs);
+
+        return;
+
+    }
+
+
+
 
 }
 
