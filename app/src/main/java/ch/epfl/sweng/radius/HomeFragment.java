@@ -31,6 +31,8 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.radius.database.User;
+
 public class HomeFragment extends Fragment implements OnMapReadyCallback, RadiusCircle {
 
     //constants
@@ -78,8 +80,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         users = new ArrayList<User>();
-        users.add(new User(46.518532, 6.556455));
-        users.add(new User(46.519331, 6.580971));
+        User alfred = new User(); User bob = new User();
+
+        alfred.setLocation(new LatLng(46.518532, 6.556455));
+        bob.setLocation(new LatLng(46.519331, 6.580971));
+        users.add(alfred); users.add(bob);
         getLocationPermission();
     }
 
@@ -96,10 +101,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         testMark.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                users.add(new User(46.524434, 6.570222));
-                users.add(new User(46.514874, 6.567602));
-                users.add(new User(46.521877, 6.588810));
-
+                User marc = new User(); marc.setLocation(new LatLng(46.524434, 6.570222));
+                User jean = new User(); jean.setLocation(new LatLng(46.514874, 6.567602));
+                User marie = new User(); marie.setLocation(new LatLng(46.521877, 6.588810));
+                users.add(marc); users.add(jean); users.add(marie);
                 markNearbyUsers();
             }
         });
@@ -108,8 +113,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         testRad.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setRadius(500);
-                markNearbyUsers();
+                setRadius(500);markNearbyUsers();
             }
         });
 
@@ -117,8 +121,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         testRad2.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setRadius(2000);
-                markNearbyUsers();
+                setRadius(2000);markNearbyUsers();
             }
         });
 
@@ -135,12 +138,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
                         .fillColor(Color.parseColor("#22FF0000"))
                         .radius(getRadius());
                 radiusCircle = mobileMap.addCircle(radiusOptions);
-                markNearbyUsers();
-                //mobileMap.addCircle(radiusOptions);
+                markNearbyUsers(); //mobileMap.addCircle(radiusOptions);
             }
         });
 
-        //------------------------------------
         mapView = view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
@@ -157,11 +158,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
             getDeviceLocation();
 
             if (ActivityCompat.checkSelfPermission(getContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(getContext(),
-                    Manifest.permission.ACCESS_COARSE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED)
+                   Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                   && ActivityCompat.checkSelfPermission(getContext(),
+                   Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             {
                 return;
             }
@@ -263,7 +262,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         return currentLocation.getLatitude();
     }
 
-    public double getLongtitude() {
+    public double getLongitude() {
         return currentLocation.getLongitude();
     }
 
@@ -287,8 +286,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         currentLocation.setLatitude(latitude);
     }
 
-    public void setLongtitude(double longtitude) {
-        currentLocation.setLongitude(longtitude);
+    public void setLongitude(double longitude) {
+        currentLocation.setLongitude(longitude);
     }
 
     /**
@@ -298,7 +297,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
      * */
     public boolean contains(double p2latitude, double p2longtitude) {
         double distance = findDistance(p2latitude, p2longtitude);
-
         return radiusCircle.getRadius() >= distance;
     }
 
@@ -327,13 +325,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
                     users.get(i).getLocation().longitude))
             {
                 String status = users.get(i).getStatus();
-                String userName = users.get(i).getUserName();
+                String userName = users.get(i).getNickname();
                 //radiusCircle = mobileMap.addCircle(radiusOptions);
                 mobileMap.addMarker(new MarkerOptions().position(users.get(i).getLocation())
                         .title(userName + ": "  + status));
             }
         }
-
     }
 
     /**
@@ -343,7 +340,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
      * */
     public void addUser(double latitude, double longtitude) {
         if ( latitude >= -90 && latitude <= 90 && longtitude >= -180 && longtitude <= 180) {
-            users.add(new User(latitude, longtitude));
+            User temp = new User(); temp.setLocation(new LatLng(latitude, longtitude));
+            users.add(temp);
         }
     }
 
@@ -352,13 +350,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
      * @param index - int - index of the user
      * */
     public void deleteUser(int index) {
-        if ( index < users.size() && index >= 0) {
+        if ( index < users.size() && index >= 0)
             users.remove(index);
-        }
     }
 
-    public int returnNoOfUsers() {
-        return users.size();
-    }
-
+    public int returnNoOfUsers() { return users.size(); }
 }
