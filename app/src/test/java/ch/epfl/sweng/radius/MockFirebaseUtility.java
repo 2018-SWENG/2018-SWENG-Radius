@@ -1,8 +1,6 @@
 package ch.epfl.sweng.radius;
 
-import android.renderscript.Sampler;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -10,6 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +27,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -37,6 +38,8 @@ import ch.epfl.sweng.radius.database.User;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.doAnswer;
@@ -47,13 +50,15 @@ import static org.powermock.api.mockito.PowerMockito.doAnswer;
 public class MockFirebaseUtility {
 
     private FirebaseUtility uT;
-    private final static    String mockUserDBPath       = "../../db/user.json";
+    private final static    String mockUserDBPath       = "/home/arthur/Projects/Sweng_Proj/2018-SWENG-Radius/app/src/test/java/ch/epfl/sweng/radius/mock_databases/user.json";
     private final static    String mockMsgDBPath        = "../../db/msg.json";
     private final static    String mockChatLogDBPath    = "../../db/chatlog.json";
 
     private DatabaseReference mockedDatabaseReference;
     private FirebaseDatabase  mockedFirebaseDatabase;
-    String  path = "/";
+    private DataSnapshot      mockedDataSnapshot;
+    private Object obj;
+    String  path = "/user/";
 
     @Before
     public void before() {
@@ -75,31 +80,29 @@ public class MockFirebaseUtility {
             public boolean matches(Object argument) {
                 System.out.println(path);
                 User usr = new User();
-                System.out.print(User.class.getSimpleName());
                 path += argument + "/";
                 return true;
             }
 
         }))).thenReturn(mockedDatabaseReference);
-        doAnswer(new Answer<Void>() {
+
+        doAnswer(new Answer<Object>() {
             @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) throws Throwable {
                 ValueEventListener valueEventListener = (ValueEventListener) invocation.getArguments()[0];
-                Object ret_obj = null;
+                Object ret_obj = "Arthur";
                 String ret = null;
                 String [] parsed_path = path.split("/");
 
                 switch (parsed_path[0]) {
-                    case "user"     : ret_obj = getUser(parsed_path[1]);
-                    case "chatlogs" : ret_obj = getChatLogs(parsed_path[1]);
-                    case "messages" : ret_obj = getMessage(parsed_path[1]);
+                    case "user"     : ret_obj = getUser(parsed_path[1]); break;
+                    case "chatlogs" : ret_obj = getChatLogs(parsed_path[1]); break;
+                    case "messages" : ret_obj = getMessage(parsed_path[1]); break;
                 };
 
                 if(parsed_path.length > 1){
                     // TODO : Implement class specific, attribute-wise methods
                 }
-                DataSnapshot mockedDataSnapshot = Mockito.mock(DataSnapshot.class);
-                when(mockedDataSnapshot.getValue()).thenReturn(ret_obj);
 
                 /*
                   TODO : Implement class specific, attribute-wise methods
@@ -108,10 +111,31 @@ public class MockFirebaseUtility {
                 when(mockedDataSnapshot.getValue(Message.class)).thenReturn(ret)
                 */
                 valueEventListener.onDataChange(mockedDataSnapshot);
-
-                return null;
+                obj = ret_obj;
+                return ret_obj;
             }
         }).when(mockedDatabaseReference).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+        mockedDataSnapshot = Mockito.mock(DataSnapshot.class);
+        doAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                String [] parsed_path = path.split("/");
+                Object ret_obj = "bob";
+
+                System.out.print("Parsed 1 : " +parsed_path[1]);
+                System.out.print("Parsed 0 : " +parsed_path[2]);
+
+
+                switch ( parsed_path[1]) {
+                    case "user"     : ret_obj = getUser(parsed_path[2]);
+                    case "chatlogs" : ret_obj = getChatLogs(parsed_path[2]);
+                    case "messages" : ret_obj = getMessage(parsed_path[2]);
+                }
+
+                return ret_obj;
+            }
+        }).when(mockedDataSnapshot).getValue();
 
     }
 
@@ -121,8 +145,6 @@ public class MockFirebaseUtility {
 
         // Try writing to existing user
         mockedDatabaseReference.child("arthur").child("nickname").setValue("Archie");
-
-        mockedDatabaseReference.child("arthurrrrr");
 
     }
 
@@ -136,7 +158,7 @@ public class MockFirebaseUtility {
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String val = dataSnapshot.getValue(String.class);
+                Object val = mockedDataSnapshot.getValue();
 
                 if (val == null){
                     System.out.println("User data is null!");
@@ -152,6 +174,7 @@ public class MockFirebaseUtility {
 
             }
         };
+        System.out.println("Path : " + path);
         mockedDatabaseReference.child("arthur").addListenerForSingleValueEvent(listener);
         // check preferences are updated
     }
@@ -354,25 +377,40 @@ public class MockFirebaseUtility {
 }
 
 class UserDB {
+    @Expose
+    private List<User> database;
 
-    private Map<String, User> database;
+    public  UserDB(ArrayList<User> db){
+        database = db;
+    }
 
     public User getUser(String uID){
 
-        return database.get(uID);
+        User user = new User();
+
+        System.out.println("GET  " + database);
+        return user;
     }
 
     public void addUser(String uID, User user){
 
-        if(database.containsKey(uID))
+    ///    if(database.containsKey(uID))
             database.remove(uID);
 
-        database.put(uID, user);
+    //    database.put(uID, user);
     }
 
     public void removeUser(String uID){
 
         database.remove(uID);
+    }
+
+    public List<User> getUsers(){
+        return database;
+    }
+
+    public void setUsers(List<User> db){
+        this.database = db;
     }
 }
 

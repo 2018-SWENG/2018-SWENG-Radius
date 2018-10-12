@@ -1,0 +1,12 @@
+
+  {
+    "user": {
+      	"arthur" : {
+        "userID": 123456789,
+        "nickname": "Arthy",
+        "urlProfilePhoto": "http://placehold.it/32x32",
+        "radius": 34,
+        "status": "Asleep"
+      }
+    }
+  }
