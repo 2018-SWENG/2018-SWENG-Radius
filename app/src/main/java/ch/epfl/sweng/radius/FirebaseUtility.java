@@ -7,13 +7,15 @@
  *                  write[User, Message, ChatLogs]([User,Message, ChatLogs] new_value)
  * TODO : Add methods to add more than one listener for each instance
  * TODO : Add method to check if user is new
- * @since 1.0
  */
 package ch.epfl.sweng.radius;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -81,6 +83,44 @@ class FirebaseUtility {
 
         this.chatLogs    = dataType;
         this.database    = fireDB.getReference("chatlogs");
+    }
+
+    // TODO : #Salezer, must be fixed
+
+    /**
+     * Checks whether the current user is a new user. If that's the case, it creates a new user
+     *      and pushes it to the database
+     * @return Whether the user is new or not
+     */
+    public boolean isNew(){
+
+        final boolean[] newb = new boolean[1];
+        final boolean[] listenDone = {false};
+        OnCompleteListener<AuthResult> completeListener = new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
+                    Log.d("MyTAG", "onComplete: " + (isNew ? "new user" : "old user"));
+                    newb[0] = isNew;
+                    listenDone[0] = true;
+                }
+            }
+        };
+        while(!listenDone[0]);
+
+        if(newb[0]){
+            User user = new User(Long.parseLong(auth.getCurrentUser().getUid()));
+                user.setNickname(auth.getCurrentUser().getDisplayName());
+                user.setRadius(10);
+                user.setStatus("Hey, I just arrived on Radius!");
+
+            database.child(Long.toString(user.getUserID())).setValue(user);
+
+        }
+
+
+        return newb[0];
     }
 
 
