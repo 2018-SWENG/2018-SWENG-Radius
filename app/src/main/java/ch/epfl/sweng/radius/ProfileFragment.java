@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.button.MaterialButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,9 @@ public class ProfileFragment extends Fragment {
             int progress = radiusBar.getProgress();
             radiusValue.setText(progress + "Km");
         }
+
+        Fragment homeFragment = HomeFragment.newInstance(radiusBar.getProgress());
+        //Fragment homeFragment = HomeFragment.newInstance(radiusBar.getProgress());
         // Inflate the layout for this fragment
         return view;
     }
@@ -75,6 +79,13 @@ public class ProfileFragment extends Fragment {
 
         //outstate.putString("radiusValue", radiusValue.getText().toString());
         outstate.putInt("radius", radiusBar.getProgress());
+
+        /*Bundle profileData = new Bundle();
+        Fragment homeFragment = new HomeFragment();
+        profileData.putDouble("radiusValue", radiusBar.getProgress());
+        homeFragment.setArguments(profileData);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fcontainer, homeFragment).addToBackStack(null).commit();*/
     }
 
 
@@ -83,7 +94,15 @@ public class ProfileFragment extends Fragment {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             // updated continuously as the user slides the thumb
+
             radiusValue.setText(progress + " Km");
+            Fragment homeFragment = HomeFragment.newInstance(radiusBar.getProgress());
+            /*Bundle profileData = new Bundle();
+            Fragment homeFragment = new HomeFragment();
+            profileData.putDouble("radiusValue", radiusBar.getProgress());
+            homeFragment.setArguments(profileData);*/
+            //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            //fragmentManager.beginTransaction().replace(R.id.fcontainer, homeFragment).addToBackStack(null).commit();
         }
 
         @Override

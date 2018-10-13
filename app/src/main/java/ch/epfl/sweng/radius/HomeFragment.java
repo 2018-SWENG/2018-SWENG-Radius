@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOC_PERMIT_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
-    private static final double DEFAULT_RADIUS = 1500; //In meters
+    private static final double DEFAULT_RADIUS = 50000; //In meters
 
     //properties
     private static GoogleMap mobileMap;
@@ -56,7 +56,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     private static CircleOptions radiusOptions;
     private static Circle radiusCircle;
     // might need to delete them later or switch to them
-    private static double radius;
+    private static double radius; // don't delete radius
     private static LatLng currCoordinates;
 
     private FusedLocationProviderClient mblFusedLocationClient;
@@ -72,15 +72,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param radiusValue Parameter 1.
      * @return A new instance of fragment SettingsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
+    public static HomeFragment newInstance(int radiusValue) {
         HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
+        radius = radiusValue * 1000;
+        /*Bundle args = new Bundle();
+        args.putDouble("radiusValue", radiusValue);
+        fragment.setArguments(args);*/
         return fragment;
     }
 
@@ -95,12 +96,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         if (savedInstanceState != null) {
             currCoordinates = new LatLng(savedInstanceState
                     .getDouble("latitude", 0), savedInstanceState.getDouble("longtitude", 0));
-            radius = savedInstanceState.getDouble("radius", 350);
+            //if ( getArguments() != null) {
+                //radius = getArguments().getDouble("radiusValue", DEFAULT_RADIUS) * 1000; //converting km to m.
+            //}
+            radius = savedInstanceState.getDouble("radius", DEFAULT_RADIUS);
             latitude = currCoordinates.latitude; // might need to delete them later
             longtitude = currCoordinates.longitude;
         }
         else {
-            radius = 750;
+            radius = DEFAULT_RADIUS;
         }
 
         if (currentLocation == null) {
@@ -140,6 +144,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     @Override
     public View onCreateView(LayoutInflater infltr, ViewGroup containr, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        /*if (savedInstanceState != null) {
+            currCoordinates = new LatLng(savedInstanceState
+                    .getDouble("latitude", 0), savedInstanceState.getDouble("longtitude", 0));
+            if ( getArguments() != null) {
+                radius = getArguments().getDouble("radiusValue", DEFAULT_RADIUS) * 1000; //converting km to m.
+            }
+            radius = savedInstanceState.getDouble("radius", DEFAULT_RADIUS);
+            latitude = currCoordinates.latitude; // might need to delete them later
+            longtitude = currCoordinates.longitude;
+        }
+        else {
+            radius = DEFAULT_RADIUS;
+        }*/
+
         return infltr.inflate(R.layout.fragment_home, containr, false);
     }
 
@@ -259,7 +277,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
                             LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(),
                                     currentLocation.getLongitude());
                             latitude = currentLocation.getLatitude();
-                            latitude = currentLocation.getLongitude();
+                            longtitude = currentLocation.getLongitude();
 
                             initCircle(currentCoordinates);
                             markNearbyUsers();
@@ -352,6 +370,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
      * @param radius - double - new radius of the circle (in meters)
      * */
     public void setRadius(double radius) {
+        this.radius = radius;
         mobileMap.clear();
         LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(),
                 currentLocation.getLongitude());
