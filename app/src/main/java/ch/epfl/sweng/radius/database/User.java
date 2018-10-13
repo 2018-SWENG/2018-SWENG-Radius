@@ -21,6 +21,7 @@ public class User {
     private List<Integer> friendsInvitations;
     private List<Integer> friends;
     private List<Integer> blockedUsers;
+    private List<String> spokenLanguages;
     private LatLng location;
 
     public User(long userID){
@@ -33,6 +34,7 @@ public class User {
         this.friendsInvitations = new ArrayList<>();
         this.friends = new ArrayList<>();
         this.blockedUsers = new ArrayList<>();
+        this.spokenLanguages = new ArrayList<>();
     }
 
     // Debugging purpose only

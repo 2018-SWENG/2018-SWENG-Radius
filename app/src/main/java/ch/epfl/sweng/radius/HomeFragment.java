@@ -78,7 +78,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(int radiusValue) {
         HomeFragment fragment = new HomeFragment();
-        radius = radiusValue * 1000;
+        radius = radiusValue * 1000; // converting to meters.
         /*Bundle args = new Bundle();
         args.putDouble("radiusValue", radiusValue);
         fragment.setArguments(args);*/
@@ -96,9 +96,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         if (savedInstanceState != null) {
             currCoordinates = new LatLng(savedInstanceState
                     .getDouble("latitude", 0), savedInstanceState.getDouble("longtitude", 0));
-            //if ( getArguments() != null) {
-                //radius = getArguments().getDouble("radiusValue", DEFAULT_RADIUS) * 1000; //converting km to m.
-            //}
+
             radius = savedInstanceState.getDouble("radius", DEFAULT_RADIUS);
             latitude = currCoordinates.latitude; // might need to delete them later
             longtitude = currCoordinates.longitude;

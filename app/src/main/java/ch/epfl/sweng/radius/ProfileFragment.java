@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.util.List;
+
 
 public class ProfileFragment extends Fragment {
     
@@ -25,7 +27,7 @@ public class ProfileFragment extends Fragment {
     SeekBar radiusBar;
     TextView radiusValue;
     MaterialButton saveButton;
-
+    private List<String> spokenLanguages;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -60,7 +62,7 @@ public class ProfileFragment extends Fragment {
 
         if ( savedInstanceState != null) {
             int progress = savedInstanceState.getInt("radius", radiusBar.getProgress());
-            radiusBar.setProgress(savedInstanceState.getInt("radius", 50));//radiusBar.getProgress();  //50 is the default value of the slider - might want to put a constant for it later
+            radiusBar.setProgress(savedInstanceState.getInt("radius", 50));
             radiusValue.setText(progress + " Km");
         } else {
             int progress = radiusBar.getProgress();
@@ -68,7 +70,6 @@ public class ProfileFragment extends Fragment {
         }
 
         Fragment homeFragment = HomeFragment.newInstance(radiusBar.getProgress());
-        //Fragment homeFragment = HomeFragment.newInstance(radiusBar.getProgress());
         // Inflate the layout for this fragment
         return view;
     }
