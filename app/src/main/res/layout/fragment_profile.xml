@@ -74,6 +74,12 @@
                     android:max="100"
                     android:progress="50" />
 
+                <Button
+                    android:id="@+id/languagesButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Select languages" />
+
                 <android.support.design.button.MaterialButton
                     android:id="@+id/saveButton"
                     style="@style/Widget.MaterialComponents.Button"

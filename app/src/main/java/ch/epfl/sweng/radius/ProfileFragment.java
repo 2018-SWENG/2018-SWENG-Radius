@@ -1,19 +1,28 @@
 package ch.epfl.sweng.radius;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.button.MaterialButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import android.content.Context;
+/*import android.content.res.Resources;
+import android.content.*/
 
 
 public class ProfileFragment extends Fragment {
@@ -27,6 +36,8 @@ public class ProfileFragment extends Fragment {
     SeekBar radiusBar;
     TextView radiusValue;
     MaterialButton saveButton;
+    private Button selectLanguagesButton;
+    private List<String> selectableLanguages;
     private List<String> spokenLanguages;
 
     public ProfileFragment() {
@@ -69,6 +80,28 @@ public class ProfileFragment extends Fragment {
             radiusValue.setText(progress + "Km");
         }
 
+        selectLanguagesButton = view.findViewById(R.id.languagesButton);
+        selectLanguagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectableLanguages == null) {
+                    selectableLanguages = readLanguagesFromFile();
+                }
+
+                System.out.println(selectableLanguages == null);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Pick the languages you speak");
+                builder.setItems(ProfileFragment.this.selectableLanguages.toArray(new String[ProfileFragment.this.selectableLanguages.size()]), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // the user clicked on colors[which]
+                    }
+                });
+                builder.show();
+            }
+        });
+
         Fragment homeFragment = HomeFragment.newInstance(radiusBar.getProgress());
         // Inflate the layout for this fragment
         return view;
@@ -79,6 +112,25 @@ public class ProfileFragment extends Fragment {
         super.onSaveInstanceState(outstate);
 
         outstate.putInt("radius", radiusBar.getProgress());
+    }
+
+    private ArrayList<String> readLanguagesFromFile() {
+        try {
+
+            InputStream inputStream = getActivity().getResources().openRawResource(R.raw.languages);
+            ArrayList<String> languages = new ArrayList<String>();
+            // File f = new File("languages.txt");
+            Scanner scan = new Scanner(inputStream);
+
+            while (scan.hasNext()) {
+                languages.add(scan.nextLine().trim());
+            }
+
+            return languages;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
 
