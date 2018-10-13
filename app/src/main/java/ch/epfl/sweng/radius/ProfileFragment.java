@@ -55,12 +55,26 @@ public class ProfileFragment extends Fragment {
         // set a change listener on the SeekBar
         radiusBar = view.findViewById(R.id.radiusBar);
         radiusBar.setOnSeekBarChangeListener(seekBarChangeListener);
-
-        int progress = radiusBar.getProgress();
         radiusValue = view.findViewById(R.id.radiusValue);
-        radiusValue.setText(progress + " Km");
+
+        if ( savedInstanceState != null) {
+            int progress = savedInstanceState.getInt("radius", radiusBar.getProgress());
+            radiusBar.setProgress(savedInstanceState.getInt("radius", 50));//radiusBar.getProgress();  //50 is the default value of the slider - might want to put a constant for it later
+            radiusValue.setText(progress + " Km");
+        } else {
+            int progress = radiusBar.getProgress();
+            radiusValue.setText(progress + "Km");
+        }
         // Inflate the layout for this fragment
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outstate) {
+        super.onSaveInstanceState(outstate);
+
+        //outstate.putString("radiusValue", radiusValue.getText().toString());
+        outstate.putInt("radius", radiusBar.getProgress());
     }
 
 
