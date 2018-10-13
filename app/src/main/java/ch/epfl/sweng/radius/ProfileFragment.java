@@ -77,15 +77,7 @@ public class ProfileFragment extends Fragment {
     public void onSaveInstanceState(Bundle outstate) {
         super.onSaveInstanceState(outstate);
 
-        //outstate.putString("radiusValue", radiusValue.getText().toString());
         outstate.putInt("radius", radiusBar.getProgress());
-
-        /*Bundle profileData = new Bundle();
-        Fragment homeFragment = new HomeFragment();
-        profileData.putDouble("radiusValue", radiusBar.getProgress());
-        homeFragment.setArguments(profileData);
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fcontainer, homeFragment).addToBackStack(null).commit();*/
     }
 
 
@@ -94,15 +86,8 @@ public class ProfileFragment extends Fragment {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             // updated continuously as the user slides the thumb
-
             radiusValue.setText(progress + " Km");
             Fragment homeFragment = HomeFragment.newInstance(radiusBar.getProgress());
-            /*Bundle profileData = new Bundle();
-            Fragment homeFragment = new HomeFragment();
-            profileData.putDouble("radiusValue", radiusBar.getProgress());
-            homeFragment.setArguments(profileData);*/
-            //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            //fragmentManager.beginTransaction().replace(R.id.fcontainer, homeFragment).addToBackStack(null).commit();
         }
 
         @Override
