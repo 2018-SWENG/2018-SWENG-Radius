@@ -37,8 +37,10 @@ public class ProfileFragment extends Fragment {
     TextView radiusValue;
     MaterialButton saveButton;
     private Button selectLanguagesButton;
-    private List<String> selectableLanguages;
-    private List<String> spokenLanguages;
+    private ArrayList<String> selectableLanguages;
+    private boolean[] checkedLanguages;
+    private ArrayList<Integer> spokenLanguages;
+    private TextView selectedLanguages;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -75,30 +77,70 @@ public class ProfileFragment extends Fragment {
             int progress = savedInstanceState.getInt("radius", radiusBar.getProgress());
             radiusBar.setProgress(savedInstanceState.getInt("radius", 50));
             radiusValue.setText(progress + " Km");
+            selectableLanguages = savedInstanceState.getStringArrayList("languageList");
+            spokenLanguages = savedInstanceState.getIntegerArrayList("spokenLanguages");
         } else {
             int progress = radiusBar.getProgress();
             radiusValue.setText(progress + "Km");
+            selectableLanguages = readLanguagesFromFile();
+            spokenLanguages = new ArrayList<Integer>();
         }
 
+        selectedLanguages =  view.findViewById(R.id.spokenLanguages);
+        checkedLanguages = new boolean[selectableLanguages.size()];
         selectLanguagesButton = view.findViewById(R.id.languagesButton);
         selectLanguagesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectableLanguages == null) {
-                    selectableLanguages = readLanguagesFromFile();
-                }
-
-                System.out.println(selectableLanguages == null);
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Pick the languages you speak");
-                builder.setItems(ProfileFragment.this.selectableLanguages.toArray(new String[ProfileFragment.this.selectableLanguages.size()]), new DialogInterface.OnClickListener() {
+                builder.setMultiChoiceItems(selectableLanguages.toArray(new String[ProfileFragment.this.selectableLanguages.size()]), checkedLanguages, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // the user clicked on colors[which]
+                    public void onClick(DialogInterface dialog, int position, boolean isChecked) {
+                        if (isChecked) {
+                            if (!spokenLanguages.contains(position)) {
+                                spokenLanguages.add(position);
+                            }
+                        } else if (spokenLanguages.contains(position)) {
+                            spokenLanguages.remove(position);
+                        }
                     }
                 });
-                builder.show();
+
+                builder.setCancelable(false);
+                builder.setPositiveButton(R.string.ok_label, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String item = "";
+                        for (int i = 0; i < spokenLanguages.size(); i++) {
+                            item = item + selectableLanguages.get(spokenLanguages.get(i));
+
+                            if (i != spokenLanguages.size() - 1) {
+                                item = item + ", ";
+                            }
+                        }
+
+                        selectedLanguages.setText(item);
+                    }
+                });
+                builder.setNegativeButton(R.string.dismiss_label, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNeutralButton(R.string.clearAll_label, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        for (int i = 0; i < checkedLanguages.length; i++) {
+                            checkedLanguages[i] = false;
+                        }
+                        spokenLanguages.clear();
+                        selectedLanguages.setText("");
+                    }
+                });
+                AlertDialog languageDialog = builder.create();
+                languageDialog.show();
             }
         });
 
@@ -112,6 +154,8 @@ public class ProfileFragment extends Fragment {
         super.onSaveInstanceState(outstate);
 
         outstate.putInt("radius", radiusBar.getProgress());
+        outstate.putStringArrayList("languageList", selectableLanguages);
+        outstate.putIntegerArrayList("spokenLanguages", spokenLanguages);
     }
 
     private ArrayList<String> readLanguagesFromFile() {
