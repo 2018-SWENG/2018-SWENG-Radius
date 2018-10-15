@@ -21,7 +21,7 @@ public class User {
     private List<Integer> friendsInvitations;
     private List<Integer> friends;
     private List<Integer> blockedUsers;
-    private List<String> spokenLanguages;
+    private String spokenLanguages;
     private LatLng location;
 
     public User(long userID){
@@ -34,7 +34,7 @@ public class User {
         this.friendsInvitations = new ArrayList<>();
         this.friends = new ArrayList<>();
         this.blockedUsers = new ArrayList<>();
-        this.spokenLanguages = new ArrayList<>();
+        this.spokenLanguages = "";
     }
 
     // Debugging purpose only
@@ -140,4 +140,8 @@ public class User {
     public void setLocation(LatLng location) {
         this.location = location;
     }
+
+    public void setSpokenLanguages(String spokenLanguages) { this.spokenLanguages = spokenLanguages; }
+
+    public String getSpokenLanguages() { return this.spokenLanguages; }
 }

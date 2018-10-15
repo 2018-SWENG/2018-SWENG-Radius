@@ -33,33 +33,46 @@ public class ProfileFragment extends Fragment {
     TextView userStatus;
     TextInputEditText statusInput;
     TextInputEditText nicknameInput;
-    SeekBar radiusBar;
+    static SeekBar radiusBar;
     TextView radiusValue;
     MaterialButton saveButton;
     private Button selectLanguagesButton;
-    private ArrayList<String> selectableLanguages;
-    private boolean[] checkedLanguages;
-    private ArrayList<Integer> spokenLanguages;
-    private TextView selectedLanguages;
+    private static ArrayList<String> selectableLanguages;
+    private static boolean[] checkedLanguages;
+    private static ArrayList<Integer> spokenLanguages;
+    private static TextView selectedLanguages;
+    private static String languagesText;
 
     public ProfileFragment() {
         // Required empty public constructor
+        //languagesText = "";
+        //selectableLanguages = readLanguagesFromFile();
+        spokenLanguages = new ArrayList<Integer>();
+        //System.out.println(readLanguagesFromFile().size());
+        //checkedLanguages = new boolean[selectableLanguages.size()];
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment SettingsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
+    public static ProfileFragment newInstance() { // currently useless
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+        args.putInt("radiusTest", radiusBar.getProgress());
+        //languagesText = selectedLanguages.getText().toString();
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        System.out.println(readLanguagesFromFile().size());
     }
 
 
@@ -72,37 +85,44 @@ public class ProfileFragment extends Fragment {
         radiusBar = view.findViewById(R.id.radiusBar);
         radiusBar.setOnSeekBarChangeListener(seekBarChangeListener);
         radiusValue = view.findViewById(R.id.radiusValue);
+        selectedLanguages =  view.findViewById(R.id.spokenLanguages);
+        selectLanguagesButton = view.findViewById(R.id.languagesButton);
 
         if ( savedInstanceState != null) {
             int progress = savedInstanceState.getInt("radius", radiusBar.getProgress());
             radiusBar.setProgress(savedInstanceState.getInt("radius", 50));
             radiusValue.setText(progress + " Km");
             selectableLanguages = savedInstanceState.getStringArrayList("languageList");
-            spokenLanguages = savedInstanceState.getIntegerArrayList("spokenLanguages");
+            spokenLanguages = savedInstanceState.getIntegerArrayList("spokenLanguagesArray");
+            selectedLanguages.setText(savedInstanceState.getString("spokenLanguages"));
         } else {
             int progress = radiusBar.getProgress();
             radiusValue.setText(progress + "Km");
+            System.out.println("------------------------------------------------------" + progress + " ----------------------------------------------------------------------");
             selectableLanguages = readLanguagesFromFile();
-            spokenLanguages = new ArrayList<Integer>();
+            //spokenLanguages = new ArrayList<Integer>();
+            if (languagesText == null) {
+                languagesText = "";
+            }
+            selectedLanguages.setText(languagesText);
         }
 
-        selectedLanguages =  view.findViewById(R.id.spokenLanguages);
+        System.out.println(spokenLanguages.size() + " ------------------------------------------------");
         checkedLanguages = new boolean[selectableLanguages.size()];
-        selectLanguagesButton = view.findViewById(R.id.languagesButton);
         selectLanguagesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Pick the languages you speak");
                 builder.setMultiChoiceItems(selectableLanguages.toArray(new String[ProfileFragment.this.selectableLanguages.size()]), checkedLanguages, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int position, boolean isChecked) {
                         if (isChecked) {
                             if (!spokenLanguages.contains(position)) {
-                                spokenLanguages.add(position);
+                                spokenLanguages.add(new Integer(position));
                             }
                         } else if (spokenLanguages.contains(position)) {
-                            spokenLanguages.remove(position);
+                            spokenLanguages.remove(new Integer(position));
                         }
                     }
                 });
@@ -111,16 +131,17 @@ public class ProfileFragment extends Fragment {
                 builder.setPositiveButton(R.string.ok_label, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String item = "";
-                        for (int i = 0; i < spokenLanguages.size(); i++) {
-                            item = item + selectableLanguages.get(spokenLanguages.get(i));
 
-                            if (i != spokenLanguages.size() - 1) {
-                                item = item + ", ";
+                        for (int i = 0; i < spokenLanguages.size() ; i++) {
+                            if (!languagesText.contains(selectableLanguages.get(spokenLanguages.get(i)))) {
+                                languagesText = languagesText + " " +selectableLanguages.get(spokenLanguages.get(i));
+                                if (i != spokenLanguages.size() - 1) {
+                                    languagesText = languagesText + " ";
+                                }
                             }
                         }
 
-                        selectedLanguages.setText(item);
+                        selectedLanguages.setText(languagesText);
                     }
                 });
                 builder.setNegativeButton(R.string.dismiss_label, new DialogInterface.OnClickListener() {
@@ -136,7 +157,8 @@ public class ProfileFragment extends Fragment {
                             checkedLanguages[i] = false;
                         }
                         spokenLanguages.clear();
-                        selectedLanguages.setText("");
+                        languagesText = "";
+                        selectedLanguages.setText(languagesText);
                     }
                 });
                 AlertDialog languageDialog = builder.create();
@@ -150,12 +172,24 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            System.out.println("Yay I can finally progress");
+        } else {
+            System.out.println("God please end my suffering");
+        }
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outstate) {
         super.onSaveInstanceState(outstate);
 
         outstate.putInt("radius", radiusBar.getProgress());
         outstate.putStringArrayList("languageList", selectableLanguages);
-        outstate.putIntegerArrayList("spokenLanguages", spokenLanguages);
+        outstate.putIntegerArrayList("spokenLanguagesArray", spokenLanguages);
+        outstate.putString("spokenLanguages", selectedLanguages.getText().toString());
     }
 
     private ArrayList<String> readLanguagesFromFile() {
@@ -163,7 +197,7 @@ public class ProfileFragment extends Fragment {
 
             InputStream inputStream = getActivity().getResources().openRawResource(R.raw.languages);
             ArrayList<String> languages = new ArrayList<String>();
-            // File f = new File("languages.txt");
+
             Scanner scan = new Scanner(inputStream);
 
             while (scan.hasNext()) {
@@ -172,7 +206,7 @@ public class ProfileFragment extends Fragment {
 
             return languages;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage() + "----------------------------------------------");
             return null;
         }
     }
@@ -184,7 +218,7 @@ public class ProfileFragment extends Fragment {
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             // updated continuously as the user slides the thumb
             radiusValue.setText(progress + " Km");
-            Fragment homeFragment = HomeFragment.newInstance(radiusBar.getProgress());
+            Fragment homeFragment = HomeFragment.newInstance(radiusBar.getProgress());// I can delete Fragment homeFragment =
         }
 
         @Override
@@ -197,4 +231,8 @@ public class ProfileFragment extends Fragment {
             // called after the user finishes moving the SeekBar
         }
     };
+
+    public String getLanguagesText() {
+        return languagesText;
+    }
 }

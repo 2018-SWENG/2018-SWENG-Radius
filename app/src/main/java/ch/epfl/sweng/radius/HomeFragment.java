@@ -23,6 +23,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -105,6 +106,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
             radius = DEFAULT_RADIUS;
         }
 
+        System.out.println(savedInstanceState == null);
+
         if (currentLocation == null) {
             LocationListener locListener = new LocationListener() {
                 @Override
@@ -167,8 +170,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
             @Override
             public void onClick(View view) {
                 User marc = new User(); marc.setLocation(new LatLng(46.524434, 6.570222));
+                marc.setSpokenLanguages("English German");
                 User jean = new User(); jean.setLocation(new LatLng(46.514874, 6.567602));
+                jean.setSpokenLanguages("French");
                 User marie = new User(); marie.setLocation(new LatLng(46.521877, 6.588810));
+                marie.setSpokenLanguages("Italian");
                 users.add(marc); users.add(jean); users.add(marie);
                 markNearbyUsers();
             }
@@ -295,6 +301,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     }
 
     private void initCircle(LatLng currentCoordinates) {
+        System.out.println(radius + "----------------------------------------------------------");
         radiusOptions = new CircleOptions().center(currentCoordinates)
                 .strokeColor(Color.RED)
                 .fillColor(Color.parseColor("#22FF0000"))
@@ -430,10 +437,29 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
                 String status = users.get(i).getStatus();
                 String userName = users.get(i).getNickname();
                 //radiusCircle = mobileMap.addCircle(radiusOptions);
-                mobileMap.addMarker(new MarkerOptions().position(users.get(i).getLocation())
-                        .title(userName + ": "  + status));
+                if (!speaksSameLanguage(users.get(i))) {
+                    mobileMap.addMarker(new MarkerOptions().position(users.get(i).getLocation())
+                            .title(userName + ": " + status));
+                } else {
+                    mobileMap.addMarker(new MarkerOptions().position(users.get(i).getLocation())
+                            .title(userName + ": " + status).icon(BitmapDescriptorFactory
+                                    .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                }
             }
         }
+    }
+
+    public boolean speaksSameLanguage(User user) {
+        String[] languagesSpoken = user.getSpokenLanguages().split(" ");
+        Fragment profileFragment = ProfileFragment.newInstance();
+        String languagesSpokenByCurrUser = ((ProfileFragment)profileFragment).getLanguagesText();
+
+        for (int i = 0; i < languagesSpoken.length; i++) {
+            if (languagesSpokenByCurrUser.contains(languagesSpoken[i])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
