@@ -1,6 +1,7 @@
 package ch.epfl.sweng.radius;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,9 +39,9 @@ import ch.epfl.sweng.radius.database.User;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.doAnswer;
 
@@ -61,7 +62,7 @@ public class MockFirebaseUtility {
     String  path = "/user/";
 
     @Before
-    public void before() {
+    public void before() throws IOException {
         mockedDatabaseReference = Mockito.mock(DatabaseReference.class);
 
         mockedFirebaseDatabase = Mockito.mock(FirebaseDatabase.class);
@@ -85,6 +86,15 @@ public class MockFirebaseUtility {
             }
 
         }))).thenReturn(mockedDatabaseReference);
+
+        when(mockedDatabaseReference.setValue(any(User.class))).thenAnswer(new Answer<Void>() {
+            @Override
+            public Void answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                writeUser((User) args[0]);
+                return null;
+            }
+        });
 
         doAnswer(new Answer<Object>() {
             @Override
@@ -123,19 +133,22 @@ public class MockFirebaseUtility {
                 String [] parsed_path = path.split("/");
                 Object ret_obj = "bob";
 
-                System.out.print("Parsed 1 : " +parsed_path[1]);
-                System.out.print("Parsed 0 : " +parsed_path[2]);
+                System.out.println("Parsed 1 : " +parsed_path[1]);
+            //    System.out.print("Parsed 0 : " +parsed_path[2]);
 
 
-                switch ( parsed_path[1]) {
-                    case "user"     : ret_obj = getUser(parsed_path[2]);
-                    case "chatlogs" : ret_obj = getChatLogs(parsed_path[2]);
-                    case "messages" : ret_obj = getMessage(parsed_path[2]);
+                switch ( parsed_path[0]) {
+                    case "user"     : ret_obj = getUser(parsed_path[1]);
+                        break;
+                    case "chatlogs" : ret_obj = getChatLogs(parsed_path[1]);
+                    case "messages" : ret_obj = getMessage(parsed_path[1]);
                 }
 
                 return ret_obj;
             }
-        }).when(mockedDataSnapshot).getValue();
+        }).when(mockedDataSnapshot).getValue(User.class);
+
+        generateJSONUserFile();
 
     }
 
@@ -143,12 +156,58 @@ public class MockFirebaseUtility {
     @Test
     public void writeToDB() {
 
+        path = "";
+        User user = new User();
+        user.setNickname("Archie");
         // Try writing to existing user
-        mockedDatabaseReference.child("arthur").child("nickname").setValue("Archie");
+        mockedDatabaseReference.child("user").setValue(user);
+
+
+        ValueEventListener  listener;
+
+        listener = new ValueEventListener() {
+            @Override
+            public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user2 = dataSnapshot.getValue(User.class);
+
+                System.out.println("User : " + user2.getNickname());
+                Log.e("Firebase", "User data has been read.");
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("Firebase", "Failed to read user", databaseError.toException());
+
+            }
+        };
+
+        mockedDatabaseReference.child("20").addListenerForSingleValueEvent(listener);
+
+        return;
 
     }
 
+    public void generateJSONUserFile() throws IOException {
+        UserDB database;
+        Gson gson = new Gson();
+        FileWriter writer = new FileWriter(mockUserDBPath, false);
 
+        ArrayList<User> list = new ArrayList<>();
+
+        for(int i = 0; i < 20; i++){
+
+            list.add(new User());
+        }
+        database = new UserDB(list);
+
+        writer.write(gson.toJson(database));
+        writer.close();
+
+
+    }
+
+    /*
     @Test
     public void getSignedInUserProfileTest() {
       //  when(mockedDatabaseReference.child(anyString())).thenReturn(mockedDatabaseReference);
@@ -178,17 +237,22 @@ public class MockFirebaseUtility {
         mockedDatabaseReference.child("arthur").addListenerForSingleValueEvent(listener);
         // check preferences are updated
     }
+    */
 
     private void writeUser(User user) throws IOException {
 
         Gson gson = new Gson();
         UserDB userdb;
-
+        System.out.println("Printing user to File " + user.getNickname());
         try{
             BufferedReader br = new BufferedReader(new FileReader(mockUserDBPath));
+
             userdb = gson.fromJson(br, UserDB.class);
 
+            System.out.println("Size :" + Integer.toString(userdb.database.size()));
             userdb.addUser(Long.toString(user.getUserID()), user);
+            System.out.println("Size :" + Integer.toString(userdb.database.size()));
+
 
             FileWriter writer = new FileWriter(mockUserDBPath, false);
             writer.write(gson.toJson(userdb));
@@ -378,7 +442,7 @@ public class MockFirebaseUtility {
 
 class UserDB {
     @Expose
-    private List<User> database;
+    public List<User> database;
 
     public  UserDB(ArrayList<User> db){
         database = db;
@@ -387,17 +451,19 @@ class UserDB {
     public User getUser(String uID){
 
         User user = new User();
-
-        System.out.println("GET  " + database);
-        return user;
+        for(int i = 0; i <database.size(); i++){
+            if (Long.toString(database.get(i).getUserID()).equals(uID))
+                return  database.get(i);
+        }
+      //  System.out.println("GET  " + database);
+        return null;
     }
 
     public void addUser(String uID, User user){
 
     ///    if(database.containsKey(uID))
-            database.remove(uID);
-
-    //    database.put(uID, user);
+    //        database.remove(uID);
+            database.add(user);
     }
 
     public void removeUser(String uID){
