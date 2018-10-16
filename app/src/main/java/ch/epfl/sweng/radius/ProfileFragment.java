@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.design.button.MaterialButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import ch.epfl.sweng.radius.database.User;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -25,7 +29,9 @@ import static android.app.Activity.RESULT_OK;
 public class ProfileFragment extends Fragment {
 
     private static Uri profilePictureUri;
-    
+    private static String userNicknameString;
+    private static String userStatusString;
+
     CircleImageView userPhoto;
     ImageButton changeProfilePictureButton;
     TextView userNickname;
@@ -88,7 +94,54 @@ public class ProfileFragment extends Fragment {
         });
 
         userNickname = view.findViewById(R.id.userNickname);
+
+        if (userNicknameString != null) {
+            userNickname.setText(userNicknameString);
+        } else {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                String defaultUserName = user.getDisplayName();
+                userNickname.setText(defaultUserName);
+            }
+        }
+
         userStatus = view.findViewById(R.id.userStatus);
+
+        if (userStatusString != null) {
+            userStatus.setText(userStatusString);
+        }
+
+        nicknameInput = view.findViewById(R.id.nicknameInput);
+
+        statusInput = view.findViewById(R.id.statusInput);
+
+        saveButton = view.findViewById(R.id.saveButton);
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (nicknameInput != null) {
+                    Editable inputText = nicknameInput.getText();
+                    if (inputText != null) {
+                        String inputString = inputText.toString();
+                        if (!inputString.isEmpty()) {
+                            userNicknameString = inputString;
+                            userNickname.setText(userNicknameString);
+                        }
+                    }
+                }
+                if (statusInput != null) {
+                    Editable inputText = statusInput.getText();
+                    if (inputText != null) {
+                        String inputString = inputText.toString();
+                        if (!inputString.isEmpty()) {
+                            userStatusString = inputString;
+                            userStatus.setText(userStatusString);
+                        }
+                    }
+                }
+            }
+        });
 
         // Inflate the layout for this fragment
         return view;

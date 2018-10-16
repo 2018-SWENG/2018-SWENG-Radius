@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="Fanfou"
+                    android:text="Default"
                     android:textColor="#636e72"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -65,7 +65,7 @@
                     android:layout_below="@+id/userNickname"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
-                    android:text="In Lausanne for two weeks"
+                    android:text="Default Status"
                     android:textColor="#636e72"
                     android:textSize="14sp" />
             </RelativeLayout>
