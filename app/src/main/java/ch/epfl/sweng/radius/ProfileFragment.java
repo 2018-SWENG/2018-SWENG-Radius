@@ -15,14 +15,12 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.io.File;
+
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Scanner;
-import android.content.Context;
-/*import android.content.res.Resources;
-import android.content.*/
+
 
 
 public class ProfileFragment extends Fragment {
@@ -33,9 +31,10 @@ public class ProfileFragment extends Fragment {
     TextView userStatus;
     TextInputEditText statusInput;
     TextInputEditText nicknameInput;
-    static SeekBar radiusBar;
+    SeekBar radiusBar;
     TextView radiusValue;
     MaterialButton saveButton;
+
     private Button selectLanguagesButton;
     private static ArrayList<String> selectableLanguages;
     private static boolean[] checkedLanguages;
@@ -44,12 +43,7 @@ public class ProfileFragment extends Fragment {
     private static String languagesText;
 
     public ProfileFragment() {
-        // Required empty public constructor
-        //languagesText = "";
-        //selectableLanguages = readLanguagesFromFile();
         spokenLanguages = new ArrayList<Integer>();
-        //System.out.println(readLanguagesFromFile().size());
-        //checkedLanguages = new boolean[selectableLanguages.size()];
     }
 
     /**
@@ -63,8 +57,7 @@ public class ProfileFragment extends Fragment {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
-        args.putInt("radiusTest", radiusBar.getProgress());
-        //languagesText = selectedLanguages.getText().toString();
+
         return fragment;
     }
 
@@ -88,108 +81,100 @@ public class ProfileFragment extends Fragment {
         selectedLanguages =  view.findViewById(R.id.spokenLanguages);
         selectLanguagesButton = view.findViewById(R.id.languagesButton);
 
-        if ( savedInstanceState != null) {
-            int progress = savedInstanceState.getInt("radius", radiusBar.getProgress());
-            radiusBar.setProgress(savedInstanceState.getInt("radius", 50));
-            radiusValue.setText(progress + " Km");
-            selectableLanguages = savedInstanceState.getStringArrayList("languageList");
-            spokenLanguages = savedInstanceState.getIntegerArrayList("spokenLanguagesArray");
-            selectedLanguages.setText(savedInstanceState.getString("spokenLanguages"));
-        } else {
-            int progress = radiusBar.getProgress();
-            radiusValue.setText(progress + "Km");
-            System.out.println("------------------------------------------------------" + progress + " ----------------------------------------------------------------------");
-            selectableLanguages = readLanguagesFromFile();
-            //spokenLanguages = new ArrayList<Integer>();
-            if (languagesText == null) {
-                languagesText = "";
-            }
-            selectedLanguages.setText(languagesText);
-        }
+        int progress = radiusBar.getProgress();
+        radiusValue.setText(progress + "Km");
 
-        System.out.println(spokenLanguages.size() + " ------------------------------------------------");
+        selectableLanguages = readLanguagesFromFile();
+        //spokenLanguages = new ArrayList<Integer>();
+        if (languagesText == null) {
+            languagesText = "";
+        }
+        selectedLanguages.setText(languagesText);
+
         checkedLanguages = new boolean[selectableLanguages.size()];
         selectLanguagesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Pick the languages you speak");
-                builder.setMultiChoiceItems(selectableLanguages.toArray(new String[ProfileFragment.this.selectableLanguages.size()]), checkedLanguages, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int position, boolean isChecked) {
-                        if (isChecked) {
-                            if (!spokenLanguages.contains(position)) {
-                                spokenLanguages.add(new Integer(position));
-                            }
-                        } else if (spokenLanguages.contains(position)) {
-                            spokenLanguages.remove(new Integer(position));
-                        }
-                    }
-                });
-
-                builder.setCancelable(false);
-                builder.setPositiveButton(R.string.ok_label, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        for (int i = 0; i < spokenLanguages.size() ; i++) {
-                            if (!languagesText.contains(selectableLanguages.get(spokenLanguages.get(i)))) {
-                                languagesText = languagesText + " " +selectableLanguages.get(spokenLanguages.get(i));
-                                if (i != spokenLanguages.size() - 1) {
-                                    languagesText = languagesText + " ";
-                                }
-                            }
-                        }
-
-                        selectedLanguages.setText(languagesText);
-                    }
-                });
-                builder.setNegativeButton(R.string.dismiss_label, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.setNeutralButton(R.string.clearAll_label, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        for (int i = 0; i < checkedLanguages.length; i++) {
-                            checkedLanguages[i] = false;
-                        }
-                        spokenLanguages.clear();
-                        languagesText = "";
-                        selectedLanguages.setText(languagesText);
-                    }
-                });
-                AlertDialog languageDialog = builder.create();
-                languageDialog.show();
+                createBuilder();
             }
         });
 
-        Fragment homeFragment = HomeFragment.newInstance(radiusBar.getProgress());
+        HomeFragment.newInstance(radiusBar.getProgress());
         // Inflate the layout for this fragment
         return view;
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    private void createBuilder() {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        if (savedInstanceState != null) {
-            System.out.println("Yay I can finally progress");
-        } else {
-            System.out.println("God please end my suffering");
-        }
+            builder.setTitle("Pick the languages you speak");
+            setBuilderMultiChoiceItems(builder);
+            builder.setCancelable(false);
+            setBuilderPositiveButton(builder);
+            setBuilderNegativeButton(builder);
+            setBuilderNeutralButton(builder);
+
+            AlertDialog languageDialog = builder.create();
+            languageDialog.show();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outstate) {
-        super.onSaveInstanceState(outstate);
+    private void setBuilderMultiChoiceItems(AlertDialog.Builder builder) {
+        builder.setMultiChoiceItems(selectableLanguages
+                .toArray(new String[ProfileFragment.this.selectableLanguages.size()])
+                , checkedLanguages, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int position, boolean isChecked) {
+                if (isChecked) {
+                    if (!spokenLanguages.contains(position)) {
+                        spokenLanguages.add(new Integer(position));
+                    }
+                } else if (spokenLanguages.contains(position)) {
+                    spokenLanguages.remove(new Integer(position));
+                }
+            }
+        });
+    }
 
-        outstate.putInt("radius", radiusBar.getProgress());
-        outstate.putStringArrayList("languageList", selectableLanguages);
-        outstate.putIntegerArrayList("spokenLanguagesArray", spokenLanguages);
-        outstate.putString("spokenLanguages", selectedLanguages.getText().toString());
+    private void setBuilderPositiveButton(AlertDialog.Builder builder) {
+        builder.setPositiveButton(R.string.ok_label, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                for (int i = 0; i < spokenLanguages.size() ; i++) {
+                    if (!languagesText.contains(selectableLanguages.get(spokenLanguages.get(i)))) {
+                        languagesText = languagesText + " " +selectableLanguages.get(spokenLanguages.get(i));
+                        if (i != spokenLanguages.size() - 1) {
+                            languagesText = languagesText + " ";
+                        }
+                    }
+                }
+
+                selectedLanguages.setText(languagesText);
+            }
+        });
+    }
+
+    private void setBuilderNegativeButton(AlertDialog.Builder builder) {
+        builder.setNegativeButton(R.string.dismiss_label, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void setBuilderNeutralButton(AlertDialog.Builder builder) {
+        builder.setNeutralButton(R.string.clearAll_label, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                for (int i = 0; i < checkedLanguages.length; i++) {
+                    checkedLanguages[i] = false;
+                }
+                spokenLanguages.clear();
+                languagesText = "";
+                selectedLanguages.setText(languagesText);
+            }
+        });
     }
 
     private ArrayList<String> readLanguagesFromFile() {
@@ -206,7 +191,7 @@ public class ProfileFragment extends Fragment {
 
             return languages;
         } catch (Exception e) {
-            System.out.println(e.getMessage() + "----------------------------------------------");
+            System.out.println(e.getMessage());
             return null;
         }
     }
@@ -218,7 +203,8 @@ public class ProfileFragment extends Fragment {
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             // updated continuously as the user slides the thumb
             radiusValue.setText(progress + " Km");
-            Fragment homeFragment = HomeFragment.newInstance(radiusBar.getProgress());// I can delete Fragment homeFragment =
+
+            HomeFragment.newInstance(radiusBar.getProgress());
         }
 
         @Override
