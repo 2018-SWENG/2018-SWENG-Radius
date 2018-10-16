@@ -72,10 +72,14 @@ public class AccountActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
 
         //Save the fragment's instance
-        getSupportFragmentManager().putFragment(outState, "homeFragment", homeFragment);//(outState, "myFragmentName", mContent);
-        getSupportFragmentManager().putFragment(outState, "messageFragment", messageFragment);
-        getSupportFragmentManager().putFragment(outState, "settingsFragment", settingsFragment);
-        getSupportFragmentManager().putFragment(outState, "profileFragment", profileFragment);
+        if (homeFragment.isAdded())
+            getSupportFragmentManager().putFragment(outState, "homeFragment", homeFragment);//(outState, "myFragmentName", mContent);
+        if (messageFragment.isAdded())
+            getSupportFragmentManager().putFragment(outState, "messageFragment", messageFragment);
+        if (settingsFragment.isAdded())
+            getSupportFragmentManager().putFragment(outState, "settingsFragment", settingsFragment);
+        if (profileFragment.isAdded())
+            getSupportFragmentManager().putFragment(outState, "profileFragment", profileFragment);
     }
 
     private void loadFragment(Fragment fragment) {
