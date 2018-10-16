@@ -58,7 +58,7 @@ public class MailLoginActivity extends AppCompatActivity {
                     password.setError("can't be blank");
                 }
                 else{
-                    String url = "https://sweng-radius.firebaseio.com/user.json";
+                    String url = "https://radius-1538126456577.firebaseio.com/users.json";
                     final ProgressDialog pd = new ProgressDialog(MailLoginActivity.this);
                     pd.setMessage("Loading...");
                     pd.show();
