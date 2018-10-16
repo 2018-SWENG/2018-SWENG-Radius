@@ -288,20 +288,19 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         }
 
         for (int i = 0; i < users.size(); i++) {
+            String status = users.get(i).getStatus();
+            String userName = users.get(i).getNickname();
             if ( contains(users.get(i).getLocation().latitude,
-                    users.get(i).getLocation().longitude))
+                    users.get(i).getLocation().longitude) && !speaksSameLanguage(users.get(i)))
             {
-                String status = users.get(i).getStatus();
-                String userName = users.get(i).getNickname();
-                //radiusCircle = mobileMap.addCircle(radiusOptions);
-                if (!speaksSameLanguage(users.get(i))) {
                     mobileMap.addMarker(new MarkerOptions().position(users.get(i).getLocation())
                             .title(userName + ": " + status));
-                } else {
-                    mobileMap.addMarker(new MarkerOptions().position(users.get(i).getLocation())
-                            .title(userName + ": " + status).icon(BitmapDescriptorFactory
-                                    .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                }
+
+            } else if (contains(users.get(i).getLocation().latitude,
+                    users.get(i).getLocation().longitude) && speaksSameLanguage(users.get(i))) {
+                mobileMap.addMarker(new MarkerOptions().position(users.get(i).getLocation())
+                        .title(userName + ": " + status).icon(BitmapDescriptorFactory
+                                .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
             }
         }
     }
