@@ -203,16 +203,12 @@ public class ProfileFragment extends Fragment {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
             profilePictureUri = (Uri) savedInstanceState.getSerializable("profilePictureUri");
-            if (userNickname != null) {
-                CharSequence toSet = savedInstanceState.getCharSequence("userNickname",
+            CharSequence toSet = savedInstanceState.getCharSequence("userNickname",
+                    "");
+            userNicknameString = toSet.toString();
+            toSet = savedInstanceState.getCharSequence("userNickname",
                         "");
-                userNickname.setText(toSet);
-            }
-            if (userStatus != null) {
-                CharSequence toSet = savedInstanceState.getCharSequence("userNickname",
-                        "");
-                userNickname.setText(toSet);
-            }
+            userStatusString = toSet.toString();
         }
     }
 }
