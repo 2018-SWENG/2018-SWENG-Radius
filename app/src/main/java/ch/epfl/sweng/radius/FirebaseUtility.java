@@ -145,7 +145,7 @@ class FirebaseUtility {
             }
         };
 
-        database.addListenerForSingleValueEvent(listener);
+        database.child(Long.toString(user.getUserID())).addListenerForSingleValueEvent(listener);
 
         return;
 

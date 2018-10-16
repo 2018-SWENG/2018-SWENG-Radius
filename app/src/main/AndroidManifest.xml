@@ -29,7 +29,7 @@
         </activity>
         <activity android:name=".AccountActivity" />
         <activity android:name=".BrowseProfilesActivity" />
-        <activity android:name=".message.MessageListActivity"></activity>
+        <activity android:name=".message.MessageListActivity"/>
     </application>
 
 </manifest>

@@ -1,27 +1,35 @@
 {
   "project_info": {
-    "project_number": "942867396100",
-    "firebase_url": "https://sweng-radius.firebaseio.com",
-    "project_id": "sweng-radius",
-    "storage_bucket": "sweng-radius.appspot.com"
+    "project_number": "862473371396",
+    "firebase_url": "https://radius-1538126456577.firebaseio.com",
+    "project_id": "radius-1538126456577",
+    "storage_bucket": "radius-1538126456577.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:942867396100:android:cf1257c7112903f3",
+        "mobilesdk_app_id": "1:862473371396:android:cf1257c7112903f3",
         "android_client_info": {
           "package_name": "ch.epfl.sweng.radius"
         }
       },
       "oauth_client": [
         {
-          "client_id": "942867396100-tc8fjhfqu0qv5duhc35baj6u4tvionfn.apps.googleusercontent.com",
+          "client_id": "862473371396-jjtg0gb24t160doav89gfir0ifujbgfe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.radius",
+            "certificate_hash": "d91ac95abc37e8839d57b249e721e10e1882fbca"
+          }
+        },
+        {
+          "client_id": "862473371396-nl6ffe7ep6non6rjcn9ol7se09u6a0be.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCCg0u98uKF4t8o85dpfH4yZ0xgYA51cWY"
+          "current_key": "AIzaSyCvVOoXPemRj36QkkQN4sdB1kc1IZ7_HTI"
         }
       ],
       "services": {
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "862473371396-nl6ffe7ep6non6rjcn9ol7se09u6a0be.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
