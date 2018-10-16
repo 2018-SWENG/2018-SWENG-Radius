@@ -312,7 +312,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         String languagesSpokenByCurrUser = ((ProfileFragment)profileFragment).getLanguagesText();
 
         for (int i = 0; i < languagesSpoken.length; i++) {
-            if (languagesSpokenByCurrUser.contains(languagesSpoken[i])) {
+            if (languagesSpokenByCurrUser != null && languagesSpokenByCurrUser.contains(languagesSpoken[i])) {
                 return true;
             }
         }
