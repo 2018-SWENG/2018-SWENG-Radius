@@ -9,6 +9,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +35,8 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.friendsList.FriendsListAdapter;
+import ch.epfl.sweng.radius.friendsList.FriendsListItem;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback, RadiusCircle {
 
@@ -91,7 +96,29 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     @Override
     public View onCreateView(LayoutInflater infltr, ViewGroup containr, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return infltr.inflate(R.layout.fragment_home, containr, false);
+        // Inflate the layout for this fragment
+        View view = infltr.inflate(R.layout.fragment_home, containr, false);
+
+        // 1. get a reference to recyclerView
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.friendsList);
+
+        // this is data for recycler view
+        FriendsListItem items[] = { new FriendsListItem("John Doe",R.drawable.image1),
+                new FriendsListItem("Jane Doe",R.drawable.image2),
+                new FriendsListItem("Alison Star",R.drawable.image3),
+                new FriendsListItem("Mila Noon",R.drawable.image4),
+                new FriendsListItem("David Doyle",R.drawable.image5)};
+
+        // 2. set layoutManger
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        // 3. create an adapter
+        FriendsListAdapter adapter = new FriendsListAdapter(items);
+        // 4. set adapter
+        recyclerView.setAdapter(adapter);
+        // 5. set item animator to DefaultAnimator
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        return view;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius;
+package ch.epfl.sweng.radius.browseProfiles;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.List;
+
+import ch.epfl.sweng.radius.R;
 
 /**
  * CustomAdapter class that extends the ArrayAdapter class
