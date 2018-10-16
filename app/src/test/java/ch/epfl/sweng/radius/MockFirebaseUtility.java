@@ -54,7 +54,7 @@ public class MockFirebaseUtility {
     private FirebaseUtility uT;
     private final static    String mockUserDBPath       = "/home/arthur/Projects/Sweng_Proj/2018-SWENG-Radius/app/src/test/java/ch/epfl/sweng/radius/mock_databases/user.json";
     private final static    String mockMsgDBPath        = "/home/arthur/Projects/Sweng_Proj/2018-SWENG-Radius/app/src/test/java/ch/epfl/sweng/radius/mock_databases/msg.json";
-    private final static    String mockChatLogDBPath    = "../../db/chatlog.json";
+    private final static    String mockChatLogDBPath    = "/home/arthur/Projects/Sweng_Proj/2018-SWENG-Radius/app/src/test/java/ch/epfl/sweng/radius/mock_databases/chatlog.json";
 
     private DatabaseReference mockedDatabaseReference;
     private FirebaseDatabase  mockedFirebaseDatabase;
@@ -170,6 +170,7 @@ public class MockFirebaseUtility {
 
         generateJSONUserFile();
         generateJSONMsgFile();
+        generateJSONChatFile();
     }
 
 
@@ -209,7 +210,7 @@ public class MockFirebaseUtility {
 
         Message msg = new Message(10, new User(), "Coucou" + Integer.toString(0), date);
         // Try writing to existing user
-        mockedDatabaseReference.child("user").setValue(user);
+        mockedDatabaseReference.child("messages");
 
 
         listener = new ValueEventListener() {
@@ -230,6 +231,29 @@ public class MockFirebaseUtility {
         };
 
         mockedDatabaseReference.child("0").addListenerForSingleValueEvent(listener);
+        path = "";
+        mockedDatabaseReference.child("chatlogs");
+
+        listener = new ValueEventListener() {
+            @Override
+            public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                System.out.println("Participants : " + path);
+
+                ChatLogs msg2 = dataSnapshot.getValue(ChatLogs.class);
+
+                System.out.println("Participants : " + msg2.getParticipants().get(0).getUserID());
+                Log.e("Firebase", "Message data has been read.");
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("Firebase", "Failed to read user", databaseError.toException());
+
+            }
+        };
+
+        mockedDatabaseReference.child("40").addListenerForSingleValueEvent(listener);
 
 
         return;
@@ -268,6 +292,30 @@ public class MockFirebaseUtility {
             list.add(new Message(i, u, "Coucou" + Integer.toString(i), date));
         }
         database = new MessageDB(list);
+
+        writer.write(gson.toJson(database));
+        writer.close();
+
+
+    }
+
+    public void generateJSONChatFile() throws IOException {
+        ChatLogsDB database;
+        Gson gson = new Gson();
+        Date date = new Date();
+        FileWriter writer = new FileWriter(mockChatLogDBPath, false);
+
+        ArrayList<ChatLogs> list = new ArrayList<>();
+        ArrayList<User> users = new ArrayList<>();
+        for(int i = 0; i < 2; i++){
+            users.add(new User());
+        }
+        for(int i = 0; i < 20; i++){
+            ChatLogs chat = new ChatLogs(users);
+            users.add(new User());
+            list.add(chat);
+        }
+        database = new ChatLogsDB(list);
 
         writer.write(gson.toJson(database));
         writer.close();
@@ -550,19 +598,23 @@ class UserDB {
 
 class ChatLogsDB {
 
-    private Map<String, ChatLogs> database;
+    private List<ChatLogs> database;
 
+    ChatLogsDB(List<ChatLogs> data){
+        this.database = data;
+    }
     public ChatLogs getChatLogs(String uID){
-
-        return database.get(uID);
+        System.out.print("Size of chat :" + database.size());
+        for(int i = 0; i < database.size(); i++){
+            if(Long.toString(database.get(i).getParticipants().get(0).getUserID()).equals(uID))
+                return database.get(i);
+        }
+        return null;
     }
 
     public void addChatLogs(String uID, ChatLogs chatlog){
 
-        if(!database.containsKey(uID))
-            database.remove(uID, chatlog);
-
-        database.put(uID, chatlog);
+        database.add(chatlog);
     }
 
     public void removeChatLogs(String uID){
