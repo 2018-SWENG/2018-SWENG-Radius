@@ -66,7 +66,7 @@ class FirebaseUtility {
         this.uID        = dataType.getMessageID();
 
         this.msg        = dataType;
-        this.database   = fireDB.getReference("messages")
+        this.database   = fireDB.getReference("messages");
 
     }
 
