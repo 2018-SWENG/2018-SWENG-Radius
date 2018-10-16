@@ -46,44 +46,26 @@ public class ProfileFragmentTest {
                 .add(fcontainer.getId(), fragment).commitAllowingStateLoss();
         getInstrumentation().waitForIdleSync();
 
-        View view = fragment.getView().findViewById(R.id.profileLayout);
-        assertNotNull(view);
-        view = fragment.getView().findViewById(R.id.userPhoto);
-        assertNotNull(view);
-        view = fragment.getView().findViewById(R.id.changeProfilePictureButton);
-        assertNotNull(view);
-        view = fragment.getView().findViewById(R.id.userNickname);
-        assertNotNull(view);
-        view = fragment.getView().findViewById(R.id.userStatus);
-        assertNotNull(view);
-        view = fragment.getView().findViewById(R.id.nicknameInput);
-        assertNotNull(view);
-        view = fragment.getView().findViewById(R.id.statusInput);
-        assertNotNull(view);
-        view = fragment.getView().findViewById(R.id.radiusLabel);
-        assertNotNull(view);
-        view = fragment.getView().findViewById(R.id.radiusValue);
-        assertNotNull(view);
-        view = fragment.getView().findViewById(R.id.radiusBar);
-        assertNotNull(view);
-        view = fragment.getView().findViewById(R.id.languagesButton);
-        assertNotNull(view);
-        view = fragment.getView().findViewById(R.id.spokenLanguages);
-        assertNotNull(view);
-        view = fragment.getView().findViewById(R.id.saveButton);
-        assertNotNull(view);
+        View view = fragment.getView().findViewById(R.id.profileLayout); assertNotNull(view);
+        view = fragment.getView().findViewById(R.id.userPhoto); assertNotNull(view);
+        view = fragment.getView().findViewById(R.id.changeProfilePictureButton); assertNotNull(view);
+        view = fragment.getView().findViewById(R.id.userNickname); assertNotNull(view);
+        view = fragment.getView().findViewById(R.id.userStatus); assertNotNull(view);
+        view = fragment.getView().findViewById(R.id.nicknameInput); assertNotNull(view);
+        view = fragment.getView().findViewById(R.id.statusInput); assertNotNull(view);
+        view = fragment.getView().findViewById(R.id.radiusLabel); assertNotNull(view);
+        view = fragment.getView().findViewById(R.id.radiusValue); assertNotNull(view);
+        view = fragment.getView().findViewById(R.id.radiusBar); assertNotNull(view);
+        view = fragment.getView().findViewById(R.id.languagesButton); assertNotNull(view);
+        view = fragment.getView().findViewById(R.id.spokenLanguages); assertNotNull(view);
+        view = fragment.getView().findViewById(R.id.saveButton); assertNotNull(view);
     }
 
     @Test
-    public void testChangeNickname() {
+    public void testChangeNicknameAndStatus() {
         onView(withId(R.id.navigation_profile)).perform(click());
         onView(withId(R.id.nicknameInput)).perform(typeText("User Nickname"));
         onView(withId(R.id.nicknameInput)).perform(closeSoftKeyboard());
-    }
-
-    @Test
-    public void testChangeStatus() {
-        onView(withId(R.id.navigation_profile)).perform(click());
         onView(withId(R.id.statusInput)).perform(typeText("User Status"));
         onView(withId(R.id.statusInput)).perform(closeSoftKeyboard());
     }
