@@ -283,11 +283,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         mobileMap.clear();
         radiusCircle = mobileMap.addCircle(radiusOptions);
 
-        if (users == null) { //write a test to check if users are null or not when the markNearbyUsers method is called
+        /*if (users == null) { //write a test to check if users are null or not when the markNearbyUsers method is called
             return;
-        }
+        }*/
 
-        for (int i = 0; i < users.size(); i++) {
+        for (int i = 0; users != null && i < users.size(); i++) {
             String status = users.get(i).getStatus();
             String userName = users.get(i).getNickname();
             if ( contains(users.get(i).getLocation().latitude,

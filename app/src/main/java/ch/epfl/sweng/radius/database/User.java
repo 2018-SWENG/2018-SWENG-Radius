@@ -133,9 +133,9 @@ public class User {
         blockedUsers.add(userID);
     }
 
-    public void removeBlockedUser(Integer userID){
-        blockedUsers.remove(userID);
-    }
+    //public void removeBlockedUser(Integer userID){
+    //    blockedUsers.remove(userID);
+    //}
 
     public void setLocation(LatLng location) {
         this.location = location;
