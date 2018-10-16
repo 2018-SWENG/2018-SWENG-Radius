@@ -72,12 +72,12 @@ public class MailRegisterActivity extends AppCompatActivity {
                     pd.setMessage("Loading...");
                     pd.show();
 
-                    String url = "https://sweng-radius.firebaseio.com/user.json";
+                    String url = "https://radius-1538126456577.firebaseio.com/users.json";
 
                     StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
                         @Override
                         public void onResponse(String s) {
-                            Firebase reference = new Firebase("https://asweng-radius.firebaseio.com/user");
+                            Firebase reference = new Firebase("https://radius-1538126456577.firebaseio.com/users");
 
                             if(s.equals("null")) {
                                 reference.child(user).child("password").setValue(pass);
