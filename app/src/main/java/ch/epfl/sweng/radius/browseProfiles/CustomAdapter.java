@@ -17,8 +17,6 @@ import ch.epfl.sweng.radius.R;
 /**
  * CustomAdapter class that extends the ArrayAdapter class
  * to work with the custom chat list view layout.
- *
- * @author  Pinar Ayaz
  */
 public class CustomAdapter extends ArrayAdapter<ChatListItem> {
     List<ChatListItem> chatList;

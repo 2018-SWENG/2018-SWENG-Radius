@@ -1,5 +1,7 @@
 package ch.epfl.sweng.radius.friendsList;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,13 +10,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesActivity;
 
 public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.ViewHolder>{
 
     private FriendsListItem[] items;
+    Context context;
 
-    public FriendsListAdapter(FriendsListItem[] items) {
+    public FriendsListAdapter(FriendsListItem[] items, Context context) {
         this.items = items;
+        this.context = context;
     }
 
     // Create new views (invoked by the layout manager)
@@ -39,6 +44,21 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
 
         viewHolder.txtViewTitle.setText(items[position].getFriendName());
         viewHolder.imgViewIcon.setImageResource(items[position].getFriendProfilePic());
+
+        FriendsListItem item = items[position];
+        final int clickedPic = item.getFriendProfilePic();
+        final String clickedName = item.getFriendName();
+
+         viewHolder.imgViewIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, BrowseProfilesActivity.class);
+                intent.putExtra("Clicked Picture", clickedPic);
+                intent.putExtra("Clicked Name", clickedName);
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     // inner class to hold a reference to each item of RecyclerView

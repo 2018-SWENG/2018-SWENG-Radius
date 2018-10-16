@@ -112,7 +112,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         // 2. set layoutManger
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         // 3. create an adapter
-        FriendsListAdapter adapter = new FriendsListAdapter(items);
+        FriendsListAdapter adapter = new FriendsListAdapter(items, getContext());
         // 4. set adapter
         recyclerView.setAdapter(adapter);
         // 5. set item animator to DefaultAnimator
