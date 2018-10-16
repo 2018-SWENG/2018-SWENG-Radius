@@ -65,9 +65,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     //testing
     private static ArrayList<User> users;
     private Button testMark;
-    private Button testLoc;
-    private Button testRad;
-    private Button testRad2;
 
     /**
      * Use this factory method to create a new instance of
@@ -145,10 +142,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     }
 
     private void getDeviceLocation() {
-        Log.d( TAG, "getDeviceLocation: getting the device's current location");
-
         mblFusedLocationClient = LocationServices.getFusedLocationProviderClient( getActivity());
-
         try {
             if ( mblLocationPermissionGranted) {
                 Task location = mblFusedLocationClient.getLastLocation();
@@ -156,20 +150,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
                     @Override
                     public void onComplete(@NonNull Task task) {
                         if ( task.isSuccessful()) {
-                            Log.d( TAG, "onComplete: found location.");
                             currentLocation = (Location) task.getResult();
-
                             LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(),
                                     currentLocation.getLongitude());
                             latitude = currentLocation.getLatitude();
                             longtitude = currentLocation.getLongitude();
-
                             initCircle(currentCoordinates);
                             markNearbyUsers();
                             moveCamera( currentCoordinates, DEFAULT_ZOOM);
                         }
                         else {
-                            Log.d( TAG, "onComplete: current location is null.");
                             Toast.makeText( getContext(), "Unable to get current location",
                                     Toast.LENGTH_SHORT).show();
                         }
