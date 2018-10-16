@@ -17,13 +17,16 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import ch.epfl.sweng.radius.database.User;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
 
 
 public class ProfileFragment extends Fragment {
+
+    private static Uri profilePictureUri;
     
-    ImageView userPhoto;
+    CircleImageView userPhoto;
     ImageButton changeProfilePictureButton;
     TextView userNickname;
     TextView userStatus;
@@ -32,8 +35,6 @@ public class ProfileFragment extends Fragment {
     SeekBar radiusBar;
     TextView radiusValue;
     MaterialButton saveButton;
-
-    private Uri profilePictureUri;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -69,7 +70,7 @@ public class ProfileFragment extends Fragment {
         radiusValue = view.findViewById(R.id.radiusValue);
         radiusValue.setText(progress + " Km");
 
-        userPhoto = view.findViewById(R.id.userPhoto);
+        userPhoto = (CircleImageView) view.findViewById(R.id.userPhoto);
 
         if (profilePictureUri != null) {
             userPhoto.setImageURI(profilePictureUri);
