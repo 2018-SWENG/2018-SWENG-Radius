@@ -126,10 +126,10 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    private void setUpDataInput(View view) {
-        nicknameInput = view.findViewById(R.id.nicknameInput);
-        statusInput = view.findViewById(R.id.statusInput);
-        saveButton = view.findViewById(R.id.saveButton);
+    private void setUpDataInput(final View mainView) {
+        nicknameInput = mainView.findViewById(R.id.nicknameInput);
+        statusInput = mainView.findViewById(R.id.statusInput);
+        saveButton = mainView.findViewById(R.id.saveButton);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,23 +138,24 @@ public class ProfileFragment extends Fragment {
                 String statusString = getDataFromTextInput(statusInput);
                 if (!nicknameString.isEmpty()) {
                     userNicknameString = nicknameString;
-                    setUpUserNickname(view);
+                    setUpUserNickname(mainView);
                 }
                 if (!statusString.isEmpty()) {
                     userStatusString = statusString;
-                    setUpUserStatus(view);
+                    setUpUserStatus(mainView);
                 }
             }
-        }
+        });
     }
 
     private String getDataFromTextInput(TextInputEditText input) {
         if (input != null) {
             Editable inputText = input.getText();
             if (inputText != null) {
-                return inputText.toString()
+                return inputText.toString();
             }
         }
+        return "";
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
