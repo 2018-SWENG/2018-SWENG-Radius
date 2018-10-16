@@ -66,7 +66,7 @@ class FirebaseUtility {
         this.uID        = dataType.getMessageID();
 
         this.msg        = dataType;
-        this.database   = fireDB.getReference("messages")
+        this.database   = fireDB.getReference("messages");
 
     }
 
@@ -145,7 +145,7 @@ class FirebaseUtility {
             }
         };
 
-        database.addListenerForSingleValueEvent(listener);
+        database.child(Long.toString(user.getUserID())).addListenerForSingleValueEvent(listener);
 
         return;
 
