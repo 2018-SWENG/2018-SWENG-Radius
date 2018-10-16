@@ -12,7 +12,7 @@ import java.util.List;
 public class User {
     private static long idGenerator = 0;// Debugging purpose only
 
-    private final long userID;
+    private final String userID;
     private String nickname;
     private String urlProfilePhoto;
     private int radius; // meters
@@ -23,7 +23,7 @@ public class User {
     private List<Integer> blockedUsers;
     private LatLng location;
 
-    public User(long userID){
+    public User(String userID){
         this.userID = userID;
         this.nickname = "New User " + userID;
         this.urlProfilePhoto = "";
@@ -37,7 +37,7 @@ public class User {
 
     // Debugging purpose only
     public User(){
-        this.userID = idGenerator++;
+        this.userID = Long.toString(idGenerator++);
         this.nickname = "New User " + this.userID;
         this.urlProfilePhoto = "";
         this.radius = 500;
@@ -49,7 +49,7 @@ public class User {
     }
 
     // Getter
-    public long getUserID() {
+    public String getUserID() {
         return userID;
     }
 

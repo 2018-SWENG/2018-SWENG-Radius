@@ -34,7 +34,6 @@ class FirebaseUtility {
 
     private DatabaseReference   database;
 
-    private Long        uID;
     private User        user;
     private Message     msg;
     private ChatLogs    chatLogs;
@@ -48,8 +47,6 @@ class FirebaseUtility {
         // Instanciate References Object
         this.auth      = FirebaseAuth.getInstance();
         this.fireDB    = FirebaseDatabase.getInstance();
-        this.uID       = user.getUserID();
-
         this.user      = user;
         this.database  = fireDB.getReference("users");
     }
@@ -63,8 +60,6 @@ class FirebaseUtility {
         // Instanciate References Object
         this.auth       = FirebaseAuth.getInstance();
         this.fireDB     = FirebaseDatabase.getInstance();
-        this.uID        = dataType.getMessageID();
-
         this.msg        = dataType;
         this.database   = fireDB.getReference("messages");
 
@@ -79,8 +74,6 @@ class FirebaseUtility {
         // Instanciate References Object
         this.auth        = FirebaseAuth.getInstance();
         this.fireDB      = FirebaseDatabase.getInstance();
-        this.uID         = dataType.getParticipants().get(0).getUserID();
-
         this.chatLogs    = dataType;
         this.database    = fireDB.getReference("chatlogs");
     }
@@ -94,33 +87,28 @@ class FirebaseUtility {
      */
     public boolean isNew(){
 
-        final boolean[] newb = new boolean[1];
-        final boolean[] listenDone = {false};
-        OnCompleteListener<AuthResult> completeListener = new OnCompleteListener<AuthResult>() {
+        final boolean[] newUser = new boolean[1];
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
-                    Log.d("MyTAG", "onComplete: " + (isNew ? "new user" : "old user"));
-                    newb[0] = isNew;
-                    listenDone[0] = true;
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.hasChild(user.getUserID())) {
+                    System.out.println("is not new");
+
+                    newUser[0] = false;
                 }
+                else
+                    newUser[0] = true;
             }
-        };
-        while(!listenDone[0]);
 
-        if(newb[0]){
-            User user = new User(Long.parseLong(auth.getCurrentUser().getUid()));
-                user.setNickname(auth.getCurrentUser().getDisplayName());
-                user.setRadius(10);
-                user.setStatus("Hey, I just arrived on Radius!");
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            database.child(Long.toString(user.getUserID())).setValue(user);
+            }
+        });
 
-        }
+        while(newUser == null);
 
-
-        return newb[0];
+        return newUser[0];
     }
 
 
@@ -145,16 +133,13 @@ class FirebaseUtility {
             }
         };
 
-        database.child(Long.toString(user.getUserID())).addListenerForSingleValueEvent(listener);
-
-        return;
-
+        database.child(user.getUserID()).addListenerForSingleValueEvent(listener);
     }
 
 
     public void writeUser(){
 
-        database.child(Long.toString(user.getUserID())).setValue(user);
+        database.child(user.getUserID()).setValue(user);
 
         return;
 
@@ -162,7 +147,7 @@ class FirebaseUtility {
 
     public void writeUser(User new_user){
 
-        database.child(Long.toString(new_user.getUserID())).setValue(new_user);
+        database.child(new_user.getUserID()).setValue(new_user);
 
         return;
 
@@ -245,16 +230,20 @@ class FirebaseUtility {
     }
 
     public void writeChatLogs(ChatLogs new_chatlogs){
-        database.child(Long.toString(new_chatlogs.getParticipants().get(0).getUserID()))
+        database.child(new_chatlogs.getParticipants().get(0).getUserID())
                 .setValue(new_chatlogs);
 
         return;
 
     }
 
+    public User getUser() {
+        return user;
+    }
 
-
-
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
 
 
