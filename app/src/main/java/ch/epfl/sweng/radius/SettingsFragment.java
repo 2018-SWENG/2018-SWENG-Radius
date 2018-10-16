@@ -1,62 +1,72 @@
 package ch.epfl.sweng.radius;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceFragmentCompat;
+import android.util.Log;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-public class SettingsFragment extends Fragment {
-
-    private Button logOutButton;
+public class SettingsFragment extends PreferenceFragmentCompat
+        implements SharedPreferences.OnSharedPreferenceChangeListener{
 
     public SettingsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SettingsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SettingsFragment newInstance(String param1, String param2) {
-        SettingsFragment fragment = new SettingsFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        logOutButton = getView().findViewById(R.id.logOutButton);
-        logOutButton.setOnClickListener(new View.OnClickListener() {
+    public void onCreatePreferences(Bundle bundle, String s) {
+        // Load the Preferences from the XML file
+        addPreferencesFromResource(R.xml.app_preferences);
+        Preference logOutButton = findPreference("logOutButton");
+        logOutButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onPreferenceClick(Preference preference) {
                 logOut();
+                return true;
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPreferenceScreen()
+                .getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getPreferenceScreen()
+                .getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    // TODO: New File with settings actions and call also in mainActivity
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        System.out.println(key);
+        Log.println(Log.INFO,"Settings","change");
+
+        switch (key){
+            case "incognitoSwitch": // TODO: set the incognito Mode
+                Preference pref = findPreference(key);
+                Log.println(Log.INFO,"Settings", String.valueOf((sharedPreferences.getBoolean(key, false))));
+            case "notificationCheckbox": // TODO: set the notifications On/Off
+                Log.println(Log.INFO,"Settings","notification");
+                break;
+            case "nightModeSwitch": // TODO: set the night Mode
+                Log.println(Log.INFO,"Settings","night mode");
+                break;
+        }
     }
 
     private void logOut() {
