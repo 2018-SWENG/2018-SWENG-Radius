@@ -76,6 +76,16 @@ public class ProfileFragment extends Fragment {
         radiusValue = view.findViewById(R.id.radiusValue);
         radiusValue.setText(progress + " Km");
 
+        setUpProfilePhoto(view);
+        setUpUserNickname(view);
+        setUpUserStatus(view);
+        setUpDataInput(view);
+
+        // Inflate the layout for this fragment
+        return view;
+    }
+
+    private void setUpProfilePhoto(View view) {
         userPhoto = (CircleImageView) view.findViewById(R.id.userPhoto);
 
         if (profilePictureUri != null) {
@@ -92,7 +102,9 @@ public class ProfileFragment extends Fragment {
                         "Select Profile Picture"), 1);
             }
         });
+    }
 
+    private void setUpUserNickname(View view) {
         userNickname = view.findViewById(R.id.userNickname);
 
         if (userNicknameString != null) {
@@ -104,47 +116,45 @@ public class ProfileFragment extends Fragment {
                 userNickname.setText(defaultUserName);
             }
         }
+    }
 
+    private void setUpUserStatus(View view) {
         userStatus = view.findViewById(R.id.userStatus);
 
         if (userStatusString != null) {
             userStatus.setText(userStatusString);
         }
+    }
 
+    private void setUpDataInput(View view) {
         nicknameInput = view.findViewById(R.id.nicknameInput);
-
         statusInput = view.findViewById(R.id.statusInput);
-
         saveButton = view.findViewById(R.id.saveButton);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (nicknameInput != null) {
-                    Editable inputText = nicknameInput.getText();
-                    if (inputText != null) {
-                        String inputString = inputText.toString();
-                        if (!inputString.isEmpty()) {
-                            userNicknameString = inputString;
-                            userNickname.setText(userNicknameString);
-                        }
-                    }
+                String nicknameString = getDataFromTextInput(nicknameInput);
+                String statusString = getDataFromTextInput(statusInput);
+                if (!nicknameString.isEmpty()) {
+                    userNicknameString = nicknameString;
+                    setUpUserNickname(view);
                 }
-                if (statusInput != null) {
-                    Editable inputText = statusInput.getText();
-                    if (inputText != null) {
-                        String inputString = inputText.toString();
-                        if (!inputString.isEmpty()) {
-                            userStatusString = inputString;
-                            userStatus.setText(userStatusString);
-                        }
-                    }
+                if (!statusString.isEmpty()) {
+                    userStatusString = statusString;
+                    setUpUserStatus(view);
                 }
             }
-        });
+        }
+    }
 
-        // Inflate the layout for this fragment
-        return view;
+    private String getDataFromTextInput(TextInputEditText input) {
+        if (input != null) {
+            Editable inputText = input.getText();
+            if (inputText != null) {
+                return inputText.toString()
+            }
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -193,12 +203,14 @@ public class ProfileFragment extends Fragment {
         if (savedInstanceState != null) {
             profilePictureUri = (Uri) savedInstanceState.getSerializable("profilePictureUri");
             if (userNickname != null) {
-                userNickname.setText(savedInstanceState.getCharSequence("userNickname",
-                        ""));
+                CharSequence toSet = savedInstanceState.getCharSequence("userNickname",
+                        "");
+                userNickname.setText(toSet);
             }
             if (userStatus != null) {
-                userNickname.setText(savedInstanceState.getCharSequence("userStatus",
-                        ""));
+                CharSequence toSet = savedInstanceState.getCharSequence("userNickname",
+                        "");
+                userNickname.setText(toSet);
             }
         }
     }
