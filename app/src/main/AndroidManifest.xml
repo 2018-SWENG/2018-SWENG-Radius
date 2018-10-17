@@ -28,8 +28,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".AccountActivity" />
-        <activity android:name=".browseProfiles.BrowseProfilesActivity" />
-        <activity android:name=".message.MessageListActivity"></activity>
+        <activity android:name=".BrowseProfilesActivity" />
+        <activity android:name=".message.MessageListActivity"/>
     </application>
 
 </manifest>
