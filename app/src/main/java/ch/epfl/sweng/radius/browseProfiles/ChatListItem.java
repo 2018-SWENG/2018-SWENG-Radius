@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius;
+package ch.epfl.sweng.radius.browseProfiles;
 
 public class ChatListItem {
     private int image;
