@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.utils;
+package ch.epfl.sweng.radius.mock_databases;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -33,12 +33,13 @@ import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.doAnswer;
 
-
-public class MockFirebaseUtility {
+@RunWith(PowerMockRunner.class)
+@PowerMockRunnerDelegate(JUnit4.class)
+@PrepareForTest({ FirebaseDatabase.class})
+public class MockFirebaseUtility{
 
     public final static    String mockUserDBPath       = "./src/test/java/ch/epfl/sweng/radius/mock_databases/user.json";
     public final static    String mockMsgDBPath        = "./src/test/java/ch/epfl/sweng/radius/mock_databases/msg.json";
@@ -49,19 +50,19 @@ public class MockFirebaseUtility {
     private DataSnapshot      mockedDataSnapshot;
     String  path = "";
 
-    MockFirebaseUtility() throws IOException {
+    public MockFirebaseUtility() throws IOException {
         mockedDatabaseReference = Mockito.mock(DatabaseReference.class);
 
         mockedFirebaseDatabase = Mockito.mock(FirebaseDatabase.class);
-        Mockito.when(mockedFirebaseDatabase.getReference()).thenReturn(mockedDatabaseReference);
+        when(mockedFirebaseDatabase.getReference()).thenReturn(mockedDatabaseReference);
 
         PowerMockito.mockStatic(FirebaseDatabase.class);
-        Mockito.when(FirebaseDatabase.getInstance()).thenReturn(mockedFirebaseDatabase);
+        when(FirebaseDatabase.getInstance()).thenReturn(mockedFirebaseDatabase);
 
         PowerMockito.mock(DatabaseReference.class);
         // When the child() method is called, the current path is updated
         //     PATH MUST BE CLEARED BETWEEN OPERATIONS
-        Mockito.when(mockedDatabaseReference.child((String) Matchers.argThat(new ArgumentMatcher(){
+        when(mockedDatabaseReference.child((String) Matchers.argThat(new ArgumentMatcher(){
 
             // Update current and print to console path to console
             @Override
@@ -74,7 +75,7 @@ public class MockFirebaseUtility {
 
         }))).thenReturn(mockedDatabaseReference);
 
-        Mockito.when(mockedDatabaseReference.setValue(Matchers.any(User.class))).thenAnswer(new Answer<Void>() {
+        when(mockedDatabaseReference.setValue(Matchers.any(User.class))).thenAnswer(new Answer<Void>() {
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 Object[] args = invocation.getArguments();
@@ -83,7 +84,7 @@ public class MockFirebaseUtility {
             }
         });
 
-        PowerMockito.doAnswer(new Answer<Object>() {
+        doAnswer(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 ValueEventListener valueEventListener = (ValueEventListener) invocation.getArguments()[0];
@@ -113,7 +114,7 @@ public class MockFirebaseUtility {
         }).when(mockedDatabaseReference).addListenerForSingleValueEvent(Matchers.any(ValueEventListener.class));
 
         mockedDataSnapshot = Mockito.mock(DataSnapshot.class);
-        PowerMockito.doAnswer(new Answer<Object>() {
+        doAnswer(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 String [] parsed_path = path.split("/");
@@ -127,7 +128,7 @@ public class MockFirebaseUtility {
             }
         }).when(mockedDataSnapshot).getValue(User.class);
 
-        PowerMockito.doAnswer(new Answer<Object>() {
+        doAnswer(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 String [] parsed_path = path.split("/");
@@ -141,7 +142,7 @@ public class MockFirebaseUtility {
             }
         }).when(mockedDataSnapshot).getValue(Message.class);
 
-        PowerMockito.doAnswer(new Answer<Object>() {
+        doAnswer(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 String [] parsed_path = path.split("/");

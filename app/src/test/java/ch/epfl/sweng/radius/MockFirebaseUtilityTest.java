@@ -1,12 +1,6 @@
 package ch.epfl.sweng.radius;
 
-import android.support.annotation.NonNull;
-import android.util.Log;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -20,15 +14,10 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
-import ch.epfl.sweng.radius.database.ChatLogs;
-import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
-
-import static org.junit.Assert.*;
+import ch.epfl.sweng.radius.mock_databases.MockFirebaseUtility;
 
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(JUnit4.class)
