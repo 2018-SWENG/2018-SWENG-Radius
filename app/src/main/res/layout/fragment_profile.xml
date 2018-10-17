@@ -21,17 +21,20 @@
                 android:background="#fff"
                 android:paddingBottom="24dp">
 
-                <android.support.v7.widget.AppCompatImageView
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/userPhoto"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
-                    android:background="@drawable/profile_picture_circular_border"
+                    android:src="@drawable/user_photo_default"
                     android:elevation="5dp"
                     android:padding="5dp"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/ic_man" />
+                    app:srcCompat="@drawable/ic_man"
+                    app:civ_border_width="3dp"
+                    app:civ_border_color="#FF000000"/>
 
                 <android.support.v7.widget.AppCompatImageButton
                     android:id="@+id/changeProfilePictureButton"
@@ -51,7 +54,7 @@
                     android:layout_below="@+id/userPhoto"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="Fanfou"
+                    android:text="Default"
                     android:textColor="#636e72"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -63,7 +66,7 @@
                     android:layout_below="@+id/userNickname"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
-                    android:text="In Lausanne for two weeks"
+                    android:text="Default Status"
                     android:textColor="#636e72"
                     android:textSize="14sp" />
             </RelativeLayout>
