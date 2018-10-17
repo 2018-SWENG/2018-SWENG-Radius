@@ -2,10 +2,15 @@ package ch.epfl.sweng.radius;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.button.MaterialButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +19,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import ch.epfl.sweng.radius.database.User;
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.app.Activity.RESULT_OK;
 
 
 import java.io.InputStream;
@@ -24,8 +37,12 @@ import java.util.Scanner;
 
 
 public class ProfileFragment extends Fragment {
-    
-    ImageView userPhoto;
+
+    private static Uri profilePictureUri;
+    private static String userNicknameString;
+    private static String userStatusString;
+
+    CircleImageView userPhoto;
     ImageButton changeProfilePictureButton;
     TextView userNickname;
     TextView userStatus;
@@ -100,6 +117,14 @@ public class ProfileFragment extends Fragment {
         });
 
         HomeFragment.newInstance(radiusBar.getProgress());
+        radiusValue = view.findViewById(R.id.radiusValue);
+        radiusValue.setText(progress + " Km");
+
+        setUpProfilePhoto(view);
+        setUpUserNickname(view);
+        setUpUserStatus(view);
+        setUpDataInput(view);
+
         // Inflate the layout for this fragment
         return view;
     }
@@ -131,6 +156,23 @@ public class ProfileFragment extends Fragment {
                 } else if (spokenLanguages.contains(position)) {
                     spokenLanguages.remove(new Integer(position));
                 }
+
+    private void setUpProfilePhoto(View view) {
+        userPhoto = (CircleImageView) view.findViewById(R.id.userPhoto);
+
+        if (profilePictureUri != null) {
+            userPhoto.setImageURI(profilePictureUri);
+        }
+
+        userPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,
+                        "Select Profile Picture"), 1);
+
             }
         });
     }
@@ -173,6 +215,47 @@ public class ProfileFragment extends Fragment {
                 spokenLanguages.clear();
                 languagesText = "";
                 selectedLanguages.setText(languagesText);
+
+    private void setUpUserNickname(View view) {
+        userNickname = view.findViewById(R.id.userNickname);
+
+        if (userNicknameString != null) {
+            userNickname.setText(userNicknameString);
+        } else {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                String defaultUserName = user.getDisplayName();
+                userNickname.setText(defaultUserName);
+            }
+        }
+    }
+
+    private void setUpUserStatus(View view) {
+        userStatus = view.findViewById(R.id.userStatus);
+
+        if (userStatusString != null) {
+            userStatus.setText(userStatusString);
+        }
+    }
+
+    private void setUpDataInput(final View mainView) {
+        nicknameInput = mainView.findViewById(R.id.nicknameInput);
+        statusInput = mainView.findViewById(R.id.statusInput);
+        saveButton = mainView.findViewById(R.id.saveButton);
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String nicknameString = getDataFromTextInput(nicknameInput);
+                String statusString = getDataFromTextInput(statusInput);
+                if (!nicknameString.isEmpty()) {
+                    userNicknameString = nicknameString;
+                    setUpUserNickname(mainView);
+                }
+                if (!statusString.isEmpty()) {
+                    userStatusString = statusString;
+                    setUpUserStatus(mainView);
+                }
             }
         });
     }
@@ -196,6 +279,22 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    private String getDataFromTextInput(TextInputEditText input) {
+        if (input != null) {
+            Editable inputText = input.getText();
+            if (inputText != null) {
+                return inputText.toString();
+            }
+        }
+        return "";
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            profilePictureUri = intent.getData();
+            userPhoto.setImageURI(profilePictureUri);
+        }
+    }
 
     SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
 
@@ -220,5 +319,32 @@ public class ProfileFragment extends Fragment {
 
     public String getLanguagesText() {
         return languagesText;
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (profilePictureUri != null) {
+            outState.putParcelable("profilePictureUri", profilePictureUri);
+        }
+        if (userNickname != null) {
+            outState.putCharSequence("userNickname", userNickname.getText());
+        }
+        if (userStatus != null) {
+            outState.putCharSequence("userStatus", userStatus.getText());
+        }
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            profilePictureUri = (Uri) savedInstanceState.getSerializable("profilePictureUri");
+            CharSequence toSet = savedInstanceState.getCharSequence("userNickname",
+                    "");
+            userNicknameString = toSet.toString();
+            toSet = savedInstanceState.getCharSequence("userNickname",
+                        "");
+            userStatusString = toSet.toString();
+        }
     }
 }
