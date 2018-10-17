@@ -50,7 +50,7 @@ public class HomeFragmentTest {
         assertNotNull(view);
     }
 
-    @Test
+    /*@Test
     public void addDeleteUsersTest() {
         //Adding new Users
         ((HomeFragment)fragment).addUser(46.524434, 6.570222);
@@ -65,7 +65,7 @@ public class HomeFragmentTest {
 
         ((HomeFragment) fragment).deleteUser(4);
         assertTrue(((HomeFragment) fragment).returnNoOfUsers() == 4);
-    }
+    }*/
 
     @After
     public void tearDown() {
