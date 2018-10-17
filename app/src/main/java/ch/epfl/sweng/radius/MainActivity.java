@@ -56,26 +56,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {
+
                     googleSignInClient = GoogleSignIn.getClient(MainActivity.this, gso);
-                    System.out.println("test : " + myAuth.getCurrentUser().getUid());
+
                     User currentUser = new User(myAuth.getCurrentUser().getUid());
                     FirebaseUtility firebase = new FirebaseUtility(currentUser);
+                    
                     if(firebase.isNew()){
-                        System.out.println("is new");
                         firebase.writeUser();
                     } else {
-                        System.out.println("is not new");
                         firebase.listenUser();
                     }
-
-                    // Database Example
-                    System.out.println("Status of current User : " + firebase.getUser().getStatus());
-                    currentUser.setStatus("COUCU");
-                    firebase.setUser(currentUser);
-                    firebase.writeUser();
-
-
-                    firebase.listenUser();
 
                     startActivity(new Intent(MainActivity.this, AccountActivity.class));
                 }
