@@ -280,7 +280,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         for (int i = 0; users != null && i < users.size(); i++) {
             String status = users.get(i).getStatus();
             String userName = users.get(i).getNickname();
-            if ( contains(users.get(i).getLocation().latitude,
+            markNearbyUser(i, status, userName);
+            /*if ( contains(users.get(i).getLocation().latitude,
                     users.get(i).getLocation().longitude) && !speaksSameLanguage(users.get(i)))
             {
                     mobileMap.addMarker(new MarkerOptions().position(users.get(i).getLocation())
@@ -291,7 +292,22 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
                 mobileMap.addMarker(new MarkerOptions().position(users.get(i).getLocation())
                         .title(userName + ": " + status).icon(BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-            }
+            }*/
+        }
+    }
+
+    private void markNearbyUser(int indexOfUser, String status, String userName) {
+        if ( contains(users.get(indexOfUser).getLocation().latitude,
+                users.get(indexOfUser).getLocation().longitude) && !speaksSameLanguage(users.get(indexOfUser)))
+        {
+            mobileMap.addMarker(new MarkerOptions().position(users.get(indexOfUser).getLocation())
+                    .title(userName + ": " + status));
+
+        } else if (contains(users.get(indexOfUser).getLocation().latitude,
+                users.get(indexOfUser).getLocation().longitude) && speaksSameLanguage(users.get(indexOfUser))) {
+            mobileMap.addMarker(new MarkerOptions().position(users.get(indexOfUser).getLocation())
+                    .title(userName + ": " + status).icon(BitmapDescriptorFactory
+                            .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         }
     }
 
