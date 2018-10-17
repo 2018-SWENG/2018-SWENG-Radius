@@ -8,7 +8,7 @@
  * TODO : Add methods to add more than one listener for each instance
  * TODO : Add method to check if user is new
  */
-package ch.epfl.sweng.radius;
+package ch.epfl.sweng.radius.utils;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -27,7 +27,7 @@ import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
 
-class FirebaseUtility {
+public class FirebaseUtility {
 
     private FirebaseDatabase fireDB;
     private FirebaseAuth     auth;
