@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <PreferenceCategory
+        android:title="General"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <SwitchPreference
+            android:key="incognitoSwitch"
+
+            android:title="Incognito mode"
+            android:summary="If this option is activate, nobody can see you on the map"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            android:key="notificationCheckbox"
+            android:title="Notifications"
+            android:summary="Disable or enable notifications when you receive a message"
+            android:defaultValue="true"/>
+
+        <SwitchPreference
+            android:key="nightModeSwitch"
+
+            android:title="Night Mode"
+            android:summary="Change the colors of the app for a less bright version"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Account"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Preference
+            android:key="logOutButton"
+            android:title="Disconnect"
+            android:summary="You will be redirected to the login page"/>
+
+        <Preference
+            android:id="@+id/deleteAccount"
+            android:title="Delete your account"
+            android:summary="All your conversations and friends will be deleted"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
