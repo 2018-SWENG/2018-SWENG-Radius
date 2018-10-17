@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.FirebaseUtility;
 
 public class MainActivity extends AppCompatActivity {
 
