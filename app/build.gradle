@@ -62,8 +62,14 @@ dependencies {
     androidTestImplementation 'junit:junit:4.12'
 // Gradle automatically adds 'android.test.runner' as a dependency.
     testImplementation 'org.powermock:powermock:1.6.5'
+    implementation 'org.powermock:powermock:1.6.5'
+
     testImplementation 'org.powermock:powermock-module-junit4:1.6.5'
+    implementation 'org.powermock:powermock-module-junit4:1.6.5'
+
     testImplementation 'org.powermock:powermock-api-mockito:1.6.5'
+    implementation 'org.powermock:powermock-api-mockito:1.6.5'
+
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

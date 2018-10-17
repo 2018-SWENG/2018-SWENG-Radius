@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.mock_databases;
+package ch.epfl.sweng.radius.utils;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;

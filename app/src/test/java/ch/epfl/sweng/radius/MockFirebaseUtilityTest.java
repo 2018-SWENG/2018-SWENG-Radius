@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.IOException;
 
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.mock_databases.MockFirebaseUtility;
+import ch.epfl.sweng.radius.utils.MockFirebaseUtility;
 
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(JUnit4.class)
