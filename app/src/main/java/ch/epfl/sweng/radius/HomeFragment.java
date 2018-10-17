@@ -10,6 +10,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +37,8 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.friendsList.FriendsListAdapter;
+import ch.epfl.sweng.radius.friendsList.FriendsListItem;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback, RadiusCircle {
 
@@ -91,8 +96,22 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
 
     @Override
     public View onCreateView(LayoutInflater infltr, ViewGroup containr, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return infltr.inflate(R.layout.fragment_home, containr, false);
+        View view = infltr.inflate(R.layout.fragment_home, containr, false);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.friendsList);
+
+        //mock data for testing purposes
+        FriendsListItem items[] = { new FriendsListItem("John Doe",R.drawable.image1),
+                new FriendsListItem("Jane Doe",R.drawable.image2),
+                new FriendsListItem("Alison Star",R.drawable.image3),
+                new FriendsListItem("Mila Noon",R.drawable.image4),
+                new FriendsListItem("David Doyle",R.drawable.image5)};
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        FriendsListAdapter adapter = new FriendsListAdapter(items, getContext());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        return view;
     }
 
     @Override
@@ -133,12 +152,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
             if (ActivityCompat.checkSelfPermission(getContext(),
                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                    && ActivityCompat.checkSelfPermission(getContext(),
-                   Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            {
-                return;
-            }
-            mobileMap.setMyLocationEnabled(true);
-        }
+                   Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                return;}
+            mobileMap.setMyLocationEnabled(true);}
     }
 
     private void getDeviceLocation() {
@@ -226,10 +242,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         mobileMap.clear();
         LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(),
                 currentLocation.getLongitude());
-        radiusOptions = new CircleOptions().center(currentCoordinates)
-                .strokeColor(Color.RED)
-                .fillColor(Color.parseColor("#22FF0000"))
-                .radius(radius);
+        radiusOptions = new CircleOptions().center(currentCoordinates).strokeColor(Color.RED)
+                .fillColor(Color.parseColor("#22FF0000")).radius(radius);
         radiusCircle = mobileMap.addCircle(radiusOptions);
         //radiusCircle.setRadius(radius);
     }
@@ -273,26 +287,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         mobileMap.clear();
         radiusCircle = mobileMap.addCircle(radiusOptions);
 
-        /*if (users == null) { //write a test to check if users are null or not when the markNearbyUsers method is called
-            return;
-        }*/
-
         for (int i = 0; users != null && i < users.size(); i++) {
             String status = users.get(i).getStatus();
             String userName = users.get(i).getNickname();
             markNearbyUser(i, status, userName);
-            /*if ( contains(users.get(i).getLocation().latitude,
-                    users.get(i).getLocation().longitude) && !speaksSameLanguage(users.get(i)))
-            {
-                    mobileMap.addMarker(new MarkerOptions().position(users.get(i).getLocation())
-                            .title(userName + ": " + status));
-
-            } else if (contains(users.get(i).getLocation().latitude,
-                    users.get(i).getLocation().longitude) && speaksSameLanguage(users.get(i))) {
-                mobileMap.addMarker(new MarkerOptions().position(users.get(i).getLocation())
-                        .title(userName + ": " + status).icon(BitmapDescriptorFactory
-                                .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-            }*/
         }
     }
 

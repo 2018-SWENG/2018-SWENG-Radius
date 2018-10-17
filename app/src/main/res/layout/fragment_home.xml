@@ -25,18 +25,49 @@
 
         <Button
             android:id="@+id/testMark"
-            android:layout_width="103dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="254dp"
-            android:layout_marginEnd="140dp"
-            android:layout_marginStart="141dp"
+            android:layout_width="65dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="253dp"
+            android:layout_marginEnd="43dp"
+            android:layout_marginBottom="8dp"
             android:text="Mark"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/friendsListLabel"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.567"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/friendsList"
+            android:layout_width="368dp"
+            android:layout_height="187dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="60dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/friendsListLabel"
+            android:layout_width="71dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="Friends"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/friendsList"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.61" />
     </android.support.constraint.ConstraintLayout>
 
 </FrameLayout>

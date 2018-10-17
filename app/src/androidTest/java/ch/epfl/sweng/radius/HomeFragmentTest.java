@@ -53,11 +53,6 @@ public class HomeFragmentTest {
         assertNotNull(view);
     }
 
-    /*@Test
-    public void clickMarkButton() {
-        onView(withId(R.id.testMark)).perform(click());
-    }*/
-
     @After
     public void tearDown() {
         mblAccountActivity = null;
