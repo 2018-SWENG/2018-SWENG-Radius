@@ -82,23 +82,19 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     public static HomeFragment newInstance(int radiusValue) {
         HomeFragment fragment = new HomeFragment();
         radius = radiusValue * 1000; // converting to meters.
-
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        radius = DEFAULT_RADIUS;
-        users = new ArrayList<User>();
+        radius = DEFAULT_RADIUS; users = new ArrayList<User>();
     }
 
     @Override
     public View onCreateView(LayoutInflater infltr, ViewGroup containr, Bundle savedInstanceState) {
         View view = infltr.inflate(R.layout.fragment_home, containr, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.friendsList);
-
         //mock data for testing purposes
         FriendsListItem items[] = { new FriendsListItem("John Doe",R.drawable.image1),
                 new FriendsListItem("Jane Doe",R.drawable.image2),
@@ -133,8 +129,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         });
 
         mapView = view.findViewById(R.id.map);
-        mapView.onCreate(savedInstanceState);
-        mapView.onResume();
+        mapView.onCreate(savedInstanceState); mapView.onResume();
         mapView.getMapAsync(this);
     }
 
