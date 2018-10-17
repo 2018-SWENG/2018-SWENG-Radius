@@ -1,7 +1,6 @@
-package ch.epfl.sweng.radius;
+package ch.epfl.sweng.radius.browseProfiles;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,11 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.List;
 
+import ch.epfl.sweng.radius.R;
+
 /**
  * CustomAdapter class that extends the ArrayAdapter class
  * to work with the custom chat list view layout.
- *
- * @author  Pinar Ayaz
  */
 public class CustomAdapter extends ArrayAdapter<ChatListItem> {
     List<ChatListItem> chatList;
@@ -57,16 +56,7 @@ public class CustomAdapter extends ArrayAdapter<ChatListItem> {
         final int clickedPic = chatListItem.getImage();
         final String clickedName = chatListItem.getName();
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, BrowseProfilesActivity.class);
-                intent.putExtra("Clicked Picture", clickedPic);
-                intent.putExtra("Clicked Name", clickedName);
-                context.startActivity(intent);
-            }
-        });
-
+        new CustomListener(clickedPic, clickedName).setCustomOnClick(imageView, context);
         return view;
     }
 }

@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import ch.epfl.sweng.radius.browseProfiles.ChatListItem;
+import ch.epfl.sweng.radius.browseProfiles.CustomAdapter;
 import ch.epfl.sweng.radius.message.MessageListActivity;
 
 import java.util.ArrayList;

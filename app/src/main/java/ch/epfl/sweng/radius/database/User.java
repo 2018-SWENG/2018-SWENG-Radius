@@ -21,6 +21,7 @@ public class User {
     private List<Integer> friendsInvitations;
     private List<Integer> friends;
     private List<Integer> blockedUsers;
+    private String spokenLanguages;
     private LatLng location;
 
     public User(String userID){
@@ -33,6 +34,7 @@ public class User {
         this.friendsInvitations = new ArrayList<>();
         this.friends = new ArrayList<>();
         this.blockedUsers = new ArrayList<>();
+        this.spokenLanguages = "";
     }
 
     // Debugging purpose only
@@ -118,24 +120,28 @@ public class User {
             friendsRequests.add(friendID);
     }
 
-    public void addFriendInvitation(Integer friendID){
+    /*public void addFriendInvitation(Integer friendID){
         if (friendsRequests.contains(friendID)) {
             friendsRequests.remove(friendID);
             friends.add(friendID);
         }
         else
             friendsInvitations.add(friendID);
-    }
+    }*/
 
-    public void addBlockedUser (Integer userID){
+    /*public void addBlockedUser (Integer userID){
         blockedUsers.add(userID);
-    }
+    }*/
 
-    public void removeBlockedUser(Integer userID){
-        blockedUsers.remove(userID);
-    }
+    //public void removeBlockedUser(Integer userID){
+    //    blockedUsers.remove(userID);
+    //}
 
     public void setLocation(LatLng location) {
         this.location = location;
     }
+
+    public void setSpokenLanguages(String spokenLanguages) { this.spokenLanguages = spokenLanguages; }
+
+    public String getSpokenLanguages() { return this.spokenLanguages; }
 }
