@@ -42,8 +42,7 @@ public class FirebaseUtility {
     public FirebaseUtility(User user){
 
         // Instanciate References Object
-        this.auth      = FirebaseAuth.getInstance();
-        this.fireDB    = FirebaseDatabase.getInstance();
+        initDB();
         this.user      = user;
         this.database  = fireDB.getReference("users");
     }
@@ -55,8 +54,7 @@ public class FirebaseUtility {
     public FirebaseUtility(Message dataType){
 
         // Instanciate References Object
-        this.auth       = FirebaseAuth.getInstance();
-        this.fireDB     = FirebaseDatabase.getInstance();
+        initDB();
         this.msg        = dataType;
         this.database   = fireDB.getReference("messages");
 
@@ -69,12 +67,15 @@ public class FirebaseUtility {
     public FirebaseUtility(ChatLogs dataType){
 
         // Instanciate References Object
-        this.auth        = FirebaseAuth.getInstance();
-        this.fireDB      = FirebaseDatabase.getInstance();
+        initDB();
         this.chatLogs    = dataType;
         this.database    = fireDB.getReference("chatlogs");
     }
 
+    private void initDB(){
+        this.auth       = FirebaseAuth.getInstance();
+        this.fireDB     = FirebaseDatabase.getInstance();
+    }
     // TODO : #Salezer, must be fixed
 
     /**
