@@ -10,9 +10,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.junit.runners.MethodSorters;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
@@ -31,25 +33,32 @@ import static org.junit.Assert.*;
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(JUnit4.class)
 @PrepareForTest({ MockFirebaseUtility.class, FirebaseDatabase.class})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MockFirebaseUtilityTest {
 
     private static MockFirebaseUtility mockedDB;
+    private static User user;
 
     @BeforeClass
     public static void before() throws IOException {
 
         mockedDB = new MockFirebaseUtility();
         System.out.println("MockedFirebaseUtility instantiated");
+
+        // Create sample user for testing
+        user = new User();
+        user.setNickname("Arthy");
+        user.setStatus("Testing the MockUtilityDatabase !");
     }
 
-    @Before     
+    @Before
     public void clearPath(){
         mockedDB.clearPath();
     }
 
 
     @Test
-    public void filesShouldBeGenerated() {
+    public void aFilesShouldBeGenerated() {
 
 
         File userFile = new File(mockedDB.mockUserDBPath);
@@ -72,12 +81,7 @@ public class MockFirebaseUtilityTest {
     }
 
     @Test
-    public void writeAndReadUserDB() {
-
-        // Create new user
-        User user = new User();
-        user.setNickname("Arthy");
-        user.setStatus("Testing the MockUtilityDatabase !");
+    public void bWriteAndReadUserDB() {
 
         try {
             mockedDB.writeUser(user);
@@ -94,6 +98,14 @@ public class MockFirebaseUtilityTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void cRemoveUserFromDB(){
+
+        mockedDB.removeUser(user.getUserID());
+
+        assert(mockedDB.getUser(user.getUserID()) == null);
     }
     /*
     @Test

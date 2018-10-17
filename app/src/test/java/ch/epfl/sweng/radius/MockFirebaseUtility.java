@@ -280,7 +280,7 @@ public class MockFirebaseUtility {
 
             String json = gson.toJson(userdb);
             // Overwrites existing file
-            FileWriter writer = new FileWriter(mockUserDBPath, true);
+            FileWriter writer = new FileWriter(mockUserDBPath, false);
             writer.write(json);
             writer.close();
 
@@ -346,7 +346,7 @@ public class MockFirebaseUtility {
 
             String json = gson.toJson(msgDB);
             // Overwrites existing file
-            FileWriter writer = new FileWriter(mockChatLogDBPath, true);
+            FileWriter writer = new FileWriter(mockChatLogDBPath, false);
             writer.write(json);
             writer.close();
 
@@ -411,7 +411,7 @@ public class MockFirebaseUtility {
 
             String json = gson.toJson(chatLogsDB);
             // Overwrites existing file
-            FileWriter writer = new FileWriter(mockChatLogDBPath, true);
+            FileWriter writer = new FileWriter(mockChatLogDBPath, false);
             writer.write(json);
             writer.close();
 
@@ -438,7 +438,6 @@ class UserDB {
             if (database.get(i).getUserID().equals(uID))
                 return  database.get(i);
         }
-      //  System.out.println("GET  " + database);
         return null;
     }
 
