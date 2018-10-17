@@ -9,6 +9,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +35,8 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.friendsList.FriendsListAdapter;
+import ch.epfl.sweng.radius.friendsList.FriendsListItem;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback, RadiusCircle {
 
@@ -80,18 +85,27 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         users = new ArrayList<User>();
-        User alfred = new User(); User bob = new User();
-
-        alfred.setLocation(new LatLng(46.518532, 6.556455));
-        bob.setLocation(new LatLng(46.519331, 6.580971));
-        users.add(alfred); users.add(bob);
         getLocationPermission();
     }
 
     @Override
     public View onCreateView(LayoutInflater infltr, ViewGroup containr, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return infltr.inflate(R.layout.fragment_home, containr, false);
+        View view = infltr.inflate(R.layout.fragment_home, containr, false);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.friendsList);
+
+        //mock data for testing purposes
+        FriendsListItem items[] = { new FriendsListItem("John Doe",R.drawable.image1),
+                new FriendsListItem("Jane Doe",R.drawable.image2),
+                new FriendsListItem("Alison Star",R.drawable.image3),
+                new FriendsListItem("Mila Noon",R.drawable.image4),
+                new FriendsListItem("David Doyle",R.drawable.image5)};
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        FriendsListAdapter adapter = new FriendsListAdapter(items, getContext());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        return view;
     }
 
     @Override
@@ -106,39 +120,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
                 User marie = new User(); marie.setLocation(new LatLng(46.521877, 6.588810));
                 users.add(marc); users.add(jean); users.add(marie);
                 markNearbyUsers();
-            }
-        });
-
-        testRad = view.findViewById(R.id.testRad);
-        testRad.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setRadius(500);markNearbyUsers();
-            }
-        });
-
-        testRad2 = view.findViewById(R.id.testRad2);
-        testRad2.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setRadius(2000);markNearbyUsers();
-            }
-        });
-
-        testLoc = view.findViewById(R.id.testLoc);
-        testLoc.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mobileMap.clear();
-                LatLng newLocation = new LatLng(46.521202, 6.552371);
-                currentLocation.setLongitude(newLocation.longitude);
-                currentLocation.setLatitude(newLocation.latitude);
-                radiusOptions = new CircleOptions().center(newLocation)
-                        .strokeColor(Color.RED)
-                        .fillColor(Color.parseColor("#22FF0000"))
-                        .radius(getRadius());
-                radiusCircle = mobileMap.addCircle(radiusOptions);
-                markNearbyUsers(); //mobileMap.addCircle(radiusOptions);
             }
         });
 
@@ -160,12 +141,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
             if (ActivityCompat.checkSelfPermission(getContext(),
                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                    && ActivityCompat.checkSelfPermission(getContext(),
-                   Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            {
-                return;
-            }
-            mobileMap.setMyLocationEnabled(true);
-        }
+                   Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                return;}
+            mobileMap.setMyLocationEnabled(true);}
     }
 
     private void getDeviceLocation() {
@@ -232,28 +210,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
 
     }
 
-    /*public void onRequestPermissionResult(int requestCode, @NonNull String[] permissions,
-                                            @NonNull int[] grantResults) {
-        Log.d( TAG, "onRequestPermissionResult: called.");
-        mLocationPermissionGranted = false;
-
-        switch ( requestCode) {
-            case LOCATION_PERMISSION_REQUEST_CODE: {
-                if ( grantResults.length > 0) {
-                    for ( int i = 0; i < grantResults.length; i++) {
-                        if ( grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                            Log.d( TAG, "onRequestPermissionResult: permission denied.");
-                            mLocationPermissionGranted = false;
-                            return;
-                        }
-                    }
-                    Log.d( TAG, "onRequestPermissionResult: permission granted.");
-                    mLocationPermissionGranted = true;
-                }
-            }
-        }
-    }*/
-
     public double getRadius() {
         return radiusCircle.getRadius();
     }
@@ -274,10 +230,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         mobileMap.clear();
         LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(),
                 currentLocation.getLongitude());
-        radiusOptions = new CircleOptions().center(currentCoordinates)
-                .strokeColor(Color.RED)
-                .fillColor(Color.parseColor("#22FF0000"))
-                .radius(radius);
+        radiusOptions = new CircleOptions().center(currentCoordinates).strokeColor(Color.RED)
+                .fillColor(Color.parseColor("#22FF0000")).radius(radius);
         radiusCircle = mobileMap.addCircle(radiusOptions);
         //radiusCircle.setRadius(radius);
     }
@@ -321,9 +275,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
         mobileMap.clear();
         radiusCircle = mobileMap.addCircle(radiusOptions);
         for (int i = 0; i < users.size(); i++) {
-            if ( contains(users.get(i).getLocation().latitude,
-                    users.get(i).getLocation().longitude))
-            {
+            if(contains(users.get(i).getLocation().latitude,users.get(i).getLocation().longitude)){
                 String status = users.get(i).getStatus();
                 String userName = users.get(i).getNickname();
                 //radiusCircle = mobileMap.addCircle(radiusOptions);
