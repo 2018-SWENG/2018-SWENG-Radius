@@ -56,7 +56,7 @@ public class CustomAdapter extends ArrayAdapter<ChatListItem> {
         final int clickedPic = chatListItem.getImage();
         final String clickedName = chatListItem.getName();
 
-        CustomListener.setCustomOnClick(view, imageView, clickedPic, clickedName, context);
+        new CustomListener(clickedPic, clickedName).setCustomOnClick(imageView, context);
         return view;
     }
 }

@@ -1,7 +1,6 @@
 package ch.epfl.sweng.radius.friendsList;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesActivity;
+import ch.epfl.sweng.radius.browseProfiles.CustomListener;
 
 public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.ViewHolder>{
 
@@ -39,9 +38,6 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
-        // - get data from your itemsData at this position
-        // - replace the contents of the view with that itemsData
-
         viewHolder.txtViewTitle.setText(items[position].getFriendName());
         viewHolder.imgViewIcon.setImageResource(items[position].getFriendProfilePic());
 
@@ -49,15 +45,7 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
         final int clickedPic = item.getFriendProfilePic();
         final String clickedName = item.getFriendName();
 
-         viewHolder.imgViewIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, BrowseProfilesActivity.class);
-                intent.putExtra("Clicked Picture", clickedPic);
-                intent.putExtra("Clicked Name", clickedName);
-                context.startActivity(intent);
-            }
-        });
+        new CustomListener(clickedPic, clickedName).setCustomOnClick(viewHolder.imgViewIcon, context);
 
     }
 

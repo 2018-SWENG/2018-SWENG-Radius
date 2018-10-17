@@ -8,9 +8,15 @@ import android.widget.ImageView;
 import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesActivity;
 
 public class CustomListener {
+    private int clickedPic;
+    private String clickedName;
 
-    public static void setCustomOnClick(View view, ImageView imageView, final int clickedPic,
-                                        final String clickedName, final Context context){
+    public CustomListener(int clickedPic, String clickedName){
+        this.clickedPic = clickedPic;
+        this.clickedName = clickedName;
+    }
+
+    public void setCustomOnClick(ImageView imageView, final Context context){
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

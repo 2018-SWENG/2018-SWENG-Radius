@@ -90,14 +90,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Radius
 
     @Override
     public View onCreateView(LayoutInflater infltr, ViewGroup containr, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        // Inflate the layout for this fragment
         View view = infltr.inflate(R.layout.fragment_home, containr, false);
-
-        // 1. get a reference to recyclerView
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.friendsList);
 
-        // this is data for recycler view
+        //mock data for testing purposes
         FriendsListItem items[] = { new FriendsListItem("John Doe",R.drawable.image1),
                 new FriendsListItem("Jane Doe",R.drawable.image2),
                 new FriendsListItem("Alison Star",R.drawable.image3),
