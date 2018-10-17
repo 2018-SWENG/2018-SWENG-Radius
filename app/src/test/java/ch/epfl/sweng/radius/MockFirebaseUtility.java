@@ -1,18 +1,12 @@
 package ch.epfl.sweng.radius;
 
-import android.support.annotation.NonNull;
-import android.util.Log;
-
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.ArgumentMatcher;
@@ -20,7 +14,6 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 
@@ -31,39 +24,31 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
 
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.argThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.doAnswer;
 
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(JUnit4.class)
-@PrepareForTest({ FirebaseDatabase.class})
 public class MockFirebaseUtility {
 
     private FirebaseUtility uT;
-    private final static    String mockUserDBPath       = "/home/arthur/Projects/Sweng_Proj/2018-SWENG-Radius/app/src/test/java/ch/epfl/sweng/radius/mock_databases/user.json";
-    private final static    String mockMsgDBPath        = "/home/arthur/Projects/Sweng_Proj/2018-SWENG-Radius/app/src/test/java/ch/epfl/sweng/radius/mock_databases/msg.json";
-    private final static    String mockChatLogDBPath    = "/home/arthur/Projects/Sweng_Proj/2018-SWENG-Radius/app/src/test/java/ch/epfl/sweng/radius/mock_databases/chatlog.json";
+    private final static    String mockUserDBPath       = "./mock_databases/user.json";
+    private final static    String mockMsgDBPath        = "./mock_databases/msg.json";
+    private final static    String mockChatLogDBPath    = "./mock_databases/chatlog.json";
 
     private DatabaseReference mockedDatabaseReference;
     private FirebaseDatabase  mockedFirebaseDatabase;
     private DataSnapshot      mockedDataSnapshot;
-    private Object obj;
-    String  path = "/user/";
+    String  path = "";
 
-    @Before
-    public void before() throws IOException {
+    MockFirebaseUtility() throws IOException {
         mockedDatabaseReference = Mockito.mock(DatabaseReference.class);
 
         mockedFirebaseDatabase = Mockito.mock(FirebaseDatabase.class);
@@ -122,7 +107,6 @@ public class MockFirebaseUtility {
                 when(mockedDataSnapshot.getValue(Message.class)).thenReturn(ret)
                 */
                 valueEventListener.onDataChange(mockedDataSnapshot);
-                obj = ret_obj;
                 return ret_obj;
             }
         }).when(mockedDatabaseReference).addListenerForSingleValueEvent(any(ValueEventListener.class));
@@ -171,93 +155,6 @@ public class MockFirebaseUtility {
         generateJSONUserFile();
         generateJSONMsgFile();
         generateJSONChatFile();
-    }
-
-
-    @Test
-    public void writeToDB() {
-
-        path = "";
-        User user = new User();
-        user.setNickname("Archie");
-        // Try writing to existing user
-        mockedDatabaseReference.child("user").setValue(user);
-
-
-        ValueEventListener  listener;
-
-        listener = new ValueEventListener() {
-            @Override
-            public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user2 = dataSnapshot.getValue(User.class);
-
-                System.out.println("User : " + user2.getNickname());
-                Log.e("Firebase", "User data has been read.");
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("Firebase", "Failed to read user", databaseError.toException());
-
-            }
-        };
-
-        mockedDatabaseReference.child("0").addListenerForSingleValueEvent(listener);
-
-        path = "";
-        Date date = new Date();
-
-        Message msg = new Message(10, new User(), "Coucou" + Integer.toString(0), date);
-        // Try writing to existing user
-        mockedDatabaseReference.child("messages");
-
-
-        listener = new ValueEventListener() {
-            @Override
-            public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Message msg2 = dataSnapshot.getValue(Message.class);
-
-                System.out.println("User : " + msg2.getContentMessage());
-                Log.e("Firebase", "Message data has been read.");
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("Firebase", "Failed to read user", databaseError.toException());
-
-            }
-        };
-
-        mockedDatabaseReference.child("0").addListenerForSingleValueEvent(listener);
-        path = "";
-        mockedDatabaseReference.child("chatlogs");
-
-        listener = new ValueEventListener() {
-            @Override
-            public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                System.out.println("Participants : " + path);
-
-                ChatLogs msg2 = dataSnapshot.getValue(ChatLogs.class);
-
-                System.out.println("Participants : " + msg2.getParticipants().get(0).getUserID());
-                Log.e("Firebase", "Message data has been read.");
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("Firebase", "Failed to read user", databaseError.toException());
-
-            }
-        };
-
-        mockedDatabaseReference.child("40").addListenerForSingleValueEvent(listener);
-
-
-        return;
-
     }
 
     public void generateJSONUserFile() throws IOException {
@@ -323,51 +220,17 @@ public class MockFirebaseUtility {
 
     }
 
-    /*
-    @Test
-    public void getSignedInUserProfileTest() {
-      //  when(mockedDatabaseReference.child(anyString())).thenReturn(mockedDatabaseReference);
-
-
-
-        ValueEventListener listener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Object val = mockedDataSnapshot.getValue();
-
-                if (val == null){
-                    System.out.println("User data is null!");
-                    return;
-                }
-
-
-                System.out.println("User data is changed : " + val);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-        System.out.println("Path : " + path);
-        mockedDatabaseReference.child("arthur").addListenerForSingleValueEvent(listener);
-        // check preferences are updated
-    }
-    */
-
     private void writeUser(User user) throws IOException {
 
         Gson gson = new Gson();
         UserDB userdb;
-        System.out.println("Printing user to File " + user.getNickname());
+        System.out.println("Printing user to File : " + user.getNickname());
         try{
             BufferedReader br = new BufferedReader(new FileReader(mockUserDBPath));
 
             userdb = gson.fromJson(br, UserDB.class);
 
-            System.out.println("Size :" + Integer.toString(userdb.database.size()));
-            userdb.addUser(Long.toString(user.getUserID()), user);
-            System.out.println("Size :" + Integer.toString(userdb.database.size()));
+            userdb.addUser(user.getUserID(), user);
 
 
             FileWriter writer = new FileWriter(mockUserDBPath, false);
@@ -432,7 +295,7 @@ public class MockFirebaseUtility {
             BufferedReader br = new BufferedReader((new FileReader(mockChatLogDBPath)));
             chatLogsDB = gson.fromJson(br, ChatLogsDB.class);
 
-            chatLogsDB.addChatLogs(Long.toString(chatlogs.getParticipants().get(0).getUserID()),
+            chatLogsDB.addChatLogs(chatlogs.getParticipants().get(0).getUserID(),
                     chatlogs);
 
             FileWriter writer = new FileWriter(mockChatLogDBPath, false);
@@ -568,7 +431,7 @@ class UserDB {
 
         User user = new User();
         for(int i = 0; i <database.size(); i++){
-            if (Long.toString(database.get(i).getUserID()).equals(uID))
+            if (database.get(i).getUserID().equals(uID))
                 return  database.get(i);
         }
       //  System.out.println("GET  " + database);
@@ -577,14 +440,19 @@ class UserDB {
 
     public void addUser(String uID, User user){
 
-    ///    if(database.containsKey(uID))
-    //        database.remove(uID);
+        for(int i = 0; i <database.size(); i++){
+            if (database.get(i).getUserID().equals(uID))
+                database.remove(i);
+        }
             database.add(user);
     }
 
     public void removeUser(String uID){
 
-        database.remove(uID);
+        for(int i = 0; i <database.size(); i++){
+            if (database.get(i).getUserID().equals(uID))
+                database.remove(i);
+        }
     }
 
     public List<User> getUsers(){
@@ -606,20 +474,32 @@ class ChatLogsDB {
     public ChatLogs getChatLogs(String uID){
         System.out.print("Size of chat :" + database.size());
         for(int i = 0; i < database.size(); i++){
-            if(Long.toString(database.get(i).getParticipants().get(0).getUserID()).equals(uID))
+            if(database.get(i).getParticipants().get(0).getUserID().equals(uID))
                 return database.get(i);
         }
         return null;
     }
 
     public void addChatLogs(String uID, ChatLogs chatlog){
-
+        for(int i = 0; i <database.size(); i++){
+            if (database.get(i).getParticipants().get(0).getUserID().equals(uID))
+                database.remove(i);
+        }
         database.add(chatlog);
     }
 
     public void removeChatLogs(String uID){
+        for(int i = 0; i <database.size(); i++){
+            if (database.get(i).getParticipants().get(0).getUserID().equals(uID))
+                database.remove(i);
+        }
+    }
+    public List<ChatLogs> getChatLogs(){
+        return database;
+    }
 
-        database.remove(uID);
+    public void setChatlogs(List<ChatLogs> db){
+        this.database = db;
     }
 }
 
@@ -641,12 +521,27 @@ class MessageDB {
     }
 
     public void addMsg(Message msg){
+        for(int i = 0; i < database.size(); i++){
+            if(Long.toString(database.get(i).getMessageID()).equals(msg.getMessageID()))
+                database.remove(i);
+        }
         database.add(msg);
     }
 
     public void removeMsg(String uID){
 
-        database.remove(uID);
+        for(int i = 0; i < database.size(); i++){
+            if(Long.toString(database.get(i).getMessageID()).equals(uID))
+                database.remove(i);
+        }
+    }
+
+    public List<Message> getMsgs(){
+        return database;
+    }
+
+    public void setMsgs(List<Message> db){
+        this.database = db;
     }
 }
 
