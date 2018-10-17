@@ -10,14 +10,17 @@ import com.google.gson.annotations.Expose;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.ArgumentMatcher;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -36,12 +39,12 @@ import static org.powermock.api.mockito.PowerMockito.doAnswer;
 
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(JUnit4.class)
+@PrepareForTest({ FirebaseDatabase.class})
 public class MockFirebaseUtility {
 
-    private FirebaseUtility uT;
-    private final static    String mockUserDBPath       = "./mock_databases/user.json";
-    private final static    String mockMsgDBPath        = "./mock_databases/msg.json";
-    private final static    String mockChatLogDBPath    = "./mock_databases/chatlog.json";
+    public final static    String mockUserDBPath       = "./src/test/java/ch/epfl/sweng/radius/mock_databases/user.json";
+    public final static    String mockMsgDBPath        = "./src/test/java/ch/epfl/sweng/radius/mock_databases/msg.json";
+    public final static    String mockChatLogDBPath    = "./src/test/java/ch/epfl/sweng/radius/mock_databases/chatlog.json";
 
     private DatabaseReference mockedDatabaseReference;
     private FirebaseDatabase  mockedFirebaseDatabase;
@@ -60,7 +63,7 @@ public class MockFirebaseUtility {
         PowerMockito.mock(DatabaseReference.class);
         // When the child() method is called, the current path is updated
         //     PATH MUST BE CLEARED BETWEEN OPERATIONS
-        when(mockedDatabaseReference.child((String) argThat(new ArgumentMatcher(){
+        when(mockedDatabaseReference.child((String) Matchers.argThat(new ArgumentMatcher(){
 
             // Update current and print to console path to console
             @Override
@@ -73,7 +76,7 @@ public class MockFirebaseUtility {
 
         }))).thenReturn(mockedDatabaseReference);
 
-        when(mockedDatabaseReference.setValue(any(User.class))).thenAnswer(new Answer<Void>() {
+        when(mockedDatabaseReference.setValue(Matchers.any(User.class))).thenAnswer(new Answer<Void>() {
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 Object[] args = invocation.getArguments();
@@ -109,7 +112,7 @@ public class MockFirebaseUtility {
                 valueEventListener.onDataChange(mockedDataSnapshot);
                 return ret_obj;
             }
-        }).when(mockedDatabaseReference).addListenerForSingleValueEvent(any(ValueEventListener.class));
+        }).when(mockedDatabaseReference).addListenerForSingleValueEvent(Matchers.any(ValueEventListener.class));
 
         mockedDataSnapshot = Mockito.mock(DataSnapshot.class);
         doAnswer(new Answer<Object>() {
@@ -157,11 +160,12 @@ public class MockFirebaseUtility {
         generateJSONChatFile();
     }
 
+    public void clearPath() { path = "";}
+
     public void generateJSONUserFile() throws IOException {
         UserDB database;
         Gson gson = new Gson();
-        FileWriter writer = new FileWriter(mockUserDBPath, false);
-
+        BufferedWriter writer = new BufferedWriter(new FileWriter(mockUserDBPath));
         ArrayList<User> list = new ArrayList<>();
 
         for(int i = 0; i < 20; i++){
@@ -180,7 +184,7 @@ public class MockFirebaseUtility {
         MessageDB database;
         Gson gson = new Gson();
         Date date = new Date();
-        FileWriter writer = new FileWriter(mockMsgDBPath, false);
+        BufferedWriter writer = new BufferedWriter(new FileWriter(mockMsgDBPath));
 
         ArrayList<Message> list = new ArrayList<>();
 
@@ -199,8 +203,8 @@ public class MockFirebaseUtility {
     public void generateJSONChatFile() throws IOException {
         ChatLogsDB database;
         Gson gson = new Gson();
-        Date date = new Date();
-        FileWriter writer = new FileWriter(mockChatLogDBPath, false);
+
+        BufferedWriter writer = new BufferedWriter(new FileWriter(mockChatLogDBPath));
 
         ArrayList<ChatLogs> list = new ArrayList<>();
         ArrayList<User> users = new ArrayList<>();
@@ -220,7 +224,7 @@ public class MockFirebaseUtility {
 
     }
 
-    private void writeUser(User user) throws IOException {
+    public void writeUser(User user) throws IOException {
 
         Gson gson = new Gson();
         UserDB userdb;
@@ -242,7 +246,7 @@ public class MockFirebaseUtility {
         }
     }
 
-    private User getUser(String key){
+    public User getUser(String key){
 
         Gson gson = new Gson();
         UserDB userdb;
@@ -263,7 +267,7 @@ public class MockFirebaseUtility {
 
     }
 
-    private void removeUser(String key){
+    public void removeUser(String key){
 
         Gson gson = new Gson();
         UserDB userdb;
@@ -286,7 +290,7 @@ public class MockFirebaseUtility {
 
     }
 
-    private void writeChatLogs(ChatLogs chatlogs){
+    public void writeChatLogs(ChatLogs chatlogs){
         Gson gson = new Gson();
 
         ChatLogsDB chatLogsDB;
@@ -308,7 +312,7 @@ public class MockFirebaseUtility {
 
     }
 
-    private Message getMessage(String key){
+    public Message getMessage(String key){
 
         Gson gson = new Gson();
         MessageDB msgDB;
@@ -329,7 +333,7 @@ public class MockFirebaseUtility {
 
     }
 
-    private void removeMessage(String key){
+    public void removeMessage(String key){
 
         Gson gson = new Gson();
         MessageDB msgDB;
@@ -352,7 +356,7 @@ public class MockFirebaseUtility {
 
     }
 
-    private void writeMessage(Message msg){
+    public void writeMessage(Message msg){
         Gson gson = new Gson();
 
         MessageDB msgDB;
@@ -373,7 +377,7 @@ public class MockFirebaseUtility {
 
     }
 
-    private ChatLogs getChatLogs(String key){
+    public ChatLogs getChatLogs(String key){
 
         Gson gson = new Gson();
         ChatLogsDB chatLogsDB;
@@ -394,7 +398,7 @@ public class MockFirebaseUtility {
 
     }
 
-    private void removeChatLogs(String key){
+    public void removeChatLogs(String key){
 
         Gson gson = new Gson();
         ChatLogsDB chatLogsDB;
