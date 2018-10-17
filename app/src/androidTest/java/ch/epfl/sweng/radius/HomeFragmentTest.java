@@ -9,6 +9,9 @@ import android.widget.FrameLayout;
 
 import org.junit.After;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -50,22 +53,10 @@ public class HomeFragmentTest {
         assertNotNull(view);
     }
 
-    @Test
-    public void addDeleteUsersTest() {
-        //Adding new Users
-        ((HomeFragment)fragment).addUser(46.524434, 6.570222);
-        ((HomeFragment)fragment).addUser(46.514874, 6.567602);
-        ((HomeFragment)fragment).addUser(46.521877, 6.588810);
-        ((HomeFragment)fragment).addUser(-91, -181);
-        ((HomeFragment)fragment).addUser(-91, 181);
-        ((HomeFragment)fragment).addUser(91, 181);
-        ((HomeFragment)fragment).addUser(91, -181);
-
-        assertTrue(((HomeFragment) fragment).returnNoOfUsers() == 5);
-
-        ((HomeFragment) fragment).deleteUser(4);
-        assertTrue(((HomeFragment) fragment).returnNoOfUsers() == 4);
-    }
+    /*@Test
+    public void clickMarkButton() {
+        onView(withId(R.id.testMark)).perform(click());
+    }*/
 
     @After
     public void tearDown() {
