@@ -173,7 +173,7 @@ class FirebaseUtility {
             }
         };
 
-        database.addListenerForSingleValueEvent(listener);
+        database.child(Long.toString(msg.getMessageID())).addListenerForSingleValueEvent(listener);
 
         return;
 
@@ -214,8 +214,8 @@ class FirebaseUtility {
 
             }
         };
-
-        database.addListenerForSingleValueEvent(listener);
+        // TODO Fix ID For Chatlogs
+        database.child(chatLogs.getParticipants().get(0).getUserID()).addListenerForSingleValueEvent(listener);
 
         return;
 
