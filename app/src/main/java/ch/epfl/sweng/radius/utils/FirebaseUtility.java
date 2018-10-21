@@ -119,21 +119,19 @@ public class FirebaseUtility {
             @Override
             public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
-
-                Log.e("Firebase", "User data has been read.");
-
+                Log.w("Firebase", "User data has been read.");
+                Log.w("Firebase", getUser().getStatus());
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("Firebase", "Failed to read user", databaseError.toException());
+                Log.w("Firebase", "Failed to read user", databaseError.toException());
 
             }
         };
 
         database.child(user.getUserID()).addListenerForSingleValueEvent(listener);
     }
-
 
     public void writeUser(){
 
@@ -236,6 +234,7 @@ public class FirebaseUtility {
     }
 
     public User getUser() {
+
         return user;
     }
 
