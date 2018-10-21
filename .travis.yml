@@ -1,5 +1,8 @@
 sudo: false
 language: android
+env:
+  global:
+    CC_TEST_REPORTER_ID=84258ca4e80b5ff62e516d21cfcb4e8e5da7a6e34739af08d1ed16a3165da8a0
 android:
   components:
     # The BuildTools version used by your project
@@ -7,16 +10,19 @@ android:
     # The SDK version used to compile your project
     - android-28
     # The SDK version used by the system image
-    - android-22
+    - android-26
     # The system image, to run an emulator during the tests
     - extra-google-google_play_services
     - extra-google-m2repository
     - extra-android-m2repository
-    - sys-img-armeabi-v7a-android-22
+    - sys-img-armeabi-v7a-android-26
+before_install:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
 
 before_script:
   # Emulator Management: Create, Start and Wait
-  - "echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a"
+  - "echo no | android create avd --force -n test -t android-26 --abi armeabi-v7a"
   - "emulator -avd test -no-audio -no-window &"
   - android-wait-for-emulator
   - "adb shell input keyevent 82"
@@ -26,9 +32,13 @@ before_script:
   - "chmod +x ./cc-test-reporter"
   - "./cc-test-reporter before-build"
 script:
-  - "./gradlew build connectedCheck jacocoTestReport"
+#  - "./gradlew build connectedCheck jacocoTestReport"
 after_script:
  # Report test coverage to Code Climate
   - "export JACOCO_SOURCE_PATH=app/src/main/java/"
   - "./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco"
   - "./cc-test-reporter upload-coverage"
+  - ./cc-test-reporter format-coverage -t simplecov -o coverage/codeclimate.backend.json coverage/backend/.resultset.json # Format backend coverage
+  - ./cc-test-reporter format-coverage -t lcov -o coverage/codeclimate.frontend.json coverage/frontend/lcov.info  # Format frontend coverage
+  - ./cc-test-reporter sum-coverage coverage/codeclimate.*.json -p 2                  # Sum both coverage parts into coverage/codeclimate.json
+  - if [[ "$TRAVIS_TEST_RESULT" == 0 ]]; then ./cc-test-reporter upload-coverage; fi  # Upload coverage/codeclimate.json

@@ -39,7 +39,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
   //  private FirebaseUtility logs_fbutil;
   //  private FirebaseUtility msg_fbutil;
 
-/*
+
     @Override
     public void setUp() throws InterruptedException {
         authSignal = new CountDownLatch(1);
@@ -112,7 +112,6 @@ public class FirebaseUtilityTest extends AndroidTestCase {
         try {
             user_fbutil.writeUser();
 
-            /* Fetch result if exists
             user_fbutil.listenUser();
 
             user = user_fbutil.getUser();
@@ -133,7 +132,6 @@ public class FirebaseUtilityTest extends AndroidTestCase {
         try {
             user_fbutil.writeUser(new_user);
 
-            /* Fetch result if exists
             user_fbutil.setUser(new_user);
             user_fbutil.listenUser();
 
@@ -182,5 +180,5 @@ public class FirebaseUtilityTest extends AndroidTestCase {
     @Test
     public void setUser() {
     }
-    */
+
 }
