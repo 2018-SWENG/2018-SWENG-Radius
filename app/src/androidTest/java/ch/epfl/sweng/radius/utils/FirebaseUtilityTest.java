@@ -95,16 +95,13 @@ public class FirebaseUtilityTest extends AndroidTestCase {
     @Test
     public void testListenUser() throws InterruptedException {
 
-        try {
             user_fbutil.listenUser();
 
             user = user_fbutil.getUser();
             Log.e(TAG, user.getStatus());
 
             if ((!"Being tested on".equals(user.getStatus()))) throw new AssertionError();
-        }catch (Exception e){
-            System.out.print("API Not available");
-        }
+
     }
 
     @Test
