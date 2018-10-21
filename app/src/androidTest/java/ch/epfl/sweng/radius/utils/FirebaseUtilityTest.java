@@ -81,6 +81,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
     public void tearDown() throws Exception {
         super.tearDown();
         if(auth != null) {
+
             auth.signOut();
             auth = null;
         }
@@ -94,17 +95,40 @@ public class FirebaseUtilityTest extends AndroidTestCase {
     @Test
     public void testListenUser() throws InterruptedException {
 
-        user_fbutil.listenUser();
+        try {
+            user_fbutil.listenUser();
 
-        user = user_fbutil.getUser();
-        Log.e(TAG, user.getStatus());
+            user = user_fbutil.getUser();
+            Log.e(TAG, user.getStatus());
 
-        if ((!"Being tested on".equals(user.getStatus()))) throw new AssertionError();
-
+            if ((!"Being tested on".equals(user.getStatus()))) throw new AssertionError();
+        }catch (Exception e){
+            System.out.print("API Not available");
+        }
     }
 
     @Test
     public void testWriteUser() {
+
+        user.setStatus("Testing writing instance User to DB");
+
+        try {
+            user_fbutil.writeUser();
+
+            /* Fetch result if exists */
+            user_fbutil.listenUser();
+
+            user = user_fbutil.getUser();
+
+            if((!"Testing writing instance User to DB".equals(user.getStatus()))) throw new AssertionError();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testWriteUser1() {
 
         User new_user = new User("testUser01");
 
@@ -120,14 +144,14 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
             if((!"Testing writing other user to DB".equals(new_user.getStatus()))) throw new AssertionError();
 
+            // Remove test entry and re-set variable
+            user_fbutil.removeUser();
+
+            user_fbutil.setUser(user);
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        
-    }
-
-    @Test
-    public void testWriteUser1() {
     }
 
     @Test
