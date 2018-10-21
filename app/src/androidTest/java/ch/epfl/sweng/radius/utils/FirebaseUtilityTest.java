@@ -39,7 +39,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
   //  private FirebaseUtility logs_fbutil;
   //  private FirebaseUtility msg_fbutil;
 
-
+/*
     @Override
     public void setUp() throws InterruptedException {
         authSignal = new CountDownLatch(1);
@@ -181,4 +181,5 @@ public class FirebaseUtilityTest extends AndroidTestCase {
     public void setUser() {
     }
 
+*/
 }
