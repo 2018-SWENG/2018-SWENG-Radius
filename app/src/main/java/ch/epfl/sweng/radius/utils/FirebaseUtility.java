@@ -140,21 +140,17 @@ public class FirebaseUtility {
 
     }
 
-    public void writeUser() throws InterruptedException {
+    public void writeUser(){
 
-        semaphore.acquire();
         database.child(user.getUserID()).setValue(user);
-        semaphore.release();
 
         return;
 
     }
 
-    public void writeUser(User new_user) throws InterruptedException {
+    public void writeUser(User new_user) {
 
-        semaphore.acquire();
         database.child(new_user.getUserID()).setValue(new_user);
-        semaphore.release();
 
         return;
 
@@ -187,21 +183,17 @@ public class FirebaseUtility {
 
     }
 
-    public void writeMessage() throws InterruptedException {
+    public void writeMessage() {
 
-        semaphore.acquire();
         database.child(Long.toString(msg.getMessageID())).setValue(msg);
-        semaphore.release();
 
         return;
 
     }
 
-    public void writeMessage(Message new_msg) throws InterruptedException {
+    public void writeMessage(Message new_msg) {
 
-        semaphore.acquire();
         database.child(Long.toString(new_msg.getMessageID())).setValue(new_msg);
-        semaphore.release();
 
         return;
 
@@ -233,20 +225,16 @@ public class FirebaseUtility {
 
     }
 
-    public void writeChatLogs() throws InterruptedException {
+    public void writeChatLogs()  {
 
-        semaphore.acquire();
         database.child(Long.toString(msg.getMessageID())).setValue(msg);
-        semaphore.release();
         return;
 
     }
 
-    public void writeChatLogs(ChatLogs new_chatlogs) throws InterruptedException {
-        semaphore.acquire();
+    public void writeChatLogs(ChatLogs new_chatlogs) {
         database.child(new_chatlogs.getParticipants().get(0).getUserID())
                 .setValue(new_chatlogs);
-        semaphore.release();
         return;
 
     }

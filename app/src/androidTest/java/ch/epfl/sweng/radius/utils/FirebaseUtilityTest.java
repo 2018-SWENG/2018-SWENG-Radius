@@ -123,10 +123,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
-
-
+        
     }
 
     @Test
