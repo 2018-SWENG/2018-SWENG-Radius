@@ -1,5 +1,6 @@
 package ch.epfl.sweng.radius.database;
 
+import android.provider.ContactsContract;
 import android.util.ArrayMap;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -13,7 +14,7 @@ import java.util.Map;
  * This class is design to store all the element we need about a user in the app
  * We can then store/access the states of each user in the database
  */
-public class User {
+public class User implements DatabaseObject {
     private static long idGenerator = 0;// Debugging purpose only
 
     private final String userID;
@@ -169,4 +170,9 @@ public class User {
     public void addChat(String uID, String chatID){ this.chatList.put(uID, chatID);    }
 
     public void addConv(String convID){ this.convList.add(convID);}
+
+    @Override
+    public String getID() {
+        return userID;
+    }
 }

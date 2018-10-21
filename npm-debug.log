@@ -1,0 +1,43 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'install', '.' ]
+2 info using npm@3.5.2
+3 info using node@v4.2.6
+4 verbose config Skipping project config: /home/arthur/.npmrc. (matches userconfig)
+5 silly loadCurrentTree Starting
+6 silly install loadCurrentTree
+7 silly install readLocalPackageData
+8 silly fetchPackageMetaData .
+9 silly fetchOtherPackageData .
+10 silly cache add args [ '.', null ]
+11 verbose cache add spec .
+12 silly cache add parsed spec Result {
+12 silly cache add   raw: '.',
+12 silly cache add   scope: null,
+12 silly cache add   name: null,
+12 silly cache add   rawSpec: '.',
+12 silly cache add   spec: '/home/arthur/Projects/Sweng_Proj/2018-SWENG-Radius',
+12 silly cache add   type: 'local' }
+13 error addLocal Could not install /home/arthur/Projects/Sweng_Proj/2018-SWENG-Radius
+14 silly fetchPackageMetaData Error: EISDIR: illegal operation on a directory, read
+14 silly fetchPackageMetaData     at Error (native)
+14 silly fetchPackageMetaData  error for . { [Error: EISDIR: illegal operation on a directory, read] errno: -21, code: 'EISDIR', syscall: 'read' }
+15 silly rollbackFailedOptional Starting
+16 silly rollbackFailedOptional Finishing
+17 silly runTopLevelLifecycles Starting
+18 silly runTopLevelLifecycles Finishing
+19 silly install printInstalled
+20 verbose stack Error: EISDIR: illegal operation on a directory, read
+20 verbose stack     at Error (native)
+21 verbose cwd /home/arthur/Projects/Sweng_Proj/2018-SWENG-Radius
+22 error Linux 4.10.0-38-generic
+23 error argv "/usr/bin/nodejs" "/usr/bin/npm" "install" "."
+24 error node v4.2.6
+25 error npm  v3.5.2
+26 error code EISDIR
+27 error errno -21
+28 error syscall read
+29 error eisdir EISDIR: illegal operation on a directory, read
+30 error eisdir This is most likely not a problem with npm itself
+30 error eisdir and is related to npm not being able to find a package.json in
+30 error eisdir a package you are trying to install.
+31 verbose exit [ -21, true ]

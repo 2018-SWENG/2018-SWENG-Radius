@@ -8,7 +8,7 @@ import static java.lang.Math.*;
 /**
  * This class represent a Chat conversation with a list of participants and a List of Messages
  */
-public class ChatLogs {
+public class ChatLogs implements DatabaseObject{
     private static int idGenerator = 0;
 
     private String convID;
@@ -46,5 +46,10 @@ public class ChatLogs {
     }
     public void addMessage(Message message){
         conversations.addFirst(message);
+    }
+
+    @Override
+    public String getID() {
+        return convID;
     }
 }
