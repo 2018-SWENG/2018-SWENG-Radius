@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Logger;
 
+import org.junit.AssumptionViolatedException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -94,9 +95,6 @@ public class FirebaseUtilityTest extends AndroidTestCase {
     public void testListenUser() throws InterruptedException {
 
         user_fbutil.listenUser();
-        
-        // Waiting before implementation of synchronization
-        sleep(2000);
 
         user = user_fbutil.getUser();
         Log.e(TAG, user.getStatus());
@@ -107,6 +105,28 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
     @Test
     public void testWriteUser() {
+
+        User new_user = new User("testUser01");
+
+        new_user.setStatus("Testing writing other user to DB");
+        try {
+            user_fbutil.writeUser(new_user);
+
+            /* Fetch result if exists */
+            user_fbutil.setUser(new_user);
+            user_fbutil.listenUser();
+
+            new_user = user_fbutil.getUser();
+
+            if((!"Testing writing other user to DB".equals(new_user.getStatus()))) throw new AssertionError();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+
+
     }
 
     @Test
