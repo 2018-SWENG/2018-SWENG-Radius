@@ -17,6 +17,10 @@ android:
     - extra-android-m2repository
     - extra-firebase-admin
 #    - sys-img-armeabi-v7a-android-22
+before_install:
+  - nvm install                         # Install node version from .nvmrc
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
 
 before_script:
   # Emulator Management: Create, Start and Wait
