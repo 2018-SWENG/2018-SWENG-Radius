@@ -148,6 +148,14 @@ public class FirebaseUtility {
 
     }
 
+    public void removeUser(){
+
+        database.child(user.getUserID()).setValue(null);
+
+        return;
+
+    }
+
     public void writeUser(User new_user) {
 
         database.child(new_user.getUserID()).setValue(new_user);
