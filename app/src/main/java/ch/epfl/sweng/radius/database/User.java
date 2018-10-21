@@ -1,9 +1,13 @@
 package ch.epfl.sweng.radius.database;
 
+import android.util.ArrayMap;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is design to store all the element we need about a user in the app
@@ -21,6 +25,9 @@ public class User {
     private List<Integer> friendsInvitations;
     private List<Integer> friends;
     private List<Integer> blockedUsers;
+    // Map is uID --> convID
+    private Map<String, String> chatList;
+    private List<String> convList;
     private String spokenLanguages;
     private LatLng location;
 
@@ -35,6 +42,8 @@ public class User {
         this.friends = new ArrayList<>();
         this.blockedUsers = new ArrayList<>();
         this.spokenLanguages = "";
+        this.chatList = new HashMap<>();
+        this.convList = new ArrayList<>();
     }
 
     // Debugging purpose only
@@ -48,6 +57,8 @@ public class User {
         this.friendsInvitations = new ArrayList<>();
         this.friends = new ArrayList<>();
         this.blockedUsers = new ArrayList<>();
+        this.chatList = new HashMap<>();
+        this.convList = new ArrayList<>();
     }
 
     // Getter
@@ -91,6 +102,11 @@ public class User {
         return location;
     }
 
+    public Map<String, String> getChatList(){return chatList; }
+
+    public List<String> getConvList(){ return convList;}
+
+    public String getConvFromUser(String userID){ return chatList.get(userID);}
     // Setter
 
     public void setNickname(String nickname) {
@@ -110,6 +126,7 @@ public class User {
             throw new IllegalArgumentException("The status is limited to 50 characters");
         this.status = status;
     }
+
 
     public void addFriendRequest(Integer friendID){
         if (friendsInvitations.contains(friendID)){
@@ -144,4 +161,12 @@ public class User {
     public void setSpokenLanguages(String spokenLanguages) { this.spokenLanguages = spokenLanguages; }
 
     public String getSpokenLanguages() { return this.spokenLanguages; }
+
+    public void setChatList(Map<String, String> newChatList){ this.chatList = newChatList;}
+
+    public void setConvList(List<String> newConv){ this.convList = newConv;}
+
+    public void addChat(String uID, String chatID){ this.chatList.put(uID, chatID);    }
+
+    public void addConv(String convID){ this.convList.add(convID);}
 }

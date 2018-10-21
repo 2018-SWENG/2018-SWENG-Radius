@@ -9,16 +9,16 @@ import static java.lang.Math.*;
  * This class represent a Chat conversation with a list of participants and a List of Messages
  */
 public class ChatLogs {
-    private List<User> participants;
+    private List<String> userIDs;
     private LinkedList<Message> conversations; // List LIFO of all the message in the chat
-    public ChatLogs(ArrayList<User> participants){
-        this.participants = participants;
+    public ChatLogs(ArrayList<String> participants){
+        this.userIDs = participants;
         this.conversations = new LinkedList<>();
     }
 
     // Getters
-    public List<User> getParticipants() {
-        return participants;
+    public List<String> getParticipants() {
+        return userIDs;
     }
 
     public LinkedList<Message> getAllConversations() {
@@ -34,9 +34,9 @@ public class ChatLogs {
     }
 
     // Setters
-    public void addParticipant(User user){
-        if(!participants.contains(user))
-            participants.add(user);
+    public void addParticipant(String userID){
+        if(!userIDs.contains(userID))
+            userIDs.add(userID);
     }
     public void addMessage(Message message){
         conversations.addFirst(message);
