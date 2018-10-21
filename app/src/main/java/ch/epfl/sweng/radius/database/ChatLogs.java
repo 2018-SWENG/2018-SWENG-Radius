@@ -9,14 +9,20 @@ import static java.lang.Math.*;
  * This class represent a Chat conversation with a list of participants and a List of Messages
  */
 public class ChatLogs {
+    private static int idGenerator = 0;
+
+    private String convID;
     private List<String> userIDs;
     private LinkedList<Message> conversations; // List LIFO of all the message in the chat
     public ChatLogs(ArrayList<String> participants){
+        this.convID = Integer.toString(idGenerator++);
         this.userIDs = participants;
         this.conversations = new LinkedList<>();
     }
 
     // Getters
+    public String getConvID(){return convID; }
+
     public List<String> getParticipants() {
         return userIDs;
     }
