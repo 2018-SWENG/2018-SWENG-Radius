@@ -33,7 +33,6 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
     private User user;
     private Message msg;
-    private ChatLogs logs;
 
     private FirebaseUtility user_fbutil;
   //  private FirebaseUtility logs_fbutil;
