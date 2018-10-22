@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     googleSignInClient = GoogleSignIn.getClient(MainActivity.this, gso);
 
                     User currentUser = new User(myAuth.getCurrentUser().getUid());
+                    /*
                     FirebaseUtility firebase = new FirebaseUtility(currentUser);
                     
                     if(firebase.isNew()){
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         firebase.listenUser();
                     }
-
+                    */
                     startActivity(new Intent(MainActivity.this, AccountActivity.class));
                 }
             }

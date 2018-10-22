@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import ch.epfl.sweng.radius.browseProfiles.ChatListItem;
 import ch.epfl.sweng.radius.browseProfiles.CustomAdapter;
+import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.message.MessageListActivity;
 
 import java.util.ArrayList;
@@ -47,9 +48,10 @@ public class MessagesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
 
-        chatList = new ArrayList<>();
         listView = view.findViewById(R.id.listView);
 
+        //For UI testing
+        chatList = new ArrayList<>();
         chatList.add(new ChatListItem(R.drawable.image1, "john doe"));
         chatList.add(new ChatListItem(R.drawable.image2, "jane doe"));
         chatList.add(new ChatListItem(R.drawable.image3, "alison star"));
