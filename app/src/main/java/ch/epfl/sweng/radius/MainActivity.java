@@ -63,10 +63,15 @@ public class MainActivity extends AppCompatActivity {
                     User currentUser = new User(myAuth.getCurrentUser().getUid());
                     FirebaseUtility firebase = new FirebaseUtility(currentUser);
                     
-                    if(firebase.isNew()){
+                    if(firebase.isNew()) {
                         firebase.writeUser();
-                    } else {
-                        firebase.listenUser();
+                    }
+                    else {
+                        try {
+                            firebase.listenUser();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     startActivity(new Intent(MainActivity.this, AccountActivity.class));
