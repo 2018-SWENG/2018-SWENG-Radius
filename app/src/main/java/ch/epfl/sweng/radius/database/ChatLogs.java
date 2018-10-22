@@ -12,14 +12,14 @@ public class ChatLogs {
     private static long idGenerator = 0;
     private List<String> membersId;
     private LinkedList<Message> messages; // List LIFO of all the message in the chat
-    private final long chatLogsId;
+    private final String chatLogsId;
 
 
     public ChatLogs(ArrayList<String> membersId){
         //if(membersId.size() != 2) { throw new IllegalArgumentException("Chat must be between 2 users");
         this.membersId = new ArrayList<>(membersId);
         this.messages = new LinkedList<>();
-        this.chatLogsId = idGenerator++;
+        this.chatLogsId = Long.toString(idGenerator++);
 
     }
 
@@ -28,7 +28,7 @@ public class ChatLogs {
         return membersId;
     }
 
-    public LinkedList<Message> getAllConversations() {
+    public LinkedList<Message> getAllMessages() {
         return messages;
     }
 
@@ -40,11 +40,17 @@ public class ChatLogs {
         return ret;
     }
 
+    // Setters
+    public void addMembersId(String userID){
+        if(!membersId.contains(userID))
+            membersId.add(userID);
+    }
+
     public void addMessage(Message message){
         messages.addFirst(message);
     }
 
-    public long getChatLogsId() {
+    public String getChatLogsId() {
         return chatLogsId;
     }
 }
