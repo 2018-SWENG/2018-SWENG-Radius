@@ -12,7 +12,7 @@ import java.util.List;
 public class User {
     private static long idGenerator = 0;// Debugging purpose only
 
-    private final long userID;
+    private final String userID;
     private String nickname;
     private String urlProfilePhoto;
     private int radius; // meters
@@ -21,9 +21,10 @@ public class User {
     private List<Integer> friendsInvitations;
     private List<Integer> friends;
     private List<Integer> blockedUsers;
+    private String spokenLanguages;
     private LatLng location;
 
-    public User(long userID){
+    public User(String userID){
         this.userID = userID;
         this.nickname = "New User " + userID;
         this.urlProfilePhoto = "";
@@ -33,11 +34,12 @@ public class User {
         this.friendsInvitations = new ArrayList<>();
         this.friends = new ArrayList<>();
         this.blockedUsers = new ArrayList<>();
+        this.spokenLanguages = "";
     }
 
     // Debugging purpose only
     public User(){
-        this.userID = idGenerator++;
+        this.userID = Long.toString(idGenerator++);
         this.nickname = "New User " + this.userID;
         this.urlProfilePhoto = "";
         this.radius = 500;
@@ -49,7 +51,7 @@ public class User {
     }
 
     // Getter
-    public long getUserID() {
+    public String getUserID() {
         return userID;
     }
 
@@ -118,24 +120,28 @@ public class User {
             friendsRequests.add(friendID);
     }
 
-    public void addFriendInvitation(Integer friendID){
+    /*public void addFriendInvitation(Integer friendID){
         if (friendsRequests.contains(friendID)) {
             friendsRequests.remove(friendID);
             friends.add(friendID);
         }
         else
             friendsInvitations.add(friendID);
-    }
+    }*/
 
-    public void addBlockedUser (Integer userID){
+    /*public void addBlockedUser (Integer userID){
         blockedUsers.add(userID);
-    }
+    }*/
 
-    public void removeBlockedUser(Integer userID){
-        blockedUsers.remove(userID);
-    }
+    //public void removeBlockedUser(Integer userID){
+    //    blockedUsers.remove(userID);
+    //}
 
     public void setLocation(LatLng location) {
         this.location = location;
     }
+
+    public void setSpokenLanguages(String spokenLanguages) { this.spokenLanguages = spokenLanguages; }
+
+    public String getSpokenLanguages() { return this.spokenLanguages; }
 }

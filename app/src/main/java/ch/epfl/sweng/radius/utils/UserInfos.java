@@ -1,21 +1,21 @@
 package ch.epfl.sweng.radius.utils;
 
 public class UserInfos {
-    private static final long USER_ID = 1234;
-    private static String username = "User_1";
+
+    private static final String USER_ID = "1234";
+    private static String USER_USERNAME = "User_1";
     private static String chatWith = "";
 
-
-    public static long getUserId() {
+    public static String getUserId() {
         return USER_ID;
     }
 
     public static String getUsername() {
-        return username;
+        return USER_USERNAME;
     }
 
     public static void setUsername(String username) {
-        UserInfos.username = username;
+        UserInfos.USER_USERNAME = username;
     }
 
     public static String getChatWith() {

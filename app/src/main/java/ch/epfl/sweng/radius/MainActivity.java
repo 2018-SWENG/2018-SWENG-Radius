@@ -25,6 +25,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.FirebaseUtility;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 1;
@@ -54,7 +57,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {
+
                     googleSignInClient = GoogleSignIn.getClient(MainActivity.this, gso);
+
+                    User currentUser = new User(myAuth.getCurrentUser().getUid());
+                    FirebaseUtility firebase = new FirebaseUtility(currentUser);
+                    
+                    if(firebase.isNew()){
+                        firebase.writeUser();
+                    } else {
+                        firebase.listenUser();
+                    }
+
                     startActivity(new Intent(MainActivity.this, AccountActivity.class));
                 }
             }

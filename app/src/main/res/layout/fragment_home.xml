@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homeFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
@@ -23,60 +24,50 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/testRad2"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="252dp"
-            android:layout_marginEnd="11dp"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="255dp"
-            android:text="Rad2"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/testLoc"
-            app:layout_constraintStart_toEndOf="@+id/testRad"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/testLoc"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="254dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="19dp"
-            android:layout_marginTop="253dp"
-            android:text="Loc"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/testMark"
-            app:layout_constraintStart_toEndOf="@+id/testRad2"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/testRad"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="254dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="47dp"
-            android:layout_marginTop="253dp"
-            android:text="Rad1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/testRad2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
             android:id="@+id/testMark"
             android:layout_width="65dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="254dp"
-            android:layout_marginEnd="43dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="253dp"
+            android:layout_marginEnd="43dp"
+            android:layout_marginBottom="8dp"
             android:text="Mark"
+            app:layout_constraintBottom_toTopOf="@+id/friendsListLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.567"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/friendsList"
+            android:layout_width="368dp"
+            android:layout_height="187dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="60dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/testLoc"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/friendsListLabel"
+            android:layout_width="71dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="Friends"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/friendsList"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.61" />
     </android.support.constraint.ConstraintLayout>
 
 </FrameLayout>
