@@ -70,9 +70,9 @@ public class SettingsFragment extends PreferenceFragmentCompat
     }
 
     private void logOut() {
-        if (MainActivity.googleSignInClient != null) {
+        if (LoginActivity.googleSignInClient != null) {
             FirebaseAuth.getInstance().signOut();
-            MainActivity.googleSignInClient.signOut()
+            LoginActivity.googleSignInClient.signOut()
                     .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -83,11 +83,11 @@ public class SettingsFragment extends PreferenceFragmentCompat
     }
 
     private void revokeAccess() {
-        MainActivity.googleSignInClient.revokeAccess()
+        LoginActivity.googleSignInClient.revokeAccess()
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        startActivity(new Intent(getActivity(), MainActivity.class));
+                        startActivity(new Intent(getActivity(), LoginActivity.class));
                     }
                 });
     }

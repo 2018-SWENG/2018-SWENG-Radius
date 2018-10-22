@@ -20,6 +20,7 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +30,8 @@
         </activity>
         <activity android:name=".AccountActivity" />
         <activity android:name=".BrowseProfilesActivity" />
-        <activity android:name=".message.MessageListActivity"/>
+        <activity android:name=".message.MessageListActivity" />
+        <activity android:name=".LoginActivity"></activity>
     </application>
 
 </manifest>
