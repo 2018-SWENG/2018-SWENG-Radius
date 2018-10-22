@@ -14,8 +14,6 @@ import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
-import java.util.List;
-
 /**
  * Adapter for the RecyclerView that will store a list of message,
  * determine if a message is sent or received
@@ -79,7 +77,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
         Message message = myMessageList.getAllConversations().get(position);
 
-        if (message.getOwner().getUserID() == UserInfos.getUserId()) {
+        if (message.getSender().getUserID() == UserInfos.getUserId()) {
             // If the current user is the sender of the message
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
@@ -109,7 +107,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(DateUtils.formatDateTime(myContext, message.getSendingTime().getTime(), flags)); // TODO: Date format ??
-            nameText.setText(message.getOwner().getNickname());
+            nameText.setText(message.getSender().getNickname());
 
             // Insert the profile image from the URL into the ImageView.
             //Utils.displayRoundImageFromUrl(
