@@ -79,7 +79,10 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
         Message message = myMessageList.getAllConversations().get(position);
 
-        if (message.getOwner().getUserID() == UserInfos.getUserId()) {
+        if (
+                // TODO Reset to UserID
+                message.getMessageID() == UserInfos.getUserId()
+                ) {
             // If the current user is the sender of the message
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
@@ -109,7 +112,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(DateUtils.formatDateTime(myContext, message.getSendingTime().getTime(), flags)); // TODO: Date format ??
-            nameText.setText(message.getOwner().getNickname());
+        //    nameText.setText(message.getOwner().getNickname());
 
             // Insert the profile image from the URL into the ImageView.
             //Utils.displayRoundImageFromUrl(
