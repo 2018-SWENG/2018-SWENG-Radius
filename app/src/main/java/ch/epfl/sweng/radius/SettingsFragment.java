@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 
 public class SettingsFragment extends PreferenceFragmentCompat
-        implements SharedPreferences.OnSharedPreferenceChangeListener{
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public SettingsFragment() {
         // Required empty public constructor
