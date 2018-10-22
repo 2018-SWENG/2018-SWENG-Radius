@@ -9,13 +9,18 @@ import static java.lang.Math.*;
  * This class represent a Chat conversation with a list of participants and a List of Messages
  */
 public class ChatLogs {
+    private static long idGenerator = 0;
     private List<String> membersId;
     private LinkedList<Message> messages; // List LIFO of all the message in the chat
+    private final long chatLogsId;
+
 
     public ChatLogs(ArrayList<String> membersId){
         //if(membersId.size() != 2) { throw new IllegalArgumentException("Chat must be between 2 users");
         this.membersId = new ArrayList<>(membersId);
         this.messages = new LinkedList<>();
+        this.chatLogsId = idGenerator++;
+
     }
 
     // Getters
@@ -37,5 +42,9 @@ public class ChatLogs {
 
     public void addMessage(Message message){
         messages.addFirst(message);
+    }
+
+    public long getChatLogsId() {
+        return chatLogsId;
     }
 }

@@ -23,6 +23,7 @@ public class User {
     private List<Integer> blockedUsers;
     private String spokenLanguages;
     private LatLng location;
+    private List<Long> chats;
 
     public User(String userID){
         this.userID = userID;
@@ -34,20 +35,14 @@ public class User {
         this.friendsInvitations = new ArrayList<>();
         this.friends = new ArrayList<>();
         this.blockedUsers = new ArrayList<>();
+        this.chats = new ArrayList<>();
         this.spokenLanguages = "";
+
     }
 
     // Debugging purpose only
     public User(){
-        this.userID = Long.toString(idGenerator++);
-        this.nickname = "New User " + this.userID;
-        this.urlProfilePhoto = "";
-        this.radius = 500;
-        this.status = "Hi, I'm new to radius !";
-        this.friendsRequests = new ArrayList<>();
-        this.friendsInvitations = new ArrayList<>();
-        this.friends = new ArrayList<>();
-        this.blockedUsers = new ArrayList<>();
+        this(Long.toString(idGenerator++));
     }
 
     // Getter
@@ -144,4 +139,12 @@ public class User {
     public void setSpokenLanguages(String spokenLanguages) { this.spokenLanguages = spokenLanguages; }
 
     public String getSpokenLanguages() { return this.spokenLanguages; }
+
+    /*
+        return a list of chatsID
+     */
+    public List<Long> getChats() {
+        return chats;
+    }
+
 }
