@@ -15,7 +15,9 @@ import com.google.firebase.FirebaseApiNotAvailableException;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -27,6 +29,9 @@ import ch.epfl.sweng.radius.database.User;
 
 import static java.lang.Thread.sleep;
 
+
+@Ignore
+@PrepareForTest(FirebaseUtility.class)
 public class FirebaseUtilityTest extends AndroidTestCase {
     private static final String TAG = "Firebase";
 
@@ -189,6 +194,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
             e.printStackTrace();
         }
     }
+
 
 
 
