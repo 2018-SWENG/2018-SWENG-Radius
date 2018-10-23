@@ -82,7 +82,14 @@ public class MessageListActivity extends AppCompatActivity {
         // End Test
 
         //get chatlogs from db
-        chatLogs = ChatLogDbUtility.getChatLogs(someChatLogsId);
+        //chatLogs = ChatLogDbUtility.getChatLogs(someChatLogsId);
+        User alfred = new User("2");
+        User mika = new User("1");
+        ArrayList<String> participantsId = new ArrayList<>();
+
+        participantsId.add(alfred.getUserID());
+        participantsId.add(mika.getUserID());
+        chatLogs = new ChatLogs(participantsId);
 
         myMessageRecycler = findViewById(R.id.reyclerview_message_list);
         myMessageAdapter = new MessageListAdapter(this, chatLogs.getAllMessages());
@@ -91,7 +98,10 @@ public class MessageListActivity extends AppCompatActivity {
 
 
         Firebase.setAndroidContext(this);
-        chatReference = new Firebase("https://radius-1538126456577.firebaseio.com/messages/" + UserInfos.getchatList().getChatId(receiver.getUserId()));
+        //chatReference = new Firebase("https://radius-1538126456577.firebaseio.com/messages/" + UserInfos.getchatList().getChatId(receiver.getUserId()));
+
+        //test :
+        chatReference = new Firebase("https://radius-1538126456577.firebaseio.com/messages/myChatID");
 
         findViewById(R.id.button_chatbox_send).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,8 +110,9 @@ public class MessageListActivity extends AppCompatActivity {
 
                 if (!message.equals("")) {
                     Map<String, String> map = new HashMap<String, String>();
+                    map.put("senderId", UserInfos.getUserId());
                     map.put("message", message);
-                    map.put("user", UserInfos.getUsername());
+                    map.put("sendingTime", new Date().toString());
                     chatReference.push().setValue(map);
                     messageZone.setText("");
                 }
@@ -113,7 +124,7 @@ public class MessageListActivity extends AppCompatActivity {
                 Map map = dataSnapshot.getValue(Map.class);
                 String message = map.get("message").toString();
                 String senderId = map.get("senderId").toString();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
                 Date sendingTime = null;
                 try {
                     sendingTime = simpleDateFormat.parse(map.get("sendingTime").toString());
@@ -122,7 +133,7 @@ public class MessageListActivity extends AppCompatActivity {
                 }
 
                 chatLogs.addMessage(new Message(senderId,message,sendingTime));
-                myMessageAdapter.notify();
+               myMessageAdapter.notifyDataSetChanged();
             }
 
             @Override

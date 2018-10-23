@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Message;
@@ -25,9 +26,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
     private Context context;
-    private LinkedList<Message> messages;
+    private List<Message> messages;
 
-    public MessageListAdapter(Context context, LinkedList<Message> messages) {
+    public MessageListAdapter(Context context, List<Message> messages) {
         this.context = context;
         this.messages = messages;
     }
@@ -77,7 +78,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         Message message = messages.get(position);
-        if (message.getSenderId().getUserID() == UserInfos.getUserId()) {
+        if (message.getSenderId() == UserInfos.getUserId()) {
             // If the current user is the sender of the message
             return VIEW_TYPE_MESSAGE_SENT;
         } else {

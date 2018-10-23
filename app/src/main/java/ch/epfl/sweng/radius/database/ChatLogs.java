@@ -12,7 +12,7 @@ import static java.lang.Math.*;
 public class ChatLogs implements DatabaseObject{
     private static long idGenerator = 0;
     private List<String> membersId;
-    private LinkedList<Message> messages; // List LIFO of all the message in the chat
+    private List<Message> messages; // List LIFO of all the message in the chat
     private final String chatLogsId;
 
 
@@ -29,7 +29,7 @@ public class ChatLogs implements DatabaseObject{
         return membersId;
     }
 
-    public LinkedList<Message> getAllMessages() {
+    public List<Message> getAllMessages() {
         return messages;
     }
 
@@ -48,7 +48,7 @@ public class ChatLogs implements DatabaseObject{
     }
 
     public void addMessage(Message message){
-        messages.addFirst(message);
+        messages.add(message);
     }
 
     public String getChatLogsId() {
