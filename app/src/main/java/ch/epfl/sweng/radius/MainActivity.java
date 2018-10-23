@@ -101,14 +101,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Login with mail
-        Button mailLoginButton = findViewById(R.id.loginEmailButton);
-        mailLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MailLoginActivity.class));
-            }
-        });
     }
 
     @Override
