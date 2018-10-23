@@ -46,49 +46,17 @@ public class MessageListActivity extends AppCompatActivity {
 
         messageZone = (EditText) findViewById(R.id.edittext_chatbox);
 
-
-
-        /*
-
-        // Test the chat view
-        //User alfred = new User(UserInfos.getChatWithID());
-        User alfred = new User();
-        User mika = new User(UserInfos.getUserId());
-
-        ArrayList<String> participantsId = new ArrayList<>();
-
-        participantsId.add(alfred.getUserID());
-        participantsId.add(mika.getUserID());
-
-        Message m1 = new Message( alfred, "Hello", new Date());
-        Message m2 = new Message( mika,"Hello alfred", new Date());
-        Message m3 = new Message( alfred,"how are you ?", new Date());
-
-        List messageList= new ArrayList();
-        messageList.add(m1);
-        messageList.add(m2);
-        messageList.add(m3);
-        */
-
-        /*sort by date
-        Collections.sort(messageList, new Comparator<UserMessage>() {
-            @Override
-            public int compare(UserMessage o1, UserMessage o2) {
-                return (int) (o1.getCreatedAt() - o2.getCreatedAt());
-            }
-        });
-        */
-
-        // End Test
+        final String otherUserId = "2";
 
         //get chatlogs from db
         //chatLogs = ChatLogDbUtility.getChatLogs(someChatLogsId);
-        User alfred = new User("2");
-        User mika = new User("1");
-        ArrayList<String> participantsId = new ArrayList<>();
 
-        participantsId.add(alfred.getUserID());
-        participantsId.add(mika.getUserID());
+
+        ArrayList<String> participantsId = new ArrayList<String>(){{
+            add(UserInfos.getUserId());
+            add(otherUserId);
+        }};
+
         chatLogs = new ChatLogs(participantsId);
 
         myMessageRecycler = findViewById(R.id.reyclerview_message_list);
