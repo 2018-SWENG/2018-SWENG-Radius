@@ -64,7 +64,6 @@ public class MessageListActivity extends AppCompatActivity {
         myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         myMessageRecycler.setAdapter(myMessageAdapter);
 
-
         Firebase.setAndroidContext(this);
         //chatReference = new Firebase("https://radius-1538126456577.firebaseio.com/messages/" + UserInfos.getchatList().getChatId(receiver.getUserId()));
 
@@ -99,9 +98,9 @@ public class MessageListActivity extends AppCompatActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
                 chatLogs.addMessage(new Message(senderId,message,sendingTime));
-               myMessageAdapter.notifyDataSetChanged();
+                myMessageRecycler.smoothScrollToPosition(chatLogs.getAllMessages().size());
+                myMessageAdapter.notifyDataSetChanged();
             }
 
             @Override
