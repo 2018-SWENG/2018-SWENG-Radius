@@ -67,7 +67,7 @@ public class MessageListActivity extends AppCompatActivity {
 
         Firebase.setAndroidContext(this);
         //chatReference = new Firebase("https://radius-1538126456577.firebaseio.com/messages/" + UserInfos.getchatList().getChatId(receiver.getUserId()));
-        //Hardcoded for now but supposed to be the table reference 
+        //Hardcoded for now but supposed to be the table reference
         chatReference = new Firebase("https://radius-1538126456577.firebaseio.com/messages/myChatID");
 
         findViewById(R.id.button_chatbox_send).setOnClickListener(new View.OnClickListener() {
