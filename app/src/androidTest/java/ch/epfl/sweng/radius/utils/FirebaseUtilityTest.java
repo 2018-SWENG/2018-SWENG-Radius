@@ -13,6 +13,8 @@ import com.google.firebase.FirebaseApiNotAvailableException;
 
 //import org.junit.Test;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.concurrent.CountDownLatch;
@@ -25,32 +27,21 @@ import ch.epfl.sweng.radius.database.User;
 public class FirebaseUtilityTest extends AndroidTestCase {
     private static final String TAG = "Firebase";
 
-
-//    private static Logger logger = Logger.getLogger(FirebaseUtilityTest.class);
-
     private CountDownLatch authSignal = null;
     private FirebaseAuth auth;
 
     private User user;
-    private Message msg;
 
-    private FirebaseUtility user_fbutil;
-  //  private FirebaseUtility logs_fbutil;
-  //  private FirebaseUtility msg_fbutil;
+    private FirebaseUtility fbutil;
 
-/*
-    @Override
+
     public void setUp() throws InterruptedException {
         authSignal = new CountDownLatch(1);
 
-        user = new User("usertTest00");
+        user = new User("userTest00");
 
 
-        user_fbutil = new FirebaseUtility(user);
-
-        // logs_fbutil = new FirebaseUtility(logs);
-        // msg_fbutil = new FirebaseUtility(msg);
-
+        fbutil = new FirebaseUtility(user, "users");
 
         auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null) {
@@ -80,20 +71,21 @@ public class FirebaseUtilityTest extends AndroidTestCase {
             auth.signOut();
             auth = null;
         }
+        user = new User("userTest00");
+        user.setStatus("Being tested on");
+        fbutil.setInstance(user);
+
+        fbutil.writeInstanceObj();
     }
 
-    @Test
-    public void isNew() {
-
-    }
 
     @Test
     public void testListenUser() throws InterruptedException {
 
         try {
-            user_fbutil.listenUser();
+            fbutil.readObj();
 
-            user = user_fbutil.getUser();
+            user = (User) fbutil.getInstance();
             Log.e(TAG, user.getStatus());
 
             if ((!"Being tested on".equals(user.getStatus()))) throw new AssertionError();
@@ -109,11 +101,11 @@ public class FirebaseUtilityTest extends AndroidTestCase {
         user.setStatus("Testing writing instance User to DB");
 
         try {
-            user_fbutil.writeUser();
+            fbutil.writeInstanceObj();
 
-            user_fbutil.listenUser();
+            fbutil.readObj();
 
-            user = user_fbutil.getUser();
+            user = (User) fbutil.getInstance();
 
             if((!"Testing writing instance User to DB".equals(user.getStatus()))) throw new AssertionError();
 
@@ -129,56 +121,26 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
         new_user.setStatus("Testing writing other user to DB");
         try {
-            user_fbutil.writeUser(new_user);
+            fbutil.writeOtherObj(new_user);
 
-            user_fbutil.setUser(new_user);
-            user_fbutil.listenUser();
+            fbutil.setInstance(new_user);
+            fbutil.readObj();
 
-            new_user = user_fbutil.getUser();
+            new_user = (User) fbutil.getInstance();
 
             if((!"Testing writing other user to DB".equals(new_user.getStatus()))) throw new AssertionError();
 
             // Remove test entry and re-set variable
-            user_fbutil.removeUser();
+         //   fbutil.removeUser();
 
-            user_fbutil.setUser(user);
+         //   fbutil.setUser(user);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    @Test
-    public void listenMessage() {
-    }
 
-    @Test
-    public void writeMessage() {
-    }
 
-    @Test
-    public void writeMessage1() {
-    }
 
-    @Test
-    public void listenChatLogs() {
-    }
-
-    @Test
-    public void writeChatLogs() {
-    }
-
-    @Test
-    public void writeChatLogs1() {
-    }
-
-    @Test
-    public void getUser() {
-    }
-
-    @Test
-    public void setUser() {
-    }
-
-*/
 }
