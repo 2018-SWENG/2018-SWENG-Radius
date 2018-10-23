@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                     googleSignInClient = GoogleSignIn.getClient(MainActivity.this, gso);
 
                     User currentUser = new User(myAuth.getCurrentUser().getUid());
-                   /* FirebaseUtility firebase = new FirebaseUtility(currentUser, "users");
+                    FirebaseUtility firebase = new FirebaseUtility(currentUser, "users");
                     
                     if(firebase.isNew()) {
                         firebase.writeInstanceObj();
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                    */
+                    
 
                     startActivity(new Intent(MainActivity.this, AccountActivity.class));
                 }
