@@ -22,6 +22,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ch.epfl.sweng.radius.utils.UserInfos;
+
 public class MailLoginActivity extends AppCompatActivity {
     TextView registerUser;
     EditText username, password;
@@ -77,11 +79,9 @@ public class MailLoginActivity extends AppCompatActivity {
                                         Toast.makeText(MailLoginActivity.this, "user not found", Toast.LENGTH_LONG).show();
                                     }
                                     else if(obj.getJSONObject(user).getString("password").equals(pass)){
-                                        UserDetails.username = user;
-                                        UserDetails.password = pass;
-                                        Log.println(Log.INFO,"C'est bon","C'est bbonbonbobnon");
-                                      //  startActivity(new Intent(MailLoginActivity.this, Users.class));
-                                    }
+                                        UserInfos.setUsername(user);
+                                        startActivity(new Intent(MailLoginActivity.this, AccountActivity.class));
+                                        }
                                     else {
                                         Toast.makeText(MailLoginActivity.this, "incorrect password", Toast.LENGTH_LONG).show();
                                     }

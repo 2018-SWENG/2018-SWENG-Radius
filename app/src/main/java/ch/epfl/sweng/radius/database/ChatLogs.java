@@ -8,48 +8,54 @@ import static java.lang.Math.*;
 /**
  * This class represent a Chat conversation with a list of participants and a List of Messages
  */
-public class ChatLogs implements DatabaseObject{
-    private static int idGenerator = 0;
 
-    private String convID;
-    private List<String> userIDs;
-    private LinkedList<Message> conversations; // List LIFO of all the message in the chat
-    public ChatLogs(ArrayList<String> participants){
-        this.convID = Integer.toString(idGenerator++);
-        this.userIDs = participants;
-        this.conversations = new LinkedList<>();
+public class ChatLogs implements DatabaseObject{
+    private static long idGenerator = 0;
+    private List<String> membersId;
+    private LinkedList<Message> messages; // List LIFO of all the message in the chat
+    private final String chatLogsId;
+
+
+    public ChatLogs(ArrayList<String> membersId){
+        //if(membersId.size() != 2) { throw new IllegalArgumentException("Chat must be between 2 users");
+        this.membersId = new ArrayList<>(membersId);
+        this.messages = new LinkedList<>();
+        this.chatLogsId = Long.toString(idGenerator++);
+
     }
 
     // Getters
-    public String getConvID(){return convID; }
-
-    public List<String> getParticipants() {
-        return userIDs;
+    public List<String> getMembersId() {
+        return membersId;
     }
 
-    public LinkedList<Message> getAllConversations() {
-        return conversations;
+    public LinkedList<Message> getAllMessages() {
+        return messages;
     }
 
     public LinkedList<Message> getLastNMessages(int n) {
         LinkedList<Message> ret = new LinkedList<>();
-        int maxIndex = max(n, conversations.size());
+        int maxIndex = max(n, messages.size());
         for (int i = 0; i<maxIndex; i++)
-            ret.addLast(conversations.get(i));
+            ret.addLast(messages.get(i));
         return ret;
     }
 
     // Setters
-    public void addParticipant(String userID){
-        if(!userIDs.contains(userID))
-            userIDs.add(userID);
-    }
-    public void addMessage(Message message){
-        conversations.addFirst(message);
+    public void addMembersId(String userID){
+        if(!membersId.contains(userID))
+            membersId.add(userID);
     }
 
-    @Override
+    public void addMessage(Message message){
+        messages.addFirst(message);
+    }
+
+    public String getChatLogsId() {
+        return chatLogsId;
+    }
+
     public String getID() {
-        return convID;
+        return chatLogsId;
     }
 }

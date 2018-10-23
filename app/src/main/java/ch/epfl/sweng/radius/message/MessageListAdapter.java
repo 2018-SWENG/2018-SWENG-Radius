@@ -14,8 +14,6 @@ import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
-import java.util.List;
-
 /**
  * Adapter for the RecyclerView that will store a list of message,
  * determine if a message is sent or received
@@ -55,7 +53,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     // Passes the message object to a ViewHolder so that the contents can be bound to UI.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Message message = myMessageList.getAllConversations().get(position);
+        Message message = myMessageList.getAllMessages().get(position);
 
         switch (holder.getItemViewType()) {
             case VIEW_TYPE_MESSAGE_SENT:
@@ -71,18 +69,18 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return myMessageList.getAllConversations().size();
+        return myMessageList.getAllMessages().size();
     }
 
     // Determines the appropriate ViewType according to the sender of the message.
     @Override
     public int getItemViewType(int position) {
-        Message message = myMessageList.getAllConversations().get(position);
-
+        Message message = myMessageList.getAllMessages().get(position);
         if (
                 // TODO Reset to UserID
-                message.getMessageID() == UserInfos.getUserId()
+                message.getSender().getUserID() == UserInfos.getUserId()
                 ) {
+
             // If the current user is the sender of the message
             return VIEW_TYPE_MESSAGE_SENT;
         } else {

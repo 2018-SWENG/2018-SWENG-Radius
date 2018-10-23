@@ -49,17 +49,7 @@ public class User implements DatabaseObject {
 
     // Debugging purpose only
     public User(){
-        this.userID = Long.toString(idGenerator++);
-        this.nickname = "New User " + this.userID;
-        this.urlProfilePhoto = "";
-        this.radius = 500;
-        this.status = "Hi, I'm new to radius !";
-        this.friendsRequests = new ArrayList<>();
-        this.friendsInvitations = new ArrayList<>();
-        this.friends = new ArrayList<>();
-        this.blockedUsers = new ArrayList<>();
-        this.chatList = new HashMap<>();
-        this.convList = new ArrayList<>();
+        this(Long.toString(idGenerator++));
     }
 
     // Getter

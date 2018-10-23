@@ -19,7 +19,7 @@ import java.io.IOException;
 
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.MockFirebaseUtility;
-
+/*
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(JUnit4.class)
 @PrepareForTest({ MockFirebaseUtility.class, FirebaseDatabase.class})
@@ -209,5 +209,6 @@ public class MockFirebaseUtilityTest {
     }
 
 }
-    */
+
 }
+*/

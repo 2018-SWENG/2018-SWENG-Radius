@@ -254,7 +254,7 @@ public class FirebaseUtility {
             }
         };
         // TODO Fix ID For Chatlogs
-        database.child(chatLogs.getConvID()).addListenerForSingleValueEvent(listener);
+        database.child(chatLogs.getChatLogsId()).addListenerForSingleValueEvent(listener);
         semaphore.acquire();
         return;
 
@@ -262,13 +262,13 @@ public class FirebaseUtility {
 
     public void writeChatLogs()  {
 
-        database.child(chatLogs.getConvID()).setValue(msg);
+        database.child(chatLogs.getChatLogsId()).setValue(msg);
         return;
 
     }
 
     public void writeChatLogs(ChatLogs new_chatlogs) {
-        database.child(new_chatlogs.getConvID())
+        database.child(new_chatlogs.getMembersId().get(0))
                 .setValue(new_chatlogs);
         return;
 

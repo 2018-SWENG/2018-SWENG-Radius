@@ -9,19 +9,19 @@ import java.util.Date;
  * IN THE DB.
  */
 public class Message {
-    private String senderID;
+
+    private User sender;
     private final String contentMessage;
     private final Date sendingTime;
 
-    public Message(String senderID, User owner, String contentMessage, Date sendingTime){
-        this.senderID = senderID;
+    public Message(User sender, String contentMessage, Date sendingTime){
+        this.sender = sender;
         this.contentMessage = contentMessage;
         this.sendingTime = sendingTime;
     }
 
-    // Getters
-    public String getMessageID() {
-        return senderID;
+    public User getSender() {
+        return sender;
     }
 
     public String getContentMessage() {
