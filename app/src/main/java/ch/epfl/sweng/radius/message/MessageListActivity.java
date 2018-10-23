@@ -36,14 +36,14 @@ public class MessageListActivity extends AppCompatActivity {
         participants.add(alfred);
         participants.add(mika);
 
-        Message m1 = new Message(1, alfred, "Hello", new Date());
-        Message m2 = new Message(2, mika,"Hello alfred", new Date());
-        Message m3 = new Message(3, alfred,"how are you ?", new Date());
+  //      Message m1 = new Message(1, alfred, "Hello", new Date());
+  //      Message m2 = new Message(2, mika,"Hello alfred", new Date());
+  //      Message m3 = new Message(3, alfred,"how are you ?", new Date());
 
-        ChatLogs messageList= new ChatLogs(participants);
-        messageList.addMessage(m1);
-        messageList.addMessage(m2);
-        messageList.addMessage(m3);
+  //      ChatLogs messageList= new ChatLogs(participants);
+  //      messageList.addMessage(m1);
+  //      messageList.addMessage(m2);
+  //      messageList.addMessage(m3);
 
         /*sort by date
         Collections.sort(messageList, new Comparator<UserMessage>() {
@@ -57,7 +57,7 @@ public class MessageListActivity extends AppCompatActivity {
         // End Test
 
         myMessageRecycler = findViewById(R.id.reyclerview_message_list);
-        myMessageAdapter = new MessageListAdapter(this, messageList);
+    //    myMessageAdapter = new MessageListAdapter(this, messageList);
         myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         myMessageRecycler.setAdapter(myMessageAdapter);
 

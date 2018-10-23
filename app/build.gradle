@@ -134,6 +134,9 @@ allprojects {
 }
 
 apply plugin: 'com.google.gms.google-services'
+<<<<<<< HEAD
 configurations.all {
     resolutionStrategy.force "com.android.support:support-annotations:26.0.1"
 }
+=======
+>>>>>>> fix-modifyDbClasses

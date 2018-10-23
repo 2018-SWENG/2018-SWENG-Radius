@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.concurrent.Semaphore;
 
 import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.DatabaseObject;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
 
@@ -33,6 +34,7 @@ public class FirebaseUtility {
 
     private DatabaseReference   database;
 
+    private DatabaseObject obj;
     private User        user;
     private Message     msg;
     private ChatLogs    chatLogs;
@@ -49,6 +51,12 @@ public class FirebaseUtility {
         this.user      = user;
         this.database  = fireDB.getReference("users");
 
+    }
+
+    public FirebaseUtility(DatabaseObject obj, String ref){
+        initDB();
+        this.obj = obj;
+        this.database = fireDB.getReference(ref);
     }
 
     /**
@@ -116,6 +124,68 @@ public class FirebaseUtility {
     }
 
 
+    public void readObj() throws InterruptedException {
+
+        database.child(obj.getID()).addListenerForSingleValueEvent( new ValueEventListener() {
+            @Override
+            public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                obj = dataSnapshot.getValue(obj.getClass());
+                semaphore.release();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w("Firebase", "Failed to read user", databaseError.toException());
+
+            }
+        });
+        semaphore.acquire();
+
+    }
+
+    public void listenInstanceObject() throws InterruptedException {
+
+        database.child(obj.getID()).addValueEventListener( new ValueEventListener() {
+            @Override
+            public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                obj = dataSnapshot.getValue(obj.getClass());
+                semaphore.release();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w("Firebase", "Failed to read user", databaseError.toException());
+
+            }
+        });
+        semaphore.acquire();
+
+    }
+
+    public DatabaseObject readOtherObject(DatabaseObject otherObj) throws InterruptedException {
+
+        final DatabaseObject[] ret = new DatabaseObject[1];
+        database.child(otherObj.getID()).addListenerForSingleValueEvent( new ValueEventListener() {
+            @Override
+            public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ret[0] = dataSnapshot.getValue(obj.getClass());
+                semaphore.release();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w("Firebase", "Failed to read object", databaseError.toException());
+
+            }
+        });
+        semaphore.acquire();
+
+        return ret[0];
+    }
+
+    public void writeInstanceObj(){ database.child(obj.getID()).setValue(obj); }
+
+    public void writeOtherObj(DatabaseObject otherObj){ database.child(otherObj.getID()).setValue(otherObj);    }
 
     public void listenUser() throws InterruptedException {
 
@@ -164,49 +234,6 @@ public class FirebaseUtility {
 
     }
 
-    public void listenMessage() throws InterruptedException {
-
-        ValueEventListener  listener;
-
-        listener = new ValueEventListener() {
-            @Override
-            public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                msg = dataSnapshot.getValue(Message.class);
-                semaphore.release();
-
-                Log.e("Firebase", "Message data has been read.");
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("Firebase", "Failed to read message", databaseError.toException());
-
-            }
-        };
-
-        database.child(Long.toString(msg.getMessageID())).addListenerForSingleValueEvent(listener);
-        semaphore.acquire();
-        return;
-
-    }
-
-    public void writeMessage() {
-
-        database.child(Long.toString(msg.getMessageID())).setValue(msg);
-
-        return;
-
-    }
-
-    public void writeMessage(Message new_msg) {
-
-        database.child(Long.toString(new_msg.getMessageID())).setValue(new_msg);
-
-        return;
-
-    }
-
     public void listenChatLogs() throws InterruptedException {
 
         ValueEventListener  listener;
@@ -227,7 +254,7 @@ public class FirebaseUtility {
             }
         };
         // TODO Fix ID For Chatlogs
-        database.child(chatLogs.getParticipants().get(0).getUserID()).addListenerForSingleValueEvent(listener);
+        database.child(chatLogs.getConvID()).addListenerForSingleValueEvent(listener);
         semaphore.acquire();
         return;
 
@@ -235,13 +262,13 @@ public class FirebaseUtility {
 
     public void writeChatLogs()  {
 
-        database.child(Long.toString(msg.getMessageID())).setValue(msg);
+        database.child(chatLogs.getConvID()).setValue(msg);
         return;
 
     }
 
     public void writeChatLogs(ChatLogs new_chatlogs) {
-        database.child(new_chatlogs.getParticipants().get(0).getUserID())
+        database.child(new_chatlogs.getConvID())
                 .setValue(new_chatlogs);
         return;
 
