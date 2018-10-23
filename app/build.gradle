@@ -8,7 +8,7 @@ jacoco {
 }
 android {
     compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    buildToolsVersion '27.0.3'
     defaultConfig {
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         applicationId "ch.epfl.sweng.radius"
@@ -30,21 +30,19 @@ android {
     }
     productFlavors {
     }
-    android {
-        // ...
-        testOptions {
-            unitTests.returnDefaultValues = true
-        }
-        lintOptions {
-            warning 'InvalidPackage'
-        }
-        // Gradle automatically adds 'android.test.runner' as a dependency.
-        useLibrary 'android.test.runner'
 
-        useLibrary 'android.test.base'
-        useLibrary 'android.test.mock'
-
+    // ...
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
+    lintOptions {
+        warning 'InvalidPackage'
+    }
+    // Gradle automatically adds 'android.test.runner' as a dependency.
+    useLibrary 'android.test.runner'
+
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
 }
 
 dependencies {
