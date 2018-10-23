@@ -1,6 +1,8 @@
 package ch.epfl.sweng.radius;
 
+import android.Manifest;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.GrantPermissionRule;
 import android.view.View;
 
 import org.junit.Rule;
@@ -15,6 +17,10 @@ public class AccountActivityTest {
     @Rule
     public final ActivityTestRule<AccountActivity> mActivityRule =
             new ActivityTestRule<>(AccountActivity.class);
+
+    @Rule
+    public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
+            Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Test
     public void testViewExists() {
