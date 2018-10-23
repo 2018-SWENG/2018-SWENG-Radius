@@ -1,8 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
 apply plugin: 'com.google.gms.google-services'
-
-
 jacoco {
     toolVersion = "0.8.0"
 }

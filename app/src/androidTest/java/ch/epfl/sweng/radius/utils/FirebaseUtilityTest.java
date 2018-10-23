@@ -37,7 +37,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
     private FirebaseUtility fbutil;
 
-
+    @Before
     public void setUp() throws InterruptedException {
         authSignal = new CountDownLatch(1);
 
@@ -82,7 +82,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
     }
 
 
-    @Test
+    @Test(expected = FirebaseApiNotAvailableException.class)
     public void testListenUser() throws InterruptedException {
 
         try {
@@ -98,7 +98,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
         }
     }
 
-    @Test
+    @Test(expected = FirebaseApiNotAvailableException.class)
     public void testWriteUser() {
 
         user.setStatus("Testing writing instance User to DB");
@@ -116,8 +116,8 @@ public class FirebaseUtilityTest extends AndroidTestCase {
             e.printStackTrace();
         }
     }
-    @Test
-    public void testIsNew(){
+    @Test(expected = FirebaseApiNotAvailableException.class)
+    public void testIsNew() throws FirebaseApiNotAvailableException {
 
         if(fbutil.isNew()) throw new AssertionError();
 
@@ -130,7 +130,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
     }
 
-    @Test
+    @Test(expected = FirebaseApiNotAvailableException.class)
     public void testReadOtherObject() throws InterruptedException {
 
         User new_user = new User("testUser01");
@@ -141,7 +141,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
     }
 
-    @Test
+    @Test(expected = FirebaseApiNotAvailableException.class)
     public void testListenInstanceObject() throws InterruptedException {
             fbutil.listenInstanceObject();
 
@@ -164,7 +164,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
     }
 
-    @Test
+    @Test(expected = FirebaseApiNotAvailableException.class)
     public void testWriteUser1() {
 
         User new_user = new User("testUser01");
