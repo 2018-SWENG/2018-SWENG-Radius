@@ -42,12 +42,12 @@ public class HomeFragmentTest {
         fragment = new HomeFragment();
     }
 
-    @Test
+    /*@Test
     public void testMarkButton() {
         onView(withId(R.id.navigation_profile)).perform(click());
         onView(withId(R.id.navigation_home)).perform(click());
         onView(withId(R.id.testMark)).perform(click());
-    }
+    }*/
 
     @Test
     public void testOnCreate() {
