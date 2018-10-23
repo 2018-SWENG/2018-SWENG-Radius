@@ -22,7 +22,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.internal.bind.DateTypeAdapter;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.DatabaseObject;
@@ -75,12 +78,16 @@ public class FirebaseUtility {
     }
 
     public DatabaseObject readObj() throws InterruptedException {
-
+        final AtomicBoolean done = new AtomicBoolean(false);
+        final AtomicInteger message1 = new AtomicInteger(0);
         database.child(obj.getID()).addListenerForSingleValueEvent( new ValueEventListener() {
             @Override
             public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.e("Firebase", "Wait for Read done");
+
                 obj = dataSnapshot.getValue(obj.getClass());
-   //             semaphore.release();
+                Log.e("Firebase", "Read done");
+                done.set(true);
             }
 
             @Override
@@ -90,9 +97,14 @@ public class FirebaseUtility {
             }
         });
   //      semaphore.acquire();
+        while (!done.get());
         return obj;
     }
 
+    /*
+        Do not use this method to read instantly used values ! Might lead to NullPointerException
+                Use readObj() instead
+     */
     public void listenInstanceObject() throws InterruptedException {
 
         database.child(obj.getID()).addValueEventListener( new ValueEventListener() {

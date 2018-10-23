@@ -129,6 +129,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
             'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
     ])
 }
+
 allprojects {
     repositories {
         jcenter()
@@ -140,5 +141,5 @@ allprojects {
 
 apply plugin: 'com.google.gms.google-services'
 configurations.all {
-    resolutionStrategy.force "com.android.support:support-annotations:28.0.8"
+    resolutionStrategy.force "com.android.support:support-annotations:28.0.0"
 }
