@@ -110,10 +110,10 @@ public class FirebaseUtility {
 
     }
 
-    public DatabaseObject readOtherObject(DatabaseObject otherObj) throws InterruptedException {
+    public DatabaseObject readOtherObject(String otherObjID) throws InterruptedException {
 
         final DatabaseObject[] ret = new DatabaseObject[1];
-        database.child(otherObj.getID()).addListenerForSingleValueEvent( new ValueEventListener() {
+        database.child(otherObjID).addListenerForSingleValueEvent( new ValueEventListener() {
             @Override
             public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ret[0] = dataSnapshot.getValue(obj.getClass());
