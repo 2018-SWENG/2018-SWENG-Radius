@@ -35,14 +35,14 @@ import ch.epfl.sweng.radius.database.User;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.doAnswer;
- /*
+
 
 
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(JUnit4.class)
 @PrepareForTest({ FirebaseDatabase.class})
 public class MockFirebaseUtility{
-
+/*
     public final static    String mockUserDBPath       = "./src/test/java/ch/epfl/sweng/radius/mock_databases/user.json";
     public final static    String mockMsgDBPath        = "./src/test/java/ch/epfl/sweng/radius/mock_databases/msg.json";
     public final static    String mockChatLogDBPath    = "./src/test/java/ch/epfl/sweng/radius/mock_databases/chatlog.json";
@@ -550,9 +550,9 @@ class MessageDB {
     public void setMsgs(List<Message> db){
         this.database = db;
     }
-
+*/
 }
 
-*/
+
 
 
