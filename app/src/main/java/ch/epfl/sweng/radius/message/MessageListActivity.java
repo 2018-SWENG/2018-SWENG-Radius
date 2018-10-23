@@ -41,22 +41,24 @@ public class MessageListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_list);
-
         messageZone = (EditText) findViewById(R.id.edittext_chatbox);
 
-        //Hardcoded now but supposed to be the receiver's ID
-        final String otherUserId = "2";
+
+        Bundle b = getIntent().getExtras();
+        String otherUserId = "";
+        String chatId = "";
+        if(b != null) {
+            otherUserId = b.getString("otherUserId");
+            chatId = b.getString("chatId");
+        }
 
         //get chatlogs from db
-        //chatLogs = ChatLogDbUtility.getChatLogs(someChatLogsId);
+        //chatLogs = ChatLogDbUtility.getChatLogs(chatId);
 
 
-        ArrayList<String> participantsId = new ArrayList<String>() {
-            {
-                add(UserInfos.getUserId());
-                add(otherUserId);
-            }
-        };
+        ArrayList<String> participantsId = new ArrayList<String>();
+        participantsId.add(UserInfos.getUserId());
+        participantsId.add(otherUserId);
 
         chatLogs = new ChatLogs(participantsId);
 
@@ -68,7 +70,7 @@ public class MessageListActivity extends AppCompatActivity {
         Firebase.setAndroidContext(this);
         //chatReference = new Firebase("https://radius-1538126456577.firebaseio.com/messages/" + UserInfos.getchatList().getChatId(receiver.getUserId()));
         //Hardcoded for now but supposed to be the table reference
-        chatReference = new Firebase("https://radius-1538126456577.firebaseio.com/messages/myChatID");
+        chatReference = new Firebase("https://radius-1538126456577.firebaseio.com/messages/"+chatId);
 
         findViewById(R.id.button_chatbox_send).setOnClickListener(new View.OnClickListener() {
             @Override
