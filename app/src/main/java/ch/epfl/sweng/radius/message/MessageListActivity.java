@@ -7,6 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 
+import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.utils.UserInfos;
+
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -17,15 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.database.ChatLogs;
-import ch.epfl.sweng.radius.database.Message;
-import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.ChatLogDbUtility;
-import ch.epfl.sweng.radius.utils.UserInfos;
 
 /**
  * Activity that hosts messages between two users
@@ -46,16 +44,19 @@ public class MessageListActivity extends AppCompatActivity {
 
         messageZone = (EditText) findViewById(R.id.edittext_chatbox);
 
+        //Hardcoded now but supposed to be the receiver's ID
         final String otherUserId = "2";
 
         //get chatlogs from db
         //chatLogs = ChatLogDbUtility.getChatLogs(someChatLogsId);
 
 
-        ArrayList<String> participantsId = new ArrayList<String>(){{
-            add(UserInfos.getUserId());
-            add(otherUserId);
-        }};
+        ArrayList<String> participantsId = new ArrayList<String>() {
+            {
+                add(UserInfos.getUserId());
+                add(otherUserId);
+            }
+        };
 
         chatLogs = new ChatLogs(participantsId);
 
@@ -64,11 +65,9 @@ public class MessageListActivity extends AppCompatActivity {
         myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         myMessageRecycler.setAdapter(myMessageAdapter);
 
-
         Firebase.setAndroidContext(this);
         //chatReference = new Firebase("https://radius-1538126456577.firebaseio.com/messages/" + UserInfos.getchatList().getChatId(receiver.getUserId()));
-
-        //test :
+        //Hardcoded for now but supposed to be the table reference 
         chatReference = new Firebase("https://radius-1538126456577.firebaseio.com/messages/myChatID");
 
         findViewById(R.id.button_chatbox_send).setOnClickListener(new View.OnClickListener() {
@@ -89,19 +88,21 @@ public class MessageListActivity extends AppCompatActivity {
         chatReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String pattern = "EEE MMM dd HH:mm:ss Z yyyy";
                 Map map = dataSnapshot.getValue(Map.class);
                 String message = map.get("message").toString();
                 String senderId = map.get("senderId").toString();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
                 Date sendingTime = null;
                 try {
                     sendingTime = simpleDateFormat.parse(map.get("sendingTime").toString());
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                chatLogs.addMessage(new Message(senderId, message, sendingTime));
 
-                chatLogs.addMessage(new Message(senderId,message,sendingTime));
-               myMessageAdapter.notifyDataSetChanged();
+                myMessageRecycler.smoothScrollToPosition(chatLogs.getAllMessages().size());
+                myMessageAdapter.notifyDataSetChanged();
             }
 
             @Override
