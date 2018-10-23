@@ -22,7 +22,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.internal.bind.DateTypeAdapter;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.DatabaseObject;
@@ -49,7 +52,8 @@ public class FirebaseUtility {
 
     // TODO : #Salezer, must be fixed
     public boolean isNew(){
-
+        final AtomicBoolean done = new AtomicBoolean(false);
+        final AtomicInteger message1 = new AtomicInteger(0);
         final boolean[] newUser = new boolean[1];
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -61,6 +65,9 @@ public class FirebaseUtility {
                 }
                 else
                     newUser[0] = true;
+
+                done.set(true);
+
             }
 
             @Override
@@ -69,18 +76,21 @@ public class FirebaseUtility {
             }
         });
 
-        while(newUser == null);
-
+        while (!done.get());
         return newUser[0];
     }
 
     public DatabaseObject readObj() throws InterruptedException {
-
+        final AtomicBoolean done = new AtomicBoolean(false);
+        final AtomicInteger message1 = new AtomicInteger(0);
         database.child(obj.getID()).addListenerForSingleValueEvent( new ValueEventListener() {
             @Override
             public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.e("Firebase", "Wait for Read done");
+
                 obj = dataSnapshot.getValue(obj.getClass());
-   //             semaphore.release();
+                Log.e("Firebase", "Read done");
+                done.set(true);
             }
 
             @Override
@@ -90,9 +100,14 @@ public class FirebaseUtility {
             }
         });
   //      semaphore.acquire();
+        while (!done.get());
         return obj;
     }
 
+    /*
+        Do not use this method to read instantly used values ! Might lead to NullPointerException
+                Use readObj() instead
+     */
     public void listenInstanceObject() throws InterruptedException {
 
         database.child(obj.getID()).addValueEventListener( new ValueEventListener() {
@@ -110,14 +125,16 @@ public class FirebaseUtility {
 
     }
 
-    public DatabaseObject readOtherObject(DatabaseObject otherObj) throws InterruptedException {
+    public DatabaseObject readOtherObject(String otherObjID) throws InterruptedException {
+        final AtomicBoolean done = new AtomicBoolean(false);
+        final AtomicInteger message1 = new AtomicInteger(0);
 
         final DatabaseObject[] ret = new DatabaseObject[1];
-        database.child(otherObj.getID()).addListenerForSingleValueEvent( new ValueEventListener() {
+        database.child(otherObjID).addListenerForSingleValueEvent( new ValueEventListener() {
             @Override
             public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ret[0] = dataSnapshot.getValue(obj.getClass());
-          //      semaphore.release();
+                done.set(true);
             }
 
             @Override
@@ -126,7 +143,7 @@ public class FirebaseUtility {
 
             }
         });
-     //   semaphore.acquire();
+        while (!done.get());
 
         return ret[0];
     }
@@ -140,9 +157,7 @@ public class FirebaseUtility {
     public void setInstance(DatabaseObject new_obj){
 
         if(new_obj.getClass().equals(this.obj.getClass())) this.obj = new_obj;
-        else{
-            Log.e("Firebase", "Illegal change of Object type.");
-        }
+
     }
 }
 

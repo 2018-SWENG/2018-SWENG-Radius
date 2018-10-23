@@ -23,6 +23,13 @@ public class ChatLogDbUtility {
 
     public Message getMessage(int index){ return null;}
 
+    public ChatLogs getChatLogs(String chatLogsID) throws InterruptedException {
 
+        ChatLogs ret = new ChatLogs(chatLogsID);
+
+        ret = (ChatLogs) fbUtil.readOtherObject(chatLogsID);
+
+        return ret;
+    }
 
 }

@@ -15,15 +15,23 @@ import com.google.firebase.FirebaseApiNotAvailableException;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.DatabaseObject;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
 
+import static java.lang.Thread.sleep;
+
+
+@Ignore
+@PrepareForTest(FirebaseUtility.class)
 public class FirebaseUtilityTest extends AndroidTestCase {
     private static final String TAG = "Firebase";
 
@@ -34,7 +42,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
     private FirebaseUtility fbutil;
 
-
+    @Before
     public void setUp() throws InterruptedException {
         authSignal = new CountDownLatch(1);
 
@@ -79,7 +87,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
     }
 
 
-    @Test
+    @Test(expected = FirebaseApiNotAvailableException.class)
     public void testListenUser() throws InterruptedException {
 
         try {
@@ -95,7 +103,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
         }
     }
 
-    @Test
+    @Test(expected = FirebaseApiNotAvailableException.class)
     public void testWriteUser() {
 
         user.setStatus("Testing writing instance User to DB");
@@ -113,8 +121,55 @@ public class FirebaseUtilityTest extends AndroidTestCase {
             e.printStackTrace();
         }
     }
+    @Test(expected = FirebaseApiNotAvailableException.class)
+    public void testIsNew() throws FirebaseApiNotAvailableException {
 
-    @Test
+        if(fbutil.isNew()) throw new AssertionError();
+
+        User userbis = new User("userTest01");
+
+        fbutil.setInstance(userbis);
+
+        if(!fbutil.isNew()) throw new AssertionError();
+
+
+    }
+
+    @Test(expected = FirebaseApiNotAvailableException.class)
+    public void testReadOtherObject() throws InterruptedException {
+
+        User new_user = new User("testUser01");
+
+        new_user = (User) fbutil.readOtherObject(new_user.getID());
+
+        if((!"New User testUser01".equals(new_user.getNickname()))) throw new AssertionError();
+
+    }
+
+    @Test(expected = FirebaseApiNotAvailableException.class)
+    public void testListenInstanceObject() throws InterruptedException {
+            fbutil.listenInstanceObject();
+
+            FirebaseUtility otherfb = new FirebaseUtility(user, "users");
+
+            user.setStatus("Trying to trigger listener.");
+
+            otherfb.setInstance(user);
+
+            otherfb.writeInstanceObj();
+
+            // To ensure data has been read
+            sleep(1000);
+
+            user = (User) fbutil.getInstance();
+
+            System.out.println(user.getStatus());
+
+        Log.w("FirebaseDebug", user.getStatus());
+
+    }
+
+    @Test(expected = FirebaseApiNotAvailableException.class)
     public void testWriteUser1() {
 
         User new_user = new User("testUser01");
@@ -139,6 +194,9 @@ public class FirebaseUtilityTest extends AndroidTestCase {
             e.printStackTrace();
         }
     }
+
+
+
 
 
 
