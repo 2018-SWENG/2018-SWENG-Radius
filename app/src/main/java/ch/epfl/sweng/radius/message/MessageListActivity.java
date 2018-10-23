@@ -12,15 +12,19 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.ChatLogDbUtility;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
 /**
@@ -31,8 +35,8 @@ public class MessageListActivity extends AppCompatActivity {
     private RecyclerView myMessageRecycler;
     private MessageListAdapter myMessageAdapter;
     private EditText messageZone;
-    private Firebase reference1;
-    private Firebase reference2;
+    private Firebase chatReference;
+    private ChatLogs chatLogs;
 
 
     @Override
@@ -43,22 +47,28 @@ public class MessageListActivity extends AppCompatActivity {
         messageZone = (EditText) findViewById(R.id.edittext_chatbox);
 
 
+
+        /*
+
         // Test the chat view
         //User alfred = new User(UserInfos.getChatWithID());
         User alfred = new User();
         User mika = new User(UserInfos.getUserId());
+
         ArrayList<String> participantsId = new ArrayList<>();
+
         participantsId.add(alfred.getUserID());
         participantsId.add(mika.getUserID());
 
-  //      Message m1 = new Message(1, alfred, "Hello", new Date());
-  //      Message m2 = new Message(2, mika,"Hello alfred", new Date());
-  //      Message m3 = new Message(3, alfred,"how are you ?", new Date());
+        Message m1 = new Message( alfred, "Hello", new Date());
+        Message m2 = new Message( mika,"Hello alfred", new Date());
+        Message m3 = new Message( alfred,"how are you ?", new Date());
 
-  //      ChatLogs messageList= new ChatLogs(participants);
-  //      messageList.addMessage(m1);
-  //      messageList.addMessage(m2);
-  //      messageList.addMessage(m3);
+        List messageList= new ArrayList();
+        messageList.add(m1);
+        messageList.add(m2);
+        messageList.add(m3);
+        */
 
         /*sort by date
         Collections.sort(messageList, new Comparator<UserMessage>() {
@@ -71,17 +81,17 @@ public class MessageListActivity extends AppCompatActivity {
 
         // End Test
 
-        myMessageRecycler = findViewById(R.id.reyclerview_message_list);
-    //    myMessageAdapter = new MessageListAdapter(this, messageList);
+        //get chatlogs from db
+        chatLogs = ChatLogDbUtility.getChatLogs(someChatLogsId);
 
+        myMessageRecycler = findViewById(R.id.reyclerview_message_list);
+        myMessageAdapter = new MessageListAdapter(this, chatLogs.getAllMessages());
         myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         myMessageRecycler.setAdapter(myMessageAdapter);
 
 
         Firebase.setAndroidContext(this);
-        reference1 = new Firebase("https://radius-1538126456577.firebaseio.com/messages/" + UserInfos.getUsername() + "_" + UserInfos.getChatWith());
-        reference2 = new Firebase("https://radius-1538126456577.firebaseio.com/messages/" + UserInfos.getChatWith() + "_" + UserInfos.getUsername());
-
+        chatReference = new Firebase("https://radius-1538126456577.firebaseio.com/messages/" + UserInfos.getchatList().getChatId(receiver.getUserId()));
 
         findViewById(R.id.button_chatbox_send).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,17 +102,27 @@ public class MessageListActivity extends AppCompatActivity {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("message", message);
                     map.put("user", UserInfos.getUsername());
-                    reference1.push().setValue(map);
-                    reference2.push().setValue(map);
+                    chatReference.push().setValue(map);
                     messageZone.setText("");
                 }
             }
         });
-        reference1.addChildEventListener(new ChildEventListener() {
+        chatReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Map map = dataSnapshot.getValue(Map.class);
+                String message = map.get("message").toString();
+                String senderId = map.get("senderId").toString();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
+                Date sendingTime = null;
+                try {
+                    sendingTime = simpleDateFormat.parse(map.get("sendingTime").toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
+                chatLogs.addMessage(new Message(senderId,message,sendingTime));
+                myMessageAdapter.notify();
             }
 
             @Override
