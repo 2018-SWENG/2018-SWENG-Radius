@@ -51,6 +51,8 @@ public class HomeFragmentTest {
 
         View view = fragment.getView().findViewById(R.id.map);
         assertNotNull(view);
+        view = fragment.getView().findViewById(R.id.friendsList);
+        assertNotNull(view);
     }
 
     @After
