@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -30,7 +31,6 @@ import ch.epfl.sweng.radius.database.User;
 import static java.lang.Thread.sleep;
 
 
-@Ignore
 @PrepareForTest(FirebaseUtility.class)
 public class FirebaseUtilityTest extends AndroidTestCase {
     private static final String TAG = "Firebase";
@@ -47,7 +47,10 @@ public class FirebaseUtilityTest extends AndroidTestCase {
         authSignal = new CountDownLatch(1);
 
         user = new User("userTest00");
+        user.addChat("userTest00", "Hello you");
+        user.addFriendRequest("userTest01");
 
+        String otherID = user.getConvFromUser("userTest01");
 
         fbutil = new FirebaseUtility(user, "users");
 

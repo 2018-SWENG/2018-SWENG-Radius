@@ -74,6 +74,7 @@ dependencies {
     androidTestImplementation 'com.google.firebase:firebase-core:16.0.4'
     androidTestImplementation 'com.google.firebase:firebase-database:16.0.3'
     androidTestImplementation 'com.google.android.gms:play-services-identity:16.0.0'
+
     implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.firebase:firebase-core:16.0.4'
