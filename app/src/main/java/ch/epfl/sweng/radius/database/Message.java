@@ -10,18 +10,18 @@ import java.util.Date;
  */
 public class Message {
 
-    private User sender;
+    private String senderId;
     private final String contentMessage;
     private final Date sendingTime;
 
-    public Message(User sender, String contentMessage, Date sendingTime){
-        this.sender = sender;
+    public Message(String senderId, String contentMessage, Date sendingTime){
+        this.senderId = senderId;
         this.contentMessage = contentMessage;
         this.sendingTime = sendingTime;
     }
 
-    public User getSender() {
-        return sender;
+    public String getSenderId() {
+        return senderId;
     }
 
     public String getContentMessage() {

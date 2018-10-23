@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
@@ -23,12 +25,12 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
-    private Context myContext;
-    private ChatLogs myMessageList;
+    private Context context;
+    private List<Message> messages;
 
-    public MessageListAdapter(Context context, ChatLogs messageList) {
-        myContext = context;
-        myMessageList = messageList;
+    public MessageListAdapter(Context context, List<Message> messages) {
+        this.context = context;
+        this.messages = messages;
     }
 
     // Inflates the appropriate layout according to the ViewType.
@@ -53,7 +55,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     // Passes the message object to a ViewHolder so that the contents can be bound to UI.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Message message = myMessageList.getAllMessages().get(position);
+        Message message = messages.get(position);
 
         switch (holder.getItemViewType()) {
             case VIEW_TYPE_MESSAGE_SENT:
@@ -69,18 +71,14 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return myMessageList.getAllMessages().size();
+        return messages.size();
     }
 
     // Determines the appropriate ViewType according to the sender of the message.
     @Override
     public int getItemViewType(int position) {
-        Message message = myMessageList.getAllMessages().get(position);
-        if (
-                // TODO Reset to UserID
-                message.getSender().getUserID() == UserInfos.getUserId()
-                ) {
-
+        Message message = messages.get(position);
+        if (message.getSenderId() == UserInfos.getUserId()) {
             // If the current user is the sender of the message
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
@@ -109,12 +107,12 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             int flags = DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE;
 
             // Format the stored timestamp into a readable String using method.
-            timeText.setText(DateUtils.formatDateTime(myContext, message.getSendingTime().getTime(), flags)); // TODO: Date format ??
+            timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags)); // TODO: Date format ??
         //    nameText.setText(message.getOwner().getNickname());
 
             // Insert the profile image from the URL into the ImageView.
             //Utils.displayRoundImageFromUrl(
-            // myContext, message.getSender().getProfileUrl(), profileImage);
+            // context, message.getSenderId().getProfileUrl(), profileImage);
         }
     }
 
@@ -134,11 +132,11 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             int flags = DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE;
 
             // Format the stored timestamp into a readable String using method.
-            timeText.setText(DateUtils.formatDateTime(myContext, message.getSendingTime().getTime(), flags)); // TODO: Date format ??
+            timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags)); // TODO: Date format ??
 
             // Insert the profile image from the URL into the ImageView.
             //Utils.displayRoundImageFromUrl(
-            // myContext, message.getSender().getProfileUrl(), profileImage);
+            // context, message.getSenderId().getProfileUrl(), profileImage);
         }
     }
 }
