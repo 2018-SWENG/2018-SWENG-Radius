@@ -32,4 +32,18 @@ public class ChatLogDbUtility {
         return ret;
     }
 
+    public ChatLogs readChatLogs() throws InterruptedException {
+
+        return (ChatLogs) fbUtil.readObj();
+    }
+
+    public void writeChatLogs() {
+
+        fbUtil.writeInstanceObj();
+    }
+
+    public void writeChatLogs(ChatLogs otherChatlogs) {
+        fbUtil.writeOtherObj(otherChatlogs);
+    }
+
 }
