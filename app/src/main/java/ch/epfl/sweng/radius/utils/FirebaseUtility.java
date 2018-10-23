@@ -52,7 +52,8 @@ public class FirebaseUtility {
 
     // TODO : #Salezer, must be fixed
     public boolean isNew(){
-
+        final AtomicBoolean done = new AtomicBoolean(false);
+        final AtomicInteger message1 = new AtomicInteger(0);
         final boolean[] newUser = new boolean[1];
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -64,6 +65,9 @@ public class FirebaseUtility {
                 }
                 else
                     newUser[0] = true;
+
+                done.set(true);
+
             }
 
             @Override
@@ -72,8 +76,7 @@ public class FirebaseUtility {
             }
         });
 
-        while(newUser == null);
-
+        while (!done.get());
         return newUser[0];
     }
 
@@ -123,13 +126,15 @@ public class FirebaseUtility {
     }
 
     public DatabaseObject readOtherObject(String otherObjID) throws InterruptedException {
+        final AtomicBoolean done = new AtomicBoolean(false);
+        final AtomicInteger message1 = new AtomicInteger(0);
 
         final DatabaseObject[] ret = new DatabaseObject[1];
         database.child(otherObjID).addListenerForSingleValueEvent( new ValueEventListener() {
             @Override
             public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ret[0] = dataSnapshot.getValue(obj.getClass());
-          //      semaphore.release();
+                done.set(true);
             }
 
             @Override
@@ -138,7 +143,7 @@ public class FirebaseUtility {
 
             }
         });
-     //   semaphore.acquire();
+        while (!done.get());
 
         return ret[0];
     }
@@ -152,9 +157,7 @@ public class FirebaseUtility {
     public void setInstance(DatabaseObject new_obj){
 
         if(new_obj.getClass().equals(this.obj.getClass())) this.obj = new_obj;
-        else{
-            Log.e("Firebase", "Illegal change of Object type.");
-        }
+
     }
 }
 
