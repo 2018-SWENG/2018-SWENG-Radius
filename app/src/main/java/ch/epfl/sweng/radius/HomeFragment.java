@@ -128,9 +128,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 User jean = new User(); jean.setLocation(new LatLng(46.514874, 6.567602));
                 jean.setSpokenLanguages("French");
                 User marie = new User(); marie.setLocation(new LatLng(46.521877, 6.588810));
-                marie.setSpokenLanguages("");
-                users.add(marc); users.add(jean); users.add(marie);
-                markNearbyUsers();
+                marie.setSpokenLanguages(""); users.add(marc); users.add(jean); users.add(marie); markNearbyUsers();
             }
         });
 
@@ -146,8 +144,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 return;
             }
 
-            mobileMap.setMyLocationEnabled(true);
-            initMap();
+            mobileMap.setMyLocationEnabled(true); initMap();
         }
     }
 

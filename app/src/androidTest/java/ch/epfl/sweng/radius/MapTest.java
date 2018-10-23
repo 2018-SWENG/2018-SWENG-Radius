@@ -53,12 +53,6 @@ public class MapTest {
     }
 
     @Test
-    public void testUserLanguageNull() {
-        user2.setSpokenLanguages(null);
-        assertTrue(!mapListener.speaksSameLanguage(user2));
-    }
-
-    @Test
     public void testContains() {
         assertTrue(mapListener.contains(user1.getLocation().latitude, user1.getLocation().longitude));
         assertTrue(!mapListener.contains(user2.getLocation().latitude, user2.getLocation().longitude));
