@@ -1,10 +1,7 @@
 package ch.epfl.sweng.radius;
 
-import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.After;
@@ -48,12 +45,6 @@ public class MapTest {
         homeFragment = new HomeFragment();
         mapListener = new MapUtility(radius, users);
     }
-
-    /*@Test
-    public void testSetCircle() {
-        GoogleMap googleMap = new GoogleMap()
-        Circle radiusCircle =
-    }*/
 
     @Test
     public void testSpeaksSameLanguages() {

@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -45,7 +44,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static MapView mapView;
     private static CircleOptions radiusOptions;
     private static double radius;
-    private FusedLocationProviderClient mblFusedLocationClient;
 
     //testing
     private static MapUtility mapListener;
@@ -75,8 +73,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public View onCreateView(LayoutInflater infltr, ViewGroup containr, Bundle savedInstanceState) {
-        View view = infltr.inflate(R.layout.fragment_home, containr, false);
+    public View onCreateView(LayoutInflater infltr, ViewGroup container, Bundle savedInstanceState) {
+        View view = infltr.inflate(R.layout.fragment_home, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.friendsList);
         //mock data for testing purposes
         FriendsListItem items[] = { new FriendsListItem("John Doe",R.drawable.image1),
@@ -95,6 +93,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        testMark = view.findViewById(R.id.testMark);
+        testMark.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                User marc = new User(); marc.setLocation(new LatLng(46.524434, 6.570222));
+                marc.setSpokenLanguages("English German");
+                User jean = new User(); jean.setLocation(new LatLng(46.514874, 6.567602));
+                jean.setSpokenLanguages("French");
+                User marie = new User(); marie.setLocation(new LatLng(46.521877, 6.588810));
+                marie.setSpokenLanguages("");
+                users.add(marc); users.add(jean); users.add(marie);
+                markNearbyUsers();
+            }
+        });
         mapListener = new MapUtility(radius, users);
 
         mapView = view.findViewById(R.id.map);
@@ -139,7 +151,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mobileMap.addCircle(radiusOptions);
     }
 
-    private void moveCamera(LatLng latLng, float zoom) {
+    public void moveCamera(LatLng latLng, float zoom) {
         Log.d( TAG, "moveCamera: moving the camera to: lat: "
                 + latLng.latitude + " long: " + latLng.longitude);
         mobileMap.moveCamera(CameraUpdateFactory.newLatLngZoom( latLng, zoom));
