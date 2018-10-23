@@ -75,7 +75,7 @@ dependencies {
     androidTestImplementation 'com.google.android.gms:play-services-auth:16.0.1'
     androidTestImplementation 'com.google.firebase:firebase-core:16.0.4'
     androidTestImplementation 'com.google.firebase:firebase-database:16.0.3'
-
+    androidTestImplementation 'com.google.android.gms:play-services-identity:16.0.0'
     implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.firebase:firebase-core:16.0.4'
@@ -83,6 +83,7 @@ dependencies {
     //Google Play  services
     implementation 'com.google.android.gms:play-services-maps:16.0.0' //added
     implementation 'com.google.android.gms:play-services-location:16.0.0'
+    implementation 'com.google.android.gms:play-services-identity:16.0.0'
 
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support:multidex:1.0.3'
