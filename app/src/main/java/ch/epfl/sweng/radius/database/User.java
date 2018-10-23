@@ -48,6 +48,7 @@ public class User {
         this.friendsInvitations = new ArrayList<>();
         this.friends = new ArrayList<>();
         this.blockedUsers = new ArrayList<>();
+        this.spokenLanguages = "";
     }
 
     // Getter
@@ -141,7 +142,7 @@ public class User {
         this.location = location;
     }
 
-    public void setSpokenLanguages(String spokenLanguages) { this.spokenLanguages = spokenLanguages; }
+    public void setSpokenLanguages(String spokenLanguages) { if (spokenLanguages != null) this.spokenLanguages = spokenLanguages; }
 
     public String getSpokenLanguages() { return this.spokenLanguages; }
 }

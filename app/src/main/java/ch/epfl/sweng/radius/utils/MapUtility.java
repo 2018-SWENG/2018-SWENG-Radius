@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.ProfileFragment;
+import ch.epfl.sweng.radius.RadiusCircle;
 import ch.epfl.sweng.radius.database.User;
 
 public class MapUtility {
@@ -37,7 +38,7 @@ public class MapUtility {
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOC_PERMIT_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
-    private static final double DEFAULT_RADIUS = 50000; //In meters
+    //private static final double DEFAULT_RADIUS = 50000; //In meters
 
     private static FusedLocationProviderClient mblFusedLocationClient;
     private static boolean mblLocationPermissionGranted;
@@ -46,7 +47,8 @@ public class MapUtility {
     private static Circle radiusCircle;
     private static double radius;
     private static GoogleMap mobileMap;
-    //private static MapView mapView;
+    private static LatLng currCoordinates;
+
     private static ArrayList<User> users;
 
     public MapUtility(double radius, ArrayList<User> users) {
@@ -54,7 +56,7 @@ public class MapUtility {
         this.users = users;
     }
 
-    public static void getDeviceLocation(final FragmentActivity activity) {
+    public void getDeviceLocation(final FragmentActivity activity) {
         mblFusedLocationClient = LocationServices.getFusedLocationProviderClient( activity);
         try {
             if ( mblLocationPermissionGranted) {
@@ -67,9 +69,10 @@ public class MapUtility {
                             LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(),
                                     currentLocation.getLongitude());
 
-                            initCircle(currentCoordinates);
+                            setCurrCoordinates(currentCoordinates);
+                            /*initCircle(currentCoordinates);
                             markNearbyUsers();
-                            moveCamera( currentCoordinates, DEFAULT_ZOOM);
+                            moveCamera( currentCoordinates, DEFAULT_ZOOM);*/
                         }
                         else {
                             Toast.makeText( activity.getApplicationContext(), "Unable to get current location",
@@ -78,27 +81,21 @@ public class MapUtility {
                     }
                 });
             }
+
         } catch ( SecurityException e) {
             Log.e( TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
         }
     }
 
-    private static void initCircle(LatLng currentCoordinates) {
-        radiusOptions = new CircleOptions().center(currentCoordinates)
-                .strokeColor(Color.RED)
-                .fillColor(Color.parseColor("#22FF0000"))
-                .radius(radius);
-
-        radiusCircle = mobileMap.addCircle(radiusOptions);
+    public void setCurrCoordinates(LatLng currCoordinates) {
+        this.currCoordinates = currCoordinates;
     }
 
-    public static void moveCamera(LatLng latLng, float zoom) {
-        Log.d( TAG, "moveCamera: moving the camera to: lat: "
-                + latLng.latitude + " long: " + latLng.longitude);
-        mobileMap.moveCamera(CameraUpdateFactory.newLatLngZoom( latLng, zoom));
+    public LatLng getCurrCoordinates() {
+        return this.currCoordinates;
     }
 
-    public static void getLocationPermission(Context context, FragmentActivity activity) {
+    public void getLocationPermission(Context context, FragmentActivity activity) {
         Log.d( TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -117,49 +114,14 @@ public class MapUtility {
 
     }
 
-    public double getRadius() {
-        return radiusCircle.getRadius();
-    }
-
-    public double getLatitude() {
-        return currentLocation.getLatitude();
-    }
-
-    public double getLongitude() {
-        return currentLocation.getLongitude();
-    }
-
-    /**
-     * Sets a new radius for the circle and updates the UI.
-     * @param radius - double - new radius of the circle (in meters)
-     * */
-    public void setRadius(double radius) {
-        this.radius = radius;
-        mobileMap.clear();
-        LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(),
-                currentLocation.getLongitude());
-        radiusOptions = new CircleOptions().center(currentCoordinates).strokeColor(Color.RED)
-                .fillColor(Color.parseColor("#22FF0000")).radius(radius);
-        radiusCircle = mobileMap.addCircle(radiusOptions);
-        //radiusCircle.setRadius(radius);
-    }
-
-    public void setLatitude(double latitude) {
-        currentLocation.setLatitude(latitude);
-    }
-
-    public void setLongitude(double longitude) {
-        currentLocation.setLongitude(longitude);
-    }
-
     /**
      * Checks if the other users in the list of users are within the specified distance of the user.
      * @param p2latitude - double - latitude of the user that is being checked
      * @param p2longtitude - double - longtitude of the user that is being checked
      * */
-    public static boolean contains(double p2latitude, double p2longtitude) {
+    public boolean contains(double p2latitude, double p2longtitude) {
         double distance = findDistance(p2latitude, p2longtitude);
-        return radiusCircle.getRadius() >= distance;
+        return radius >= distance;
     }
 
     /**
@@ -168,7 +130,7 @@ public class MapUtility {
      * @param p2longtitude - double - longtitude of the second location
      * @return distance-double- the distance between the current location and the a second location
      * */
-    public static double findDistance(double p2latitude, double p2longtitude) {
+    public double findDistance(double p2latitude, double p2longtitude) {
         float[] distance = new float[3];
         Location.distanceBetween( currentLocation.getLatitude(), currentLocation.getLongitude(),
                 p2latitude, p2longtitude, distance);
@@ -176,36 +138,7 @@ public class MapUtility {
         return distance[0];
     }
 
-    /**
-     * Marks the other users that are within the distance specified by the users.
-     * */
-    private static void markNearbyUsers() {
-        mobileMap.clear();
-        radiusCircle = mobileMap.addCircle(radiusOptions);
-
-        for (int i = 0; users != null && i < users.size(); i++) {
-            String status = users.get(i).getStatus();
-            String userName = users.get(i).getNickname();
-            markNearbyUser(i, status, userName);
-        }
-    }
-
-    private static void markNearbyUser(int indexOfUser, String status, String userName) {
-        if ( contains(users.get(indexOfUser).getLocation().latitude,
-                users.get(indexOfUser).getLocation().longitude) && !speaksSameLanguage(users.get(indexOfUser)))
-        {
-            mobileMap.addMarker(new MarkerOptions().position(users.get(indexOfUser).getLocation())
-                    .title(userName + ": " + status));
-
-        } else if (contains(users.get(indexOfUser).getLocation().latitude,
-                users.get(indexOfUser).getLocation().longitude) && speaksSameLanguage(users.get(indexOfUser))) {
-            mobileMap.addMarker(new MarkerOptions().position(users.get(indexOfUser).getLocation())
-                    .title(userName + ": " + status).icon(BitmapDescriptorFactory
-                            .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        }
-    }
-
-    public static boolean speaksSameLanguage(User user) {
+    public boolean speaksSameLanguage(User user) {
         String[] languagesSpoken = user.getSpokenLanguages().split(" ");
         Fragment profileFragment = ProfileFragment.newInstance();
         String languagesSpokenByCurrUser = ((ProfileFragment)profileFragment).getLanguagesText();
@@ -218,5 +151,70 @@ public class MapUtility {
         return false;
     }
 
+    public boolean getPermissionResult() {
+        return mblLocationPermissionGranted;
+    }
+
+    /*private void initCircle(LatLng currentCoordinates) {
+        radiusOptions = new CircleOptions().center(currentCoordinates)
+                .strokeColor(Color.RED)
+                .fillColor(Color.parseColor("#22FF0000"))
+                .radius(radius);
+
+        radiusCircle = mobileMap.addCircle(radiusOptions);
+    }
+
+    private void moveCamera(LatLng latLng, float zoom) {
+        Log.d( TAG, "moveCamera: moving the camera to: lat: "
+                + latLng.latitude + " long: " + latLng.longitude);
+        mobileMap.moveCamera(CameraUpdateFactory.newLatLngZoom( latLng, zoom));
+    }*/
+
+    /*public double getRadius() {
+        return radiusCircle.getRadius();
+    }*/
+
+    /**
+     * Sets a new radius for the circle and updates the UI.
+     * @param radius - double - new radius of the circle (in meters)
+     * */
+    /*public void setRadius(double radius) {
+        this.radius = radius;
+        mobileMap.clear();
+        LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(),
+                currentLocation.getLongitude());
+        radiusOptions = new CircleOptions().center(currentCoordinates).strokeColor(Color.RED)
+                .fillColor(Color.parseColor("#22FF0000")).radius(radius);
+        radiusCircle = mobileMap.addCircle(radiusOptions);
+    }*/
+
+    /**
+     * Marks the other users that are within the distance specified by the users.
+     * */
+    /*public void markNearbyUsers() {
+        mobileMap.clear();
+        radiusCircle = mobileMap.addCircle(radiusOptions);
+
+        for (int i = 0; users != null && i < users.size(); i++) {
+            String status = users.get(i).getStatus();
+            String userName = users.get(i).getNickname();
+            markNearbyUser(i, status, userName);
+        }
+    }
+
+    private void markNearbyUser(int indexOfUser, String status, String userName) {
+        if ( contains(users.get(indexOfUser).getLocation().latitude,
+                users.get(indexOfUser).getLocation().longitude) && !speaksSameLanguage(users.get(indexOfUser)))
+        {
+            mobileMap.addMarker(new MarkerOptions().position(users.get(indexOfUser).getLocation())
+                    .title(userName + ": " + status));
+
+        } else if (contains(users.get(indexOfUser).getLocation().latitude,
+                users.get(indexOfUser).getLocation().longitude) && speaksSameLanguage(users.get(indexOfUser))) {
+            mobileMap.addMarker(new MarkerOptions().position(users.get(indexOfUser).getLocation())
+                    .title(userName + ": " + status).icon(BitmapDescriptorFactory
+                            .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        }
+    }*/
 
 }

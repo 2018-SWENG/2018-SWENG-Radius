@@ -25,8 +25,8 @@ public class HomeFragmentTest {
     public ActivityTestRule<AccountActivity> mblActivityTestRule
             = new ActivityTestRule<AccountActivity>(AccountActivity.class);
 
-    private AccountActivity mblAccountActivity;
-    private FrameLayout fcontainer;
+
+    private FrameLayout fcontainer;private AccountActivity mblAccountActivity;
     private Fragment fragment;
 
     /**
