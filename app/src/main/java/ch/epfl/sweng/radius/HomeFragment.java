@@ -134,11 +134,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             }
 
             mobileMap.setMyLocationEnabled(true);
-            if (mapListener.getCurrCoordinates() != null) {
-                initCircle(mapListener.getCurrCoordinates());
-                moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM);
-                markNearbyUsers();
-            }
+            initMap();
+        }
+    }
+
+    private void initMap() {
+        if (mapListener.getCurrCoordinates() != null) {
+            initCircle(mapListener.getCurrCoordinates());
+            moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM);
+            markNearbyUsers();
         }
     }
 
