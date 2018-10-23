@@ -95,22 +95,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        //For testing purposes,delete later
-        testMark = view.findViewById(R.id.testMark);
-        testMark.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                User marc = new User(); marc.setLocation(new LatLng(46.524434, 6.570222));
-                marc.setSpokenLanguages("English German");
-                User jean = new User(); jean.setLocation(new LatLng(46.514874, 6.567602));
-                jean.setSpokenLanguages("French");
-                User marie = new User(); marie.setLocation(new LatLng(46.521877, 6.588810));
-                marie.setSpokenLanguages("Italian");
-                users.add(marc); users.add(jean); users.add(marie);
-                markNearbyUsers();
-            }
-        });
-
         mapListener = new MapUtility(radius, users);
 
         mapView = view.findViewById(R.id.map);
