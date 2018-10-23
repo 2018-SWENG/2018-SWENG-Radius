@@ -4,42 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/red"
-    android:paddingBottom="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp"
-    tools:context=".LoginActivity">
-
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/googleButton"
-        android:layout_width="113dp"
-        android:layout_height="49dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="120dp"
-        android:layout_marginEnd="127dp"
-        android:layout_marginStart="128dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="220dp"
-        android:layout_height="231dp"
-        android:layout_above="@+id/googleButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="14dp"
-        android:layout_marginEnd="74dp"
-        android:layout_marginStart="74dp"
-        android:layout_marginTop="65dp"
-        android:contentDescription="@string/radius_logo"
-        app:layout_constraintBottom_toTopOf="@+id/googleButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher_foreground" />
+    tools:context=".MainActivity">
 
 </android.support.constraint.ConstraintLayout>
-
