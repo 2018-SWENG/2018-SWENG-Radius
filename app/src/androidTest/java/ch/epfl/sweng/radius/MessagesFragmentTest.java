@@ -73,9 +73,14 @@ public class MessagesFragmentTest {
 
     @Test
     public void testBrowseProfilesActivity() {
+        mblAccountActivity.getSupportFragmentManager().beginTransaction()
+                .add(fcontainer.getId(), fragment).commitAllowingStateLoss();
+        getInstrumentation().waitForIdleSync();
+
         Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
 
         final ListView listview = fragment.getView().findViewById(R.id.listView);
+        assertNotNull(listview);
 
         instrumentation.runOnMainSync(new Runnable() {
             @Override
