@@ -104,7 +104,6 @@ dependencies {
     //Messages
     implementation 'com.firebase:firebase-client-android:2.5.2'
     implementation 'com.android.volley:volley:1.1.0'
-    implementation 'com.android.support:support-annotations:28.0.8'
 }
 
 tasks.withType(Test) {
@@ -140,5 +139,5 @@ allprojects {
 
 apply plugin: 'com.google.gms.google-services'
 configurations.all {
-    resolutionStrategy.force "com.android.support:support-annotations:28.0.8"
+   // resolutionStrategy.force "com.android.support:support-annotations:28.0.8"
 }
