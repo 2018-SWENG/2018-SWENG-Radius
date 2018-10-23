@@ -2,8 +2,12 @@ package ch.epfl.sweng.radius;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -19,7 +23,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class HomeFragmentTest {
+
+
+public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountActivity> {
 
     @Rule
     public ActivityTestRule<AccountActivity> mblActivityTestRule
@@ -29,22 +35,32 @@ public class HomeFragmentTest {
     private FrameLayout fcontainer;
     private Fragment fragment;
 
+    public HomeFragmentTest(Class<AccountActivity> activityClass) {
+        super(activityClass);
+    }
+
+    public HomeFragmentTest(){
+        super(AccountActivity.class);
+    }
+
     /**
      * Set up the test.
      * */
     @Before
-    public void setUp() {
-        mblAccountActivity = mblActivityTestRule.getActivity();
-        fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
-        fragment = new HomeFragment();
+    public void setUp() throws Exception {
+        super.setUp();
+
+        Intent intent = new Intent();
+        mblAccountActivity = mblActivityTestRule.launchActivity(intent);
+
     }
 
     @Test
     public void testLaunch() {
-        //FrameLayout fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
+        FrameLayout fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
         assertNotNull(fcontainer);
 
-        //Fragment fragment = new HomeFragment();
+        Fragment fragment = new HomeFragment();
         mblAccountActivity.getSupportFragmentManager().beginTransaction()
                 .add(fcontainer.getId(), fragment).commitAllowingStateLoss();
         getInstrumentation().waitForIdleSync();
