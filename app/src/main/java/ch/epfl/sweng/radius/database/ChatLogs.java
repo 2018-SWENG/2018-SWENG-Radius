@@ -8,7 +8,8 @@ import static java.lang.Math.*;
 /**
  * This class represent a Chat conversation with a list of participants and a List of Messages
  */
-public class ChatLogs {
+
+public class ChatLogs implements DatabaseObject{
     private static long idGenerator = 0;
     private List<String> membersId;
     private LinkedList<Message> messages; // List LIFO of all the message in the chat
@@ -51,6 +52,10 @@ public class ChatLogs {
     }
 
     public String getChatLogsId() {
+        return chatLogsId;
+    }
+
+    public String getID() {
         return chatLogsId;
     }
 }

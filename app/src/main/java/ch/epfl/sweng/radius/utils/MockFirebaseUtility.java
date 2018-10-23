@@ -79,7 +79,7 @@ public class MockFirebaseUtility{
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 Object[] args = invocation.getArguments();
-                writeUser((User) args[0]);
+     //           writeUser((User) args[0]);
                 return null;
             }
         });
@@ -93,9 +93,9 @@ public class MockFirebaseUtility{
                 String [] parsed_path = path.split("/");
 
                 switch (parsed_path[0]) {
-                    case "user"     : ret_obj = getUser(parsed_path[1]); break;
-                    case "chatlogs" : ret_obj = getChatLogs(parsed_path[1]); break;
-                    case "messages" : ret_obj = getMessage(parsed_path[1]); break;
+       //             case "user"     : ret_obj = getUser(parsed_path[1]); break;
+       //             case "chatlogs" : ret_obj = getChatLogs(parsed_path[1]); break;
+       //             case "messages" : ret_obj = getMessage(parsed_path[1]); break;
                 };
 
                 if(parsed_path.length > 1){
@@ -118,11 +118,11 @@ public class MockFirebaseUtility{
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 String [] parsed_path = path.split("/");
-                User ret_obj;
+                User ret_obj = null;
 
                 System.out.println("Parsed 1 : " +parsed_path[1]);
 
-                ret_obj = getUser(parsed_path[1]);
+        //        ret_obj = getUser(parsed_path[1]);
 
                 return ret_obj;
             }
@@ -132,11 +132,11 @@ public class MockFirebaseUtility{
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 String [] parsed_path = path.split("/");
-                Message ret_obj;
+                Message ret_obj = null;
 
                 System.out.println("Parsed 1 : " +parsed_path[1]);
 
-                ret_obj = getMessage(parsed_path[1]);
+       //         ret_obj = getMessage(parsed_path[1]);
 
                 return ret_obj;
             }
@@ -146,21 +146,21 @@ public class MockFirebaseUtility{
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 String [] parsed_path = path.split("/");
-                ChatLogs ret_obj;
+                ChatLogs ret_obj = null;
 
-                ret_obj = getChatLogs(parsed_path[1]);
+    //            ret_obj = getChatLogs(parsed_path[1]);
 
                 return ret_obj;
             }
         }).when(mockedDataSnapshot).getValue(ChatLogs.class);
 
-        generateJSONUserFile();
-        generateJSONMsgFile();
-        generateJSONChatFile();
+   //     generateJSONUserFile();
+   //     generateJSONMsgFile();
+   //     generateJSONChatFile();
     }
 
     public void clearPath() { path = "";}
-
+/*
     public void generateJSONUserFile() throws IOException {
         UserDB database;
         Gson gson = new Gson();
@@ -545,6 +545,7 @@ class MessageDB {
     public void setMsgs(List<Message> db){
         this.database = db;
     }
+    */
 }
 
 

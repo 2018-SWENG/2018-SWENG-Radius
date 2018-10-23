@@ -61,14 +61,14 @@ public class MainActivity extends AppCompatActivity {
                     googleSignInClient = GoogleSignIn.getClient(MainActivity.this, gso);
 
                     User currentUser = new User(myAuth.getCurrentUser().getUid());
-                    FirebaseUtility firebase = new FirebaseUtility(currentUser);
+                    FirebaseUtility firebase = new FirebaseUtility(currentUser, "users");
                     
                     if(firebase.isNew()) {
-                        firebase.writeUser();
+                        firebase.writeInstanceObj();
                     }
                     else {
                         try {
-                            firebase.listenUser();
+                            firebase.readObj();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
