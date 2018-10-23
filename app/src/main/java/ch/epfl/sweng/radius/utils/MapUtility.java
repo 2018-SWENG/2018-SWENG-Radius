@@ -28,6 +28,8 @@ public class MapUtility {
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOC_PERMIT_REQUEST_CODE = 1234;
+    private static final double DEFAULT_LATITUDE = 46.5191;
+    private static final double DEFAULT_LONGTITUDE = 6.5668;
 
     private static FusedLocationProviderClient mblFusedLocationClient;
     private static boolean mblLocationPermissionGranted;
@@ -40,6 +42,7 @@ public class MapUtility {
     public MapUtility(double radius, ArrayList<User> users) {
         this.radius = radius;
         this.users = users;
+        currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGTITUDE);
     }
 
     public void getDeviceLocation(final FragmentActivity activity) {
@@ -115,7 +118,7 @@ public class MapUtility {
      * */
     public double findDistance(double p2latitude, double p2longtitude) {
         float[] distance = new float[3];
-        Location.distanceBetween( currentLocation.getLatitude(), currentLocation.getLongitude(),
+        Location.distanceBetween( currCoordinates.latitude, currCoordinates.longitude,
                 p2latitude, p2longtitude, distance);
 
         return distance[0];
@@ -137,4 +140,5 @@ public class MapUtility {
     public boolean getPermissionResult() {
         return mblLocationPermissionGranted;
     }
+
 }
