@@ -94,7 +94,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         testMark = view.findViewById(R.id.testMark);
-        testMark.setOnClickListener( new View.OnClickListener() {
+        /*testMark.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 User marc = new User(); marc.setLocation(new LatLng(46.524434, 6.570222));
@@ -106,7 +106,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 users.add(marc); users.add(jean); users.add(marie);
                 markNearbyUsers();
             }
-        });
+        });*/
         mapListener = new MapUtility(radius, users);
 
         mapView = view.findViewById(R.id.map);
@@ -120,6 +120,19 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         Toast.makeText(getContext(), "Map is ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: map is ready");
         mobileMap = googleMap; //use map utility here
+        testMark.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                User marc = new User(); marc.setLocation(new LatLng(46.524434, 6.570222));
+                marc.setSpokenLanguages("English German");
+                User jean = new User(); jean.setLocation(new LatLng(46.514874, 6.567602));
+                jean.setSpokenLanguages("French");
+                User marie = new User(); marie.setLocation(new LatLng(46.521877, 6.588810));
+                marie.setSpokenLanguages("");
+                users.add(marc); users.add(jean); users.add(marie);
+                markNearbyUsers();
+            }
+        });
 
         mapListener.getLocationPermission(getContext(), getActivity()); // Use map utility here
 
