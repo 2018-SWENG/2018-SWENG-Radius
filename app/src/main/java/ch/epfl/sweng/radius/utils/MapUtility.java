@@ -141,4 +141,8 @@ public class MapUtility {
         return mblLocationPermissionGranted;
     }
 
+    public void setPermissionResult(boolean permission) {
+        mblLocationPermissionGranted = permission;
+    }
+
 }

@@ -76,6 +76,7 @@ public class MapTest {
 
     @Test
     public void testGetDeviceLocation() {
+        mapListener.setPermissionResult(true);
         mapListener.getDeviceLocation(accountActivity);
     }
 
