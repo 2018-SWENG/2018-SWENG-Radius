@@ -1,7 +1,9 @@
 package ch.epfl.sweng.radius;
 
+import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.v4.app.Fragment;
+import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -18,7 +20,7 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.*;
 
-public class ProfileFragmentTest {
+public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<AccountActivity> {
 
 
     @Rule
@@ -29,19 +31,29 @@ public class ProfileFragmentTest {
     private FrameLayout fcontainer;
     private Fragment fragment;
 
+    public ProfileFragmentTest(Class<AccountActivity> activityClass) {
+        super(activityClass);
+    }
+
+    public ProfileFragmentTest() {
+        super(AccountActivity.class);
+    }
+
     @Before
     public void setUp() throws Exception {
-        mblAccountActivity = mblActivityTestRule.getActivity();
-        fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
-        fragment = new ProfileFragment();
+        super.setUp();
+
+        Intent intent = new Intent();
+        mblAccountActivity = mblActivityTestRule.launchActivity(intent);
+
     }
 
     @Test
     public void testLaunch() {
-        //FrameLayout fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
+        FrameLayout fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
         assertNotNull(fcontainer);
 
-        //Fragment fragment = new HomeFragment();
+        Fragment fragment = new ProfileFragment();
         mblAccountActivity.getSupportFragmentManager().beginTransaction()
                 .add(fcontainer.getId(), fragment).commitAllowingStateLoss();
         getInstrumentation().waitForIdleSync();
@@ -62,7 +74,7 @@ public class ProfileFragmentTest {
     }
 
     @Test
-    public void testChangeNicknameAndStatus() {
+    public void ztestChangeNicknameAndStatus() {
         onView(withId(R.id.navigation_profile)).perform(click());
         onView(withId(R.id.nicknameInput)).perform(typeText("User Nickname"));
         onView(withId(R.id.nicknameInput)).perform(closeSoftKeyboard());
