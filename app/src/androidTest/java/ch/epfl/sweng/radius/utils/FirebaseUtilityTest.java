@@ -23,7 +23,7 @@ import ch.epfl.sweng.radius.database.User;
 import static java.lang.Thread.sleep;
 
 //import org.junit.Test;
-//@Ignore
+@Ignore
 public class FirebaseUtilityTest extends AndroidTestCase {
     private static final String TAG = "Firebase";
 
