@@ -36,31 +36,7 @@ public class MessageListActivity extends AppCompatActivity {
     private Firebase chatReference;
     private ChatLogs chatLogs;
 
-    private void setUpUI(){
-        Bundle b = getIntent().getExtras();
-
-        String otherUserId = "";
-        String chatId = "";
-        if(b != null) {
-            otherUserId = b.getString("otherUserId");
-            chatId = b.getString("chatId");
-        }
-        ArrayList<String> participantsId = new ArrayList<String>();
-        participantsId.add(UserInfos.getUserId());
-        participantsId.add(otherUserId);
-
-        chatLogs = new ChatLogs(participantsId);
-
-        myMessageRecycler = findViewById(R.id.reyclerview_message_list);
-        myMessageAdapter = new MessageListAdapter(this, chatLogs.getAllMessages());
-        myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
-        myMessageRecycler.setAdapter(myMessageAdapter);
-
-        Firebase.setAndroidContext(this);
-        //chatReference = new Firebase("https://radius-1538126456577.firebaseio.com/messages/" + UserInfos.getchatList().getChatId(receiver.getUserId()));
-        //Hardcoded for now but supposed to be the table reference
-        chatReference = new Firebase("https://radius-1538126456577.firebaseio.com/messages/"+chatId);
-
+    private void setUpSendButton(){
         findViewById(R.id.button_chatbox_send).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,6 +52,9 @@ public class MessageListActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void setUpListener(){
         chatReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -118,6 +97,32 @@ public class MessageListActivity extends AppCompatActivity {
         });
     }
 
+    private void setUpUI(){
+        Bundle b = getIntent().getExtras();
+
+        String otherUserId = "";
+        String chatId = "";
+        if(b != null) {
+            otherUserId = b.getString("otherUserId");
+            chatId = b.getString("chatId");
+        }
+        ArrayList<String> participantsId = new ArrayList<String>();
+        participantsId.add(UserInfos.getUserId());
+        participantsId.add(otherUserId);
+
+        chatLogs = new ChatLogs(participantsId);
+
+        myMessageRecycler = findViewById(R.id.reyclerview_message_list);
+        myMessageAdapter = new MessageListAdapter(this, chatLogs.getAllMessages());
+        myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
+        myMessageRecycler.setAdapter(myMessageAdapter);
+
+        Firebase.setAndroidContext(this);
+        //chatReference = new Firebase("https://radius-1538126456577.firebaseio.com/messages/" + UserInfos.getchatList().getChatId(receiver.getUserId()));
+        //Hardcoded for now but supposed to be the table reference
+        chatReference = new Firebase("https://radius-1538126456577.firebaseio.com/messages/"+chatId);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,11 +132,10 @@ public class MessageListActivity extends AppCompatActivity {
 
 
         setUpUI();
-
+        setUpSendButton();
+        setUpListener();
         //get chatlogs from db
         //chatLogs = ChatLogDbUtility.getChatLogs(chatId);
-
-
 
     }
 }
