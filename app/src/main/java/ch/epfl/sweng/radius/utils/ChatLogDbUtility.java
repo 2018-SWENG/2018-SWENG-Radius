@@ -16,10 +16,18 @@ public class ChatLogDbUtility {
         this.fbUtil = new FirebaseUtility(localInstance, "chatlogs");
     }
 
-    public void addMessage(Message newMsg){}
+    public void addMessage(Message newMsg){
+        localInstance.addMessage(newMsg);
+        fbUtil.setInstance(localInstance);
+        writeChatLogs();
+    }
 
 
-    public void deleteMessage(Message msg){}
+    public void deleteMessage(int msgIndex){
+        localInstance.getMessages().remove(msgIndex);
+        fbUtil.setInstance(localInstance);
+        writeChatLogs(localInstance);
+    }
 
     public Message getMessage(int index){ return null;}
 
