@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
                     User currentUser = new User(myAuth.getCurrentUser().getUid());
 
+
                   /*
                     FirebaseUtility firebase = new FirebaseUtility(currentUser, "users");
 
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                     */
+
 
 
                     startActivity(new Intent(MainActivity.this, AccountActivity.class));
