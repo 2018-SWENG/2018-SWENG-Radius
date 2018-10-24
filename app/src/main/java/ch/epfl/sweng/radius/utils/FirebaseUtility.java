@@ -13,89 +13,61 @@ package ch.epfl.sweng.radius.utils;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.common.data.DataBuffer;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.internal.bind.DateTypeAdapter;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.DatabaseObject;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
 
 public class FirebaseUtility {
 
-    private FirebaseDatabase fireDB;
-    private FirebaseAuth     auth;
-
+    private FirebaseDatabase    fireDB;
+    private FirebaseAuth        auth;
     private DatabaseReference   database;
 
-    private User        user;
-    private Message     msg;
-    private ChatLogs    chatLogs;
+    private DatabaseObject  obj;
+    private Semaphore       semaphore;
 
-    /**
-     *
-     * @param user User to listen/update
-     */
-    public FirebaseUtility(User user){
-
-        // Instanciate References Object
-        initDB();
-        this.user      = user;
-        this.database  = fireDB.getReference("users");
-    }
-
-    /**
-     *
-     * @param dataType Message listen/update
-     */
-    public FirebaseUtility(Message dataType){
-
-        // Instanciate References Object
-        initDB();
-        this.msg        = dataType;
-        this.database   = fireDB.getReference("messages");
-
-    }
-
-    /**
-     *
-     * @param dataType ChatLogs to listen/update
-     */
-    public FirebaseUtility(ChatLogs dataType){
-
-        // Instanciate References Object
-        initDB();
-        this.chatLogs    = dataType;
-        this.database    = fireDB.getReference("chatlogs");
-    }
-
-    private void initDB(){
+    public FirebaseUtility(DatabaseObject obj, String ref){
         this.auth       = FirebaseAuth.getInstance();
         this.fireDB     = FirebaseDatabase.getInstance();
+        this.semaphore = new Semaphore(0);
+
+        this.obj = obj;
+        this.database = fireDB.getReference(ref);
     }
+
     // TODO : #Salezer, must be fixed
-
-    /**
-     * Checks whether the current user is a new user. If that's the case, it creates a new user
-     *      and pushes it to the database
-     * @return Whether the user is new or not
-     */
     public boolean isNew(){
-
+        final AtomicBoolean done = new AtomicBoolean(false);
+        final AtomicInteger message1 = new AtomicInteger(0);
         final boolean[] newUser = new boolean[1];
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.hasChild(user.getUserID())) {
+                if (snapshot.hasChild(obj.getID())) {
                     System.out.println("is not new");
 
                     newUser[0] = false;
                 }
                 else
                     newUser[0] = true;
+
+                done.set(true);
+
             }
 
             @Override
@@ -104,143 +76,88 @@ public class FirebaseUtility {
             }
         });
 
-        while(newUser == null);
-
+        while (!done.get());
         return newUser[0];
     }
 
-
-
-    public void listenUser(){
-
-        ValueEventListener  listener;
-
-        listener = new ValueEventListener() {
+    public DatabaseObject readObj() throws InterruptedException {
+        final AtomicBoolean done = new AtomicBoolean(false);
+        final AtomicInteger message1 = new AtomicInteger(0);
+        database.child(obj.getID()).addListenerForSingleValueEvent( new ValueEventListener() {
             @Override
             public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(User.class);
+                Log.e("Firebase", "Wait for Read done");
 
-                Log.e("Firebase", "User data has been read.");
-
+                obj = dataSnapshot.getValue(obj.getClass());
+                Log.e("Firebase", "Read done");
+                done.set(true);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("Firebase", "Failed to read user", databaseError.toException());
+                Log.w("Firebase", "Failed to read user", databaseError.toException());
 
             }
-        };
-
-        database.child(user.getUserID()).addListenerForSingleValueEvent(listener);
+        });
+  //      semaphore.acquire();
+        while (!done.get());
+        return obj;
     }
 
+    /*
+        Do not use this method to read instantly used values ! Might lead to NullPointerException
+                Use readObj() instead
+     */
+    public void listenInstanceObject() throws InterruptedException {
 
-    public void writeUser(){
-
-        database.child(user.getUserID()).setValue(user);
-
-        return;
-
-    }
-
-    public void writeUser(User new_user){
-
-        database.child(new_user.getUserID()).setValue(new_user);
-
-        return;
-
-    }
-
-    public void listenMessage(){
-
-        ValueEventListener  listener;
-
-        listener = new ValueEventListener() {
+        database.child(obj.getID()).addValueEventListener( new ValueEventListener() {
             @Override
             public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                msg = dataSnapshot.getValue(Message.class);
-
-                Log.e("Firebase", "Message data has been read.");
-
+                obj = dataSnapshot.getValue(obj.getClass());
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("Firebase", "Failed to read message", databaseError.toException());
+                Log.w("Firebase", "Failed to read user", databaseError.toException());
 
             }
-        };
-
-        database.child(Long.toString(msg.getMessageID())).addListenerForSingleValueEvent(listener);
-
-        return;
+        });
 
     }
 
-    public void writeMessage(){
+    public DatabaseObject readOtherObject(String otherObjID) throws InterruptedException {
+        final AtomicBoolean done = new AtomicBoolean(false);
+        final AtomicInteger message1 = new AtomicInteger(0);
 
-        database.child(Long.toString(msg.getMessageID())).setValue(msg);
-
-        return;
-
-    }
-
-    public void writeMessage(Message new_msg){
-
-        database.child(Long.toString(new_msg.getMessageID())).setValue(new_msg);
-
-        return;
-
-    }
-
-    public void listenChatLogs(){
-
-        ValueEventListener  listener;
-
-        listener = new ValueEventListener() {
+        final DatabaseObject[] ret = new DatabaseObject[1];
+        database.child(otherObjID).addListenerForSingleValueEvent( new ValueEventListener() {
             @Override
             public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                chatLogs = dataSnapshot.getValue(ChatLogs.class);
-
-                Log.e("Firebase", "Chatlogs data has been read.");
-
+                ret[0] = dataSnapshot.getValue(obj.getClass());
+                done.set(true);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("Firebase", "Failed to read Chatlogs", databaseError.toException());
+                Log.w("Firebase", "Failed to read object", databaseError.toException());
 
             }
-        };
-        // TODO Fix ID For Chatlogs
-        database.child(chatLogs.getParticipants().get(0).getUserID()).addListenerForSingleValueEvent(listener);
+        });
+        while (!done.get());
 
-        return;
-
+        return ret[0];
     }
 
-    public void writeChatLogs(){
+    public void writeInstanceObj(){ database.child(obj.getID()).setValue(obj); }
 
-        database.child(Long.toString(msg.getMessageID())).setValue(msg);
+    public void writeOtherObj(DatabaseObject otherObj){ database.child(otherObj.getID()).setValue(otherObj);    }
 
-        return;
+    public DatabaseObject getInstance(){ return this.obj;    }
 
-    }
+    public void setInstance(DatabaseObject new_obj){
 
-    public void writeChatLogs(ChatLogs new_chatlogs){
-        database.child(new_chatlogs.getParticipants().get(0).getUserID())
-                .setValue(new_chatlogs);
+        if(new_obj.getClass().equals(this.obj.getClass())) this.obj = new_obj;
 
-        return;
-
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }
 
