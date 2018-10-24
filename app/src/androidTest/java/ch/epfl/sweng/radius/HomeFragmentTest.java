@@ -11,13 +11,17 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.junit.After;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -31,8 +35,8 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
     public ActivityTestRule<AccountActivity> mblActivityTestRule
             = new ActivityTestRule<AccountActivity>(AccountActivity.class);
 
-    private AccountActivity mblAccountActivity;
-    private FrameLayout fcontainer;
+
+    private FrameLayout fcontainer;private AccountActivity mblAccountActivity;
     private Fragment fragment;
 
     public HomeFragmentTest(Class<AccountActivity> activityClass) {
@@ -56,11 +60,19 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
     }
 
     @Test
+    public void testMarkButton() {
+        onView(withId(R.id.navigation_profile)).perform(click());
+        onView(withId(R.id.navigation_home)).perform(click());
+        onView(withId(R.id.testMark)).perform(click());
+    }
+
+    @Test
     public void testLaunch() {
         FrameLayout fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
         assertNotNull(fcontainer);
 
         Fragment fragment = new HomeFragment();
+
         mblAccountActivity.getSupportFragmentManager().beginTransaction()
                 .add(fcontainer.getId(), fragment).commitAllowingStateLoss();
         getInstrumentation().waitForIdleSync();
