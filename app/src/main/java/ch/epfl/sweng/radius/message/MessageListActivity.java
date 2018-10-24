@@ -36,26 +36,15 @@ public class MessageListActivity extends AppCompatActivity {
     private Firebase chatReference;
     private ChatLogs chatLogs;
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message_list);
-        messageZone = (EditText) findViewById(R.id.edittext_chatbox);
-
-
+    private void setUpUI(){
         Bundle b = getIntent().getExtras();
+
         String otherUserId = "";
         String chatId = "";
         if(b != null) {
             otherUserId = b.getString("otherUserId");
             chatId = b.getString("chatId");
         }
-
-        //get chatlogs from db
-        //chatLogs = ChatLogDbUtility.getChatLogs(chatId);
-
-
         ArrayList<String> participantsId = new ArrayList<String>();
         participantsId.add(UserInfos.getUserId());
         participantsId.add(otherUserId);
@@ -127,5 +116,22 @@ public class MessageListActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_message_list);
+        messageZone = (EditText) findViewById(R.id.edittext_chatbox);
+
+
+        setUpUI();
+
+        //get chatlogs from db
+        //chatLogs = ChatLogDbUtility.getChatLogs(chatId);
+
+
+
     }
 }

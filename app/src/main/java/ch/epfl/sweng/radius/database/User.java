@@ -16,7 +16,7 @@ public class User implements DatabaseObject {
 
     private final String userID;
     private String nickname;
-    private String urlProfilePhoto;
+    public String urlProfilePhoto;
     private int radius; // meters
     private String status;
     private List<String> friendsRequests;
@@ -59,7 +59,7 @@ public class User implements DatabaseObject {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
-
+/*
     public String getUrlProfilePhoto() {
         return urlProfilePhoto;
     }
@@ -67,7 +67,7 @@ public class User implements DatabaseObject {
     public void setUrlProfilePhoto(String urlProfilePhoto) {
         this.urlProfilePhoto = urlProfilePhoto;
     }
-
+*/
     public int getRadius() {
         return radius;
     }
