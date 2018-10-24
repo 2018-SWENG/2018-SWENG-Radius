@@ -74,22 +74,18 @@ public class MessageListActivity extends AppCompatActivity {
                 myMessageRecycler.smoothScrollToPosition(chatLogs.getAllMessages().size());
                 myMessageAdapter.notifyDataSetChanged();
             }
-
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
             }
-
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
 
             }
-
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
             }
-
             @Override
             public void onCancelled(FirebaseError firebaseError) {
 
