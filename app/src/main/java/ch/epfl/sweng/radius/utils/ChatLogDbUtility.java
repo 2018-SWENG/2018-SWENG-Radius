@@ -29,7 +29,7 @@ public class ChatLogDbUtility {
         writeChatLogs(localInstance);
     }
 
-    public Message getMessage(int index){ return null;}
+    public Message getMessage(int index) throws InterruptedException { return readChatLogs().getMessages().get(index);}
 
     public ChatLogs getChatLogs(String chatLogsID) throws InterruptedException {
 
