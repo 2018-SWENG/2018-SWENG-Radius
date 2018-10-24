@@ -70,17 +70,21 @@ public class LoginActivity extends AppCompatActivity {
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()) {
-                //Google Sign In was successful, authentication with Firebase
-                GoogleSignInAccount account = result.getSignInAccount();
-                if (account != null) {
-                    firebaseAuthWithGoogle(account);
-                }
-            } else {
-                System.out.println("Google Sign In Failed");
-                //Google Sign In failed, update UI appropriately
-                // ...
+            authenticateUsingResult(result);
+        }
+    }
+
+    private void authenticateUsingResult(GoogleSignInResult result) {
+        if (result.isSuccess()) {
+            //Google Sign In was successful, authentication with Firebase
+            GoogleSignInAccount account = result.getSignInAccount();
+            if (account != null) {
+                firebaseAuthWithGoogle(account);
             }
+        } else {
+            System.out.println("Google Sign In Failed");
+            //Google Sign In failed, update UI appropriately
+            // ...
         }
     }
 
