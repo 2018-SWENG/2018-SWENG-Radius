@@ -1,0 +1,29 @@
+{
+  "users" : {
+    "VwOJrEpWX5cjIGuBGY3tl8Usu183" : {
+      "nickname" : "New User VwOJrEpWX5cjIGuBGY3tl8Usu183",
+      "radius" : 500,
+      "status" : "COUCU",
+      "urlProfilePhoto" : "",
+      "userID" : "VwOJrEpWX5cjIGuBGY3tl8Usu183"
+    },
+    "testUser01" : {
+      "id" : "testUser01",
+      "nickname" : "New User testUser01",
+      "radius" : 500,
+      "spokenLanguages" : "",
+      "status" : "Testing writing other user to DB",
+      "urlProfilePhoto" : "",
+      "userID" : "testUser01"
+    },
+    "userTest00" : {
+      "id" : "userTest00",
+      "nickname" : "New User userTest00",
+      "radius" : 500,
+      "spokenLanguages" : "",
+      "status" : "Being tested on",
+      "urlProfilePhoto" : "",
+      "userID" : "userTest00"
+    }
+  }
+}

@@ -65,14 +65,20 @@ public class MessagesFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 
-                Object object = listView.getItemAtPosition(position);
+                Object objecty = listView.getItemAtPosition(position);
                     /*
                     write you handling code like...
                     String st = "sdcard/";
                     File f = new File(st+o.toString());
                     // do whatever u want to do with 'f' File object
                     */
-                startActivity(new Intent(getActivity(), MessageListActivity.class));
+
+                Intent intent = new Intent(getActivity(), MessageListActivity.class);
+                Bundle b = new Bundle();
+                b.putString("otherUserId", "theOtherUserId");
+                b.putString("chatId", "theChatId");
+                intent.putExtras(b); //Put your id to your next Intent
+                startActivity(intent);
 
             }
         });
