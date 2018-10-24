@@ -43,8 +43,17 @@ public class User implements DatabaseObject {
     }
 
     // Debugging purpose only
-    public User() {
-        this(Long.toString(idGenerator++));
+    public User(){
+        this.userID = Long.toString(idGenerator++);
+        this.nickname = "New User " + this.userID;
+        this.urlProfilePhoto = "";
+        this.radius = 500;
+        this.status = "Hi, I'm new to radius !";
+        this.friendsRequests = new ArrayList<>();
+        this.friendsInvitations = new ArrayList<>();
+        this.friends = new ArrayList<>();
+        this.blockedUsers = new ArrayList<>();
+        this.spokenLanguages = "";
     }
 
     // Getter
@@ -131,9 +140,7 @@ public class User implements DatabaseObject {
         return this.spokenLanguages;
     }
 
-    public void setSpokenLanguages(String spokenLanguages) {
-        this.spokenLanguages = spokenLanguages;
-    }
+    public void setSpokenLanguages(String spokenLanguages) { if (spokenLanguages != null) this.spokenLanguages = spokenLanguages; }
 
     public void addChat(String uID, String chatID) {
         this.chatList.put(uID, chatID);
