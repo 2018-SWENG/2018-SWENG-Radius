@@ -25,7 +25,7 @@ import org.junit.Test;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
-@Ignore
+
 public class ChatLogDbUtilityTest {
 
     private static ChatLogs localInstance;
