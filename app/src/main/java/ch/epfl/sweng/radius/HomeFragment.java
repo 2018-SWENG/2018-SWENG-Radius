@@ -94,19 +94,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         testMark = view.findViewById(R.id.testMark);
-        /*testMark.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                User marc = new User(); marc.setLocation(new LatLng(46.524434, 6.570222));
-                marc.setSpokenLanguages("English German");
-                User jean = new User(); jean.setLocation(new LatLng(46.514874, 6.567602));
-                jean.setSpokenLanguages("French");
-                User marie = new User(); marie.setLocation(new LatLng(46.521877, 6.588810));
-                marie.setSpokenLanguages("");
-                users.add(marc); users.add(jean); users.add(marie);
-                markNearbyUsers();
-            }
-        });*/
         mapListener = new MapUtility(radius, users);
 
         mapView = view.findViewById(R.id.map);
@@ -148,7 +135,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private void initMap() {
+    public void initMap() {
         if (mapListener.getCurrCoordinates() != null) {
             initCircle(mapListener.getCurrCoordinates());
             moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM);
@@ -156,7 +143,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private void initCircle(LatLng currentCoordinates) {
+    public void initCircle(LatLng currentCoordinates) {
         radiusOptions = new CircleOptions().center(currentCoordinates)
                 .strokeColor(Color.RED)
                 .fillColor(Color.parseColor("#22FF0000"))
@@ -185,7 +172,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private void markNearbyUser(int indexOfUser, String status, String userName) {
+    public void markNearbyUser(int indexOfUser, String status, String userName) {
         if ( mapListener.contains(users.get(indexOfUser).getLocation().latitude,
                 users.get(indexOfUser).getLocation().longitude) && !mapListener.speaksSameLanguage(users.get(indexOfUser)))
         {
