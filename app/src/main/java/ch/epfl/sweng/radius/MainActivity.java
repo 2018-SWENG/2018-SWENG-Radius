@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -60,13 +61,6 @@ public class MainActivity extends AppCompatActivity {
                     googleSignInClient = GoogleSignIn.getClient(MainActivity.this, gso);
 
                     User currentUser = new User(myAuth.getCurrentUser().getUid());
-                    /*FirebaseUtility firebase = new FirebaseUtility(currentUser);
-                    
-                    if(firebase.isNew()){
-                        firebase.writeUser();
-                    } else {
-                        firebase.listenUser();
-                    }*/
 
                     startActivity(new Intent(MainActivity.this, AccountActivity.class));
                 }
@@ -93,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 signIn();
             }
         });
+
     }
 
     @Override
