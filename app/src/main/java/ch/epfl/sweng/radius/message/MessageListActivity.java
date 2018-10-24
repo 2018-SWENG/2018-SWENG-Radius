@@ -44,6 +44,10 @@ public class MessageListActivity extends AppCompatActivity {
         messageZone = (EditText) findViewById(R.id.edittext_chatbox);
 
 
+        //get chatlogs from db
+        //chatLogs = ChatLogDbUtility.getChatLogs(chatId);
+
+        //get chat infos
         Bundle b = getIntent().getExtras();
         String otherUserId = "";
         String chatId = "";
@@ -51,10 +55,6 @@ public class MessageListActivity extends AppCompatActivity {
             otherUserId = b.getString("otherUserId");
             chatId = b.getString("chatId");
         }
-
-        //get chatlogs from db
-        //chatLogs = ChatLogDbUtility.getChatLogs(chatId);
-
 
         ArrayList<String> participantsId = new ArrayList<String>();
         participantsId.add(UserInfos.getUserId());
