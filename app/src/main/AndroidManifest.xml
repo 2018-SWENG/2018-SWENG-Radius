@@ -22,16 +22,20 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AccountActivity" />
-        <activity android:name=".browseProfiles.BrowseProfilesActivity" />
-        <activity android:name=".message.MessageListActivity"/>
+        <activity android:name=".AccountActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".browseProfiles.BrowseProfilesActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".message.MessageListActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- Required by Play Services, see https://developers.google.com/maps/documentation/android-sdk/config#specify_requirement_for_apache_http_legacy_library -->
         <uses-library

@@ -44,9 +44,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static MapView mapView;
     private static CircleOptions radiusOptions;
     private static double radius;
+    private static MapUtility mapListener;
 
     //testing
-    private static MapUtility mapListener;
     private static ArrayList<User> users;
     private Button testMark;
 
