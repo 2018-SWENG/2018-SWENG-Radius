@@ -22,18 +22,10 @@ public class AccountActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.app_preferences, false);
         setContentView(R.layout.activity_account);
 
-        if (savedInstanceState != null) {
-            homeFragment = getSupportFragmentManager().getFragment(savedInstanceState, "homeFragment");
-            settingsFragment = getSupportFragmentManager().getFragment(savedInstanceState, "settingsFragment");
-            messageFragment = getSupportFragmentManager().getFragment(savedInstanceState, "messageFragment");
-            profileFragment = getSupportFragmentManager().getFragment(savedInstanceState, "profileFragment");
-        }
-        else {
-            homeFragment = new HomeFragment();
-            messageFragment = new MessagesFragment();
-            settingsFragment = new SettingsFragment();
-            profileFragment = new ProfileFragment();
-        }
+        homeFragment = new HomeFragment();
+        messageFragment = new MessagesFragment();
+        settingsFragment = new SettingsFragment();
+        profileFragment = new ProfileFragment();
 
         loadFragment(homeFragment);
 
@@ -65,21 +57,6 @@ public class AccountActivity extends AppCompatActivity {
                 return true;
             }
         });
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        //Save the fragment's instance
-        if (homeFragment.isAdded())
-            getSupportFragmentManager().putFragment(outState, "homeFragment", homeFragment);//(outState, "myFragmentName", mContent);
-        if (messageFragment.isAdded())
-            getSupportFragmentManager().putFragment(outState, "messageFragment", messageFragment);
-        if (settingsFragment.isAdded())
-            getSupportFragmentManager().putFragment(outState, "settingsFragment", settingsFragment);
-        if (profileFragment.isAdded())
-            getSupportFragmentManager().putFragment(outState, "profileFragment", profileFragment);
     }
 
     private void loadFragment(Fragment fragment) {
