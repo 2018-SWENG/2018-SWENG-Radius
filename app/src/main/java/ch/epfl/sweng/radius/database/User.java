@@ -15,23 +15,19 @@ public class User implements DatabaseObject {
     private static long idGenerator = 0;// Debugging purpose only
 
     private final String userID;
-    private String nickname;
+    private ProfileInfo profileInfo;
     public String urlProfilePhoto;
     private int radius; // meters
-    private String status;
     private FriendsHandler friendsHandler;
     private Map<String, String> chatList; // Map is uID --> convID
-    private String spokenLanguages;
     private LatLng location;
     private boolean isHidden;
 
     public User(String userID) {
         this.userID = userID;
-        this.nickname = "New User " + userID;
+        this.profileInfo = new ProfileInfo(userID);
         this.urlProfilePhoto = "";
         this.radius = 500;
-        this.status = "Hi, I'm new to radius !";
-        this.spokenLanguages = "";
         this.chatList = new HashMap<>();
         this.isHidden = false;
     }
@@ -39,23 +35,12 @@ public class User implements DatabaseObject {
     // Debugging purpose only
     public User(){
         this.userID = Long.toString(idGenerator++);
-        this.nickname = "New User " + this.userID;
         this.urlProfilePhoto = "";
         this.radius = 500;
-        this.status = "Hi, I'm new to radius !";
-        this.spokenLanguages = "";
         this.isHidden = false;
     }
 
     // Getter
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
     public String getUrlProfilePhoto() {
         return urlProfilePhoto;
     }
@@ -72,49 +57,18 @@ public class User implements DatabaseObject {
         return radius;
     }
 
-    public void setRadius(int radius) {
-        this.radius = radius;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) throws IllegalArgumentException {
-        if (status.length() > 50) // TODO : config file with all the constants
-            throw new IllegalArgumentException("The status is limited to 50 characters");
-        this.status = status;
-    }
-
-    public LatLng getLocation() {
-        return location;
-    }
-
-    public void setLocation(LatLng location) {
-        this.location = location;
-    }
-
-    public void toggleHidden(){ this.isHidden = !isHidden;  }
-    
-    public Map<String, String> getChatList() {
-        return chatList;
+    public ProfileInfo getProfileInfo() {
+        return profileInfo;
     }
 
     public String getConvFromUser(String userID) {
         return chatList.get(userID);
     }
 
-    public String getSpokenLanguages() {
-        return this.spokenLanguages;
+    public LatLng getLocation() {
+        return location;
     }
 
-    public void setSpokenLanguages(String spokenLanguages) { if (spokenLanguages != null) this.spokenLanguages = spokenLanguages; }
-
-    public void addChat(String uID, String chatID) {
-        this.chatList.put(uID, chatID);
-    }
-
-    @Override
     public String getID() {
         return userID;
     }
@@ -122,5 +76,24 @@ public class User implements DatabaseObject {
     public boolean getisHidden() {
         return isHidden;
     }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
+    public void setLocation(LatLng location) {
+        this.location = location;
+    }
+
+    public void toggleHidden(){ this.isHidden = !isHidden;  }
+
+    public Map<String, String> getChatList() {
+        return chatList;
+    }
+
+    public void addChat(String uID, String chatID) {
+        this.chatList.put(uID, chatID);
+    }
+
 
 }

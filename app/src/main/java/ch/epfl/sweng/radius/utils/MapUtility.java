@@ -125,7 +125,7 @@ public class MapUtility {
     }
 
     public boolean speaksSameLanguage(User user) {
-        String[] languagesSpoken = user.getSpokenLanguages().split(" ");
+        String[] languagesSpoken = user.getProfileInfo().getSpokenLanguages().split(" ");
         Fragment profileFragment = ProfileFragment.newInstance();
         String languagesSpokenByCurrUser = ((ProfileFragment)profileFragment).getLanguagesText();
 

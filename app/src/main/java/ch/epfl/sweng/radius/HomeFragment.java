@@ -111,11 +111,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View view) {
                 User marc = new User(); marc.setLocation(new LatLng(46.524434, 6.570222));
-                marc.setSpokenLanguages("English German");
+                marc.getProfileInfo().setSpokenLanguages("English German");
                 User jean = new User(); jean.setLocation(new LatLng(46.514874, 6.567602));
-                jean.setSpokenLanguages("French");
+                jean.getProfileInfo().setSpokenLanguages("French");
                 User marie = new User(); marie.setLocation(new LatLng(46.521877, 6.588810));
-                marie.setSpokenLanguages(""); users.add(marc); users.add(jean); users.add(marie); markNearbyUsers();
+                marie.getProfileInfo().setSpokenLanguages(""); users.add(marc); users.add(jean); users.add(marie); markNearbyUsers();
             }
         });
 
@@ -166,8 +166,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mobileMap.addCircle(radiusOptions);
 
         for (int i = 0; users != null && i < users.size(); i++) {
-            String status = users.get(i).getStatus();
-            String userName = users.get(i).getNickname();
+            String status = users.get(i).getProfileInfo().getStatus();
+            String userName = users.get(i).getProfileInfo().getNickname();
             markNearbyUser(i, status, userName);
         }
     }

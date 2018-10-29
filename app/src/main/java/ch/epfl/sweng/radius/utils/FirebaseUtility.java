@@ -39,13 +39,15 @@ public class FirebaseUtility {
     private DatabaseReference   database;
 
     private DatabaseObject  obj;
+    private Semaphore       semaphore;
 
     public FirebaseUtility(FirebaseAttributes attr, DatabaseObject obj, String ref){
-        this.auth       = attr.getAuth().getInstance();
-        this.fireDB     = attr.getFireDB().getInstance();
-        this.database = fireDB.getReference(ref);
+        this.auth       = auth.getInstance();
+        this.fireDB     = FirebaseDatabase.getInstance();
+        this.semaphore = new Semaphore(0);
 
         this.obj = obj;
+        this.database = fireDB.getReference(ref);
     }
 
     // TODO : #Salezer, must be fixed
