@@ -1,26 +1,25 @@
 package ch.epfl.sweng.radius;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
-import ch.epfl.sweng.radius.browseProfiles.ChatListItem;
-import ch.epfl.sweng.radius.browseProfiles.CustomAdapter;
-import ch.epfl.sweng.radius.message.MessageListActivity;
-
-import java.util.ArrayList;
-import java.util.List;
+import ch.epfl.sweng.radius.friendsList.FriendsTab;
+import ch.epfl.sweng.radius.friendsList.RequestsTab;
+import ch.epfl.sweng.radius.utils.TabAdapter;
 
 
 public class FriendsFragment extends Fragment {
 
+    private FragmentActivity myContext;
+
+    private TabAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
@@ -49,12 +48,20 @@ public class FriendsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
-        viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
-        tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        tabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
+        adapter = new TabAdapter(myContext.getSupportFragmentManager());
+        adapter.addFragment(new FriendsTab(), "Friends");
+        adapter.addFragment(new RequestsTab(), "Requests");
+        viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-
-
         return view;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        myContext=(FragmentActivity) activity;
+        super.onAttach(activity);
     }
 }
