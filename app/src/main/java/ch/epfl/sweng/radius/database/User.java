@@ -19,14 +19,11 @@ public class User implements DatabaseObject {
     public String urlProfilePhoto;
     private int radius; // meters
     private String status;
-    private List<String> friendsRequests;
-    private List<String> friendsInvitations;
-    private List<String> friends;
-    private List<String> blockedUsers;
-    // Map is uID --> convID
-    private Map<String, String> chatList;
+    private FriendsHandler friendsHandler;
+    private Map<String, String> chatList; // Map is uID --> convID
     private String spokenLanguages;
     private LatLng location;
+    private boolean isHidden;
 
     public User(String userID) {
         this.userID = userID;
@@ -34,12 +31,9 @@ public class User implements DatabaseObject {
         this.urlProfilePhoto = "";
         this.radius = 500;
         this.status = "Hi, I'm new to radius !";
-        this.friendsRequests = new ArrayList<>();
-        this.friendsInvitations = new ArrayList<>();
-        this.friends = new ArrayList<>();
-        this.blockedUsers = new ArrayList<>();
         this.spokenLanguages = "";
         this.chatList = new HashMap<>();
+        this.isHidden = false;
     }
 
     // Debugging purpose only
@@ -49,18 +43,11 @@ public class User implements DatabaseObject {
         this.urlProfilePhoto = "";
         this.radius = 500;
         this.status = "Hi, I'm new to radius !";
-        this.friendsRequests = new ArrayList<>();
-        this.friendsInvitations = new ArrayList<>();
-        this.friends = new ArrayList<>();
-        this.blockedUsers = new ArrayList<>();
         this.spokenLanguages = "";
+        this.isHidden = false;
     }
 
     // Getter
-    public String getUserID() {
-        return userID;
-    }
-
     public String getNickname() {
         return nickname;
     }
@@ -68,7 +55,7 @@ public class User implements DatabaseObject {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
-/*
+
     public String getUrlProfilePhoto() {
         return urlProfilePhoto;
     }
@@ -76,7 +63,11 @@ public class User implements DatabaseObject {
     public void setUrlProfilePhoto(String urlProfilePhoto) {
         this.urlProfilePhoto = urlProfilePhoto;
     }
-*/
+
+    public FriendsHandler getFriendsHandler() {
+        return friendsHandler;
+    }
+
     public int getRadius() {
         return radius;
     }
@@ -95,23 +86,6 @@ public class User implements DatabaseObject {
         this.status = status;
     }
 
-    public List<String> getFriendsRequests() {
-        return friendsRequests;
-    }
-
-    public List<String> getFriendsInvitations() {
-        return friendsInvitations;
-    }
-
-    public List<String> getFriends() {
-        return friends;
-    }
-    // Setter
-
-    public List<String> getBlockedUsers() {
-        return blockedUsers;
-    }
-
     public LatLng getLocation() {
         return location;
     }
@@ -120,20 +94,14 @@ public class User implements DatabaseObject {
         this.location = location;
     }
 
+    public void toggleHidden(){ this.isHidden = !isHidden;  }
+    
     public Map<String, String> getChatList() {
         return chatList;
     }
 
     public String getConvFromUser(String userID) {
         return chatList.get(userID);
-    }
-
-    public void addFriendRequest(String friendID) {
-        if (friendsInvitations.contains(friendID)) {
-            friendsInvitations.remove(friendID);
-            friends.add(friendID);
-        } else
-            friendsRequests.add(friendID);
     }
 
     public String getSpokenLanguages() {
@@ -150,4 +118,9 @@ public class User implements DatabaseObject {
     public String getID() {
         return userID;
     }
+
+    public boolean getisHidden() {
+        return isHidden;
+    }
+
 }
