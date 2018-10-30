@@ -7,6 +7,7 @@ import com.google.firebase.FirebaseApiNotAvailableException;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
@@ -17,7 +18,7 @@ import ch.epfl.sweng.radius.database.User;
 import static java.lang.Thread.sleep;
 
 //import org.junit.Test;
-//@Ignore
+@Ignore
 //@RunWith(PowerMockRunner.class)
 //@PowerMockRunnerDelegate(JUnit4.class)
 @PrepareForTest(FirebaseUtility.class)

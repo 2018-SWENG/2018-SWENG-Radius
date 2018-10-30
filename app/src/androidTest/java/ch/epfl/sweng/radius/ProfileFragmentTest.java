@@ -45,10 +45,8 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
     @Before
     public void setUp() throws Exception {
         super.setUp();
-
         Intent intent = new Intent();
         mblAccountActivity = mblActivityTestRule.launchActivity(intent);
-
     }
 
     @Test
