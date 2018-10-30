@@ -36,7 +36,7 @@ public class Message {
         return sendingTime;
     }
 
-    public void setSenderId(String SenderID) {
+    public void setSenderId(String senderId) {
         this.senderId = senderId;
     }
 
