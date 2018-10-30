@@ -10,6 +10,7 @@ import android.widget.EditText;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.utils.ChatLogDbUtility;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
 import com.firebase.client.ChildEventListener;
@@ -27,7 +28,7 @@ import java.util.Map;
 
 /**
  * Activity that hosts messages between two users
- * MessageListActivity and many layout file comes in part from https://blog.sendbird.com/android-chat-tutorial-building-a-messaging-ui
+ * MessageListActivity and MessageListAdapter and some layout files are inspired from https://blog.sendbird.com/android-chat-tutorial-building-a-messaging-ui
  */
 public class MessageListActivity extends AppCompatActivity {
     private RecyclerView myMessageRecycler;
@@ -36,7 +37,9 @@ public class MessageListActivity extends AppCompatActivity {
     private Firebase chatReference;
     private ChatLogs chatLogs;
 
-
+    /**
+     * If the button is clicked, add the message to the db
+     */
     private void setUpSendButton(){
         findViewById(R.id.button_chatbox_send).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,23 +57,28 @@ public class MessageListActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * If a message is added in the db, add the message in the chat
+     */
     private void setUpListener(){
         chatReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String pattern = "EEE MMM dd HH:mm:ss Z yyyy";
                 Map map = dataSnapshot.getValue(Map.class);
-                String message = map.get("message").toString();
-                String senderId = map.get("senderId").toString();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-                Date sendingTime = null;
-                try {
-                    sendingTime = simpleDateFormat.parse(map.get("sendingTime").toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                if(!map.isEmpty() && map.size() == Message.NUMBER_ELEMENTS_IN_MESSAGE) {
+                    String message = map.get("message").toString();
+                    String senderId = map.get("senderId").toString();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+                    Date sendingTime = null;
+                    try {
+                        sendingTime = simpleDateFormat.parse(map.get("sendingTime").toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
-                addMessage(new Message(senderId, message, sendingTime));
+                    addMessage(new Message(senderId, message, sendingTime));
+                }
 
             }
             @Override
@@ -92,15 +100,26 @@ public class MessageListActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * add a message in the chatlogs and notify the adapter
+     * @param message the new message
+     */
     private void addMessage(Message message){
         chatLogs.addMessage(message);
         myMessageRecycler.smoothScrollToPosition(chatLogs.getAllMessages().size());
         myMessageAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Get all infos needed to create the activity
+     * We get the chatId and otherUserId from the parent fragment
+     *
+     * @param databaseUrl the url from the messages table of the database
+     */
     private void setInfo(String databaseUrl){
         Bundle b = getIntent().getExtras();
 
+        //Get infos from parent fragment
         String otherUserId = "";
         String chatId = "";
         if(b != null) {
@@ -114,19 +133,22 @@ public class MessageListActivity extends AppCompatActivity {
         //get chatlogs from db
         //chatLogs = ChatLogDbUtility.getChatLogs(chatId);
 
-        chatLogs = new ChatLogs(participantsId);
+        //chatLogs = new ChatLogs(participantsId);
+
         Firebase.setAndroidContext(this);
-        //chatReference = new Firebase("https://radius-1538126456577.firebaseio.com/messages/" + UserInfos.getchatList().getChatId(receiver.getUserId()));
-        //Hardcoded for now but supposed to be the table reference
         chatReference = new Firebase(databaseUrl+chatId);
 
     }
+
+    /**
+     * Set up the interface
+     */
     private void setUpUI(){
 
         setContentView(R.layout.activity_message_list);
         messageZone = (EditText) findViewById(R.id.edittext_chatbox);
-        myMessageRecycler = findViewById(R.id.reyclerview_message_list);
         myMessageAdapter = new MessageListAdapter(this, chatLogs.getAllMessages());
+        myMessageRecycler = findViewById(R.id.reyclerview_message_list);
         myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         myMessageRecycler.setAdapter(myMessageAdapter);
 

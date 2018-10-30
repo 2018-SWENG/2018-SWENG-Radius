@@ -13,35 +13,25 @@ public class ChatLogs implements DatabaseObject{
     private static long idGenerator = 0;
     private List<String> membersId;
     private List<Message> messages; // List LIFO of all the message in the chat
-    private final String chatLogsId;
+    private final String chatLogsId = Long.toString(idGenerator++);
 
 
     public ChatLogs(ArrayList<String> membersId){
-        //if(membersId.size() != 2) { throw new IllegalArgumentException("Chat must be between 2 users");
+        if(membersId.size() != 2) { throw new IllegalArgumentException("Chat must be between 2 users"); }
         this.membersId = new ArrayList<>(membersId);
         this.messages = new LinkedList<>();
-        this.chatLogsId = Long.toString(idGenerator++);
-
+        //this.chatLogsId = Long.toString(idGenerator++);
     }
 
     /*
         Copy constructor
      */
     public ChatLogs(ChatLogs chatLogs){
-        this.chatLogsId = chatLogs.getChatLogsId();
+       // this.chatLogsId = chatLogs.getChatLogsId();
         this.membersId = new ArrayList<>(chatLogs.getMembersId());
         this.messages = new LinkedList<>(chatLogs.messages);
     }
 
-    /* better to pass by copy constructor
-    public ChatLogs(String chatLogsId){
-        //if(membersId.size() != 2) { throw new IllegalArgumentException("Chat must be between 2 users");
-        this.membersId = new ArrayList<>(membersId);
-        this.messages = new LinkedList<>();
-        this.chatLogsId = chatLogsId;
-
-    }
-    */
 
     // Getters
     public List<String> getMembersId() {
