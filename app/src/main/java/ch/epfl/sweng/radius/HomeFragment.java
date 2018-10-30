@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static final double DEFAULT_RADIUS = 50000; //In meters
 
     //properties
-    private static GoogleMap mobileMap;
+    private static GoogleMap mobileMap; //make sure the fragment doesn't crash if the map is null
     private static MapView mapView;
     private static CircleOptions radiusOptions;
     private static double radius;

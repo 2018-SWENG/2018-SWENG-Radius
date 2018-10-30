@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/topMenu">
+
+    <item android:title="Block User"
+        android:id="@+id/block_user"/>
 
     <item android:title="Report User for:"
         android:id="@+id/reportUser">
-        <menu>
+        <menu
+            android:id="@+id/subMenu">
             <item android:id="@+id/language"
                 android:title="Language"/>
 

@@ -81,6 +81,22 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
         assertNotNull(view);
     }
 
+
+    /*@Test
+    public void getMarkerPosNoCrashWithBadParams() {
+        mblActivityTestRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Fragment fragment = new HomeFragment();
+
+                mblAccountActivity.getSupportFragmentManager().beginTransaction()
+                        .add(fcontainer.getId(), fragment).commitAllowingStateLoss();
+                getInstrumentation().waitForIdleSync();
+                ((HomeFragment)fragment).onMapReady(null);
+            }
+        });
+    }*/
+
     @After
     public void tearDown() {
         mblAccountActivity = null;

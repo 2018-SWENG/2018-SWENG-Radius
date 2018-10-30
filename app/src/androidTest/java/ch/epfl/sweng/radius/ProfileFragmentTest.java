@@ -74,7 +74,7 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
     }
 
     @Test
-    public void ztestChangeNicknameAndStatus() {
+    public void testChangeNicknameAndStatus() {
         onView(withId(R.id.navigation_profile)).perform(click());
         onView(withId(R.id.nicknameInput)).perform(typeText("User Nickname"));
         onView(withId(R.id.nicknameInput)).perform(closeSoftKeyboard());
