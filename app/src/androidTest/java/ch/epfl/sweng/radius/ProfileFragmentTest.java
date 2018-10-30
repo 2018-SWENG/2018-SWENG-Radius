@@ -1,7 +1,9 @@
 package ch.epfl.sweng.radius;
 
+import android.Manifest;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.GrantPermissionRule;
 import android.support.v4.app.Fragment;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
@@ -12,13 +14,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.junit.Assert.*;
 
 public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<AccountActivity> {
 
@@ -26,6 +26,9 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
     @Rule
     public ActivityTestRule<AccountActivity> mblActivityTestRule
             = new ActivityTestRule<AccountActivity>(AccountActivity.class);
+    @Rule
+    public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
+            Manifest.permission.ACCESS_FINE_LOCATION);
 
     private AccountActivity mblAccountActivity;
     private FrameLayout fcontainer;
@@ -60,7 +63,6 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
 
         View view = fragment.getView().findViewById(R.id.profileLayout); assertNotNull(view);
         view = fragment.getView().findViewById(R.id.userPhoto); assertNotNull(view);
-        view = fragment.getView().findViewById(R.id.changeProfilePictureButton); assertNotNull(view);
         view = fragment.getView().findViewById(R.id.userNickname); assertNotNull(view);
         view = fragment.getView().findViewById(R.id.userStatus); assertNotNull(view);
         view = fragment.getView().findViewById(R.id.nicknameInput); assertNotNull(view);
@@ -89,7 +91,7 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
     }*/
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mblAccountActivity = null;
     }
 }

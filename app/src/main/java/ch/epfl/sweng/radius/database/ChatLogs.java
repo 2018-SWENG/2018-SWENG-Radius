@@ -3,7 +3,8 @@ package ch.epfl.sweng.radius.database;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import static java.lang.Math.*;
+
+import static java.lang.Math.max;
 
 /**
  * This class represent a Chat conversation with a list of participants and a List of Messages

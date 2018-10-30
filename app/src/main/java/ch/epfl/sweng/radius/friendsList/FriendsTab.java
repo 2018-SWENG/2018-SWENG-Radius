@@ -25,7 +25,7 @@ public class FriendsTab extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.friends_tab, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.friendsList);
+        RecyclerView recyclerView = view.findViewById(R.id.friendsList);
         //mock data for testing purposes
         FriendsListItem items[] = { new FriendsListItem("John Doe",R.drawable.image1),
                 new FriendsListItem("Jane Doe",R.drawable.image2),

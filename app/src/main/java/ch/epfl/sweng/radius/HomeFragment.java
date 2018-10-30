@@ -6,9 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +25,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.friendsList.FriendsListAdapter;
-import ch.epfl.sweng.radius.friendsList.FriendsListItem;
 import ch.epfl.sweng.radius.utils.MapUtility;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {

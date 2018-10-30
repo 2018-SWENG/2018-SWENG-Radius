@@ -12,6 +12,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
+
+import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.FirebaseUtility;
+
 public class AccountActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -26,6 +31,42 @@ public class AccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PreferenceManager.setDefaultValues(this, R.xml.app_preferences, false);
+
+        // Read the current User from the database
+
+        /*
+        String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        System.out.println(userUID);
+        User current_user = new User("userTest00");
+        FirebaseUtility fbUserUtility = new FirebaseUtility(current_user, "users");
+
+        if (fbUserUtility.isNew()){
+            System.out.println("isNew");
+        } else
+            System.out.println("isNotNew");
+
+
+        System.out.println("fbUtilityCreated");
+        if (fbUserUtility.isNew()){
+            System.out.println("isNew");
+            fbUserUtility.writeInstanceObj();
+        }
+        else {
+            System.out.println("isNotNew");
+            try {
+                fbUserUtility.readObj();
+                System.out.println(((User)fbUserUtility.getInstance()).getStatus());
+            } catch (Exception e){
+                System.err.println("Error during database access");
+                e.printStackTrace();
+            }
+        }
+        */
+
+
+
+
+        // Set the layout
         setContentView(R.layout.activity_account);
 
         if (savedInstanceState != null) {
@@ -73,7 +114,7 @@ public class AccountActivity extends AppCompatActivity {
         });
 
         // ToolBar initialization
-        toolbar = (Toolbar) findViewById(R.id.toolbar); // Attaching the layout to the toolbar object
+        toolbar = findViewById(R.id.toolbar); // Attaching the layout to the toolbar object
         setSupportActionBar(toolbar);
     }
 

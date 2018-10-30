@@ -18,7 +18,7 @@ public class PreferencesActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment(), "preferencesFragment").commit();
     }
 
     public static class MyPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener
@@ -57,18 +57,19 @@ public class PreferencesActivity extends PreferenceActivity {
         // TODO: New File with settings actions and call also in mainActivity
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            System.out.println(key);
-            Log.println(Log.INFO,"Settings","change");
+            //System.out.println(key);
+            //Log.println(Log.INFO,"Settings","change");
 
             switch (key){
                 case "incognitoSwitch": // TODO: set the incognito Mode
-                    Preference pref = findPreference(key);
-                    Log.println(Log.INFO,"Settings", String.valueOf((sharedPreferences.getBoolean(key, false))));
+                    //Preference pref = findPreference(key);
+                    //Log.println(Log.INFO,"Settings", String.valueOf((sharedPreferences.getBoolean(key, false))));
+                    break;
                 case "notificationCheckbox": // TODO: set the notifications On/Off
-                    Log.println(Log.INFO,"Settings","notification");
+                    //Log.println(Log.INFO,"Settings","notification");
                     break;
                 case "nightModeSwitch": // TODO: set the night Mode
-                    Log.println(Log.INFO,"Settings","night mode");
+                    //Log.println(Log.INFO,"Settings","night mode");
                     break;
             }
         }

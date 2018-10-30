@@ -12,15 +12,14 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.junit.Assert.*;
 
 public class AccountActivityTest extends ActivityInstrumentationTestCase2<AccountActivity> {
     @Rule
     public final ActivityTestRule<AccountActivity> mActivityRule =
             new ActivityTestRule<>(AccountActivity.class);
+
 
     public AccountActivityTest(){
         super(AccountActivity.class);

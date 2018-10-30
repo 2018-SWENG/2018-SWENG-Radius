@@ -1,12 +1,5 @@
 package ch.epfl.sweng.radius;
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Scanner;
-
-
-
 public class LanguageFileReader {
 
     /*public static ArrayList<String> readLanguageFile(String file) {
