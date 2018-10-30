@@ -44,7 +44,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
         user = new User("userTest00");
         user.addChat("userTest00", "Hello you");
-        user.addFriendRequest("userTest01");
+        user.getFriendsHandler().addFriendRequest("userTest01");
 
         String otherID = user.getConvFromUser("userTest01");
 
