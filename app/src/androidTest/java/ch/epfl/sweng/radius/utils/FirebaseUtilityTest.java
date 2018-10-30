@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.utils;
+/*package ch.epfl.sweng.radius.utils;
 
 import android.support.annotation.NonNull;
 import android.test.AndroidTestCase;
@@ -198,4 +198,4 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
 
 
-}
+}*/

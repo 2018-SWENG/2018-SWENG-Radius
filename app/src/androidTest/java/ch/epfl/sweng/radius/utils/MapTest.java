@@ -50,7 +50,7 @@ public class MapTest {
 
     @Test
     public void testSpeaksSameLanguages() {
-        user1.setSpokenLanguages("English");
+        user1.getProfileInfo().setSpokenLanguages("English");
         assertTrue(!mapListener.speaksSameLanguage(user1));
     }
 
