@@ -41,8 +41,8 @@ public class FirebaseUtility {
     private DatabaseObject  obj;
     private Semaphore       semaphore;
 
-    public FirebaseUtility(DatabaseObject obj, String ref){
-        this.auth       = FirebaseAuth.getInstance();
+    public FirebaseUtility(FirebaseAttributes attr, DatabaseObject obj, String ref){
+        this.auth       = auth.getInstance();
         this.fireDB     = FirebaseDatabase.getInstance();
         this.semaphore = new Semaphore(0);
 

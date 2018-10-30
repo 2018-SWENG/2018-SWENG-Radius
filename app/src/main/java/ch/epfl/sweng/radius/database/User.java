@@ -15,63 +15,37 @@ public class User implements DatabaseObject {
     private static long idGenerator = 0;// Debugging purpose only
 
     private final String userID;
-    private String nickname;
+    private ProfileInfo profileInfo;
     public String urlProfilePhoto;
     private int radius; // meters
-    private String status;
-    private List<String> friendsRequests;
-    private List<String> friendsInvitations;
-    private List<String> friends;
-    private List<String> blockedUsers;
-    // Map is uID --> convID
-    private Map<String, String> chatList;
+
+    private FriendsHandler friendsHandler;
+    private Map<String, String> chatList; // Map is uID --> convID
     private Map<String, String> reportList;
-    private String spokenLanguages;
+
     private LatLng location;
+    private boolean isHidden;
 
     public User(String userID) {
         this.userID = userID;
-        this.nickname = "New User " + userID;
+        this.profileInfo = new ProfileInfo(userID);
         this.urlProfilePhoto = "";
-        this.radius = 500;
-        this.status = "Hi, I'm new to radius !";
-        this.friendsRequests = new ArrayList<>();
-        this.friendsInvitations = new ArrayList<>();
-        this.friends = new ArrayList<>();
-        this.blockedUsers = new ArrayList<>();
-        this.spokenLanguages = "";
+        this.radius = 50000;
         this.chatList = new HashMap<>();
         this.reportList = new HashMap<>();
+        this.isHidden = false;
+
     }
 
     // Debugging purpose only
     public User(){
         this.userID = Long.toString(idGenerator++);
-        this.nickname = "New User " + this.userID;
         this.urlProfilePhoto = "";
-        this.radius = 500;
-        this.status = "Hi, I'm new to radius !";
-        this.friendsRequests = new ArrayList<>();
-        this.friendsInvitations = new ArrayList<>();
-        this.friends = new ArrayList<>();
-        this.blockedUsers = new ArrayList<>();
-        this.spokenLanguages = "";
+        this.radius = 50000;
+        this.isHidden = false;
     }
 
     // Getter
-    @Override
-    public String getID() {
-        return userID;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-/*
     public String getUrlProfilePhoto() {
         return urlProfilePhoto;
     }
@@ -79,49 +53,44 @@ public class User implements DatabaseObject {
     public void setUrlProfilePhoto(String urlProfilePhoto) {
         this.urlProfilePhoto = urlProfilePhoto;
     }
-*/
+
+    public FriendsHandler getFriendsHandler() {
+        return friendsHandler;
+    }
+
     public int getRadius() {
         return radius;
     }
 
-    public void setRadius(int radius) {
-        this.radius = radius;
+    public ProfileInfo getProfileInfo() {
+        return profileInfo;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) throws IllegalArgumentException {
-        if (status.length() > 50) // TODO : config file with all the constants
-            throw new IllegalArgumentException("The status is limited to 50 characters");
-        this.status = status;
-    }
-
-    public List<String> getFriendsRequests() {
-        return friendsRequests;
-    }
-
-    public List<String> getFriendsInvitations() {
-        return friendsInvitations;
-    }
-
-    public List<String> getFriends() {
-        return friends;
-    }
-    // Setter
-
-    public List<String> getBlockedUsers() {
-        return blockedUsers;
+    public String getConvFromUser(String userID) {
+        return chatList.get(userID);
     }
 
     public LatLng getLocation() {
         return location;
     }
 
+    public String getID() {
+        return userID;
+    }
+
+    public boolean getisHidden() {
+        return isHidden;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
     public void setLocation(LatLng location) {
         this.location = location;
     }
+
+    public void toggleHidden(){ this.isHidden = !isHidden;  }
 
     public Map<String, String> getChatList() {
         return chatList;
@@ -135,23 +104,9 @@ public class User implements DatabaseObject {
         reportList.put(reportingUserID, reportingReason);
     }
 
-    public String getConvFromUser(String userID) {
-        return chatList.get(userID);
+    public String getReportFromUser(String userID) {
+        return reportList.get(userID);
     }
-
-    public void addFriendRequest(String friendID) {
-        if (friendsInvitations.contains(friendID)) {
-            friendsInvitations.remove(friendID);
-            friends.add(friendID);
-        } else
-            friendsRequests.add(friendID);
-    }
-
-    public String getSpokenLanguages() {
-        return this.spokenLanguages;
-    }
-
-    public void setSpokenLanguages(String spokenLanguages) { if (spokenLanguages != null) this.spokenLanguages = spokenLanguages; }
 
     public void addChat(String uID, String chatID) {
         this.chatList.put(uID, chatID);

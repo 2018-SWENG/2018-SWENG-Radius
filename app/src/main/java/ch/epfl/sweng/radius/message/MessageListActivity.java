@@ -71,7 +71,7 @@ public class MessageListActivity extends AppCompatActivity {
                 }
                 chatLogs.addMessage(new Message(senderId, message, sendingTime));
 
-                myMessageRecycler.smoothScrollToPosition(chatLogs.getAllMessages().size());
+                myMessageRecycler.smoothScrollToPosition(chatLogs.getMessages().size());
                 myMessageAdapter.notifyDataSetChanged();
             }
             @Override
@@ -109,7 +109,7 @@ public class MessageListActivity extends AppCompatActivity {
         chatLogs = new ChatLogs(participantsId);
 
         myMessageRecycler = findViewById(R.id.reyclerview_message_list);
-        myMessageAdapter = new MessageListAdapter(this, chatLogs.getAllMessages());
+        myMessageAdapter = new MessageListAdapter(this, chatLogs.getMessages());
         myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         myMessageRecycler.setAdapter(myMessageAdapter);
 

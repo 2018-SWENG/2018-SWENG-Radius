@@ -11,13 +11,17 @@ import java.util.Date;
 public class Message {
 
     private String senderId;
-    private final String contentMessage;
-    private final Date sendingTime;
+    private  String contentMessage;
+    private  Date sendingTime;
 
     public Message(String senderId, String contentMessage, Date sendingTime){
         this.senderId = senderId;
         this.contentMessage = contentMessage;
         this.sendingTime = sendingTime;
+    }
+
+    public Message(){
+        this.senderId = "10";
     }
 
     public String getSenderId() {
@@ -31,4 +35,17 @@ public class Message {
     public Date getSendingTime() {
         return sendingTime;
     }
+
+    public void setSenderId(String SenderID) {
+        this.senderId = senderId;
+    }
+
+    public void setContentMessage(String contentMessage) {
+        this.contentMessage = contentMessage;
+    }
+
+    public void setSendingTime(Date sendingTime) {
+        this.sendingTime = sendingTime;
+    }
 }
+

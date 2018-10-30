@@ -26,10 +26,20 @@ public class ChatLogs implements DatabaseObject{
 
     public ChatLogs(String chatLogsId){
         //if(membersId.size() != 2) { throw new IllegalArgumentException("Chat must be between 2 users");
-        this.membersId = new ArrayList<>(membersId);
+        this.membersId = new ArrayList<>(
+
+        );
         this.messages = new LinkedList<>();
         this.chatLogsId = chatLogsId;
 
+    }
+
+    public ChatLogs(){
+        this.membersId = new ArrayList<>(
+
+        );
+        this.messages = new LinkedList<>();
+        this.chatLogsId = Long.toString(idGenerator++);
     }
 
     // Getters
@@ -37,7 +47,7 @@ public class ChatLogs implements DatabaseObject{
         return membersId;
     }
 
-    public List<Message> getAllMessages() {
+    public List<Message> getMessages() {
         return messages;
     }
 
@@ -55,8 +65,16 @@ public class ChatLogs implements DatabaseObject{
             membersId.add(userID);
     }
 
+    public void setMessages(List<Message> msgs){
+        this.messages = msgs;
+    }
+
     public void addMessage(Message message){
         messages.add(message);
+    }
+
+    public void deleteMessage(int msgIndex){
+        this.messages.remove(msgIndex);
     }
 
     public String getChatLogsId() {
