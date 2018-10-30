@@ -1,8 +1,5 @@
 package ch.epfl.sweng.radius.database;
 
-import android.provider.ContactsContract;
-import android.util.ArrayMap;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -19,20 +16,19 @@ public class User implements DatabaseObject {
 
     private final String userID;
     private String nickname;
-    private String urlProfilePhoto;
+    public String urlProfilePhoto;
     private int radius; // meters
     private String status;
-    private List<Integer> friendsRequests;
-    private List<Integer> friendsInvitations;
-    private List<Integer> friends;
-    private List<Integer> blockedUsers;
+    private List<String> friendsRequests;
+    private List<String> friendsInvitations;
+    private List<String> friends;
+    private List<String> blockedUsers;
     // Map is uID --> convID
     private Map<String, String> chatList;
-    private List<String> convList;
     private String spokenLanguages;
     private LatLng location;
 
-    public User(String userID){
+    public User(String userID) {
         this.userID = userID;
         this.nickname = "New User " + userID;
         this.urlProfilePhoto = "";
@@ -44,12 +40,20 @@ public class User implements DatabaseObject {
         this.blockedUsers = new ArrayList<>();
         this.spokenLanguages = "";
         this.chatList = new HashMap<>();
-        this.convList = new ArrayList<>();
     }
 
     // Debugging purpose only
     public User(){
-        this(Long.toString(idGenerator++));
+        this.userID = Long.toString(idGenerator++);
+        this.nickname = "New User " + this.userID;
+        this.urlProfilePhoto = "";
+        this.radius = 500;
+        this.status = "Hi, I'm new to radius !";
+        this.friendsRequests = new ArrayList<>();
+        this.friendsInvitations = new ArrayList<>();
+        this.friends = new ArrayList<>();
+        this.blockedUsers = new ArrayList<>();
+        this.spokenLanguages = "";
     }
 
     // Getter
@@ -61,31 +65,50 @@ public class User implements DatabaseObject {
         return nickname;
     }
 
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+/*
     public String getUrlProfilePhoto() {
         return urlProfilePhoto;
     }
 
+    public void setUrlProfilePhoto(String urlProfilePhoto) {
+        this.urlProfilePhoto = urlProfilePhoto;
+    }
+*/
     public int getRadius() {
         return radius;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public List<Integer> getFriendsRequests() {
+    public void setStatus(String status) throws IllegalArgumentException {
+        if (status.length() > 50) // TODO : config file with all the constants
+            throw new IllegalArgumentException("The status is limited to 50 characters");
+        this.status = status;
+    }
+
+    public List<String> getFriendsRequests() {
         return friendsRequests;
     }
 
-    public List<Integer> getFriendsInvitations() {
+    public List<String> getFriendsInvitations() {
         return friendsInvitations;
     }
 
-    public List<Integer> getFriends() {
+    public List<String> getFriends() {
         return friends;
     }
+    // Setter
 
-    public List<Integer> getBlockedUsers() {
+    public List<String> getBlockedUsers() {
         return blockedUsers;
     }
 
@@ -93,73 +116,35 @@ public class User implements DatabaseObject {
         return location;
     }
 
-    public Map<String, String> getChatList(){return chatList; }
-
-    public List<String> getConvList(){ return convList;}
-
-    public String getConvFromUser(String userID){ return chatList.get(userID);}
-    // Setter
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public void setUrlProfilePhoto(String urlProfilePhoto) {
-        this.urlProfilePhoto = urlProfilePhoto;
-    }
-
-    public void setRadius(int radius) {
-        this.radius = radius;
-    }
-
-    public void setStatus(String status) throws IllegalArgumentException{
-        if (status.length() > 50) // TODO : config file with all the constants
-            throw new IllegalArgumentException("The status is limited to 50 characters");
-        this.status = status;
-    }
-
-
-    public void addFriendRequest(Integer friendID){
-        if (friendsInvitations.contains(friendID)){
-            friendsInvitations.remove(friendID);
-            friends.add(friendID);
-        }
-        else
-            friendsRequests.add(friendID);
-    }
-
-    /*public void addFriendInvitation(Integer friendID){
-        if (friendsRequests.contains(friendID)) {
-            friendsRequests.remove(friendID);
-            friends.add(friendID);
-        }
-        else
-            friendsInvitations.add(friendID);
-    }*/
-
-    /*public void addBlockedUser (Integer userID){
-        blockedUsers.add(userID);
-    }*/
-
-    //public void removeBlockedUser(Integer userID){
-    //    blockedUsers.remove(userID);
-    //}
-
     public void setLocation(LatLng location) {
         this.location = location;
     }
 
-    public void setSpokenLanguages(String spokenLanguages) { this.spokenLanguages = spokenLanguages; }
+    public Map<String, String> getChatList() {
+        return chatList;
+    }
 
-    public String getSpokenLanguages() { return this.spokenLanguages; }
+    public String getConvFromUser(String userID) {
+        return chatList.get(userID);
+    }
 
-    public void setChatList(Map<String, String> newChatList){ this.chatList = newChatList;}
+    public void addFriendRequest(String friendID) {
+        if (friendsInvitations.contains(friendID)) {
+            friendsInvitations.remove(friendID);
+            friends.add(friendID);
+        } else
+            friendsRequests.add(friendID);
+    }
 
-    public void setConvList(List<String> newConv){ this.convList = newConv;}
+    public String getSpokenLanguages() {
+        return this.spokenLanguages;
+    }
 
-    public void addChat(String uID, String chatID){ this.chatList.put(uID, chatID);    }
+    public void setSpokenLanguages(String spokenLanguages) { if (spokenLanguages != null) this.spokenLanguages = spokenLanguages; }
 
-    public void addConv(String convID){ this.convList.add(convID);}
+    public void addChat(String uID, String chatID) {
+        this.chatList.put(uID, chatID);
+    }
 
     @Override
     public String getID() {

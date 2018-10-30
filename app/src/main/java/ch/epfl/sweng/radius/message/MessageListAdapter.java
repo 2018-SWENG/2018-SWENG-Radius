@@ -27,6 +27,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     private Context context;
     private List<Message> messages;
+    private int flags;
 
     public MessageListAdapter(Context context, List<Message> messages) {
         this.context = context;
@@ -48,6 +49,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             return new ReceivedMessageHolder(view);
         }
 
+        flags = DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE;
 
         return null;
     }
@@ -105,7 +107,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         void bind(Message message) {
             messageText.setText(message.getContentMessage());
 
-            int flags = DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE;
+         //   int flags = DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE;
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags)); // TODO: Date format ??
@@ -130,7 +132,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         void bind(Message message) {
             messageText.setText(message.getContentMessage());
 
-            int flags = DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE;
+      //      int flags = DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE;
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags)); // TODO: Date format ??
