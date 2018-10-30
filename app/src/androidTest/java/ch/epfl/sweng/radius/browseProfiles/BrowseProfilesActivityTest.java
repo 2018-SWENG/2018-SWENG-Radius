@@ -29,13 +29,13 @@ public class BrowseProfilesActivityTest {
     public void setUp() throws Exception {
     }
 
-    @Test
+    /*@Test
     public void testOnCreate() {
         View view = mActivityRule.getActivity().findViewById(R.id.navigationView);
         assertNotNull(view);
         //openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         //onView(withText("Block User")).perform(click());
-    }
+    }*/
 
     @After
     public void tearDown() throws Exception {
