@@ -3,10 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Tab friends"
-        android:textSize="36sp" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/friendsList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 </RelativeLayout>

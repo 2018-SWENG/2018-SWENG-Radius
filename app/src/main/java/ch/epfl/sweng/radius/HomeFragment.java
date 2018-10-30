@@ -75,19 +75,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater infltr, ViewGroup container, Bundle savedInstanceState) {
         View view = infltr.inflate(R.layout.fragment_home, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.friendsList);
-        //mock data for testing purposes
-        FriendsListItem items[] = { new FriendsListItem("John Doe",R.drawable.image1),
-                new FriendsListItem("Jane Doe",R.drawable.image2),
-                new FriendsListItem("Alison Star",R.drawable.image3),
-                new FriendsListItem("Mila Noon",R.drawable.image4),
-                new FriendsListItem("David Doyle",R.drawable.image5)};
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        FriendsListAdapter adapter = new FriendsListAdapter(items, getContext());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
         return view;
     }
 

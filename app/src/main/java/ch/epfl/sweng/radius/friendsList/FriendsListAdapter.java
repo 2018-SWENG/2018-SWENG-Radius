@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.browseProfiles.CustomListener;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.ViewHolder>{
 
@@ -57,8 +58,8 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
-            txtViewTitle = (TextView) itemLayoutView.findViewById(R.id.item_title);
-            imgViewIcon = (ImageView) itemLayoutView.findViewById(R.id.item_icon);
+            txtViewTitle = (TextView) itemLayoutView.findViewById(R.id.username);
+            imgViewIcon = (CircleImageView) itemLayoutView.findViewById(R.id.profile_picture);
         }
     }
 
