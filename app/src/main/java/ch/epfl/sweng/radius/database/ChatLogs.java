@@ -14,12 +14,14 @@ public class ChatLogs implements DatabaseObject{
     private List<String> membersId;
     private List<Message> messages; // List LIFO of all the message in the chat
     private final String chatLogsId = Long.toString(idGenerator++);
+    private int numberOfMessages;
 
 
     public ChatLogs(ArrayList<String> membersId){
         if(membersId.size() != 2) { throw new IllegalArgumentException("Chat must be between 2 users"); }
         this.membersId = new ArrayList<>(membersId);
         this.messages = new LinkedList<>();
+        numberOfMessages=0;
         //this.chatLogsId = Long.toString(idGenerator++);
     }
 
@@ -30,6 +32,7 @@ public class ChatLogs implements DatabaseObject{
        // this.chatLogsId = chatLogs.getChatLogsId();
         this.membersId = new ArrayList<>(chatLogs.getMembersId());
         this.messages = new LinkedList<>(chatLogs.messages);
+        this.numberOfMessages = chatLogs.getNumberOfMessages();
     }
 
 
@@ -58,6 +61,7 @@ public class ChatLogs implements DatabaseObject{
 
     public void addMessage(Message message){
         messages.add(message);
+        numberOfMessages++;
     }
 
     public String getChatLogsId() {
@@ -66,5 +70,9 @@ public class ChatLogs implements DatabaseObject{
 
     public String getID() {
         return chatLogsId;
+    }
+
+    public int getNumberOfMessages() {
+        return numberOfMessages;
     }
 }
