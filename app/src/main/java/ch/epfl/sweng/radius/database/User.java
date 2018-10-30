@@ -40,6 +40,7 @@ public class User implements DatabaseObject {
     // Debugging purpose only
     public User(){
         this.userID = Long.toString(idGenerator++);
+        this.profileInfo = new ProfileInfo(userID);
         this.urlProfilePhoto = "";
         this.radius = 50000;
         this.isHidden = false;
