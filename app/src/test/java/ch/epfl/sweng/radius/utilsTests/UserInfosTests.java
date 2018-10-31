@@ -14,30 +14,7 @@ public class UserInfosTests {
 
     @Test
     public void testGetUserId() {
-        assertTrue(userInfos.getUserId() == "2");
+        assertTrue(userInfos.getUserId() == "1");
     }
 
-    @Test
-    public void testGetUserName() {
-        assertTrue(userInfos.getUsername() != null );
-    }
-
-    @Test
-    public void testSetUserName() {
-        String newUserName = "User_2";
-        userInfos.setUsername(newUserName);
-        assertTrue(userInfos.getUsername().equals(newUserName));
-    }
-
-    @Test
-    public void testGetChatWith() {
-        assertTrue(userInfos.getChatWith() != null);
-    }
-
-    @Test
-    public  void testSetChatWith() {
-        String newUserId = "User_2";
-        userInfos.setChatWith(newUserId);
-        assertTrue(userInfos.getChatWith().equals(newUserId));
-    }
 }

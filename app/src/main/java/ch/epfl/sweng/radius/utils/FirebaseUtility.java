@@ -41,8 +41,8 @@ public class FirebaseUtility {
     private DatabaseObject  obj;
     private Semaphore       semaphore;
 
-    public FirebaseUtility(FirebaseAttributes attr, DatabaseObject obj, String ref){
-        this.auth       = auth.getInstance();
+    public FirebaseUtility(DatabaseObject obj, String ref){
+        this.auth       = FirebaseAuth.getInstance();
         this.fireDB     = FirebaseDatabase.getInstance();
         this.semaphore = new Semaphore(0);
 
@@ -99,7 +99,7 @@ public class FirebaseUtility {
 
             }
         });
-  //      semaphore.acquire();
+        //      semaphore.acquire();
         while (!done.get());
         return obj;
     }
@@ -160,5 +160,3 @@ public class FirebaseUtility {
 
     }
 }
-
-

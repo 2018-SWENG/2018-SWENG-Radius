@@ -43,22 +43,5 @@ public class MessageTests {
         assertTrue(message2.getSendingTime() == null);
     }
 
-    @Test
-    public void testSetSenderId() {
-        message2.setSenderId("User_2");
-        assertTrue(message2.getSenderId().equals("User_2"));
-    }
 
-    @Test
-    public void testSetContentMessage() {
-        message2.setContentMessage("message2");
-        assertTrue(message2.getContentMessage().equals("message2"));
-    }
-
-    @Test
-    public void testSetSendingTime() {
-        Date date2 = new Date(1500);
-        message2.setSendingTime(date2);
-        assertTrue(message2.getSendingTime().equals(date2));
-    }
 }
