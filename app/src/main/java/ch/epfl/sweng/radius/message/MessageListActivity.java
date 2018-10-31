@@ -158,17 +158,19 @@ public class MessageListActivity extends AppCompatActivity {
                 String pattern = "EEE MMM dd HH:mm:ss Z yyyy";
                 Map map = dataSnapshot.getValue(Map.class);
                 if (!map.isEmpty() && map.size() == Message.NUMBER_ELEMENTS_IN_MESSAGE) {
-                    String message = map.get("message").toString();
-                    String senderId = map.get("senderId").toString();
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-                    Date sendingTime = null;
-                    try {
-                        sendingTime = simpleDateFormat.parse(map.get("sendingTime").toString());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    if (map.containsKey("message") && map.containsKey("senderId")) {
+                        String message = map.get("message").toString();
+                        String senderId = map.get("senderId").toString();
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+                        Date sendingTime = null;
+                        try {
+                            sendingTime = simpleDateFormat.parse(map.get("sendingTime").toString());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
 
-                    receiveMessage(new Message(senderId, message, sendingTime));
+                        receiveMessage(new Message(senderId, message, sendingTime));
+                    }
                 }
 
             }

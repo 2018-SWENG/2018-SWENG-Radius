@@ -1,7 +1,12 @@
 package ch.epfl.sweng.radius;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
@@ -27,6 +32,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -111,7 +117,6 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
    @Test
     public void testLanguageButton() {
        Espresso.onView(withId(R.id.navigation_profile)).perform(click());
-       Espresso.closeSoftKeyboard();
        Espresso.onView(withId(R.id.languagesButton)).perform(click());
        Espresso.onView(withText("OK"))
                .inRoot(RootMatchers.isDialog())
@@ -124,13 +129,19 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
 
     @Test
     public void testRestoreState() {
-        getInstrumentation().runOnMainSync(new Runnable() {
-            @Override
-            public void run() {
-                mblAccountActivity.recreate();
-            }
-        });
-        getInstrumentation().waitForIdleSync();
+        rotateScreen();
+    }
+
+    private void rotateScreen() {
+        Context context = InstrumentationRegistry.getTargetContext();
+        int orientation
+                = context.getResources().getConfiguration().orientation;
+
+        Activity activity = mblActivityTestRule.getActivity();
+        activity.setRequestedOrientation(
+                (orientation == Configuration.ORIENTATION_PORTRAIT) ?
+                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE :
+                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Test

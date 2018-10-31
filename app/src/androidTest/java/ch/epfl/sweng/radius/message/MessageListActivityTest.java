@@ -3,6 +3,7 @@ package ch.epfl.sweng.radius.message;
 import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -108,17 +110,19 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
     public void setUpSendButton() {
 
         onView(withId(R.id.edittext_chatbox)).perform(typeText("Coucou"));
-        onView(withId(R.id.edittext_chatbox)).perform(closeSoftKeyboard());
+        Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_chatbox_send)).perform(click());
 
         assert (mlActivity.findViewById(R.id.edittext_chatbox).toString().isEmpty());
     }
 
+    @Ignore
     @Test
     public void sendMessage() {
         //Methode a tester dans ChatLogDbUtility lorsque cette derniere sera disponible
     }
 
+    @Ignore
     @Test
     public void receiveMessage() {
         //Methode a tester dans ChatLogDbUtility lorsque cette derniere sera disponible
