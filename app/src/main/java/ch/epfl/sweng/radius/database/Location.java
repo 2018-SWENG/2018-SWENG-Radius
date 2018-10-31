@@ -1,0 +1,45 @@
+package ch.epfl.sweng.radius.database;
+
+public class Location implements DatabaseObject {
+
+    String userID;
+    double longitude;
+    double latitude;
+    // Not actually stored in DB
+    // We will use separate tables for each type of location
+    // TODO Think about it for real
+    int    type; // e.g. {myLocation, friendLocation, Marker, Event, ...}
+
+    public Location(String userID){
+        this.userID = userID;
+        this.type = 0;
+    }
+
+    public Location(String userID, double longitude, double latitude){
+        this.userID = userID;
+        this.type = 0;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    @Override
+    public String getID() {
+        return userID;
+    }
+}
