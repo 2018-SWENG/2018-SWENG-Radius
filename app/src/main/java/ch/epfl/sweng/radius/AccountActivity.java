@@ -34,7 +34,7 @@ public class AccountActivity extends AppCompatActivity {
 
         // Read the current User from the database
 
-        /*
+/*
         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         System.out.println(userUID);
         User current_user = new User("userTest00");
@@ -44,6 +44,7 @@ public class AccountActivity extends AppCompatActivity {
             System.out.println("isNew");
         } else
             System.out.println("isNotNew");
+
 
 
         System.out.println("fbUtilityCreated");

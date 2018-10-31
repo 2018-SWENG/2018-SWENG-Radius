@@ -88,7 +88,7 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
         Espresso.closeSoftKeyboard();
         Espresso.onView(withId(R.id.statusInput)).perform(typeText("User Status"));
         Espresso.closeSoftKeyboard();
-        Espresso.onView(withId(R.id.saveButton)).perform(click());
+        //Espresso.onView(withId(R.id.saveButton)).perform(click());
     }
 
     @Test
