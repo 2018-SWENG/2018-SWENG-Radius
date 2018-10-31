@@ -9,6 +9,7 @@ import java.util.Date;
  * IN THE DB.
  */
 public class Message {
+    public final static Integer NUMBER_ELEMENTS_IN_MESSAGE = 3;
 
     private String senderId;
     private  String contentMessage;
@@ -36,16 +37,5 @@ public class Message {
         return sendingTime;
     }
 
-    public void setSenderId(String senderId) {
-        this.senderId = senderId;
-    }
-
-    public void setContentMessage(String contentMessage) {
-        this.contentMessage = contentMessage;
-    }
-
-    public void setSendingTime(Date sendingTime) {
-        this.sendingTime = sendingTime;
-    }
 }
 

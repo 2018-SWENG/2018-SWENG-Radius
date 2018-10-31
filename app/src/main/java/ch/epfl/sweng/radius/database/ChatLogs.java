@@ -13,37 +13,35 @@ public class ChatLogs implements DatabaseObject{
     private static long idGenerator = 0;
     private List<String> membersId;
     private List<Message> messages; // List LIFO of all the message in the chat
-    private final String chatLogsId;
+    private final String chatLogsId = Long.toString(idGenerator++);
+    private int numberOfMessages;
 
 
     public ChatLogs(ArrayList<String> membersId){
-        //if(membersId.size() != 2) { throw new IllegalArgumentException("Chat must be between 2 users");
+        if(membersId.size() != 2) { throw new IllegalArgumentException("Chat must be between 2 users"); }
         this.membersId = new ArrayList<>(membersId);
         this.messages = new LinkedList<>();
-        this.chatLogsId = Long.toString(idGenerator++);
-
+        numberOfMessages=0;
+        //this.chatLogsId = Long.toString(idGenerator++);
     }
 
-    public ChatLogs(String chatLogsId){
-        //if(membersId.size() != 2) { throw new IllegalArgumentException("Chat must be between 2 users");
-        this.membersId = new ArrayList<>();
-        this.messages = new LinkedList<>();
-        this.chatLogsId = chatLogsId;
-
+    /*
+        Copy constructor
+     */
+    public ChatLogs(ChatLogs chatLogs){
+        // this.chatLogsId = chatLogs.getChatLogsId();
+        this.membersId = new ArrayList<>(chatLogs.getMembersId());
+        this.messages = new LinkedList<>(chatLogs.messages);
+        this.numberOfMessages = chatLogs.getNumberOfMessages();
     }
 
-    public ChatLogs(){
-        this.membersId = new ArrayList<>();
-        this.messages = new LinkedList<>();
-        this.chatLogsId = Long.toString(idGenerator++);
-    }
 
     // Getters
     public List<String> getMembersId() {
         return membersId;
     }
 
-    public List<Message> getMessages() {
+    public List<Message> getAllMessages() {
         return messages;
     }
 
@@ -61,16 +59,9 @@ public class ChatLogs implements DatabaseObject{
             membersId.add(userID);
     }
 
-    public void setMessages(List<Message> msgs){
-        this.messages = msgs;
-    }
-
     public void addMessage(Message message){
         messages.add(message);
-    }
-
-    public void deleteMessage(int msgIndex){
-        this.messages.remove(msgIndex);
+        numberOfMessages++;
     }
 
     public String getChatLogsId() {
@@ -79,5 +70,9 @@ public class ChatLogs implements DatabaseObject{
 
     public String getID() {
         return chatLogsId;
+    }
+
+    public int getNumberOfMessages() {
+        return numberOfMessages;
     }
 }

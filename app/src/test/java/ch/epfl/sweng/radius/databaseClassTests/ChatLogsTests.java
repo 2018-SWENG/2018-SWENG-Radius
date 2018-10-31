@@ -100,7 +100,7 @@ public class ChatLogsTests {
         assertTrue(!chatLogs1.getMessages().contains(message1));
         assertTrue(chatLogs1.getMessages().contains(message2));
     }
-    
+
     @After
     public void tearDown() {
         membersId = null;
