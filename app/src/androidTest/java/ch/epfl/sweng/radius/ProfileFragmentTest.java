@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.assertion.ViewAssertions;
+import android.support.test.espresso.matcher.RootMatchers;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
@@ -25,8 +27,10 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<AccountActivity> {
 
@@ -109,8 +113,25 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
        Espresso.onView(withId(R.id.navigation_profile)).perform(click());
        Espresso.closeSoftKeyboard();
        Espresso.onView(withId(R.id.languagesButton)).perform(click());
-       //Espresso.onView(withId(R.id.navigation_profile)).perform(click());
+       Espresso.onView(withText("OK"))
+               .inRoot(RootMatchers.isDialog())
+               .check(ViewAssertions.matches(isDisplayed()))
+               .perform(click());
+       Espresso.onView(withId(R.id.navigation_profile)).perform(click());
+
+
    }
+
+    @Test
+    public void testRestoreState() {
+        getInstrumentation().runOnMainSync(new Runnable() {
+            @Override
+            public void run() {
+                mblAccountActivity.recreate();
+            }
+        });
+        getInstrumentation().waitForIdleSync();
+    }
 
     @Test
     public void testSeekBar() {

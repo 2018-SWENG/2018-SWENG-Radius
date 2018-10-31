@@ -35,17 +35,6 @@ public class ChatLogs implements DatabaseObject{
         this.chatLogsId = chatLogsId;
     }
 
-    /*
-        Copy constructor
-     */
-    public ChatLogs(ChatLogs chatLogs){
-       // this.chatLogsId = chatLogs.getChatLogsId();
-        this.membersId = new ArrayList<>(chatLogs.getMembersId());
-        this.messages = new LinkedList<>(chatLogs.messages);
-        this.numberOfMessages = chatLogs.getNumberOfMessages();
-    }
-
-
     // Getters
     public List<String> getMembersId() {
         return membersId;
