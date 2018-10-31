@@ -26,6 +26,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.utils.UserInfos;
+
 
 /**
  * Activity that hosts messages between two users
@@ -194,8 +199,13 @@ public class MessageListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_message_list);
+        messageZone = findViewById(R.id.edittext_chatbox);
+
         String databaseMessagesUrl = "https://radius-1538126456577.firebaseio.com/messages/";
         setInfo(databaseMessagesUrl);
+
         setUpUI();
         setUpSendButton();
         setUpListener();

@@ -12,15 +12,14 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.junit.Assert.*;
 
 public class AccountActivityTest extends ActivityInstrumentationTestCase2<AccountActivity> {
     @Rule
     public final ActivityTestRule<AccountActivity> mActivityRule =
             new ActivityTestRule<>(AccountActivity.class);
+
 
     public AccountActivityTest(){
         super(AccountActivity.class);
@@ -58,6 +57,8 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
         assertNotNull(view);
         view = mActivity.findViewById(R.id.navigation_profile);
         assertNotNull(view);
+        view = mActivity.findViewById(R.id.action_settings);
+        assertNotNull(view);
     }
 
     @Test
@@ -67,17 +68,23 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
 
     @Test
     public void testNavigationToMessages() {
-        Espresso. onView(withId(R.id.navigation_messages)).perform(click());
+        Espresso.onView(withId(R.id.navigation_messages)).perform(click());
     }
 
     @Test
     public void testNavigationToSettings() {
-        Espresso.onView(withId(R.id.navigation_settings)).perform(click());
+        Espresso.onView(withId(R.id.action_settings)).perform(click());
+
     }
 
     @Test
     public void testNavigationToProfile() {
         Espresso.onView(withId(R.id.navigation_profile)).perform(click());
+    }
+
+    @Test
+    public void testNavigationToFriends() {
+        Espresso.onView(withId(R.id.navigation_settings)).perform(click());
     }
 
 

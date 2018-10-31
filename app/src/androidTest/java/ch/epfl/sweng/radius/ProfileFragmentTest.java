@@ -1,24 +1,32 @@
 package ch.epfl.sweng.radius;
 
+import android.Manifest;
 import android.content.Intent;
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.GrantPermissionRule;
 import android.support.v4.app.Fragment;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.SeekBar;
 
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.junit.Assert.*;
 
 public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<AccountActivity> {
 
@@ -26,6 +34,9 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
     @Rule
     public ActivityTestRule<AccountActivity> mblActivityTestRule
             = new ActivityTestRule<AccountActivity>(AccountActivity.class);
+    @Rule
+    public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
+            Manifest.permission.ACCESS_FINE_LOCATION);
 
     private AccountActivity mblAccountActivity;
     private FrameLayout fcontainer;
@@ -42,10 +53,8 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
     @Before
     public void setUp() throws Exception {
         super.setUp();
-
         Intent intent = new Intent();
         mblAccountActivity = mblActivityTestRule.launchActivity(intent);
-
     }
 
     @Test
@@ -60,7 +69,6 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
 
         View view = fragment.getView().findViewById(R.id.profileLayout); assertNotNull(view);
         view = fragment.getView().findViewById(R.id.userPhoto); assertNotNull(view);
-        view = fragment.getView().findViewById(R.id.changeProfilePictureButton); assertNotNull(view);
         view = fragment.getView().findViewById(R.id.userNickname); assertNotNull(view);
         view = fragment.getView().findViewById(R.id.userStatus); assertNotNull(view);
         view = fragment.getView().findViewById(R.id.nicknameInput); assertNotNull(view);
@@ -74,22 +82,64 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
     }
 
     @Test
-    public void ztestChangeNicknameAndStatus() {
-        onView(withId(R.id.navigation_profile)).perform(click());
-        onView(withId(R.id.nicknameInput)).perform(typeText("User Nickname"));
-        onView(withId(R.id.nicknameInput)).perform(closeSoftKeyboard());
-        onView(withId(R.id.statusInput)).perform(typeText("User Status"));
-        onView(withId(R.id.statusInput)).perform(closeSoftKeyboard());
+    public void testChangeNicknameAndStatus() {
+        Espresso.onView(withId(R.id.navigation_profile)).perform(click());
+        Espresso.onView(withId(R.id.nicknameInput)).perform(typeText("User Nickname"));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.statusInput)).perform(typeText("User Status"));
+        Espresso.closeSoftKeyboard();
+        //Espresso.onView(withId(R.id.saveButton)).perform(click());
     }
 
-   /*@Test
+    @Test
+    public void testSaveInstanceState() {
+        Espresso.onView(withId(R.id.navigation_home)).perform(click());
+        Espresso.onView(withId(R.id.navigation_profile)).perform(click());
+        Espresso.onView(withId(R.id.statusInput)).perform(typeText("User Status"));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.nicknameInput)).perform(typeText("User Nickname"));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.navigation_home)).perform(click());
+        Espresso.onView(withId(R.id.navigation_profile)).perform(click());
+    }
+
+    /*
+   @Test
     public void testLanguageButton() {
-        onView(withId(R.id.navigation_profile)).perform(click());
-        onView(withId(R.id.languagesButton)).perform(click());
-    }*/
+       Espresso.onView(withId(R.id.navigation_profile)).perform(click());
+       Espresso.closeSoftKeyboard();
+       Espresso.onView(withId(R.id.languagesButton)).perform(click());
+       Espresso.onView(withId(R.id.navigation_profile)).perform(click());
+   }
+   */
+
+    @Test
+    public void testSeekBar() {
+        Espresso.onView(withId(R.id.navigation_profile)).perform(click());
+        Espresso.onView(withId(R.id.radiusBar)).perform(setProgress(10));
+
+    }
+
+    public static ViewAction setProgress(final int progress) {
+        return new ViewAction() {
+            @Override
+            public void perform(UiController uiController, View view) {
+                SeekBar seekBar = (SeekBar) view;
+                seekBar.setProgress(progress);
+            }
+            @Override
+            public String getDescription() {
+                return "Set a progress on a SeekBar";
+            }
+            @Override
+            public Matcher<View> getConstraints() {
+                return ViewMatchers.isAssignableFrom(SeekBar.class);
+            }
+        };
+    }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mblAccountActivity = null;
     }
 }

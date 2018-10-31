@@ -1,7 +1,5 @@
 package ch.epfl.sweng.radius.utils;
 
-import java.util.List;
-
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Message;
 

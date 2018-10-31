@@ -13,24 +13,18 @@ package ch.epfl.sweng.radius.utils;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.google.android.gms.common.data.DataBuffer;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.internal.bind.DateTypeAdapter;
 
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.DatabaseObject;
-import ch.epfl.sweng.radius.database.Message;
-import ch.epfl.sweng.radius.database.User;
 
 public class FirebaseUtility {
 
@@ -80,7 +74,7 @@ public class FirebaseUtility {
         return newUser[0];
     }
 
-    public DatabaseObject readObj() throws InterruptedException {
+    public DatabaseObject readObj() {
         final AtomicBoolean done = new AtomicBoolean(false);
         final AtomicInteger message1 = new AtomicInteger(0);
         database.child(obj.getID()).addListenerForSingleValueEvent( new ValueEventListener() {
@@ -108,7 +102,7 @@ public class FirebaseUtility {
         Do not use this method to read instantly used values ! Might lead to NullPointerException
                 Use readObj() instead
      */
-    public void listenInstanceObject() throws InterruptedException {
+    public void listenInstanceObject() {
 
         database.child(obj.getID()).addValueEventListener( new ValueEventListener() {
             @Override
@@ -125,7 +119,7 @@ public class FirebaseUtility {
 
     }
 
-    public DatabaseObject readOtherObject(String otherObjID) throws InterruptedException {
+    public DatabaseObject readOtherObject(String otherObjID) {
         final AtomicBoolean done = new AtomicBoolean(false);
         final AtomicInteger message1 = new AtomicInteger(0);
 

@@ -20,24 +20,24 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 
 
-public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountActivity> {
+public class FriendsFragmentTest extends ActivityInstrumentationTestCase2<AccountActivity> {
 
-    @Rule
-    public ActivityTestRule<AccountActivity> mblActivityTestRule
-            = new ActivityTestRule<AccountActivity>(AccountActivity.class);
     @Rule
     public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
             Manifest.permission.ACCESS_FINE_LOCATION);
+    @Rule
+    public ActivityTestRule<AccountActivity> mblActivityTestRule
+            = new ActivityTestRule<AccountActivity>(AccountActivity.class);
 
 
     private FrameLayout fcontainer;private AccountActivity mblAccountActivity;
     private Fragment fragment;
 
-    public HomeFragmentTest(Class<AccountActivity> activityClass) {
+    public FriendsFragmentTest(Class<AccountActivity> activityClass) {
         super(activityClass);
     }
 
-    public HomeFragmentTest(){
+    public FriendsFragmentTest(){
         super(AccountActivity.class);
     }
 
@@ -53,25 +53,22 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
 
     }
 
-    @Test
-    public void testMarkButton() {
-        onView(withId(R.id.navigation_profile)).perform(click());
-        onView(withId(R.id.navigation_home)).perform(click());
-        onView(withId(R.id.testMark)).perform(click());
-    }
 
     @Test
     public void testLaunch() {
         FrameLayout fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
         assertNotNull(fcontainer);
 
-        Fragment fragment = new HomeFragment();
+        Fragment fragment = new FriendsFragment();
 
         mblAccountActivity.getSupportFragmentManager().beginTransaction()
                 .add(fcontainer.getId(), fragment).commitAllowingStateLoss();
         getInstrumentation().waitForIdleSync();
 
-        View view = fragment.getView().findViewById(R.id.map);
+        View view = fragment.getView().findViewById(R.id.tabLayout);
+        assertNotNull(view);
+
+        view = fragment.getView().findViewById(R.id.viewPager);
         assertNotNull(view);
     }
 

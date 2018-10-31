@@ -41,7 +41,7 @@
             android:summary="You will be redirected to the login page"/>
 
         <Preference
-            android:id="@+id/deleteAccount"
+            android:key="deleteAccount"
             android:title="Delete your account"
             android:summary="All your conversations and friends will be deleted"/>
     </PreferenceCategory>

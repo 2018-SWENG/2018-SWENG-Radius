@@ -40,8 +40,8 @@ public class MapUtility {
     private static ArrayList<User> users;
 
     public MapUtility(double radius, ArrayList<User> users) {
-        this.radius = radius;
-        this.users = users;
+        MapUtility.radius = radius;
+        MapUtility.users = users;
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGTITUDE);
     }
 
@@ -74,11 +74,11 @@ public class MapUtility {
     }
 
     public void setCurrCoordinates(LatLng currCoordinates) {
-        this.currCoordinates = currCoordinates;
+        MapUtility.currCoordinates = currCoordinates;
     }
 
     public LatLng getCurrCoordinates() {
-        return this.currCoordinates;
+        return currCoordinates;
     }
 
     public void getLocationPermission(Context context, FragmentActivity activity) {
