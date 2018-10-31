@@ -22,21 +22,26 @@ public class LocationDbUtility {
 
     public LocationDbUtility(Location myPos){
         DatabaseReference db = null;
-        FirebaseAttributes attr = new FirebaseAttributes(FirebaseDatabase.getInstance(),
-                                                         FirebaseAuth.getInstance(),
-                                                         db);
-        this.fbUtil = new FirebaseUtility(attr, myPos, "userLocations");
+    //    FirebaseAttributes attr = new FirebaseAttributes(FirebaseDatabase.getInstance(),
+    //                                                     FirebaseAuth.getInstance(),
+    //                                                     db);
+   //     this.fbUtil = new FirebaseUtility(attr, myPos, "userLocations");
         this.myPos = myPos;
         this.otherPos = new ArrayList<>();
     }
 
     public void fetchOtherLocations(){
-        otherPos = fbUtil.readAllInstances();
+        //   otherPos = fbUtil.readAllInstances();
         // Remove my own location
         for(int i = 0; i < otherPos.size(); i++){
             if(otherPos.get(i).getID().equals(myPos.getID()))
                 otherPos.remove(i);
         }
+    }
+
+    public void writeLocation(){
+        fbUtil.setInstance(myPos);
+        fbUtil.writeInstanceObj();
     }
 
     public void updatePos(Location newPos){
@@ -47,4 +52,7 @@ public class LocationDbUtility {
         fbUtil.writeInstanceObj();
     }
 
+    public ArrayList<DatabaseObject> getOtherPos() {
+        return otherPos;
+    }
 }

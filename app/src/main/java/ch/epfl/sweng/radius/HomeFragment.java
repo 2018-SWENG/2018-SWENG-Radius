@@ -24,12 +24,17 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import ch.epfl.sweng.radius.database.DatabaseObject;
+import ch.epfl.sweng.radius.database.Location;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.friendsList.FriendsListAdapter;
 import ch.epfl.sweng.radius.friendsList.FriendsListItem;
+import ch.epfl.sweng.radius.utils.LocationDbUtility;
 import ch.epfl.sweng.radius.utils.MapUtility;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
@@ -44,6 +49,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static MapView mapView;
     private static CircleOptions radiusOptions;
     private static double radius;
+    private static LocationDbUtility dbUtil;
+    private Location myPos;
 
     //testing
     private static MapUtility mapListener;
@@ -141,6 +148,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM);
             markNearbyUsers();
         }
+
+        // Push current location to DB
+        double lat = mapListener.getCurrCoordinates().latitude;
+        double lng = mapListener.getCurrCoordinates().longitude;
+        myPos = new Location(FirebaseAuth.getInstance().getCurrentUser().getUid(), lat, lng);
+        dbUtil = new LocationDbUtility(myPos);
+        dbUtil.writeLocation();
+
     }
 
     public void initCircle(LatLng currentCoordinates) {
@@ -156,6 +171,24 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         Log.d( TAG, "moveCamera: moving the camera to: lat: "
                 + latLng.latitude + " long: " + latLng.longitude);
         mobileMap.moveCamera(CameraUpdateFactory.newLatLngZoom( latLng, zoom));
+    }
+
+    public List<Location> getUsersInRadius(){
+
+        ArrayList<Location> res = new ArrayList<>();
+
+        dbUtil.fetchOtherLocations();
+
+       ArrayList<DatabaseObject> othersLocations = dbUtil.getOtherPos();
+
+       for(int i = 0; i < othersLocations.size(); i++){
+           Location temp = (Location) othersLocations.get(i);
+           if(myPos.computeDistance(temp.getLatitude(), temp.getLongitude()) <= radius)
+               res.add(temp);
+       }
+        
+        return res;
+
     }
 
     /**
