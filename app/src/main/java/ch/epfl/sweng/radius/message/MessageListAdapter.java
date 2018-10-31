@@ -31,6 +31,8 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     public MessageListAdapter(Context context, List<Message> messages) {
         this.context = context;
         this.messages = messages;
+        flags = DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE;
+
     }
 
     // Inflates the appropriate layout according to the ViewType.
@@ -47,8 +49,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                     .inflate(R.layout.item_message_received, parent, false);
             return new ReceivedMessageHolder(view);
         }
-
-        flags = DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE;
 
         return null;
     }
@@ -80,7 +80,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         Message message = messages.get(position);
-        if (message.getSenderId() == UserInfos.getUserId()) {
+        if (message.getSenderId().equals(UserInfos.getUserId())) {
             // If the current user is the sender of the message
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
@@ -106,10 +106,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         void bind(Message message) {
             messageText.setText(message.getContentMessage());
 
-         //   int flags = DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE;
 
             // Format the stored timestamp into a readable String using method.
-            timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags)); // TODO: Date format ??
+            timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags));
         //    nameText.setText(message.getOwner().getNickname());
 
             // Insert the profile image from the URL into the ImageView.
@@ -131,10 +130,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         void bind(Message message) {
             messageText.setText(message.getContentMessage());
 
-      //      int flags = DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE;
 
             // Format the stored timestamp into a readable String using method.
-            timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags)); // TODO: Date format ??
+            timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags));
 
             // Insert the profile image from the URL into the ImageView.
             //Utils.displayRoundImageFromUrl(
