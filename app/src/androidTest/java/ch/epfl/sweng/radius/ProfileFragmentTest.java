@@ -85,9 +85,9 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
     public void testChangeNicknameAndStatus() {
         Espresso.onView(withId(R.id.navigation_profile)).perform(click());
         Espresso.onView(withId(R.id.nicknameInput)).perform(typeText("User Nickname"));
-        Espresso.onView(withId(R.id.nicknameInput)).perform(closeSoftKeyboard());
+        Espresso.closeSoftKeyboard();
         Espresso.onView(withId(R.id.statusInput)).perform(typeText("User Status"));
-        Espresso.onView(withId(R.id.statusInput)).perform(closeSoftKeyboard());
+        Espresso.closeSoftKeyboard();
         Espresso.onView(withId(R.id.saveButton)).perform(click());
     }
 
@@ -96,9 +96,9 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
         Espresso.onView(withId(R.id.navigation_home)).perform(click());
         Espresso.onView(withId(R.id.navigation_profile)).perform(click());
         Espresso.onView(withId(R.id.statusInput)).perform(typeText("User Status"));
-        Espresso.onView(withId(R.id.nicknameInput)).perform(closeSoftKeyboard());
+        Espresso.closeSoftKeyboard();
         Espresso.onView(withId(R.id.nicknameInput)).perform(typeText("User Nickname"));
-        Espresso.onView(withId(R.id.statusInput)).perform(closeSoftKeyboard());
+        Espresso.closeSoftKeyboard();
         Espresso.onView(withId(R.id.navigation_home)).perform(click());
         Espresso.onView(withId(R.id.navigation_profile)).perform(click());
     }
@@ -106,8 +106,10 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
    @Test
     public void testLanguageButton() {
        Espresso.onView(withId(R.id.navigation_profile)).perform(click());
+       Espresso.closeSoftKeyboard();
        Espresso.onView(withId(R.id.languagesButton)).perform(click());
-    }
+       Espresso.onView(withId(R.id.navigation_profile)).perform(click());
+   }
 
     @Test
     public void testSeekBar() {

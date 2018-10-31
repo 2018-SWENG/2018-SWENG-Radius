@@ -130,7 +130,7 @@ public class ProfileFragment extends Fragment {
 
         builder.setTitle("Pick the languages you speak");
         setBuilderMultiChoiceItems(builder);
-        builder.setCancelable(false);
+        builder.setCancelable(true);
         setBuilderPositiveButton(builder);
         setBuilderNegativeButton(builder);
         setBuilderNeutralButton(builder);
