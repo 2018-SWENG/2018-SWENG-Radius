@@ -96,7 +96,9 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
         Espresso.onView(withId(R.id.navigation_home)).perform(click());
         Espresso.onView(withId(R.id.navigation_profile)).perform(click());
         Espresso.onView(withId(R.id.statusInput)).perform(typeText("User Status"));
+        Espresso.onView(withId(R.id.nicknameInput)).perform(closeSoftKeyboard());
         Espresso.onView(withId(R.id.nicknameInput)).perform(typeText("User Nickname"));
+        Espresso.onView(withId(R.id.statusInput)).perform(closeSoftKeyboard());
         Espresso.onView(withId(R.id.navigation_home)).perform(click());
         Espresso.onView(withId(R.id.navigation_profile)).perform(click());
     }
