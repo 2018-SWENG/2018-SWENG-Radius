@@ -88,7 +88,7 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
         Espresso.closeSoftKeyboard();
         Espresso.onView(withId(R.id.statusInput)).perform(typeText("User Status"));
         Espresso.closeSoftKeyboard();
-        //Espresso.onView(withId(R.id.saveButton)).perform(click());
+        Espresso.onView(withId(R.id.saveButton)).perform(click());
     }
 
     @Test
@@ -103,15 +103,14 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
         Espresso.onView(withId(R.id.navigation_profile)).perform(click());
     }
 
-    /*
+
    @Test
     public void testLanguageButton() {
        Espresso.onView(withId(R.id.navigation_profile)).perform(click());
        Espresso.closeSoftKeyboard();
        Espresso.onView(withId(R.id.languagesButton)).perform(click());
-       Espresso.onView(withId(R.id.navigation_profile)).perform(click());
+       //Espresso.onView(withId(R.id.navigation_profile)).perform(click());
    }
-   */
 
     @Test
     public void testSeekBar() {
