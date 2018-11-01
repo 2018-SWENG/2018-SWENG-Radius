@@ -31,6 +31,7 @@ import org.junit.Test;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -98,7 +99,7 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
         Espresso.closeSoftKeyboard();
         Espresso.onView(withId(R.id.statusInput)).perform(typeText("User Status"));
         Espresso.closeSoftKeyboard();
-        Espresso.onView(withId(R.id.saveButton)).perform(click());
+        Espresso.onView(withId(R.id.saveButton)).perform(scrollTo(),click());
     }
 
     @Test
@@ -117,7 +118,7 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
    @Test
     public void testLanguageButton() {
        Espresso.onView(withId(R.id.navigation_profile)).perform(click());
-       Espresso.onView(withId(R.id.languagesButton)).perform(click());
+       Espresso.onView(withId(R.id.languagesButton)).perform(scrollTo(),click());
        Espresso.onView(withText("OK"))
                .inRoot(RootMatchers.isDialog())
                .check(ViewAssertions.matches(isDisplayed()))
