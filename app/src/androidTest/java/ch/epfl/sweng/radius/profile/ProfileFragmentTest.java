@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius;
+package ch.epfl.sweng.radius.profile;
 
 import android.Manifest;
 import android.app.Activity;
@@ -22,20 +22,19 @@ import android.widget.FrameLayout;
 import android.widget.SeekBar;
 
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static android.support.test.espresso.Espresso.onView;
+import ch.epfl.sweng.radius.AccountActivity;
+import ch.epfl.sweng.radius.R;
+
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -148,6 +147,7 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
 
    }
 
+    @Ignore
     @Test
     public void testRestoreState() {
         rotateScreen();

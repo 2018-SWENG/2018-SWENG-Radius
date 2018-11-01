@@ -1,10 +1,10 @@
-package ch.epfl.sweng.radius.friendsList;
+package ch.epfl.sweng.radius.home;
 
-public class FriendsListItem {
+public class PeopleListItem {
     private String friendName;
     private int friendProfilePic;
 
-    public FriendsListItem(String friendName, int friendProfilePic){
+    public PeopleListItem(String friendName, int friendProfilePic){
 
         this.friendName = friendName;
         this.friendProfilePic = friendProfilePic;

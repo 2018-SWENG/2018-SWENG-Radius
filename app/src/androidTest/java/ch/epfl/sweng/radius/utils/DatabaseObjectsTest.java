@@ -1,10 +1,9 @@
-package ch.epfl.sweng.radius;
+package ch.epfl.sweng.radius.utils;
 
 import android.Manifest;
 import android.support.test.rule.GrantPermissionRule;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 

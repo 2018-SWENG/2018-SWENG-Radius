@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius;
+package ch.epfl.sweng.radius.profile;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -26,6 +26,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.home.HomeFragment;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;

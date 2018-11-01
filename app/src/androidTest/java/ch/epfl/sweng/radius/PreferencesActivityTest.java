@@ -1,37 +1,22 @@
 package ch.epfl.sweng.radius;
 
 import android.Manifest;
-import android.app.Fragment;
 import android.content.Intent;
 import android.preference.Preference;
 import android.support.test.espresso.Espresso;
-import android.support.test.espresso.assertion.ViewAssertions;
-import android.support.test.espresso.matcher.PreferenceMatchers;
-import android.support.test.espresso.matcher.RootMatchers;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.test.ActivityInstrumentationTestCase2;
-import android.view.View;
 import android.widget.FrameLayout;
 
-import org.hamcrest.Matchers;
 import org.hamcrest.core.AllOf;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
-import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withTagKey;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.junit.Assert.*;
 
 public class PreferencesActivityTest  extends ActivityInstrumentationTestCase2<PreferencesActivity> {
 

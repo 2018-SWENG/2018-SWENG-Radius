@@ -1,7 +1,9 @@
-package ch.epfl.sweng.radius;
+package ch.epfl.sweng.radius.home;
 
 import android.Manifest;
 import android.content.Intent;
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.v4.app.Fragment;
@@ -14,10 +16,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import ch.epfl.sweng.radius.AccountActivity;
+import ch.epfl.sweng.radius.R;
 
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 
 public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountActivity> {
@@ -54,13 +58,6 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
     }
 
     @Test
-    public void testMarkButton() {
-        onView(withId(R.id.navigation_profile)).perform(click());
-        onView(withId(R.id.navigation_home)).perform(click());
-        onView(withId(R.id.testMark)).perform(click());
-    }
-
-    @Test
     public void testLaunch() {
         FrameLayout fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
         assertNotNull(fcontainer);
@@ -73,6 +70,32 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
 
         View view = fragment.getView().findViewById(R.id.map);
         assertNotNull(view);
+    }
+
+    @Test
+    public void testPeopleTab(){
+        Espresso.onView(withText("TOPICS"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+        Espresso.onView(withText("PEOPLE"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+        Espresso.onView(withText("TOPICS"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+    }
+
+    @Test
+    public void testTopicsTab(){
+        Espresso.onView(withText("TOPICS"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+        Espresso.onView(withText("PEOPLE"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+        Espresso.onView(withText("TOPICS"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
     }
 
     @After

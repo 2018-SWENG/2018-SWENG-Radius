@@ -1,18 +1,11 @@
-package ch.epfl.sweng.radius.message;
+package ch.epfl.sweng.radius.messages;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
-
-import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.database.ChatLogs;
-import ch.epfl.sweng.radius.database.Message;
-import ch.epfl.sweng.radius.utils.ChatLogDbUtility;
-import ch.epfl.sweng.radius.utils.UserInfos;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -29,6 +22,7 @@ import java.util.Map;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.utils.ChatLogDbUtility;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
 

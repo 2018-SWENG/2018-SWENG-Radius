@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.message;
+package ch.epfl.sweng.radius.messages;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,17 +6,10 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.test.ActivityInstrumentationTestCase2;
-import android.view.View;
-import android.widget.FrameLayout;
 
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.google.firebase.database.DatabaseReference;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -24,27 +17,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import ch.epfl.sweng.radius.AccountActivity;
-import ch.epfl.sweng.radius.ProfileFragment;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.message.MessageListActivity;
-import ch.epfl.sweng.radius.database.Message;
-import ch.epfl.sweng.radius.utils.ChatLogDbUtility;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.powermock.api.mockito.PowerMockito.when;
 
 /**
  * Instrumented test, which will execute on an Android device.
