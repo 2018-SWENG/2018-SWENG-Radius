@@ -53,7 +53,7 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
         assertNotNull(view);
         view = mActivity.findViewById(R.id.navigation_messages);
         assertNotNull(view);
-        view = mActivity.findViewById(R.id.navigation_settings);
+        view = mActivity.findViewById(R.id.navigation_friends);
         assertNotNull(view);
         view = mActivity.findViewById(R.id.navigation_profile);
         assertNotNull(view);
@@ -84,7 +84,7 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
 
     @Test
     public void testNavigationToFriends() {
-        Espresso.onView(withId(R.id.navigation_settings)).perform(click());
+        Espresso.onView(withId(R.id.navigation_friends)).perform(click());
     }
 
 

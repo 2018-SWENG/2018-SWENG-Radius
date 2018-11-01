@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 /**
@@ -34,17 +33,6 @@ public class ChatLogs implements DatabaseObject{
         this.messages = new LinkedList<>();
         this.chatLogsId = chatLogsId;
     }
-
-    /*
-        Copy constructor
-     */
-    public ChatLogs(ChatLogs chatLogs){
-       // this.chatLogsId = chatLogs.getChatLogsId();
-        this.membersId = new ArrayList<>(chatLogs.getMembersId());
-        this.messages = new LinkedList<>(chatLogs.messages);
-        this.numberOfMessages = chatLogs.getNumberOfMessages();
-    }
-
 
     // Getters
     public List<String> getMembersId() {

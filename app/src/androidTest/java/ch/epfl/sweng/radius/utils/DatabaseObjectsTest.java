@@ -1,10 +1,9 @@
-package ch.epfl.sweng.radius;
+package ch.epfl.sweng.radius.utils;
 
 import android.Manifest;
 import android.support.test.rule.GrantPermissionRule;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -42,6 +41,12 @@ public class DatabaseObjectsTest {
     @Test
     public void testChatLogs() {
         ArrayList<String> usersIds = new ArrayList<String>();
+        try{
+            new ChatLogs(usersIds);
+            assert(false);
+        }catch (Exception e){
+
+        }
         usersIds.add("1234");
         usersIds.add("4321");
         ChatLogs chatLogs = new ChatLogs(usersIds);
@@ -49,6 +54,7 @@ public class DatabaseObjectsTest {
         Message m = new Message(chatLogs.getMembersId().get(0), chatLogs.getMembersId().get(1), new Date());
 
         chatLogs.addMessage(m);
+        chatLogs.addMembersId("56789");
         chatLogs.addMembersId("56789");
 
         // Test Ids generation
@@ -74,6 +80,7 @@ public class DatabaseObjectsTest {
         String status = user.getStatus();
         try {
             user.setStatus("123456789012345678901234567890123456789012345678902345678901234567890");
+            assert(false);
         } catch (Exception e){}
         assert(user.getStatus() == status);
     }

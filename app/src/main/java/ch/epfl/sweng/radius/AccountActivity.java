@@ -12,10 +12,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.firebase.auth.FirebaseAuth;
-
-import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.FirebaseUtility;
+import ch.epfl.sweng.radius.friends.FriendsFragment;
+import ch.epfl.sweng.radius.home.HomeFragment;
+import ch.epfl.sweng.radius.messages.MessagesFragment;
+import ch.epfl.sweng.radius.profile.ProfileFragment;
 
 public class AccountActivity extends AppCompatActivity {
 
@@ -99,7 +99,7 @@ public class AccountActivity extends AppCompatActivity {
                         //fragment = new MessagesFragment();
                         loadFragment(messageFragment);
                         break;
-                    case R.id.navigation_settings:
+                    case R.id.navigation_friends:
                         //fragment = new SettingsFragment();
                         loadFragment(friendsFragment);
                         break;

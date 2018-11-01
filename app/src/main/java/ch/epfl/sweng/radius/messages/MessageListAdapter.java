@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.message;
+package ch.epfl.sweng.radius.messages;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

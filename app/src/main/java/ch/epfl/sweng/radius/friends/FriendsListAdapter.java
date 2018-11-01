@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.friendsList;
+package ch.epfl.sweng.radius.friends;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

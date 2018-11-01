@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.friendsList;
+package ch.epfl.sweng.radius.friends;
 
 public class FriendsListItem {
     private String friendName;
@@ -16,15 +16,7 @@ public class FriendsListItem {
         return friendName;
     }
 
-    public void setFriendName(String friendName) {
-        this.friendName = friendName;
-    }
-
     public int getFriendProfilePic() {
         return friendProfilePic;
-    }
-
-    public void setFriendProfilePic(int friendProfilePic) {
-        this.friendProfilePic = friendProfilePic;
     }
 }

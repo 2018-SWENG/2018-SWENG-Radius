@@ -1,10 +1,17 @@
-package ch.epfl.sweng.radius;
+package ch.epfl.sweng.radius.profile;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.assertion.ViewAssertions;
+import android.support.test.espresso.matcher.RootMatchers;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
@@ -15,18 +22,21 @@ import android.widget.FrameLayout;
 import android.widget.SeekBar;
 
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static android.support.test.espresso.Espresso.onView;
+import ch.epfl.sweng.radius.AccountActivity;
+import ch.epfl.sweng.radius.R;
+
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<AccountActivity> {
 
@@ -88,7 +98,7 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
         Espresso.closeSoftKeyboard();
         Espresso.onView(withId(R.id.statusInput)).perform(typeText("User Status"));
         Espresso.closeSoftKeyboard();
-        //Espresso.onView(withId(R.id.saveButton)).perform(click());
+        Espresso.onView(withId(R.id.saveButton)).perform(scrollTo(),click());
     }
 
     @Test
@@ -103,15 +113,57 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
         Espresso.onView(withId(R.id.navigation_profile)).perform(click());
     }
 
-    /*
+
    @Test
     public void testLanguageButton() {
        Espresso.onView(withId(R.id.navigation_profile)).perform(click());
-       Espresso.closeSoftKeyboard();
+       Espresso.onView(withId(R.id.languagesButton)).perform(scrollTo(),click());
+       Espresso.onView(withText("OK"))
+               .inRoot(RootMatchers.isDialog())
+               .check(ViewAssertions.matches(isDisplayed()))
+               .perform(click());
+
        Espresso.onView(withId(R.id.languagesButton)).perform(click());
-       Espresso.onView(withId(R.id.navigation_profile)).perform(click());
+       Espresso.onView(withText("DISMISS"))
+               .inRoot(RootMatchers.isDialog())
+               .check(ViewAssertions.matches(isDisplayed()))
+               .perform(click());
+
+       Espresso.onView(withId(R.id.languagesButton)).perform(click());
+       Espresso.onView(withText("CLEAR ALL"))
+               .inRoot(RootMatchers.isDialog())
+               .check(ViewAssertions.matches(isDisplayed()))
+               .perform(click());
+
+       Espresso.onView(withId(R.id.languagesButton)).perform(click());
+       Espresso.onView(withText("German"))
+               .inRoot(RootMatchers.isDialog())
+               .check(ViewAssertions.matches(isDisplayed()))
+               .perform(click());
+       Espresso.onView(withText("OK"))
+               .inRoot(RootMatchers.isDialog())
+               .check(ViewAssertions.matches(isDisplayed()))
+               .perform(click());
+
    }
-   */
+
+    @Ignore
+    @Test
+    public void testRestoreState() {
+        rotateScreen();
+    }
+
+    private void rotateScreen() {
+        Context context = InstrumentationRegistry.getTargetContext();
+        int orientation
+                = context.getResources().getConfiguration().orientation;
+
+        Activity activity = mblActivityTestRule.getActivity();
+        activity.setRequestedOrientation(
+                (orientation == Configuration.ORIENTATION_PORTRAIT) ?
+                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE :
+                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
 
     @Test
     public void testSeekBar() {

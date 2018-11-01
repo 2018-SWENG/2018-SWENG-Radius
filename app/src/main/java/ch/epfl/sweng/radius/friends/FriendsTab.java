@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.friendsList;
+package ch.epfl.sweng.radius.friends;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
