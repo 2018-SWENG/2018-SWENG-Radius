@@ -35,7 +35,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
     private FirebaseUtility fbutil;
 
-
+/*
     @Before
     public void setUp() {
 
@@ -182,7 +182,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
     }
 
 
-
+*/
 
 
 

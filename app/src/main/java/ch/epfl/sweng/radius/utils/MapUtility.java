@@ -20,8 +20,8 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 
-import ch.epfl.sweng.radius.ProfileFragment;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.profile.ProfileFragment;
 
 public class MapUtility {
     private static final String TAG = "MapUtility";

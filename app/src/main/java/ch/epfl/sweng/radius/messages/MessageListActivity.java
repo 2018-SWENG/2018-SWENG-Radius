@@ -1,18 +1,11 @@
-package ch.epfl.sweng.radius.message;
+package ch.epfl.sweng.radius.messages;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
-
-import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.database.ChatLogs;
-import ch.epfl.sweng.radius.database.Message;
-import ch.epfl.sweng.radius.utils.ChatLogDbUtility;
-import ch.epfl.sweng.radius.utils.UserInfos;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -29,6 +22,7 @@ import java.util.Map;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.utils.ChatLogDbUtility;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
 
@@ -158,17 +152,19 @@ public class MessageListActivity extends AppCompatActivity {
                 String pattern = "EEE MMM dd HH:mm:ss Z yyyy";
                 Map map = dataSnapshot.getValue(Map.class);
                 if (!map.isEmpty() && map.size() == Message.NUMBER_ELEMENTS_IN_MESSAGE) {
-                    String message = map.get("message").toString();
-                    String senderId = map.get("senderId").toString();
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-                    Date sendingTime = null;
-                    try {
-                        sendingTime = simpleDateFormat.parse(map.get("sendingTime").toString());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    if (map.containsKey("message") && map.containsKey("senderId")) {
+                        String message = map.get("message").toString();
+                        String senderId = map.get("senderId").toString();
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+                        Date sendingTime = null;
+                        try {
+                            sendingTime = simpleDateFormat.parse(map.get("sendingTime").toString());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
 
-                    receiveMessage(new Message(senderId, message, sendingTime));
+                        receiveMessage(new Message(senderId, message, sendingTime));
+                    }
                 }
 
             }

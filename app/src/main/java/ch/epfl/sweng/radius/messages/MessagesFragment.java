@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius;
+package ch.epfl.sweng.radius.messages;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,9 +12,9 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.browseProfiles.ChatListItem;
 import ch.epfl.sweng.radius.browseProfiles.CustomAdapter;
-import ch.epfl.sweng.radius.message.MessageListActivity;
 
 
 public class MessagesFragment extends Fragment {

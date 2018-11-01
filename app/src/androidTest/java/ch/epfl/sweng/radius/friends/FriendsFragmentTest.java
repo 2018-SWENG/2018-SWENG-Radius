@@ -1,7 +1,9 @@
-package ch.epfl.sweng.radius;
+package ch.epfl.sweng.radius.friends;
 
 import android.Manifest;
 import android.content.Intent;
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.v4.app.Fragment;
@@ -14,10 +16,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import ch.epfl.sweng.radius.AccountActivity;
+import ch.epfl.sweng.radius.R;
 
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 
 public class FriendsFragmentTest extends ActivityInstrumentationTestCase2<AccountActivity> {
@@ -70,6 +75,36 @@ public class FriendsFragmentTest extends ActivityInstrumentationTestCase2<Accoun
 
         view = fragment.getView().findViewById(R.id.viewPager);
         assertNotNull(view);
+    }
+
+    @Test
+    public void testPeopleTab(){
+        Espresso.onView(withId(R.id.navigation_friends)).perform(click());
+
+        Espresso.onView(withText("FRIENDS"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+        Espresso.onView(withText("REQUESTS"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+        Espresso.onView(withText("FRIENDS"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+    }
+
+    @Test
+    public void testTopicsTab(){
+        Espresso.onView(withId(R.id.navigation_friends)).perform(click());
+
+        Espresso.onView(withText("REQUESTS"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+        Espresso.onView(withText("FRIENDS"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+        Espresso.onView(withText("REQUESTS"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
     }
 
     @After

@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius;
+package ch.epfl.sweng.radius.friends;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -8,8 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ch.epfl.sweng.radius.friendsList.FriendsTab;
-import ch.epfl.sweng.radius.friendsList.RequestsTab;
+import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.utils.TabAdapter;
 
 

@@ -1,21 +1,22 @@
 package ch.epfl.sweng.radius;
 
 import android.Manifest;
-import android.app.Fragment;
 import android.content.Intent;
 import android.preference.Preference;
+import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.test.ActivityInstrumentationTestCase2;
-import android.view.View;
 import android.widget.FrameLayout;
 
+import org.hamcrest.core.AllOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class PreferencesActivityTest  extends ActivityInstrumentationTestCase2<PreferencesActivity> {
 
@@ -45,20 +46,17 @@ public class PreferencesActivityTest  extends ActivityInstrumentationTestCase2<P
 
         Intent intent = new Intent();
         mblPreferenceActivity = mblActivityTestRule.launchActivity(intent);
+        fragment =  (PreferencesActivity.MyPreferenceFragment) mblPreferenceActivity
+                .getFragmentManager().findFragmentByTag("preferencesFragment");
     }
 
     @Test
     public void testLaunch() {
-        fragment =  (PreferencesActivity.MyPreferenceFragment) mblPreferenceActivity
-                .getFragmentManager().findFragmentByTag("preferencesFragment");
         assertNotNull(fragment);
-
-        //mblPreferenceActivity.getFragmentManager().beginTransaction()
-        //        .add(fcontainer.getId(), fragment).commitAllowingStateLoss();
         getInstrumentation().waitForIdleSync();
 
         Preference incognitoSwitch = fragment.findPreference("incognitoSwitch");
-        Preference notifCheckBox = fragment.findPreference("notificationCheckbox");
+        Preference notifCheckBox = fragment.findPreference("notificationsCheckbox");
         Preference nightModeSwitch = fragment.findPreference("nightModeSwitch");
         Preference logoutButton = fragment.findPreference("logOutButton");
         Preference deleteAccount = fragment.findPreference("deleteAccount");
@@ -68,12 +66,39 @@ public class PreferencesActivityTest  extends ActivityInstrumentationTestCase2<P
         assertNotNull(nightModeSwitch);
         assertNotNull(logoutButton);
         assertNotNull(deleteAccount);
-
     }
 
-    public void testLogout(){
-
+    @Test
+    public void testIncognitoMode(){
+        Espresso.onView(AllOf.allOf(withText(R.string.incognitoTitle)))
+                .perform(click());
     }
+
+    @Test
+    public void testNotifications(){
+        Espresso.onView(AllOf.allOf(withText(R.string.notificationsTitle)))
+                .perform(click());
+    }
+
+    @Test
+    public void testNightMode(){
+        Espresso.onView(AllOf.allOf(withText(R.string.nightModeTitle)))
+                .perform(click());
+    }
+
+    @Test
+    public void testLogOut(){
+        Espresso.onView(AllOf.allOf(withText(R.string.logoutTitle)))
+                .perform(click());
+    }
+
+    @Test
+    public void testDeleteAccount(){
+        Espresso.onView(AllOf.allOf(withText(R.string.deleteAccountTitle)))
+                .perform(click());
+    }
+
+
 
     @After
     public void tearDown() throws Exception {

@@ -1,3 +1,4 @@
+sudo: required # toggle sudo mode (should be a bit faster)
 language: android
 android:
   components:
@@ -12,13 +13,18 @@ android:
     - extra-google-m2repository
     - extra-android-m2repository
     - sys-img-armeabi-v7a-android-22
+
+# disable email notifications
+notifications:
+  email: false 
+
 before_script:
   # Emulator Management: Create, Start and Wait
   - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82
-  # This should be in the `before_script` entry
+
   # Set up Code Climate test reporter
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
