@@ -9,4 +9,26 @@
     <string name="ok_label">OK</string>
     <string name="dismiss_label">Dismiss</string>
     <string name="clearAll_label">Clear all</string>
+
+    <!-- Preferences Page Strings -->
+    <string name="incognitoKey">incognitoSwitch</string>
+    <string name="incognitoTitle">Incognito mode</string>
+    <string name="incognitoSumary">If this option is activate, nobody can see you on the map</string>
+
+    <string name="notificationsKey">notificationsCheckbox</string>
+    <string name="notificationsTitle">Notifications</string>
+    <string name="notificationsSumary">Disable or enable notifications when you receive a message</string>
+
+    <string name="nightModeKey">nightModeSwitch</string>
+    <string name="nightModeTitle">Night Mode</string>
+    <string name="nightModeSumary">Change the colors of the app for a less bright version</string>
+
+    <string name="logoutKey">logOutButton</string>
+    <string name="logoutTitle">Disconnect</string>
+    <string name="logoutSumary">You will be redirected to the login page</string>
+
+    <string name="deleteAccountKey">deleteAccount</string>
+    <string name="deleteAccountTitle">Delete your account</string>
+    <string name="deleteAccountSumary">All your conversations and friends will be deleted</string>
+
 </resources>

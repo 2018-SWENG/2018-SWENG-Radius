@@ -118,12 +118,19 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
     public void testLanguageButton() {
        Espresso.onView(withId(R.id.navigation_profile)).perform(click());
        Espresso.onView(withId(R.id.languagesButton)).perform(click());
+       Espresso.onView(withText("English"))
+               .inRoot(RootMatchers.isDialog())
+               .check(ViewAssertions.matches(isDisplayed()))
+               .perform(click());
+       Espresso.onView(withText("German"))
+               .inRoot(RootMatchers.isDialog())
+               .check(ViewAssertions.matches(isDisplayed()))
+               .perform(click());
        Espresso.onView(withText("OK"))
                .inRoot(RootMatchers.isDialog())
                .check(ViewAssertions.matches(isDisplayed()))
                .perform(click());
        Espresso.onView(withId(R.id.navigation_profile)).perform(click());
-
 
    }
 
