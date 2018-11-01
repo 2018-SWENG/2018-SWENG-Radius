@@ -1,17 +1,18 @@
 package ch.epfl.sweng.radius.utils;
 
 import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.FirebaseUtility;
 import ch.epfl.sweng.radius.database.Message;
 
 public class ChatLogDbUtility {
-
+    /*
     private FirebaseUtility fbUtil;
     private ChatLogs localInstance;
 
     public ChatLogDbUtility(ChatLogs localInstance){
 
         this.localInstance = localInstance;
-        this.fbUtil = new FirebaseUtility(localInstance, "chatlogs");
+        this.fbUtil = new FirebaseUtility("chatlogs");
     }
 
     public void addMessage(Message newMsg){}
@@ -25,7 +26,7 @@ public class ChatLogDbUtility {
 
         //ChatLogs ret = new ChatLogs(chatLogsID);
 
-        ChatLogs ret = (ChatLogs) fbUtil.readOtherObject(chatLogsID);
+        ChatLogs ret = (ChatLogs) fbUtil.readObjOnce(chatLogsID);
 
         return ret;
     }
@@ -43,5 +44,5 @@ public class ChatLogDbUtility {
     public void writeChatLogs(ChatLogs otherChatlogs) {
         fbUtil.writeOtherObj(otherChatlogs);
     }
-
+    */
 }

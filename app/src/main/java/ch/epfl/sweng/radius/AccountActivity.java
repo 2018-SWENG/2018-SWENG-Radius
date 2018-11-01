@@ -12,11 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.firebase.auth.FirebaseAuth;
-
-import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.FirebaseUtility;
-
 public class AccountActivity extends AppCompatActivity {
 
     private Toolbar toolbar;

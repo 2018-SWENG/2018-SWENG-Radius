@@ -13,6 +13,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import java.util.concurrent.CountDownLatch;
 
+import ch.epfl.sweng.radius.database.FirebaseUtility;
 import ch.epfl.sweng.radius.database.User;
 
 import static java.lang.Thread.sleep;
