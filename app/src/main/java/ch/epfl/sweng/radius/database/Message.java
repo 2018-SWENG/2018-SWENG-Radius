@@ -32,5 +32,4 @@ public class Message {
     public Date getSendingTime() {
         return sendingTime;
     }
-
 }

@@ -5,11 +5,22 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DatabaseError;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.FirebaseUtility;
+import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.CustomListAdapter;
+import ch.epfl.sweng.radius.utils.CustomListItem;
 
 
 public class PeopleTab extends Fragment {
@@ -25,17 +36,30 @@ public class PeopleTab extends Fragment {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.people_tab, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.peopleTab);
-        //mock data for testing purposes
-        PeopleListItem items[] = { new PeopleListItem("John Doe",R.drawable.image1),
-                new PeopleListItem("Jane Doe",R.drawable.image2),
-                new PeopleListItem("Alison Star",R.drawable.image3),
-                new PeopleListItem("Mila Noon",R.drawable.image4),
-                new PeopleListItem("David Doyle",R.drawable.image5)};
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        PeopleListAdapter adapter = new PeopleListAdapter(items, getContext());
+        final CustomListAdapter adapter = new CustomListAdapter(new ArrayList<CustomListItem>(), getContext());
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        //mock data for testing purposes
+        final FirebaseUtility database = new FirebaseUtility("users");
+
+        database.readListObj(Arrays.asList("testUser1", "testUser2", "testUser3", "testUser4"), User.class, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                ArrayList<CustomListItem> users = new ArrayList<>();
+                for (User friend: (ArrayList<User>) value) {
+                    users.add(new CustomListItem(friend));
+                }
+                adapter.setItems(users);
+                adapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onError(DatabaseError error) {
+                Log.e("Firebase", error.getMessage());
+            }
+        });
+
 
         // Inflate the layout for this fragment
         return view;

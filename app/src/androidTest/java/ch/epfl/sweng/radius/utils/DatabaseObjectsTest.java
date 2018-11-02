@@ -72,8 +72,8 @@ public class DatabaseObjectsTest {
     public void testUser() {
         // Test no duplicates friends requests
         User user = new User("1234");
-        user.addFriendRequest("123");
-        user.addFriendRequest("123");
+        user.addFriendRequest(new User("123"));
+        user.addFriendRequest(new User("123"));
         assert(user.getFriendsRequests().size() == 1);
 
         // Test status max characters

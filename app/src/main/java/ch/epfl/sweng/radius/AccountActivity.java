@@ -11,6 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.google.firebase.database.DatabaseError;
+
+import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.FirebaseUtility;
+import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.friends.FriendsFragment;
 import ch.epfl.sweng.radius.home.HomeFragment;
 import ch.epfl.sweng.radius.messages.MessagesFragment;
@@ -32,35 +38,47 @@ public class AccountActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.app_preferences, false);
 
         // Read the current User from the database
+        FirebaseUtility database = new FirebaseUtility("users");
 
-/*
+        User user1 = new User("testUser1");
+        User user2 = new User("testUser2");
+        User user3 = new User("testUser3");
+        User user4 = new User("testUser4");
+        User current_user = new User(database.getCurrent_user_id());
+
+        user1.addFriendRequest(user2);
+        user1.addFriendRequest(user3);
+        user2.addFriendRequest(user1);
+        user2.addFriendRequest(user4);
+        user4.addFriendRequest(user2);
+        user4.addFriendRequest(current_user);
+        user2.addFriendRequest(current_user);
+        user3.addFriendRequest(current_user);
+
+        current_user.addFriendRequest(user2);
+        current_user.addFriendRequest(user3);
+
+        database.writeInstanceObj(current_user);
+        database.writeInstanceObj(user1);
+        database.writeInstanceObj(user2);
+        database.writeInstanceObj(user3);
+        database.writeInstanceObj(user4);
+        /*
         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        System.out.println(userUID);
-        User current_user = new User("userTest00");
-        FirebaseUtility fbUserUtility = new FirebaseUtility(current_user, "users");
-
-        if (fbUserUtility.isNew()){
-            System.out.println("isNew");
-        } else
-            System.out.println("isNotNew");
-
-
-
-        System.out.println("fbUtilityCreated");
-        if (fbUserUtility.isNew()){
-            System.out.println("isNew");
-            fbUserUtility.writeInstanceObj();
-        }
-        else {
-            System.out.println("isNotNew");
-            try {
-                fbUserUtility.readObj();
-                System.out.println(((User)fbUserUtility.getInstance()).getStatus());
-            } catch (Exception e){
-                System.err.println("Error during database access");
-                e.printStackTrace();
+        FirebaseUtility database = new FirebaseUtility("users");
+        User currentUser = new User(userUID);
+        database.readObjOnce(currentUser, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                User userStoredInTheDB = (User)value;
+                System.out.println(userStoredInTheDB.getNickname());
             }
-        }
+
+            @Override
+            public void onError(DatabaseError error) {
+                Log.e("Firebase Error", error.getMessage());
+            }
+        });
         */
 
 

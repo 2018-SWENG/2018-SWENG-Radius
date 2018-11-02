@@ -12,6 +12,7 @@ import static java.lang.Math.min;
 
 public class ChatLogs implements DatabaseObject{
     private static long idGenerator = 0;
+
     private List<String> membersId;
     private List<Message> messages; // List LIFO of all the message in the chat
     private String chatLogsId = Long.toString(idGenerator++);
