@@ -12,6 +12,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import ch.epfl.sweng.radius.database.Database;
+
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
@@ -38,8 +40,9 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
 
     @Before
     public void setUp() throws Exception {
-
         super.setUp();
+        Database.activateDebugMode();
+
 
         Intent intent = new Intent();
         mActivity = mActivityRule.launchActivity(intent);

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -63,14 +64,15 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
     @Before
     public void setUp() throws Exception {
         super.setUp();
+        Database.activateDebugMode();
 
         Intent intent = new Intent();
         mlActivity = mblActivityTestRule.launchActivity(intent);
         user1 = new User();
         user2 = new User();
         ArrayList<String> userIds = new ArrayList<>();
-        userIds.add(user1.getUserID());
-        userIds.add(user2.getUserID());
+        userIds.add(user1.getID());
+        userIds.add(user2.getID());
         chatLogs = new ChatLogs(userIds);
         databaseMessageUrl = "https://radius-1538126456577.firebaseio.com/messages/";
 

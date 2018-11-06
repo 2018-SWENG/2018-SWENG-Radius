@@ -32,41 +32,6 @@ public class AccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         PreferenceManager.setDefaultValues(this, R.xml.app_preferences, false);
 
-        // Read the current User from the database
-
-/*
-        String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        System.out.println(userUID);
-        User current_user = new User("userTest00");
-        FirebaseUtility fbUserUtility = new FirebaseUtility(current_user, "users");
-
-        if (fbUserUtility.isNew()){
-            System.out.println("isNew");
-        } else
-            System.out.println("isNotNew");
-
-
-
-        System.out.println("fbUtilityCreated");
-        if (fbUserUtility.isNew()){
-            System.out.println("isNew");
-            fbUserUtility.writeInstanceObj();
-        }
-        else {
-            System.out.println("isNotNew");
-            try {
-                fbUserUtility.readObj();
-                System.out.println(((User)fbUserUtility.getInstance()).getStatus());
-            } catch (Exception e){
-                System.err.println("Error during database access");
-                e.printStackTrace();
-            }
-        }
-        */
-
-
-
-
         // Set the layout
         setContentView(R.layout.activity_account);
 

@@ -14,7 +14,7 @@ import java.util.Map;
 public class User implements DatabaseObject {
     private static long idGenerator = 0;// Debugging purpose only
 
-    private final String userID;
+    private String userID;
     private String nickname;
     public String urlProfilePhoto;
     private int radius; // meters
@@ -57,10 +57,6 @@ public class User implements DatabaseObject {
     }
 
     // Getter
-    public String getUserID() {
-        return userID;
-    }
-
     public String getNickname() {
         return nickname;
     }
@@ -77,6 +73,11 @@ public class User implements DatabaseObject {
         this.urlProfilePhoto = urlProfilePhoto;
     }
 */
+
+    public String getUrlProfilePhoto() {
+        return urlProfilePhoto;
+    }
+
     public int getRadius() {
         return radius;
     }
@@ -128,12 +129,16 @@ public class User implements DatabaseObject {
         return chatList.get(userID);
     }
 
-    public void addFriendRequest(String friendID) {
-        if (friendsInvitations.contains(friendID)) {
-            friendsInvitations.remove(friendID);
-            friends.add(friendID);
-        } else
-            friendsRequests.add(friendID);
+    public void addFriendRequest(User friend) {
+        if (friend.friendsRequests.contains(this.userID)) {
+            friend.friendsRequests.remove(this.userID);
+            friendsInvitations.remove(friend.getID());
+            friends.add(friend.getID());
+            friend.friends.add(this.userID);
+        } else if(!friendsRequests.contains(friend.getID())) {
+            friendsRequests.add(friend.getID());
+            friend.friendsInvitations.add(this.userID);
+        }
     }
 
     public String getSpokenLanguages() {
@@ -150,4 +155,9 @@ public class User implements DatabaseObject {
     public String getID() {
         return userID;
     }
+
+    public void setID(String id){
+        this.userID = id;
+    }
+
 }

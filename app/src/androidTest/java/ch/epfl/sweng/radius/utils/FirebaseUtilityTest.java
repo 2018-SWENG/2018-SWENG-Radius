@@ -1,21 +1,16 @@
 package ch.epfl.sweng.radius.utils;
 
 import android.test.AndroidTestCase;
-import android.util.Log;
 
-import com.google.firebase.FirebaseApiNotAvailableException;
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.Test;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import java.util.concurrent.CountDownLatch;
 
+import ch.epfl.sweng.radius.database.FirebaseUtility;
 import ch.epfl.sweng.radius.database.User;
-
-import static java.lang.Thread.sleep;
 
 //import org.junit.Test;
 @Ignore
@@ -34,7 +29,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
     private FirebaseUtility fbutil;
 
-
+/*
     @Before
     public void setUp() {
 
@@ -181,7 +176,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
     }
 
 
-
+*/
 
 
 
