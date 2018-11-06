@@ -52,20 +52,18 @@ public class FriendsTab extends Fragment {
 
     private void setUpAdapter(final CustomListAdapter adapter){
         final Database database = Database.getInstance();
-        User currentUser = new User(database.getCurrent_user_id());
-        database.readObjOnce(currentUser,  Database.Tables.USERS, new CallBackDatabase() {
+        database.readObjOnce(new User(database.getCurrent_user_id()),
+                Database.Tables.USERS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
-                User userStoredInTheDB = (User)value;
-                database.readListObjOnce(userStoredInTheDB.getFriends(), Database.Tables.USERS, new CallBackDatabase() {
+                database.readListObjOnce(((User)value).getFriends(),
+                        Database.Tables.USERS, new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
                         ArrayList<CustomListItem> friends = new ArrayList<>();
-                        for (User friend: (ArrayList<User>) value) {
+                        for (User friend: (ArrayList<User>) value)
                             friends.add(new CustomListItem(friend));
-                        }
-                        adapter.setItems(friends);
-                        adapter.notifyDataSetChanged();
+                        adapter.setItems(friends); adapter.notifyDataSetChanged();
                     }
                     @Override
                     public void onError(DatabaseError error) {
@@ -73,7 +71,6 @@ public class FriendsTab extends Fragment {
                     }
                 });
             }
-
             @Override
             public void onError(DatabaseError error) {
                 Log.e("Firebase Error", error.getMessage());
