@@ -52,21 +52,16 @@ public class FakeFirebaseUtility extends Database {
                             final Tables tableName,
                             final CallBackDatabase callback) {
         ArrayList<DatabaseObject> objsRead = new ArrayList<>();
-        switch (tableName){
-            case USERS:
-                for (String id:ids) {
-                    User objRead = usersTable.get(id);
-                    if(objRead != null)
-                        objsRead.add(objRead);
-                }
-                break;
-            case CHATLOGS:
-                for (String id:ids) {
-                    ChatLogs objRead = chatLogsTable.get(id);
-                    if(objRead != null)
-                        objsRead.add(objRead);
-                }
-                break;
+
+        for (String id:ids) {
+            DatabaseObject objRead;
+            if(tableName == Tables.USERS)
+                objRead = usersTable.get(id);
+            else
+                objRead = chatLogsTable.get(id);
+
+            if(objRead != null)
+                objsRead.add(objRead);
         }
 
         callback.onFinish(objsRead);

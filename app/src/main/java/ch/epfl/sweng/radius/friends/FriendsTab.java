@@ -10,16 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.FirebaseUtility;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.CustomListItem;
@@ -46,6 +43,14 @@ public class FriendsTab extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        // Load the friends from the DB
+        setUpAdapter(adapter);
+
+        // Inflate the layout for this fragment
+        return view;
+    }
+
+    private void setUpAdapter(final CustomListAdapter adapter){
         final Database database = Database.getInstance();
         User currentUser = new User(database.getCurrent_user_id());
         database.readObjOnce(currentUser,  Database.Tables.USERS, new CallBackDatabase() {
@@ -74,8 +79,5 @@ public class FriendsTab extends Fragment {
                 Log.e("Firebase Error", error.getMessage());
             }
         });
-
-        // Inflate the layout for this fragment
-        return view;
     }
 }

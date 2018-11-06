@@ -1,9 +1,5 @@
 package ch.epfl.sweng.radius.utils;
 
-import ch.epfl.sweng.radius.database.ChatLogs;
-import ch.epfl.sweng.radius.database.FirebaseUtility;
-import ch.epfl.sweng.radius.database.Message;
-
 public class ChatLogDbUtility {
     /*
     private FirebaseUtility fbUtil;
