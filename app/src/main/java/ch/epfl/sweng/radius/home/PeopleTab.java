@@ -17,6 +17,7 @@ import java.util.Arrays;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.FirebaseUtility;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.CustomListAdapter;
@@ -37,14 +38,17 @@ public class PeopleTab extends Fragment {
         View view = inflater.inflate(R.layout.people_tab, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.peopleTab);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        final CustomListAdapter adapter = new CustomListAdapter(new ArrayList<CustomListItem>(), getContext());
+        final CustomListAdapter adapter = new CustomListAdapter(new ArrayList<CustomListItem>()
+                , getContext());
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         //mock data for testing purposes
-        final FirebaseUtility database = new FirebaseUtility("users");
+        final Database database = Database.getInstance();
 
-        database.readListObj(Arrays.asList("testUser1", "testUser2", "testUser3", "testUser4"), User.class, new CallBackDatabase() {
+        database.readListObjOnce(Arrays.asList("testUser1", "testUser2", "testUser3", "testUser4"),
+                Database.Tables.USERS,
+                new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
                 ArrayList<CustomListItem> users = new ArrayList<>();

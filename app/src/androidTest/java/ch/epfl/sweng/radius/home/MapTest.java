@@ -14,6 +14,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.AccountActivity;
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.MapUtility;
 
@@ -39,6 +40,7 @@ public class MapTest {
 
     @Before
     public void setup() {
+        Database.activateDebugMode();
         accountActivity = mblActivityTestRule.getActivity();
         radius = 3000;
         user1 = new User();

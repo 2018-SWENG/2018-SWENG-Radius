@@ -18,6 +18,7 @@ import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.FirebaseUtility;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.CustomListAdapter;
@@ -45,13 +46,15 @@ public class RequestsTab extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        final FirebaseUtility database = new FirebaseUtility("users");
+        final Database database =  Database.getInstance();
         User currentUser = new User(database.getCurrent_user_id());
-        database.readObjOnce(currentUser, new CallBackDatabase() {
+        database.readObjOnce(currentUser, Database.Tables.USERS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
                 User userStoredInTheDB = (User)value;
-                database.readListObj(userStoredInTheDB.getFriendsInvitations(), User.class, new CallBackDatabase() {
+                database.readListObjOnce(userStoredInTheDB.getFriendsInvitations(),
+                        Database.Tables.USERS,
+                        new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
                         ArrayList<CustomListItem> friends = new ArrayList<>();

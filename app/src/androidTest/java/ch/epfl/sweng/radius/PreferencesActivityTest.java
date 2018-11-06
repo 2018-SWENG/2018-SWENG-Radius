@@ -15,6 +15,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import ch.epfl.sweng.radius.database.Database;
+
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -43,6 +45,7 @@ public class PreferencesActivityTest  extends ActivityInstrumentationTestCase2<P
     @Before
     public void setUp() throws Exception {
         super.setUp();
+        Database.activateDebugMode();
 
         Intent intent = new Intent();
         mblPreferenceActivity = mblActivityTestRule.launchActivity(intent);

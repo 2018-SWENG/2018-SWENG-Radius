@@ -30,6 +30,7 @@ import org.junit.Test;
 
 import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.Database;
 
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -63,6 +64,7 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
     @Before
     public void setUp() throws Exception {
         super.setUp();
+        Database.activateDebugMode();
         Intent intent = new Intent();
         mblAccountActivity = mblActivityTestRule.launchActivity(intent);
     }
