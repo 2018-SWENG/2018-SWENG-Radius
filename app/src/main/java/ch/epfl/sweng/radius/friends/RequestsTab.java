@@ -55,8 +55,7 @@ public class RequestsTab extends Fragment {
             @Override
             public void onFinish(Object value) {
                 database.readListObjOnce(((User)value).getFriendsInvitations(),
-                        Database.Tables.USERS,
-                        new CallBackDatabase() {
+                        Database.Tables.USERS, new CallBackDatabase() {
                             @Override
                             public void onFinish(Object value) {
                                 ArrayList<CustomListItem> friends = new ArrayList<>();
