@@ -35,13 +35,11 @@ import ch.epfl.sweng.radius.database.User;
 public class FirebaseUtility {
 
     private FirebaseDatabase    fireDB;
-    private FirebaseAuth        auth;
     private DatabaseReference   database;
 
     private DatabaseObject  obj;
 
     public FirebaseUtility(DatabaseObject obj, String ref){
-        this.auth       = FirebaseAuth.getInstance();
         this.fireDB     = FirebaseDatabase.getInstance();
 
         this.obj = obj;

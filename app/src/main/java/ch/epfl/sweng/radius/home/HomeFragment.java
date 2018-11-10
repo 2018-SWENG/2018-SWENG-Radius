@@ -27,17 +27,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.List;
 
-<<<<<<< HEAD:app/src/main/java/ch/epfl/sweng/radius/HomeFragment.java
-import ch.epfl.sweng.radius.database.DatabaseObject;
 import ch.epfl.sweng.radius.database.Location;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.friendsList.FriendsListAdapter;
-import ch.epfl.sweng.radius.friendsList.FriendsListItem;
-import ch.epfl.sweng.radius.utils.LocationDbUtility;
-=======
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.database.User;
->>>>>>> master:app/src/main/java/ch/epfl/sweng/radius/home/HomeFragment.java
 import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.TabAdapter;
 
@@ -53,14 +45,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static MapView mapView;
     private static CircleOptions radiusOptions;
     private static double radius;
-<<<<<<< HEAD:app/src/main/java/ch/epfl/sweng/radius/HomeFragment.java
-    private static LocationDbUtility dbUtil;
+
     private Location myPos;
-=======
     private TabAdapter adapter;
     private TabLayout tabLayout;
+
     private ViewPager viewPager;
->>>>>>> master:app/src/main/java/ch/epfl/sweng/radius/home/HomeFragment.java
 
     //testing
     private static MapUtility mapListener;
@@ -145,8 +135,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         double lat = mapListener.getCurrCoordinates().latitude;
         double lng = mapListener.getCurrCoordinates().longitude;
         myPos = new Location(FirebaseAuth.getInstance().getCurrentUser().getUid(), lat, lng);
-        dbUtil = new LocationDbUtility(myPos);
-        dbUtil.writeLocation();
+        // Do locations here
 
     }
 
@@ -169,16 +158,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         ArrayList<Location> res = new ArrayList<>();
 
-        dbUtil.fetchOtherLocations();
+     /*   dbUtil.fetchOtherLocations();
 
-       ArrayList<DatabaseObject> othersLocations = dbUtil.getOtherPos();
+      ArrayList<DatabaseObject> othersLocations = dbUtil.getOtherPos();
 
        for(int i = 0; i < othersLocations.size(); i++){
            Location temp = (Location) othersLocations.get(i);
            if(myPos.computeDistance(temp.getLatitude(), temp.getLongitude()) <= radius)
                res.add(temp);
        }
-        
+        */
         return res;
 
     }

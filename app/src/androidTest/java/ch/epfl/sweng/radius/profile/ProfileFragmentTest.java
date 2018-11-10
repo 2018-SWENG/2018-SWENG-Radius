@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.os.Bundle;
+import android.provider.Settings;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.UiController;
@@ -39,6 +41,40 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+class RelaunchActivityRule<T extends Activity> extends ActivityTestRule<T> {
+
+    public RelaunchActivityRule(Class<T> activityClass) {
+        super(activityClass,false);
+    }
+
+    public RelaunchActivityRule(Class<T> activityClass, boolean initialTouchMode) {
+        super(activityClass, initialTouchMode,true);
+    }
+
+    public RelaunchActivityRule(Class<T> activityClass, boolean initialTouchMode,
+                                boolean launchActivity) {
+        super(activityClass, initialTouchMode, launchActivity);
+    }
+
+    @Override protected void afterActivityFinished() {
+        super.afterActivityFinished();
+        launchActivity(getActivityIntent());
+    }
+
+    public void finish() {
+        finishActivity();
+    }
+
+    public void relaunchActivity() {
+        finishActivity();
+        launchActivity();
+    }
+
+    public void launchActivity() {
+        launchActivity(getActivityIntent());
+    }
+}
+
 public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<AccountActivity> {
 
 
@@ -49,9 +85,12 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
     public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
             Manifest.permission.ACCESS_FINE_LOCATION);
 
+    @Rule
+    public final RelaunchActivityRule<AccountActivity> mRelaunchRule = new RelaunchActivityRule<>(AccountActivity.class);
+
     private AccountActivity mblAccountActivity;
     private FrameLayout fcontainer;
-    private Fragment fragment;
+    private ProfileFragment fragment;
 
     public ProfileFragmentTest(Class<AccountActivity> activityClass) {
         super(activityClass);
@@ -148,7 +187,6 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
                .perform(click());
 
    }
-
     @Ignore
     @Test
     public void testRestoreState() {

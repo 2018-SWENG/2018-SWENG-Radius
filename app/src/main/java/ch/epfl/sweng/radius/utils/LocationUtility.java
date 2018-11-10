@@ -13,25 +13,19 @@ import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.DatabaseObject;
 import ch.epfl.sweng.radius.database.Location;
 
-public class LocationDbUtility {
+public class LocationUtility {
 
-    private FirebaseUtility fbUtil;
     private Location myPos;
     // TODO Fix heritage
-    private ArrayList<DatabaseObject> otherPos;
+    private ArrayList<Location> otherPos;
 
-    public LocationDbUtility(Location myPos){
-        DatabaseReference db = null;
-    //    FirebaseAttributes attr = new FirebaseAttributes(FirebaseDatabase.getInstance(),
-    //                                                     FirebaseAuth.getInstance(),
-    //                                                     db);
-   //     this.fbUtil = new FirebaseUtility(attr, myPos, "userLocations");
+    public LocationUtility(Location myPos){
         this.myPos = myPos;
         this.otherPos = new ArrayList<>();
     }
 
     public void fetchOtherLocations(){
-        //   otherPos = fbUtil.readAllInstances();
+
         // Remove my own location
         for(int i = 0; i < otherPos.size(); i++){
             if(otherPos.get(i).getID().equals(myPos.getID()))
@@ -40,19 +34,16 @@ public class LocationDbUtility {
     }
 
     public void writeLocation(){
-        fbUtil.setInstance(myPos);
-        fbUtil.writeInstanceObj();
+
     }
 
     public void updatePos(Location newPos){
 
         this.myPos = newPos;
 
-        fbUtil.setInstance(myPos);
-        fbUtil.writeInstanceObj();
     }
 
-    public ArrayList<DatabaseObject> getOtherPos() {
+    public ArrayList<Location> getOtherPos() {
         return otherPos;
     }
 }
