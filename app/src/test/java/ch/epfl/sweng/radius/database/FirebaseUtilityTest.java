@@ -58,7 +58,7 @@ public class FirebaseUtilityTest {
     private Map<String, User> mockedData;
     private Database                    database;
     private CallBackDatabase            callback = Mockito.mock(CallBackDatabase.class);
-    private String                      curRef;
+    private String                      curRef = "1";
     private User                        otherUser;
 
     @Before
@@ -69,6 +69,10 @@ public class FirebaseUtilityTest {
             String key = Integer.toString(i);
             User val = new User(Integer.toString(i));
             val.setStatus("HeyHeyHey");
+            val.addChat("1", "2");
+            val.setNickname("Arthy");
+            val.setRadius(22);
+
             mockedData.put(key, val);
         }
 
@@ -133,6 +137,53 @@ public class FirebaseUtilityTest {
     }
 
     @Test
+    public void readObjOnce1() {
+        final User user = new User(Integer.toString(1));
+
+        PowerMockito.mockStatic(FirebaseDatabase.class);
+        when(FirebaseDatabase.getInstance()).thenReturn(mockedFb);
+        when(mockedFb.getReference(any(String.class))).thenReturn(mockedDb);
+
+        when(mockedDb.child((String) Matchers.argThat(new ArgumentMatcher() {
+
+            // Update current and print to console path to console
+            @Override
+            public boolean matches(Object argument) {
+                curRef = (String) argument;
+                return true;
+            }
+
+        }))).thenReturn(mockedDb);
+        doAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener valueEventListener = (ValueEventListener) invocation.getArguments()[0];
+                Object ret_obj = mockedData.get(curRef);
+
+                when(mockedSnap.getValue()).thenReturn(user);
+
+                valueEventListener.onDataChange(mockedSnap);
+                return ret_obj;
+            }
+
+        }).when(mockedDb).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+        doAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                User ret_obj = null;
+                ret_obj = mockedData.get(curRef);
+                otherUser = ret_obj;
+                return ret_obj;
+            }
+        }).when(mockedSnap).getValue(User.class);
+        System.out.print(user.getID());
+
+        fbUtil.readObjOnce(user, Tables.USERS, callback);
+
+    }
+
+    @Test
     public void readObj() {
 
         final User user = new User(Integer.toString(1));
@@ -192,7 +243,6 @@ public class FirebaseUtilityTest {
 
         when(mockedDb.child((String) Matchers.argThat(new ArgumentMatcher(){
 
-            // Update current and print to console path to console
             @Override
             public boolean matches(Object argument) {
                 curRef = (String) argument;
@@ -224,6 +274,7 @@ public class FirebaseUtilityTest {
                 return ret_obj;
             }
         }).when(mockedSnap).getValue(User.class);
+
         System.out.print(user.getID());
 
         fbUtil.readObj(user, Tables.USERS, callback);
@@ -246,25 +297,25 @@ public class FirebaseUtilityTest {
                 ValueEventListener valueEventListener = (ValueEventListener) invocation.getArguments()[0];
                 Object ret_obj = mockedData.get(curRef);
                 Iterable<DataSnapshot> mockedIteDataSnap = new Iterable<DataSnapshot>() {
-                    int max = 10;
+                    int max = 5;
                     int cur = 0;
+
                     @Override
                     public Iterator<DataSnapshot> iterator() {
                         return new Iterator<DataSnapshot>() {
                             @Override
                             public boolean hasNext() {
-                                return false;
-                              //  return cur < max;
+                               return cur < max;
                             }
 
                             @Override
                             public DataSnapshot next() {
-                                return null;
+                                cur++;
+                                return mockedSnap;
                             }
                         };
                     }
                 };
-                when(mockedSnap.getValue(User.class)).thenReturn(mockedData.get(curRef));
                 when(mockedSnap.hasChild(anyString())).thenReturn(true);
                 when(mockedSnap.getChildren()).thenReturn(mockedIteDataSnap);
 
@@ -273,16 +324,16 @@ public class FirebaseUtilityTest {
             }
 
         }).when(mockedDb).addListenerForSingleValueEvent(any(ValueEventListener.class));
-
         doAnswer(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 User ret_obj = null;
                 ret_obj =  mockedData.get(curRef);
                 otherUser = ret_obj;
-                return ret_obj;
+                return mockedData.get(curRef);
             }
         }).when(mockedSnap).getValue(User.class);
+
 
         List<String> ids = new ArrayList<>();
         for(int i = 0; i < 10; i++){
