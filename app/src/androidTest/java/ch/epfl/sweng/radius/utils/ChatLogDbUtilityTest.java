@@ -4,16 +4,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import ch.epfl.sweng.radius.database.Database;
 
 public class ChatLogDbUtilityTest {
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
+        Database.activateDebugMode();
+
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
     }
 
     @Test

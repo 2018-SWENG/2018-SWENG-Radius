@@ -1,32 +1,28 @@
-package ch.epfl.sweng.radius;
+package ch.epfl.sweng.radius.home;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
-
-import android.app.Activity;
+import android.Manifest;
 import android.content.Intent;
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.GrantPermissionRule;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import org.junit.After;
-
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import ch.epfl.sweng.radius.AccountActivity;
+import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.Database;
+
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 
 public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountActivity> {
@@ -34,6 +30,9 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
     @Rule
     public ActivityTestRule<AccountActivity> mblActivityTestRule
             = new ActivityTestRule<AccountActivity>(AccountActivity.class);
+    @Rule
+    public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
+            Manifest.permission.ACCESS_FINE_LOCATION);
 
 
     private FrameLayout fcontainer;private AccountActivity mblAccountActivity;
@@ -53,17 +52,11 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
     @Before
     public void setUp() throws Exception {
         super.setUp();
+        Database.activateDebugMode();
 
         Intent intent = new Intent();
         mblAccountActivity = mblActivityTestRule.launchActivity(intent);
 
-    }
-
-    @Test
-    public void testMarkButton() {
-        onView(withId(R.id.navigation_profile)).perform(click());
-        onView(withId(R.id.navigation_home)).perform(click());
-        onView(withId(R.id.testMark)).perform(click());
     }
 
     @Test
@@ -79,6 +72,32 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
 
         View view = fragment.getView().findViewById(R.id.map);
         assertNotNull(view);
+    }
+
+    @Test
+    public void testPeopleTab(){
+        Espresso.onView(withText("TOPICS"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+        Espresso.onView(withText("PEOPLE"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+        Espresso.onView(withText("TOPICS"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+    }
+
+    @Test
+    public void testTopicsTab(){
+        Espresso.onView(withText("TOPICS"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+        Espresso.onView(withText("PEOPLE"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+        Espresso.onView(withText("TOPICS"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
     }
 
     @After

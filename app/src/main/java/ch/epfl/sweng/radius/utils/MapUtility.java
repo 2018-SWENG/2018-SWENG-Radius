@@ -20,8 +20,8 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 
-import ch.epfl.sweng.radius.ProfileFragment;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.profile.ProfileFragment;
 
 public class MapUtility {
     private static final String TAG = "MapUtility";
@@ -40,8 +40,8 @@ public class MapUtility {
     private static ArrayList<User> users;
 
     public MapUtility(double radius, ArrayList<User> users) {
-        this.radius = radius;
-        this.users = users;
+        MapUtility.radius = radius;
+        MapUtility.users = users;
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGTITUDE);
     }
 
@@ -74,11 +74,11 @@ public class MapUtility {
     }
 
     public void setCurrCoordinates(LatLng currCoordinates) {
-        this.currCoordinates = currCoordinates;
+        MapUtility.currCoordinates = currCoordinates;
     }
 
     public LatLng getCurrCoordinates() {
-        return this.currCoordinates;
+        return currCoordinates;
     }
 
     public void getLocationPermission(Context context, FragmentActivity activity) {

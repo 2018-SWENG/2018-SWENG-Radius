@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius;
+package ch.epfl.sweng.radius.profile;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,23 +16,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import ch.epfl.sweng.radius.database.User;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.home.HomeFragment;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
-
-
-import java.io.InputStream;
-import java.util.ArrayList;
-
-import java.util.Scanner;
 
 
 
@@ -134,7 +132,7 @@ public class ProfileFragment extends Fragment {
 
         builder.setTitle("Pick the languages you speak");
         setBuilderMultiChoiceItems(builder);
-        builder.setCancelable(false);
+        builder.setCancelable(true);
         setBuilderPositiveButton(builder);
         setBuilderNegativeButton(builder);
         setBuilderNeutralButton(builder);
@@ -145,7 +143,7 @@ public class ProfileFragment extends Fragment {
 
     private void setBuilderMultiChoiceItems(AlertDialog.Builder builder) {
         builder.setMultiChoiceItems(selectableLanguages
-                        .toArray(new String[ProfileFragment.this.selectableLanguages.size()])
+                        .toArray(new String[selectableLanguages.size()])
                 , checkedLanguages, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int position, boolean isChecked) {
@@ -161,7 +159,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setUpProfilePhoto(View view) {
-        userPhoto = (CircleImageView) view.findViewById(R.id.userPhoto);
+        userPhoto = view.findViewById(R.id.userPhoto);
 
         if (profilePictureUri != null) {
             userPhoto.setImageURI(profilePictureUri);

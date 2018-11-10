@@ -1,31 +1,21 @@
 package ch.epfl.sweng.radius.utils;
 
 import android.test.AndroidTestCase;
-import android.util.Log;
 
-import com.google.firebase.FirebaseApiNotAvailableException;
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 
 import java.util.concurrent.CountDownLatch;
 
+import ch.epfl.sweng.radius.database.FirebaseUtility;
 import ch.epfl.sweng.radius.database.User;
-
-import static java.lang.Thread.sleep;
 
 //import org.junit.Test;
 @Ignore
-@RunWith(PowerMockRunner.class)
-@PowerMockRunnerDelegate(JUnit4.class)
+//@RunWith(PowerMockRunner.class)
+//@PowerMockRunnerDelegate(JUnit4.class)
 @PrepareForTest(FirebaseUtility.class)
 public class FirebaseUtilityTest extends AndroidTestCase {
     private static final String TAG = "Firebase";
@@ -39,9 +29,9 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
     private FirebaseUtility fbutil;
 
-
+/*
     @Before
-    public void setUp() throws InterruptedException {
+    public void setUp() {
 
         user = new User("userTest00");
         user.addChat("userTest00", "Hello you");
@@ -49,8 +39,8 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
         String otherID = user.getConvFromUser("userTest01");
 
-        fbutil = Mockito.mock(FirebaseUtility.class);
-
+        //fbutil = Mockito.mock(FirebaseUtility.class);
+        fbutil = new FirebaseUtility(user, "users");
 
 
     }
@@ -78,7 +68,7 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
 
     @Test(expected = FirebaseApiNotAvailableException.class)
-    public void testListenUser() throws InterruptedException {
+    public void testListenUser() {
 
         try {
             fbutil.readObj();
@@ -107,12 +97,12 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
             if((!"Testing writing instance User to DB".equals(user.getStatus()))) throw new AssertionError();
 
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
     @Test(expected = FirebaseApiNotAvailableException.class)
-    public void testIsNew() throws FirebaseApiNotAvailableException {
+    public void testIsNew() {
 
         if(fbutil.isNew()) throw new AssertionError();
 
@@ -180,13 +170,13 @@ public class FirebaseUtilityTest extends AndroidTestCase {
 
          //   fbutil.setUser(user);
 
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
-
+*/
 
 
 

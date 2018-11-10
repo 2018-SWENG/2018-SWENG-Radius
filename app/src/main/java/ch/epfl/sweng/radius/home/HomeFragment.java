@@ -1,19 +1,17 @@
-package ch.epfl.sweng.radius;
+package ch.epfl.sweng.radius.home;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,13 +27,19 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.List;
 
+<<<<<<< HEAD:app/src/main/java/ch/epfl/sweng/radius/HomeFragment.java
 import ch.epfl.sweng.radius.database.DatabaseObject;
 import ch.epfl.sweng.radius.database.Location;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.friendsList.FriendsListAdapter;
 import ch.epfl.sweng.radius.friendsList.FriendsListItem;
 import ch.epfl.sweng.radius.utils.LocationDbUtility;
+=======
+import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.User;
+>>>>>>> master:app/src/main/java/ch/epfl/sweng/radius/home/HomeFragment.java
 import ch.epfl.sweng.radius.utils.MapUtility;
+import ch.epfl.sweng.radius.utils.TabAdapter;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
@@ -49,13 +53,18 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static MapView mapView;
     private static CircleOptions radiusOptions;
     private static double radius;
+<<<<<<< HEAD:app/src/main/java/ch/epfl/sweng/radius/HomeFragment.java
     private static LocationDbUtility dbUtil;
     private Location myPos;
+=======
+    private TabAdapter adapter;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+>>>>>>> master:app/src/main/java/ch/epfl/sweng/radius/home/HomeFragment.java
 
     //testing
     private static MapUtility mapListener;
     private static ArrayList<User> users;
-    private Button testMark;
 
     /**
      * Use this factory method to create a new instance of
@@ -82,25 +91,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater infltr, ViewGroup container, Bundle savedInstanceState) {
         View view = infltr.inflate(R.layout.fragment_home, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.friendsList);
-        //mock data for testing purposes
-        FriendsListItem items[] = { new FriendsListItem("John Doe",R.drawable.image1),
-                new FriendsListItem("Jane Doe",R.drawable.image2),
-                new FriendsListItem("Alison Star",R.drawable.image3),
-                new FriendsListItem("Mila Noon",R.drawable.image4),
-                new FriendsListItem("David Doyle",R.drawable.image5)};
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        FriendsListAdapter adapter = new FriendsListAdapter(items, getContext());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
+        // Create the tab layout under the map
+        viewPager = view.findViewById(R.id.viewPager);
+        tabLayout = view.findViewById(R.id.tabLayout);
+        adapter = new TabAdapter(this.getChildFragmentManager());
+        adapter.addFragment(new PeopleTab(), "People");
+        adapter.addFragment(new TopicsTab(), "Topics");
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        testMark = view.findViewById(R.id.testMark);
         mapListener = new MapUtility(radius, users);
 
         mapView = view.findViewById(R.id.map);
@@ -114,18 +118,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         Toast.makeText(getContext(), "Map is ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: map is ready");
         mobileMap = googleMap; //use map utility here
-        testMark.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                User marc = new User(); marc.setLocation(new LatLng(46.524434, 6.570222));
-                marc.setSpokenLanguages("English German");
-                User jean = new User(); jean.setLocation(new LatLng(46.514874, 6.567602));
-                jean.setSpokenLanguages("French");
-                User marie = new User(); marie.setLocation(new LatLng(46.521877, 6.588810));
-                marie.setSpokenLanguages(""); users.add(marc); users.add(jean); users.add(marie); markNearbyUsers();
-            }
-        });
-
         mapListener.getLocationPermission(getContext(), getActivity()); // Use map utility here
 
         if (mapListener.getPermissionResult()) {

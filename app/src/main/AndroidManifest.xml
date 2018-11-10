@@ -30,8 +30,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".AccountActivity" />
+        <activity android:name=".PreferencesActivity" />
         <activity android:name=".browseProfiles.BrowseProfilesActivity" />
-        <activity android:name=".message.MessageListActivity"/>
+        <activity android:name=".messages.MessageListActivity"/>
 
         <!-- Required by Play Services, see https://developers.google.com/maps/documentation/android-sdk/config#specify_requirement_for_apache_http_legacy_library -->
         <uses-library

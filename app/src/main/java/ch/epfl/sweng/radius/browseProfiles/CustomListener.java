@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 
-import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesActivity;
-
 public class CustomListener {
     private int clickedPic;
     private String clickedName;

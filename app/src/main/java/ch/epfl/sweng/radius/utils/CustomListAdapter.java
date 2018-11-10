@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.friendsList;
+package ch.epfl.sweng.radius.utils;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,28 +8,30 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.browseProfiles.CustomListener;
+import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.ViewHolder>{
+public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.ViewHolder>{
 
-    private FriendsListItem[] items;
+    private List<CustomListItem> items;
     Context context;
 
-    public FriendsListAdapter(FriendsListItem[] items, Context context) {
+    public CustomListAdapter(List<CustomListItem> items, Context context) {
         this.items = items;
         this.context = context;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public FriendsListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CustomListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View itemLayoutView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.friends_list_item_layout, null);
+                .inflate(R.layout.custom_list_item_layout, null);
 
         // create ViewHolder
-
         ViewHolder viewHolder = new ViewHolder(itemLayoutView);
         return viewHolder;
     }
@@ -38,10 +40,10 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
-        viewHolder.txtViewTitle.setText(items[position].getFriendName());
-        viewHolder.imgViewIcon.setImageResource(items[position].getFriendProfilePic());
+        viewHolder.txtViewTitle.setText(items.get(position).getFriendName());
+        viewHolder.imgViewIcon.setImageResource(items.get(position).getFriendProfilePic());
 
-        FriendsListItem item = items[position];
+        CustomListItem item = items.get(position);
         final int clickedPic = item.getFriendProfilePic();
         final String clickedName = item.getFriendName();
 
@@ -57,8 +59,8 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
-            txtViewTitle = (TextView) itemLayoutView.findViewById(R.id.item_title);
-            imgViewIcon = (ImageView) itemLayoutView.findViewById(R.id.item_icon);
+            txtViewTitle = itemLayoutView.findViewById(R.id.username);
+            imgViewIcon = (CircleImageView) itemLayoutView.findViewById(R.id.profile_picture);
         }
     }
 
@@ -66,6 +68,10 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
     // Return the size of your itemsData (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return items.length;
+        return items.size();
+    }
+
+    public void setItems(List<CustomListItem> items){
+        this.items=items;
     }
 }

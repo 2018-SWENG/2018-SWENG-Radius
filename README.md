@@ -10,3 +10,11 @@ An android app that connect people in the same area. Users can talk to other peo
 ## Mockups
 ![Alt text](docs/mockup.png?raw=true "")
 
+## Team
+- Arthur Passuelo
+- Berke Egeli
+- Efe Acer
+- François Quellec
+- Michael Spierer
+- Pinar Ayaz
+
