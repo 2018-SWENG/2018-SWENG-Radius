@@ -23,32 +23,32 @@ public class LocationUtility {
     private Location myPos;
     // TODO Fix heritage
     private ArrayList<Location> otherPos;
-    private ArrayList<String>   otherID;
+    private ArrayList<String>   otherNickname;
     private final Database database = Database.getInstance();
 
 
     public LocationUtility(Location myPos){
         this.myPos = myPos;
         this.otherPos = new ArrayList<>();
+        this.otherNickname = new ArrayList<>();
     }
 
     public void fetchUsersInRadius(final int radius){
 
-        if(!otherPos.isEmpty())
-            otherPos.clear();
+
 
         database.readAllTableOnce(Database.Tables.USERS, new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
-                        database.readListObjOnce(((User)value).getFriends(),
-                                Database.Tables.USERS, new CallBackDatabase() {
+                        database.readAllTableOnce(Database.Tables.USERS, new CallBackDatabase() {
                                     @Override
                                     public void onFinish(Object value) {
                                         for(User friend : (ArrayList<User>) value){
                                             if(isInRadius(friend.getLocation(), radius)) {
                                                 otherPos.add(friend.getLocation());
-                                                otherID.add(friend.getID());
+                                                otherNickname.add(friend.getNickname());
                                             }
+                                            Log.w("Map", "Size of others is " + Integer.toString(otherPos.size()));
                                         }
                                     }
                                     @Override
@@ -65,8 +65,13 @@ public class LocationUtility {
     }
 
     public boolean isInRadius(Location loc, int radius){
+        Log.w("Map", "Radius is " + Integer.toString(radius));
+        Log.w("Map", "Distance is " + Double.toString(computeDistance(loc)));
+        return computeDistance(loc)/1000 <= radius;
+    }
 
-        return computeDistance(loc) <= radius;
+    public ArrayList<String> getOtherNickname() {
+        return otherNickname;
     }
 
     public void updatePos(Location newPos){
@@ -74,11 +79,18 @@ public class LocationUtility {
         this.myPos = newPos;
     }
 
+    public void setMyPos(Location myPos) {
+        this.myPos = myPos;
+    }
+
     public ArrayList<Location> getOtherPos() {
         return otherPos;
     }
 
     public double computeDistance(Location loc){
+
+        if(loc == null)
+            return Double.MAX_VALUE;
 
         double earthRadius = 3958.75;
         double latDiff = Math.toRadians(loc.getLatitude() - myPos.getLatitude());

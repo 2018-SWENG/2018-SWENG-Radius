@@ -18,6 +18,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -30,6 +31,7 @@ import java.util.List;
 import ch.epfl.sweng.radius.database.Location;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.utils.LocationUtility;
 import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.TabAdapter;
 
@@ -45,6 +47,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static MapView mapView;
     private static CircleOptions radiusOptions;
     private static double radius;
+    private LocationUtility locUtil;
 
     private Location myPos;
     private TabAdapter adapter;
@@ -55,7 +58,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     //testing
     private static MapUtility mapListener;
     private static ArrayList<User> users;
-
+    private static ArrayList<Location> usersLoc;
+    private static ArrayList<String> usersNickname;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -73,7 +77,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        locUtil = new LocationUtility(new Location());
         radius = DEFAULT_RADIUS;
         users = new ArrayList<User>();
     }
@@ -128,15 +132,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         if (mapListener.getCurrCoordinates() != null) {
             initCircle(mapListener.getCurrCoordinates());
             moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM);
-            markNearbyUsers();
         }
 
         // Push current location to DB
         double lat = mapListener.getCurrCoordinates().latitude;
         double lng = mapListener.getCurrCoordinates().longitude;
         myPos = new Location(FirebaseAuth.getInstance().getCurrentUser().getUid(), lat, lng);
-        // Do locations here
 
+        locUtil.setMyPos(myPos);
+        // Do locations here
+        markNearbyUsers();
     }
 
     public void initCircle(LatLng currentCoordinates) {
@@ -154,21 +159,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mobileMap.moveCamera(CameraUpdateFactory.newLatLngZoom( latLng, zoom));
     }
 
-    public List<Location> getUsersInRadius(){
+    public void getUsersInRadius(){
 
         ArrayList<Location> res = new ArrayList<>();
 
-     /*   dbUtil.fetchOtherLocations();
+        locUtil.fetchUsersInRadius((int) radius);
 
-      ArrayList<DatabaseObject> othersLocations = dbUtil.getOtherPos();
-
-       for(int i = 0; i < othersLocations.size(); i++){
-           Location temp = (Location) othersLocations.get(i);
-           if(myPos.computeDistance(temp.getLatitude(), temp.getLongitude()) <= radius)
-               res.add(temp);
-       }
-        */
-        return res;
+        usersLoc = locUtil.getOtherPos();
+        Log.w("Map", "Size of others is " + Integer.toString(usersLoc.size()));
+        usersNickname = locUtil.getOtherNickname();
 
     }
 
@@ -178,22 +177,32 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void markNearbyUsers() {
         mobileMap.clear();
         mobileMap.addCircle(radiusOptions);
-
-        for (int i = 0; users != null && i < users.size(); i++) {
-            String status = users.get(i).getStatus();
-            String userName = users.get(i).getNickname();
-            markNearbyUser(i, status, userName);
+        getUsersInRadius();
+        for (int i = 0; usersLoc != null && i < usersLoc.size(); i++) {
+            Log.w("Map", "heyhey");
+            markNearbyUser(i, "HeyHey", usersNickname.get(i));
         }
     }
 
     public void markNearbyUser(int indexOfUser, String status, String userName) {
+
+        LatLng newPos = new LatLng(usersLoc.get(indexOfUser).getLatitude(),
+                                    usersLoc.get(indexOfUser).getLongitude()    );
+        mobileMap.addMarker(new MarkerOptions().position(newPos)
+                .title(userName + ": " + status)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+    }
+        /*
         if ( mapListener.contains(users.get(indexOfUser).getLocation().getLatitude(),
                 users.get(indexOfUser).getLocation().getLongitude()) && !mapListener.speaksSameLanguage(users.get(indexOfUser)))
         {
             LatLng newPos = new LatLng(users.get(indexOfUser).getLocation().getLatitude(),
                     users.get(indexOfUser).getLocation().getLongitude());
             mobileMap.addMarker(new MarkerOptions().position(newPos)
-                    .title(userName + ": " + status));
+                    .title(userName + ": " + status)
+                    .icon(BitmapDescriptorFactory
+                            .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
         } else if (mapListener.contains(users.get(indexOfUser).getLocation().getLatitude(),
                 users.get(indexOfUser).getLocation().getLongitude()) && mapListener.speaksSameLanguage(users.get(indexOfUser))) {
@@ -204,4 +213,5 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                             .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         }
     }
+    */
 }
