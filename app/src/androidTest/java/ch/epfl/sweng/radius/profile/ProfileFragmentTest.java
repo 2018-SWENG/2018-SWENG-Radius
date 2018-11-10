@@ -103,7 +103,7 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
         Espresso.onView(withId(R.id.saveButton)).perform(scrollTo(),click());
     }
 
- /*   @Test
+    @Test
     public void testSaveInstanceState() {
         Espresso.onView(withId(R.id.navigation_home)).perform(click());
         Espresso.onView(withId(R.id.navigation_profile)).perform(click());
@@ -115,7 +115,7 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
         Espresso.onView(withId(R.id.navigation_profile)).perform(click());
     }
 
-*/
+
    @Test
     public void testLanguageButton() {
        Espresso.onView(withId(R.id.navigation_profile)).perform(click());
