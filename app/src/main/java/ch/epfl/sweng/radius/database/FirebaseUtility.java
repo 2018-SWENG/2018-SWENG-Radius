@@ -35,6 +35,7 @@ public class FirebaseUtility extends Database{
                 .addListenerForSingleValueEvent( new ValueEventListener() {
             @Override
             public void  onDataChange(DataSnapshot dataSnapshot) {
+
                 if (dataSnapshot.getValue() == null) {
                     writeInstanceObj(obj, tableName);
                     callback.onFinish(obj);
