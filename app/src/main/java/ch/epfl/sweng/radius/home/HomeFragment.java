@@ -187,15 +187,19 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void markNearbyUser(int indexOfUser, String status, String userName) {
-        if ( mapListener.contains(users.get(indexOfUser).getLocation().latitude,
-                users.get(indexOfUser).getLocation().longitude) && !mapListener.speaksSameLanguage(users.get(indexOfUser)))
+        if ( mapListener.contains(users.get(indexOfUser).getLocation().getLatitude(),
+                users.get(indexOfUser).getLocation().getLongitude()) && !mapListener.speaksSameLanguage(users.get(indexOfUser)))
         {
-            mobileMap.addMarker(new MarkerOptions().position(users.get(indexOfUser).getLocation())
+            LatLng newPos = new LatLng(users.get(indexOfUser).getLocation().getLatitude(),
+                    users.get(indexOfUser).getLocation().getLongitude());
+            mobileMap.addMarker(new MarkerOptions().position(newPos)
                     .title(userName + ": " + status));
 
-        } else if (mapListener.contains(users.get(indexOfUser).getLocation().latitude,
-                users.get(indexOfUser).getLocation().longitude) && mapListener.speaksSameLanguage(users.get(indexOfUser))) {
-            mobileMap.addMarker(new MarkerOptions().position(users.get(indexOfUser).getLocation())
+        } else if (mapListener.contains(users.get(indexOfUser).getLocation().getLatitude(),
+                users.get(indexOfUser).getLocation().getLongitude()) && mapListener.speaksSameLanguage(users.get(indexOfUser))) {
+            LatLng newPos = new LatLng(users.get(indexOfUser).getLocation().getLatitude(),
+                    users.get(indexOfUser).getLocation().getLongitude());
+                    mobileMap.addMarker(new MarkerOptions().position(newPos)
                     .title(userName + ": " + status).icon(BitmapDescriptorFactory
                             .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         }

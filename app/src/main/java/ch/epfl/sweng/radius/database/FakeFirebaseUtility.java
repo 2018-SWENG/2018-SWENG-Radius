@@ -68,6 +68,25 @@ public class FakeFirebaseUtility extends Database {
     }
 
     @Override
+    public void readAllTableOnce(Tables tableName, CallBackDatabase callback) {
+        ArrayList<DatabaseObject> objsRead = new ArrayList<>();
+
+        int size = tableName == Tables.USERS ? usersTable.size() : chatLogsTable.size();
+        for (int i = 0; i < size; i++) {
+            DatabaseObject objRead;
+            if(tableName == Tables.USERS)
+                objRead = usersTable.get(i);
+            else
+                objRead = chatLogsTable.get(i);
+
+            if(objRead != null)
+                objsRead.add(objRead);
+        }
+
+        callback.onFinish(objsRead);
+    }
+
+    @Override
     public void writeInstanceObj(final DatabaseObject obj, final Tables tableName){
         switch (tableName){
             case USERS:
