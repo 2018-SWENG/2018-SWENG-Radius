@@ -34,6 +34,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".message.MessageListActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".PreferencesActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- Required by Play Services, see https://developers.google.com/maps/documentation/android-sdk/config#specify_requirement_for_apache_http_legacy_library -->
         <uses-library

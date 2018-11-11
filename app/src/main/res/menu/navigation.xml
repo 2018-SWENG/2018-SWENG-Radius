@@ -12,9 +12,9 @@
         android:title="Messages"/>
 
     <item
-        android:id="@+id/navigation_settings"
-        android:icon="@drawable/ic_baseline_settings_20px"
-        android:title="Settings"/>
+        android:id="@+id/navigation_friends"
+        android:icon="@drawable/ic_baseline_supervisor_account_24px"
+        android:title="Friends"/>
 
     <item
         android:id="@+id/navigation_profile"

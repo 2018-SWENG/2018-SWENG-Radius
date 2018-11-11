@@ -1,6 +1,8 @@
-package ch.epfl.sweng.radius.utils;
+package ch.epfl.sweng.radius.home;
 
+import android.Manifest;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.GrantPermissionRule;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -12,7 +14,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.AccountActivity;
-import ch.epfl.sweng.radius.HomeFragment;
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.MapUtility;
 
@@ -24,6 +26,9 @@ public class MapTest {
     @Rule
     public ActivityTestRule<AccountActivity> mblActivityTestRule
             = new ActivityTestRule<AccountActivity>(AccountActivity.class);
+    @Rule
+    public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
+            Manifest.permission.ACCESS_FINE_LOCATION);
 
     private double radius;
     private User user1, user2;
@@ -35,6 +40,7 @@ public class MapTest {
 
     @Before
     public void setup() {
+        Database.activateDebugMode();
         accountActivity = mblActivityTestRule.getActivity();
         radius = 3000;
         user1 = new User();
@@ -50,7 +56,7 @@ public class MapTest {
 
     @Test
     public void testSpeaksSameLanguages() {
-        user1.getProfileInfo().setSpokenLanguages("English");
+        user1.setSpokenLanguages("English");
         assertTrue(!mapListener.speaksSameLanguage(user1));
     }
 

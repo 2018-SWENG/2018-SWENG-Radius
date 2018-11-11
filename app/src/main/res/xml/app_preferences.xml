@@ -10,23 +10,23 @@
         android:layout_height="match_parent">
 
         <SwitchPreference
-            android:key="incognitoSwitch"
+            android:key="@string/incognitoKey"
 
-            android:title="Incognito mode"
-            android:summary="If this option is activate, nobody can see you on the map"
+            android:title="@string/incognitoTitle"
+            android:summary="@string/incognitoSumary"
             android:defaultValue="false" />
 
         <CheckBoxPreference
-            android:key="notificationCheckbox"
-            android:title="Notifications"
-            android:summary="Disable or enable notifications when you receive a message"
+            android:key="@string/notificationsKey"
+            android:title="@string/notificationsTitle"
+            android:summary="@string/notificationsSumary"
             android:defaultValue="true"/>
 
         <SwitchPreference
-            android:key="nightModeSwitch"
+            android:key="@string/nightModeKey"
 
-            android:title="Night Mode"
-            android:summary="Change the colors of the app for a less bright version"
+            android:title="@string/nightModeTitle"
+            android:summary="@string/notificationsSumary"
             android:defaultValue="false" />
     </PreferenceCategory>
 
@@ -36,14 +36,14 @@
         android:layout_height="match_parent">
 
         <Preference
-            android:key="logOutButton"
-            android:title="Disconnect"
-            android:summary="You will be redirected to the login page"/>
+            android:key="@string/logoutKey"
+            android:title="@string/logoutTitle"
+            android:summary="@string/logoutSumary"/>
 
         <Preference
-            android:id="@+id/deleteAccount"
-            android:title="Delete your account"
-            android:summary="All your conversations and friends will be deleted"/>
+            android:key="@string/deleteAccountKey"
+            android:title="@string/deleteAccountTitle"
+            android:summary="@string/deleteAccountSumary"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

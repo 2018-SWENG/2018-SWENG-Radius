@@ -9,6 +9,7 @@ import java.util.Date;
  * IN THE DB.
  */
 public class Message {
+    public final static Integer NUMBER_ELEMENTS_IN_MESSAGE = 3;
 
     private String senderId;
     private  String contentMessage;
