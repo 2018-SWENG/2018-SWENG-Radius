@@ -103,7 +103,7 @@ public class ProfileFragment extends Fragment {
         User currentUser = UserInfos.getCurrentUser();
         userNicknameString = currentUser.getNickname();
         userStatusString = currentUser.getStatus();
-        spokenLanguages = currentUser.getSpokenLanguages();
+        languagesText = currentUser.getSpokenLanguages();
 
         int progress = radiusBar.getProgress();
         radiusValue.setText(progress + "Km");
