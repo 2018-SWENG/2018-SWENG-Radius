@@ -64,14 +64,10 @@ public class FakeFirebaseUtility extends Database {
                             final CallBackDatabase callback) {
         ArrayList<DatabaseObject> objsRead = new ArrayList<>();
 
+        HashMap<String, DatabaseObject> table = getTable(tableName);
+
         for (String id:ids) {
-            DatabaseObject objRead;
-            if(tableName == Tables.USERS)
-                objRead = usersTable.get(id);
-            else if(tableName == Tables.CHATLOGS)
-                objRead = chatLogsTable.get(id);
-            else
-                objRead = locationsTable.get(id);
+            DatabaseObject objRead = table.get(id);
 
             if(objRead != null)
                 objsRead.add(objRead);
@@ -86,6 +82,7 @@ public class FakeFirebaseUtility extends Database {
 
         int size = getTableSize(tableName);
         HashMap<String, DatabaseObject> table = getTable(tableName);
+
         Log.w("Map Test", "Size of table " + size);
         for (int i = 0; i < size; i++) {
             DatabaseObject objRead = table.get("testUser"+Integer.toString(i+1));
@@ -94,7 +91,6 @@ public class FakeFirebaseUtility extends Database {
                 objsRead.add(objRead);
         }
         Log.w("Map Test", "Size of objReads " + objsRead.size());
-
 
         callback.onFinish(objsRead);
     }
