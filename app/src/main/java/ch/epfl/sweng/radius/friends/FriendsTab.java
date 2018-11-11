@@ -52,6 +52,7 @@ public class FriendsTab extends Fragment {
 
     private void setUpAdapter(final CustomListAdapter adapter){
         final Database database = Database.getInstance();
+
         database.readObjOnce(new User(database.getCurrent_user_id()),
                 Database.Tables.USERS, new CallBackDatabase() {
             @Override

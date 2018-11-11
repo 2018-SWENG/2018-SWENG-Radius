@@ -344,5 +344,61 @@ public class FirebaseUtilityTest {
 
     }
 
+    @Test
+    public void readAllTableOne() {
+
+        final User user = new User(Integer.toString(1));
+
+        PowerMockito.mockStatic(FirebaseDatabase.class);
+        when(FirebaseDatabase.getInstance()).thenReturn(mockedFb);
+        when(mockedFb.getReference(any(String.class))).thenReturn(mockedDb);
+
+        doAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener valueEventListener = (ValueEventListener) invocation.getArguments()[0];
+                Object ret_obj = mockedData.get(curRef);
+                Iterable<DataSnapshot> mockedIteDataSnap = new Iterable<DataSnapshot>() {
+                    int max = 5;
+                    int cur = 0;
+
+                    @Override
+                    public Iterator<DataSnapshot> iterator() {
+                        return new Iterator<DataSnapshot>() {
+                            @Override
+                            public boolean hasNext() {
+                                return cur < max;
+                            }
+
+                            @Override
+                            public DataSnapshot next() {
+                                cur++;
+                                return mockedSnap;
+                            }
+                        };
+                    }
+                };
+                when(mockedSnap.hasChild(anyString())).thenReturn(true);
+                when(mockedSnap.getChildren()).thenReturn(mockedIteDataSnap);
+
+                valueEventListener.onDataChange(mockedSnap);
+                return valueEventListener;
+            }
+
+        }).when(mockedDb).addListenerForSingleValueEvent(any(ValueEventListener.class));
+        doAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                User ret_obj = null;
+                ret_obj =  mockedData.get(curRef);
+                otherUser = ret_obj;
+                return mockedData.get(curRef);
+            }
+        }).when(mockedSnap).getValue(User.class);
+
+        fbUtil.readAllTableOnce(Tables.USERS, callback);
+
+    }
+
 
 }

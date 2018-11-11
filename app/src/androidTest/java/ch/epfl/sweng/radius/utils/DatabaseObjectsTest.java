@@ -3,6 +3,8 @@ package ch.epfl.sweng.radius.utils;
 import android.Manifest;
 import android.support.test.rule.GrantPermissionRule;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,8 +14,12 @@ import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 
 public class DatabaseObjectsTest {
@@ -83,6 +89,31 @@ public class DatabaseObjectsTest {
             assert(false);
         } catch (Exception e){}
         assert(user.getStatus() == status);
+
+    }
+
+    @Test
+    public void testMLocation(){
+
+        MLocation mLocation = new MLocation();
+        MLocation mLocation1 = new MLocation("locTest");
+        MLocation mLocation2 = new MLocation("locTest", new LatLng(2.0, 3.0));
+
+        assertTrue(mLocation1.getID().equals("locTest"));
+        assertTrue(mLocation2.getLatitude() == 2.0);
+
+        mLocation.setMessage("Msg");
+        mLocation.setTitle("Title");
+        mLocation.setID("locTest");
+
+        assertEquals("Msg", mLocation.getMessage());
+        assertEquals("Title", mLocation.getTitle());
+
+        mLocation.setLatitude(1.0);
+        mLocation.setLongitude(4.0);
+        assert(mLocation2.getLatitude() == 1.0);
+        assert(mLocation2.getLongitude() == 4.0);
+
     }
 
 }
