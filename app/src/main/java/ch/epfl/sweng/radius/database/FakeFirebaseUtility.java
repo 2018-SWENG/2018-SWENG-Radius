@@ -83,26 +83,12 @@ public class FakeFirebaseUtility extends Database {
     @Override
     public void readAllTableOnce(Tables tableName, CallBackDatabase callback) {
         ArrayList<DatabaseObject> objsRead = new ArrayList<>();
-        int size;
 
-        if(tableName == Tables.USERS)
-            size = usersTable.size();
-        else if(tableName == Tables.CHATLOGS)
-            size = chatLogsTable.size();
-        else
-            size = locationsTable.size();
-
-
+        int size = getTableSize(tableName);
+        HashMap<String, DatabaseObject> table = getTable(tableName);
         Log.w("Map Test", "Size of table " + size);
         for (int i = 0; i < size; i++) {
-            DatabaseObject objRead;
-            if(tableName == Tables.USERS)
-                objRead = usersTable.get(i);
-            else if(tableName == Tables.CHATLOGS)
-                objRead = chatLogsTable.get("testUser"+Integer.toString(i+1));
-            else
-                objRead = locationsTable.get("testUser"+Integer.toString(i+1));
-            Log.w("Map Test", "Name of obj " + locationsTable.get("testUser1").getID());
+            DatabaseObject objRead = table.get("testUser"+Integer.toString(i+1));
 
             if(objRead != null)
                 objsRead.add(objRead);
@@ -149,5 +135,17 @@ public class FakeFirebaseUtility extends Database {
                 defaultLat + 0.02));
         locationsTable.put("testUser4", new MLocation("testUser4",
                 defaultLng - 0.01, defaultLat - 0.01));
+    }
+
+    private int getTableSize(Tables tableName){
+
+        return tableName == Tables.USERS ? usersTable.size() :
+                tableName == Tables.CHATLOGS ? chatLogsTable.size() : locationsTable.size();
+    }
+
+    private HashMap<String,DatabaseObject> getTable(Tables tableName){
+
+        return (HashMap<String, DatabaseObject>) (tableName == Tables.USERS ? usersTable :
+                        tableName == Tables.CHATLOGS ? chatLogsTable : locationsTable);
     }
 }
