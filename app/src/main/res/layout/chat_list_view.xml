@@ -24,4 +24,5 @@
         android:id="@+id/profilePic"
         android:layout_width="64dp"
         android:layout_height="64dp" />
+
 </android.support.constraint.ConstraintLayout>
