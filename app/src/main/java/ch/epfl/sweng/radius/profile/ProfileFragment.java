@@ -27,7 +27,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.home.HomeFragment;
+import ch.epfl.sweng.radius.utils.UserInfos;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
@@ -96,11 +98,18 @@ public class ProfileFragment extends Fragment {
         selectedLanguages =  view.findViewById(R.id.spokenLanguages);
         selectLanguagesButton = view.findViewById(R.id.languagesButton);
 
+
+        //Get the instance of current user & attributes
+        User currentUser = UserInfos.getCurrentUser();
+        userNicknameString = currentUser.getNickname();
+        userStatusString = currentUser.getStatus();
+        spokenLanguages = currentUser.getSpokenLanguages();
+
         int progress = radiusBar.getProgress();
         radiusValue.setText(progress + "Km");
 
         selectableLanguages = readLanguagesFromFile();
-        //spokenLanguages = new ArrayList<Integer>();
+
         if (languagesText == null) {
             languagesText = "";
         }

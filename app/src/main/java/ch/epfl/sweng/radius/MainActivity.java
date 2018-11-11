@@ -76,8 +76,6 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
 
-                    User currentUser = new User(myAuth.getCurrentUser().getUid());
-
                     startActivity(new Intent(MainActivity.this, AccountActivity.class));
                 }
             }
@@ -151,6 +149,9 @@ public class MainActivity extends AppCompatActivity {
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Log.w("Success", "Sign in successful");
                         }
                     }
                 });

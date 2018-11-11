@@ -25,7 +25,7 @@ public class User implements DatabaseObject {
     private List<String> blockedUsers;
     // Map is uID --> convID
     private Map<String, String> chatList;
-    private String spokenLanguages;
+    private ArrayList<Integer> spokenLanguages;
     private LatLng location;
 
     public User(String userID) {
@@ -38,7 +38,7 @@ public class User implements DatabaseObject {
         this.friendsInvitations = new ArrayList<>();
         this.friends = new ArrayList<>();
         this.blockedUsers = new ArrayList<>();
-        this.spokenLanguages = "";
+        this.spokenLanguages = new ArrayList<>();;
         this.chatList = new HashMap<>();
     }
 
@@ -53,7 +53,7 @@ public class User implements DatabaseObject {
         this.friendsInvitations = new ArrayList<>();
         this.friends = new ArrayList<>();
         this.blockedUsers = new ArrayList<>();
-        this.spokenLanguages = "";
+        this.spokenLanguages = new ArrayList<>();;
     }
 
     // Getter
@@ -141,11 +141,13 @@ public class User implements DatabaseObject {
         }
     }
 
-    public String getSpokenLanguages() {
+    public ArrayList<Integer> getSpokenLanguages() {
         return this.spokenLanguages;
     }
 
-    public void setSpokenLanguages(String spokenLanguages) { if (spokenLanguages != null) this.spokenLanguages = spokenLanguages; }
+    public void setSpokenLanguages(ArrayList<Integer> spokenLanguages) {
+        this.spokenLanguages = spokenLanguages;
+    }
 
     public void addChat(String uID, String chatID) {
         this.chatList.put(uID, chatID);

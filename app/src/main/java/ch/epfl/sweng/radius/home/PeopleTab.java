@@ -45,7 +45,6 @@ public class PeopleTab extends Fragment {
         //mock data for testing purposes
         setUpAdapter(adapter);
 
-
         // Inflate the layout for this fragment
         return view;
     }
