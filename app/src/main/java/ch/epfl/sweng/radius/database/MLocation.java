@@ -2,7 +2,7 @@ package ch.epfl.sweng.radius.database;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class Location implements DatabaseObject {
+public class MLocation implements DatabaseObject {
 
     private static int locIDCounter = 0;
 
@@ -12,31 +12,31 @@ public class Location implements DatabaseObject {
     private double longitude;
     private double latitude;
 
-    public Location(String userID){
+    public MLocation(String userID){
         this.userID = userID;
     }
 
-    public Location(){
+    public MLocation(){
         this.userID = "NewLoc" + Integer.toString(locIDCounter++);
         this.latitude = 0;
         this.longitude = 0;
-        this.title = "New Location";
+        this.title = "New MLocation";
         this.message = "Here I am";
     }
 
-    public Location(String userID, double longitude, double latitude){
+    public MLocation(String userID, double longitude, double latitude){
         this.userID = userID;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.title = "New Location";
+        this.title = "New MLocation";
         this.message = "Here I am";
     }
 
-    public Location(String userID, LatLng pos){
+    public MLocation(String userID, LatLng pos){
         this.userID = userID;
         this.latitude = pos.latitude;
         this.longitude = pos.longitude;
-        this.title = "New Location";
+        this.title = "New MLocation";
         this.message = "Here I am";
     }
 

@@ -13,7 +13,7 @@ public abstract class Database {
     public enum Tables{
         USERS("users", User.class),
         CHATLOGS("chatlogs", ChatLogs.class),
-        LOCATIONS("locations", Location.class);
+        LOCATIONS("locations", MLocation.class);
 
         private String name = "";
         private Class tableClass;

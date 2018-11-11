@@ -6,10 +6,10 @@ import java.util.List;
 
 public class FakeFirebaseUtility extends Database {
     private User currentUSer;
-    private Location currentLoc;
+    private MLocation currentLoc;
     private HashMap<String, User> usersTable = new HashMap<>();
     private HashMap<String, ChatLogs> chatLogsTable = new HashMap<>();
-    private HashMap<String, Location> locationsTable = new HashMap<>();
+    private HashMap<String, MLocation> locationsTable = new HashMap<>();
 
     private final double defaultLat = 46.5360698;
     private final double defaultLng = 6.5681216000000004;
@@ -110,7 +110,7 @@ public class FakeFirebaseUtility extends Database {
                 chatLogsTable.put(obj.getID(), (ChatLogs) obj);
                 break;
             case LOCATIONS:
-                locationsTable.put(obj.getID(), (Location) obj);
+                locationsTable.put(obj.getID(), (MLocation) obj);
                 break;
         }
     }
@@ -126,15 +126,15 @@ public class FakeFirebaseUtility extends Database {
         usersTable.put("testUser4", new User("testUser4"));
 
         // TODO: Fill the chatLogs table
-        currentLoc = new Location("testUser1", defaultLng, defaultLat);
+        currentLoc = new MLocation("testUser1", defaultLng, defaultLat);
 
         // Fill the users table
         locationsTable.put("testUser1", currentLoc);
-        locationsTable.put("testUser2", new Location("testUser2", defaultLng + 0.01,
+        locationsTable.put("testUser2", new MLocation("testUser2", defaultLng + 0.01,
                 defaultLat + 0.01));
-        locationsTable.put("testUser3", new Location("testUser3", defaultLng - 0.02,
+        locationsTable.put("testUser3", new MLocation("testUser3", defaultLng - 0.02,
                 defaultLat + 0.02));
-        locationsTable.put("testUser4", new Location("testUser4",
+        locationsTable.put("testUser4", new MLocation("testUser4",
                 defaultLng - 0.01, defaultLat - 0.01));
     }
 }

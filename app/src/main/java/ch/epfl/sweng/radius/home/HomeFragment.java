@@ -29,10 +29,9 @@ import java.util.List;
 
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.Location;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.utils.LocationUtility;
 import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.TabAdapter;
 
@@ -48,9 +47,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static MapView mapView;
     private static CircleOptions radiusOptions;
     private static double radius;
-    private LocationUtility locUtil;
 
-    private Location myPos;
+    private MLocation myPos;
     private TabAdapter adapter;
     private TabLayout tabLayout;
 
@@ -60,7 +58,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static MapUtility mapListener;
     private static ArrayList<User> users;
     private static List<String> friendsID;
-    private static ArrayList<Location> usersLoc;
+    private static ArrayList<MLocation> usersLoc;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -78,11 +76,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        locUtil = new LocationUtility(new Location());
         radius = DEFAULT_RADIUS;
         users = new ArrayList<User>();
         friendsID = new ArrayList<>();
-        usersLoc = new ArrayList<Location>();
+        usersLoc = new ArrayList<MLocation>();
     }
 
     @Override
@@ -102,7 +99,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mapListener = new MapUtility(radius, users);
+       mapListener = new MapUtility(radius, users);
 
         mapView = view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
@@ -126,7 +123,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
                 return;
             }
-
             mobileMap.setMyLocationEnabled(true); initMap();
         }
     }
@@ -135,16 +131,18 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         if (mapListener.getCurrCoordinates() != null) {
             initCircle(mapListener.getCurrCoordinates());
             moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM*(float) 0.9);
+            Log.w("Map", "Centering Camera");
         }
 
         // Push current location to DB
         double lat = mapListener.getCurrCoordinates().latitude;
         double lng = mapListener.getCurrCoordinates().longitude;
-       // myPos = new Location(FirebaseAuth.getInstance().getCurrentUser().getUid(), lat, lng);
+       // myPos = new MLocation(FirebaseAuth.getInstance().getCurrentUser().getUid(), lat, lng);
        // Debug purpose only
-        myPos = new Location("testUser3", lat, lng);
+        myPos = new MLocation("testUser3", lat, lng);
 
-        locUtil.setMyPos(myPos);
+        mapListener.setMyPos(myPos);
+
         // Do locations here
         markNearbyUsers();
     }
@@ -166,9 +164,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     public void getUsersInRadius(){
 
-        locUtil.fetchUsersInRadius((int) radius);
+        mapListener.fetchUsersInRadius((int) radius);
 
-        usersLoc = locUtil.getOtherLocations();
+        usersLoc = mapListener.getOtherLocations();
         Log.w("Map", "Size of others is " + Integer.toString(usersLoc.size()));
 
     }

@@ -17,11 +17,17 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.profile.ProfileFragment;
+import ch.epfl.sweng.radius.database.MLocation;
 
 public class MapUtility {
     private static final String TAG = "MapUtility";
@@ -29,21 +35,104 @@ public class MapUtility {
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOC_PERMIT_REQUEST_CODE = 1234;
     private static final double DEFAULT_LATITUDE = 46.5191;
-    private static final double DEFAULT_LONGTITUDE = 6.5668;
+    private static final double DEFAULT_LONGITUDE = 6.5668;
 
     private static FusedLocationProviderClient mblFusedLocationClient;
     private static boolean mblLocationPermissionGranted;
     private static Location currentLocation;
+    private static MLocation myPos;
     private static double radius;
     private static LatLng currCoordinates;
 
     private static ArrayList<User> users;
+    private static HashMap<String, MLocation> otherPos;
+
 
     public MapUtility(double radius, ArrayList<User> users) {
+        Log.e("Map", "MapUtilCreated!");
         MapUtility.radius = radius;
         MapUtility.users = users;
-        currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGTITUDE);
+        currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
+        this.myPos = new MLocation(Database.getInstance().getCurrent_user_id(),
+                DEFAULT_LONGITUDE,
+                DEFAULT_LATITUDE);
+        if(otherPos == null)
+            otherPos = new HashMap<>();
     }
+
+    public void fetchUsersInRadius(final int radius){
+        final Database database = Database.getInstance();
+
+        database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
+                    @Override
+                    public void onFinish(Object value) {
+                        for(MLocation loc : (ArrayList<MLocation>) value){
+                            if(isInRadius(loc, radius)) {
+                                    Log.e("Map", "isInRadius and " + Integer.toString(otherPos.size()) );
+                                    otherPos.put(loc.getID(), loc);
+                            }
+                        }
+                    }
+                    @Override
+                    public void onError(DatabaseError error) {
+                        Log.e("Firebase", error.getMessage());
+                    }
+                });
+            }
+            @Override
+            public void onError(DatabaseError error) {
+                Log.e("Firebase Error", error.getMessage());
+            }
+        });
+    }
+
+    public boolean isInRadius(MLocation loc, int radius){
+        return computeDistance(loc) <= radius * 10000;
+    }
+
+    public ArrayList<MLocation> getOtherLocations() {
+        return new ArrayList<>(otherPos.values());
+    }
+
+    public void updatePos(MLocation newPos){
+
+        this.myPos = newPos;
+    }
+
+    public void setMyPos(MLocation myPos) {
+        this.myPos = myPos;
+    }
+
+    public HashMap<String, MLocation> getOtherPos() {
+        return otherPos;
+    }
+
+    public double computeDistance(MLocation loc){
+
+        if(loc == null)
+            return Double.MAX_VALUE;
+
+        double earthRadius = 3958.75;
+        double latDiff = Math.toRadians(loc.getLatitude() - myPos.getLatitude());
+        double lngDiff = Math.toRadians(loc.getLongitude()-myPos.getLongitude());
+        double a = Math.sin(latDiff /2) * Math.sin(latDiff /2) +
+                Math.cos(Math.toRadians(myPos.getLatitude())) *
+                        Math.cos(Math.toRadians(loc.getLatitude())) *
+                        Math.sin(lngDiff /2) * Math.sin(lngDiff /2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double distance = earthRadius * c;
+
+        int meterConversion = 1609;
+        Log.e("Map", "Distance is : " + Double.toString(distance * meterConversion));
+        Log.e("Map", "Radius is : " + Boolean.toString(distance * meterConversion < radius * 10000));
+
+        return new Float(distance * meterConversion).floatValue();
+    }
+
 
     public void getDeviceLocation(final FragmentActivity activity) {
         mblFusedLocationClient = LocationServices.getFusedLocationProviderClient( activity);
@@ -74,6 +163,7 @@ public class MapUtility {
     }
 
     public void setCurrCoordinates(LatLng currCoordinates) {
+
         MapUtility.currCoordinates = currCoordinates;
     }
 
