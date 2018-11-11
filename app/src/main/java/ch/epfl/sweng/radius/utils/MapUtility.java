@@ -49,7 +49,6 @@ public class MapUtility {
 
 
     public MapUtility(double radius, ArrayList<User> users) {
-        Log.e("Map", "MapUtilCreated!");
         MapUtility.radius = radius;
         MapUtility.users = users;
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
@@ -71,7 +70,6 @@ public class MapUtility {
                     public void onFinish(Object value) {
                         for(MLocation loc : (ArrayList<MLocation>) value){
                             if(isInRadius(loc, radius)) {
-                                    Log.e("Map", "isInRadius and " + Integer.toString(otherPos.size()) );
                                     otherPos.put(loc.getID(), loc);
                             }
                         }
@@ -127,8 +125,6 @@ public class MapUtility {
         double distance = earthRadius * c;
 
         int meterConversion = 1609;
-        Log.e("Map", "Distance is : " + Double.toString(distance * meterConversion));
-        Log.e("Map", "Radius is : " + Boolean.toString(distance * meterConversion < radius * 10000));
 
         return new Float(distance * meterConversion).floatValue();
     }

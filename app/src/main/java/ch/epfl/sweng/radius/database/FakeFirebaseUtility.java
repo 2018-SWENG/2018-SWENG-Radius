@@ -1,5 +1,7 @@
 package ch.epfl.sweng.radius.database;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,18 +86,22 @@ public class FakeFirebaseUtility extends Database {
 
         int size = tableName == Tables.USERS ? usersTable.size() :
                    tableName == Tables.CHATLOGS ? chatLogsTable.size() : locationsTable.size();
+        Log.w("Map Test", "Size of table " + size);
         for (int i = 0; i < size; i++) {
             DatabaseObject objRead;
             if(tableName == Tables.USERS)
                 objRead = usersTable.get(i);
             else if(tableName == Tables.CHATLOGS)
-                objRead = chatLogsTable.get(i);
+                objRead = chatLogsTable.get("testUser"+Integer.toString(i+1));
             else
-                objRead = locationsTable.get(i);
+                objRead = locationsTable.get("testUser"+Integer.toString(i+1));
+            Log.w("Map Test", "Name of obj " + locationsTable.get("testUser1").getID());
 
             if(objRead != null)
                 objsRead.add(objRead);
         }
+        Log.w("Map Test", "Size of objReads " + objsRead.size());
+
 
         callback.onFinish(objsRead);
     }
