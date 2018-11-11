@@ -354,6 +354,8 @@ public class ProfileFragment extends Fragment {
         if (userStatus != null) {
             outState.putCharSequence("userStatus", userStatus.getText());
         }
+        System.out.println("coucou");
+
     }
 
     @Override

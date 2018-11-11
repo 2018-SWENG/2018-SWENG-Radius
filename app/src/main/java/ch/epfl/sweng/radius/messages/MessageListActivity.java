@@ -22,7 +22,6 @@ import java.util.Map;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Message;
-import ch.epfl.sweng.radius.utils.ChatLogDbUtility;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
 
@@ -36,7 +35,6 @@ public class MessageListActivity extends AppCompatActivity {
     private EditText messageZone;
     private Firebase chatReference;
     private ChatLogs chatLogs;
-    private ChatLogDbUtility chatLogDbUtility;
 
     /**
      * Get all infos needed to create the activity
