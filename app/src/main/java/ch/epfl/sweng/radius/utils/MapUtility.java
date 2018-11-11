@@ -27,7 +27,6 @@ import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.profile.ProfileFragment;
-import ch.epfl.sweng.radius.database.MLocation;
 
 public class MapUtility {
     private static final String TAG = "MapUtility";
@@ -95,11 +94,6 @@ public class MapUtility {
         return new ArrayList<>(otherPos.values());
     }
 
-    public void updatePos(MLocation newPos){
-
-        this.myPos = newPos;
-    }
-
     public void setMyPos(MLocation myPos) {
         this.myPos = myPos;
     }
@@ -128,7 +122,6 @@ public class MapUtility {
 
         return new Float(distance * meterConversion).floatValue();
     }
-
 
     public void getDeviceLocation(final FragmentActivity activity) {
         mblFusedLocationClient = LocationServices.getFusedLocationProviderClient( activity);
@@ -206,7 +199,7 @@ public class MapUtility {
         float[] distance = new float[3];
         Location.distanceBetween( currCoordinates.latitude, currCoordinates.longitude,
                 p2latitude, p2longtitude, distance);
-
+        Log.e("Map","Distance is :" + Double.toString(distance[0]));
         return distance[0];
     }
 

@@ -3,8 +3,10 @@ package ch.epfl.sweng.radius.utils;
 import android.Manifest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DatabaseError;
 
 import org.junit.After;
 import org.junit.Before;
@@ -13,8 +15,11 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import ch.epfl.sweng.radius.AccountActivity;
+import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
@@ -46,6 +51,7 @@ public class MapUtilityTest {
     public void setUp() throws Exception {
 
         Database.activateDebugMode();
+
         accountActivity = mblActivityTestRule.getActivity();
         radius = 50000;
         user1 = new User();
@@ -73,7 +79,6 @@ public class MapUtilityTest {
 
     @Test
     public void fetchUsersInRadius() {
-        Database.activateDebugMode();
 
         mapListener.fetchUsersInRadius((int) radius);
         assertEquals(4, mapListener.getOtherPos().size());
@@ -87,7 +92,6 @@ public class MapUtilityTest {
 
     @Test
     public void getOtherLocations() {
-        Database.activateDebugMode();
 
         mapListener.fetchUsersInRadius((int) radius);
         ArrayList<MLocation> otherPos = mapListener.getOtherLocations();
@@ -97,7 +101,6 @@ public class MapUtilityTest {
 
     @Test
     public void getOtherPos() {
-        Database.activateDebugMode();
 
         mapListener.fetchUsersInRadius((int) radius);
         HashMap<String, MLocation> otherPos = mapListener.getOtherPos();
@@ -133,10 +136,11 @@ public class MapUtilityTest {
 
     @Test
     public void findDistance() {
-    //    double distanceToUser1 = mapListener.findDistance(location1.getLatitude(), location1.getLongitude());
-    //    assertTrue(radius >= distanceToUser1);
-    //    double distanceToUser2 = mapListener.findDistance(location2.getLatitude(), location2.getLongitude());
-    //    assertTrue(radius <= distanceToUser2);
+
+        double distanceToUser1 = mapListener.findDistance(location1.getLatitude(), location1.getLongitude());
+        assertTrue(radius >= distanceToUser1);
+        double distanceToUser2 = mapListener.findDistance(location2.getLatitude(), location2.getLongitude());
+        assertTrue(radius >= distanceToUser2);
     }
 
     @Test
@@ -156,6 +160,38 @@ public class MapUtilityTest {
     }
 
     @Test
-    public void setPermissionResult() {
+    public void testFakeDB(){
+        Database.getInstance().writeInstanceObj(new User(), Database.Tables.USERS);
+        Database.getInstance().writeInstanceObj(new ChatLogs("A"), Database.Tables.CHATLOGS);
+        Database.getInstance().writeInstanceObj(new MLocation(), Database.Tables.LOCATIONS);
+
+        CallBackDatabase cb = new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                assert(true);
+            }
+            @Override
+            public void onError(DatabaseError error) {
+                Log.e("Firebase Error", error.getMessage());
+            }
+        };
+
+        List<String> ids = new ArrayList<>();
+        ids.add("Arthur");
+
+        Database.getInstance().readAllTableOnce(Database.Tables.LOCATIONS, cb);
+        Database.getInstance().readAllTableOnce(Database.Tables.USERS, cb);
+        Database.getInstance().readAllTableOnce(Database.Tables.CHATLOGS, cb);
+
+        Database.getInstance().readListObjOnce(ids, Database.Tables.LOCATIONS, cb);
+        Database.getInstance().readListObjOnce(ids, Database.Tables.USERS, cb);
+        Database.getInstance().readListObjOnce(ids, Database.Tables.CHATLOGS, cb);
+
+        Database.getInstance().readObjOnce(new User(), Database.Tables.USERS, cb);
+        Database.getInstance().readObjOnce(new ChatLogs("A"), Database.Tables.CHATLOGS, cb);
+        Database.getInstance().readObjOnce(new MLocation(), Database.Tables.LOCATIONS, cb);
+
+
     }
+
 }
