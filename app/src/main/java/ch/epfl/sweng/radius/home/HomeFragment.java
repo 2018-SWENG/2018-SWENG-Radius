@@ -18,16 +18,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.Location;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.R;
@@ -58,6 +59,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     //testing
     private static MapUtility mapListener;
     private static ArrayList<User> users;
+    private static List<String> friendsID;
     private static ArrayList<Location> usersLoc;
     /**
      * Use this factory method to create a new instance of
@@ -79,6 +81,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         locUtil = new LocationUtility(new Location());
         radius = DEFAULT_RADIUS;
         users = new ArrayList<User>();
+        friendsID = new ArrayList<>();
+        usersLoc = new ArrayList<Location>();
     }
 
     @Override
@@ -136,7 +140,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         // Push current location to DB
         double lat = mapListener.getCurrCoordinates().latitude;
         double lng = mapListener.getCurrCoordinates().longitude;
-        myPos = new Location(FirebaseAuth.getInstance().getCurrentUser().getUid(), lat, lng);
+       // myPos = new Location(FirebaseAuth.getInstance().getCurrentUser().getUid(), lat, lng);
+       // Debug purpose only
+        myPos = new Location("testUser3", lat, lng);
 
         locUtil.setMyPos(myPos);
         // Do locations here
@@ -174,18 +180,44 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mobileMap.clear();
         mobileMap.addCircle(radiusOptions);
         getUsersInRadius();
+        getFriendsID();
+        Log.w("Map", "Size of friendsID is " + Integer.toString(friendsID.size()));
+
         for (int i = 0; usersLoc != null && i < usersLoc.size(); i++) {
-            markNearbyUser(i, usersLoc.get(i).getMessage(), usersLoc.get(i).getTitle());
+            markNearbyUser(i, usersLoc.get(i).getMessage(), usersLoc.get(i).getTitle(),
+                            usersLoc.get(i).getID());
         }
     }
 
-    public void markNearbyUser(int indexOfUser, String status, String userName) {
+    private void getFriendsID() {
+
+        final Database database = Database.getInstance();
+
+        database.readObjOnce(new User(myPos.getID()),
+                Database.Tables.USERS, new CallBackDatabase() {
+                                    @Override
+                                    public void onFinish(Object value) {
+                                        friendsID = ((User) value).getFriends();
+
+                                        }
+                                    @Override
+                                    public void onError(DatabaseError error) {
+                                        Log.e("Firebase", error.getMessage());
+                                    }
+
+                });
+
+    }
+
+    public void markNearbyUser(int indexOfUser, String status, String userName, String locID) {
 
         LatLng newPos = new LatLng(usersLoc.get(indexOfUser).getLatitude(),
                                     usersLoc.get(indexOfUser).getLongitude()    );
+        float color = friendsID.contains(locID) ? BitmapDescriptorFactory.HUE_BLUE :
+                                                        BitmapDescriptorFactory.HUE_RED    ;
         mobileMap.addMarker(new MarkerOptions().position(newPos)
                 .title(userName + ": " + status)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                .icon(BitmapDescriptorFactory.defaultMarker(color)));
 
     }
         /*

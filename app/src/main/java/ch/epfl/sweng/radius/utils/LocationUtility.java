@@ -37,6 +37,12 @@ public class LocationUtility {
 
         database.writeInstanceObj(new Location("testUser1", defaultLng, defaultLat),
                 Database.Tables.LOCATIONS);
+        database.writeInstanceObj(new Location("testUser2", defaultLng + 0.01,
+                defaultLat + 0.01),
+                Database.Tables.LOCATIONS);
+        database.writeInstanceObj(new Location("testUser3", defaultLng - 0.01,
+                defaultLat - 0.01),
+                Database.Tables.LOCATIONS);
     }
 
     public void fetchUsersInRadius(final int radius){
