@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.home.HomeFragment;
 import ch.epfl.sweng.radius.utils.UserInfos;
@@ -269,6 +270,13 @@ public class ProfileFragment extends Fragment {
                     userStatusString = statusString;
                     setUpUserStatus(mainView);
                 }
+
+                User currentUser = UserInfos.getCurrentUser();
+                currentUser.setNickname(nicknameString);
+                currentUser.setStatus(statusString);
+                currentUser.setSpokenLanguages(languagesText);
+                //Write to DB
+                Database.getInstance().writeInstanceObj(currentUser, Database.Tables.USERS);
             }
         });
     }
