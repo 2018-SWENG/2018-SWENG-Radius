@@ -42,7 +42,7 @@ public class MapUtility {
     public MapUtility(double radius, ArrayList<User> users) {
         MapUtility.radius = radius;
         MapUtility.users = users;
-        currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGTITUDE);
+        //currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGTITUDE);
     }
 
     public void getDeviceLocation(final FragmentActivity activity) {
@@ -53,10 +53,12 @@ public class MapUtility {
                 location.addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
-                        if ( task.isSuccessful()) {
+                        if ( task.isSuccessful() && task.getResult() != null) {
+                            Log.e( TAG, "Found location");
                             currentLocation = (Location) task.getResult();
                             LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(),
                                     currentLocation.getLongitude());
+                            Log.e( TAG, "Found location " + currentLocation.getLatitude() + " " + currentLocation.getLongitude());
 
                             setCurrCoordinates(currentCoordinates);
                         }

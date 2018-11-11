@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/topMenu">
 
     <item android:title="Block User"
-        android:id="@+id/block_user"/>
+        android:id="@+id/block_user"
+        app:showAsAction="never"/>
 
     <item android:title="Report User for:"
-        android:id="@+id/reportUser">
+        android:id="@+id/reportUser"
+        app:showAsAction="never"
+        >
         <menu
             android:id="@+id/subMenu">
             <item android:id="@+id/language"
-                android:title="Language"/>
+                android:title="Language"
+                app:showAsAction="never"/>
 
             <item android:id="@+id/spam"
-                android:title="Spam"/>
+                android:title="Spam"
+                app:showAsAction="never"/>
         </menu>
     </item>
 </menu>

@@ -32,7 +32,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".browseProfiles.BrowseProfilesActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".message.MessageListActivity"
+        <activity android:name=".messages.MessageListActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".PreferencesActivity"
             android:screenOrientation="portrait"/>

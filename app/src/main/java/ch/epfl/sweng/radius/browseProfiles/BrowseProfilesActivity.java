@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
+import android.support.v7.widget.Toolbar;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.utils.BrowseProfilesUtility;
@@ -17,6 +17,7 @@ import ch.epfl.sweng.radius.utils.BrowseProfilesUtility;
 public class BrowseProfilesActivity extends AppCompatActivity {
     //Might want to create and get the id of users along with their names.
     private BrowseProfilesUtility profileActivityListener;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +32,17 @@ public class BrowseProfilesActivity extends AppCompatActivity {
         imageView.setImageResource(clickedPic);
         TextView textViewName = findViewById(R.id.clickedName);
         textViewName.setText(clickedName);
+
+        // ToolBar initialization
+        toolbar = findViewById(R.id.toolbar); // Attaching the layout to the toolbar object
+        setSupportActionBar(toolbar);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.profile_menu, menu);
+        //MenuInflater inflater = getMenuInflater();
+        //inflater.inflate(R.menu.profile_menu, menu);
+        getMenuInflater().inflate(R.menu.profile_menu, menu);
         return true;
     }
 
