@@ -106,6 +106,31 @@ public class FirebaseUtility extends Database{
     }
 
     @Override
+    public void readAllTableOnce(final Tables tableName, final CallBackDatabase callback) {
+        FirebaseDatabase.getInstance()
+                .getReference(tableName.toString())
+                .addListenerForSingleValueEvent( new ValueEventListener() {
+                    @Override
+                    public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        List<DatabaseObject> allItems = new ArrayList<>();
+                        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                            DatabaseObject snap = (DatabaseObject)postSnapshot
+                                    .getValue(tableName.getTableClass());
+                                allItems.add((DatabaseObject)postSnapshot
+                                        .getValue(tableName.getTableClass()));
+                        }
+                        callback.onFinish(allItems);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        callback.onError(databaseError);
+
+                    }
+                });
+    }
+
+    @Override
     public void writeInstanceObj(final DatabaseObject obj, final Tables tableName){
         FirebaseDatabase.getInstance()
                 .getReference(tableName.toString())

@@ -12,7 +12,8 @@ public abstract class Database {
     // The tables we can access in the db
     public enum Tables{
         USERS("users", User.class),
-        CHATLOGS("chatlogs", ChatLogs.class);
+        CHATLOGS("chatlogs", ChatLogs.class),
+        LOCATIONS("locations", MLocation.class);
 
         private String name = "";
         private Class tableClass;
@@ -90,9 +91,21 @@ public abstract class Database {
                             final CallBackDatabase callback);
 
     /**
+     * Read all the objects in the table "tableName" of the DB
+     * and call the functions of callback when done
+     * @param tableName the name of the table we want to read
+     * @param callback the functions we want to call when the reading is complete
+     */
+    public abstract void readAllTableOnce(final Tables tableName,
+                                         final CallBackDatabase callback);
+
+
+    /**
      * Write/Update obj in the table mentioned of the DB
      * @param obj the obj to write in the DB
      * @param tableName the name of the table in which we want to store obj
      */
     public abstract void writeInstanceObj(final DatabaseObject obj, Tables tableName);
+
+
 }

@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -15,12 +16,13 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.MapUtility;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
+@Ignore
 public class MapTest {
 
     @Rule
@@ -29,10 +31,13 @@ public class MapTest {
     @Rule
     public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
             Manifest.permission.ACCESS_FINE_LOCATION);
-
+    private static final double DEFAULT_LATITUDE = 46.5191;
+    private static final double DEFAULT_LONGITUDE = 6.5668;
     private double radius;
     private User user1, user2;
+    private MLocation location1, location2;
     private ArrayList<User> users;
+    private ArrayList<MLocation> locations;
     private MapUtility mapListener;
 
     private HomeFragment homeFragment;
@@ -43,13 +48,21 @@ public class MapTest {
         Database.activateDebugMode();
         accountActivity = mblActivityTestRule.getActivity();
         radius = 3000;
-        user1 = new User();
-        user1.setLocation(new LatLng(46.524434, 6.570222));
-        user2 = new User();
-        user2.setLocation(new LatLng(0, 0));
+        user1 = new User("userTest1");
+        location1 = new MLocation(user1.getID(), DEFAULT_LONGITUDE, DEFAULT_LATITUDE);
+
+        user2 = new User("userTest2");
+        location2 = new MLocation(user2.getID(), DEFAULT_LONGITUDE + 0.1,
+                DEFAULT_LATITUDE - 0.1);
+
         users = new ArrayList<User>();
         users.add(user1);
         users.add(user2);
+
+        locations = new ArrayList<>();
+        locations.add(location1);
+        locations.add(location2);
+
         homeFragment = new HomeFragment();
         mapListener = new MapUtility(radius, users);
     }
@@ -62,16 +75,9 @@ public class MapTest {
 
     @Test
     public void testContains() {
-        assertTrue(mapListener.contains(user1.getLocation().latitude, user1.getLocation().longitude));
-        assertTrue(!mapListener.contains(user2.getLocation().latitude, user2.getLocation().longitude));
-    }
+        assertTrue(mapListener.contains(location1.getLatitude(), location1.getLongitude()));
+        assertTrue(mapListener.contains(location2.getLatitude(), location2.getLongitude()));
 
-    @Test
-    public void testFindDistance() {
-        double distanceToUser1 = mapListener.findDistance(user1.getLocation().latitude, user1.getLocation().longitude);
-        assertTrue(radius >= distanceToUser1);
-        double distanceToUser2 = mapListener.findDistance(user2.getLocation().latitude, user2.getLocation().longitude);
-        assertTrue(radius <= distanceToUser2);
     }
 
     @Test
