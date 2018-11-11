@@ -10,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
@@ -21,34 +22,38 @@ import ch.epfl.sweng.radius.database.User;
 public class LocationUtility {
 
     private Location myPos;
-    // TODO Fix heritage
-    private ArrayList<Location> otherPos;
-    private ArrayList<String>   otherNickname;
+    // TODO Replace by Map<uID, Location>
+    private HashMap<String, Location> otherPos;
     private final Database database = Database.getInstance();
 
+    private final double defaultLat = 46.5360698;
+    private final double defaultLng = 6.5681216000000004;
 
     public LocationUtility(Location myPos){
         this.myPos = myPos;
-        this.otherPos = new ArrayList<>();
-        this.otherNickname = new ArrayList<>();
+        this.otherPos = new HashMap<>();
+
+        final Database database = Database.getInstance();
+
+        database.writeInstanceObj(new Location("testUser1", defaultLng, defaultLat),
+                Database.Tables.LOCATIONS);
     }
 
     public void fetchUsersInRadius(final int radius){
 
-
-
-        database.readAllTableOnce(Database.Tables.USERS, new CallBackDatabase() {
+        database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
-                        database.readAllTableOnce(Database.Tables.USERS, new CallBackDatabase() {
+                        database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
                                     @Override
                                     public void onFinish(Object value) {
-                                        for(User friend : (ArrayList<User>) value){
-                                            if(isInRadius(friend.getLocation(), radius)) {
-                                                otherPos.add(friend.getLocation());
-                                                otherNickname.add(friend.getNickname());
+                                        for(Location loc : (ArrayList<Location>) value){
+                                            if(isInRadius(loc, radius)) {
+                                                if(!otherPos.containsKey(loc.getID())){
+                                                    otherPos.put(loc.getID(), loc);
+                                                }
+
                                             }
-                                            Log.w("Map", "Size of others is " + Integer.toString(otherPos.size()));
                                         }
                                     }
                                     @Override
@@ -65,13 +70,11 @@ public class LocationUtility {
     }
 
     public boolean isInRadius(Location loc, int radius){
-        Log.w("Map", "Radius is " + Integer.toString(radius));
-        Log.w("Map", "Distance is " + Double.toString(computeDistance(loc)));
         return computeDistance(loc)/1000 <= radius;
     }
 
-    public ArrayList<String> getOtherNickname() {
-        return otherNickname;
+    public ArrayList<Location> getOtherLocations() {
+        return new ArrayList<>(otherPos.values());
     }
 
     public void updatePos(Location newPos){
@@ -83,7 +86,7 @@ public class LocationUtility {
         this.myPos = myPos;
     }
 
-    public ArrayList<Location> getOtherPos() {
+    public HashMap<String, Location> getOtherPos() {
         return otherPos;
     }
 

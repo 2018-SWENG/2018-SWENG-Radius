@@ -12,7 +12,8 @@ public abstract class Database {
     // The tables we can access in the db
     public enum Tables{
         USERS("users", User.class),
-        CHATLOGS("chatlogs", ChatLogs.class);
+        CHATLOGS("chatlogs", ChatLogs.class),
+        LOCATIONS("locations", Location.class);
 
         private String name = "";
         private Class tableClass;

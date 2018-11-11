@@ -6,8 +6,14 @@ import java.util.List;
 
 public class FakeFirebaseUtility extends Database {
     private User currentUSer;
+    private Location currentLoc;
     private HashMap<String, User> usersTable = new HashMap<>();
     private HashMap<String, ChatLogs> chatLogsTable = new HashMap<>();
+    private HashMap<String, Location> locationsTable = new HashMap<>();
+
+    private final double defaultLat = 46.5360698;
+    private final double defaultLng = 6.5681216000000004;
+
 
     public FakeFirebaseUtility(){
         fillDatabase();
@@ -29,6 +35,9 @@ public class FakeFirebaseUtility extends Database {
                 break;
             case CHATLOGS:
                 objRead = chatLogsTable.get(obj.getID());
+                break;
+            case LOCATIONS:
+                objRead = locationsTable.get((obj.getID()));
                 break;
         }
 
@@ -57,8 +66,10 @@ public class FakeFirebaseUtility extends Database {
             DatabaseObject objRead;
             if(tableName == Tables.USERS)
                 objRead = usersTable.get(id);
-            else
+            else if(tableName == Tables.CHATLOGS)
                 objRead = chatLogsTable.get(id);
+            else
+                objRead = locationsTable.get(id);
 
             if(objRead != null)
                 objsRead.add(objRead);
@@ -71,13 +82,16 @@ public class FakeFirebaseUtility extends Database {
     public void readAllTableOnce(Tables tableName, CallBackDatabase callback) {
         ArrayList<DatabaseObject> objsRead = new ArrayList<>();
 
-        int size = tableName == Tables.USERS ? usersTable.size() : chatLogsTable.size();
+        int size = tableName == Tables.USERS ? usersTable.size() :
+                   tableName == Tables.CHATLOGS ? chatLogsTable.size() : locationsTable.size();
         for (int i = 0; i < size; i++) {
             DatabaseObject objRead;
             if(tableName == Tables.USERS)
                 objRead = usersTable.get(i);
-            else
+            else if(tableName == Tables.CHATLOGS)
                 objRead = chatLogsTable.get(i);
+            else
+                objRead = locationsTable.get(i);
 
             if(objRead != null)
                 objsRead.add(objRead);
@@ -95,6 +109,9 @@ public class FakeFirebaseUtility extends Database {
             case CHATLOGS:
                 chatLogsTable.put(obj.getID(), (ChatLogs) obj);
                 break;
+            case LOCATIONS:
+                locationsTable.put(obj.getID(), (Location) obj);
+                break;
         }
     }
 
@@ -109,5 +126,15 @@ public class FakeFirebaseUtility extends Database {
         usersTable.put("testUser4", new User("testUser4"));
 
         // TODO: Fill the chatLogs table
+        currentLoc = new Location("testUser1", defaultLng, defaultLat);
+
+        // Fill the users table
+        locationsTable.put("testUser1", currentLoc);
+        locationsTable.put("testUser2", new Location("testUser2", defaultLng + 0.01,
+                defaultLat + 0.01));
+        locationsTable.put("testUser3", new Location("testUser3", defaultLng - 0.02,
+                defaultLat + 0.02));
+        locationsTable.put("testUser4", new Location("testUser4",
+                defaultLng - 0.01, defaultLat - 0.01));
     }
 }

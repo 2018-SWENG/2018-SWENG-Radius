@@ -59,7 +59,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static MapUtility mapListener;
     private static ArrayList<User> users;
     private static ArrayList<Location> usersLoc;
-    private static ArrayList<String> usersNickname;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -112,7 +111,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         Toast.makeText(getContext(), "Map is ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: map is ready");
         mobileMap = googleMap; //use map utility here
-        mapListener.getLocationPermission(getContext(), getActivity()); // Use map utility here
+        mapListener.getLocationPermission(getContext(), getActivity());
 
         if (mapListener.getPermissionResult()) {
             mapListener.getDeviceLocation(getActivity()); // use map utility here
@@ -131,7 +130,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void initMap() {
         if (mapListener.getCurrCoordinates() != null) {
             initCircle(mapListener.getCurrCoordinates());
-            moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM);
+            moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM*(float) 0.9);
         }
 
         // Push current location to DB
@@ -161,13 +160,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     public void getUsersInRadius(){
 
-        ArrayList<Location> res = new ArrayList<>();
-
         locUtil.fetchUsersInRadius((int) radius);
 
-        usersLoc = locUtil.getOtherPos();
+        usersLoc = locUtil.getOtherLocations();
         Log.w("Map", "Size of others is " + Integer.toString(usersLoc.size()));
-        usersNickname = locUtil.getOtherNickname();
 
     }
 
@@ -179,8 +175,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mobileMap.addCircle(radiusOptions);
         getUsersInRadius();
         for (int i = 0; usersLoc != null && i < usersLoc.size(); i++) {
-            Log.w("Map", "heyhey");
-            markNearbyUser(i, "HeyHey", usersNickname.get(i));
+            markNearbyUser(i, usersLoc.get(i).getMessage(), usersLoc.get(i).getTitle());
         }
     }
 
