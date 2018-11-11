@@ -42,6 +42,7 @@ public class ProfileFragment extends Fragment {
     private static Uri profilePictureUri;
     private static String userNicknameString;
     private static String userStatusString;
+    private static int userRadius;
 
     CircleImageView userPhoto;
     ImageButton changeProfilePictureButton;
@@ -102,12 +103,15 @@ public class ProfileFragment extends Fragment {
 
         //Get the instance of current user & attributes
         User currentUser = UserInfos.getCurrentUser();
+
         userNicknameString = currentUser.getNickname();
         userStatusString = currentUser.getStatus();
         languagesText = currentUser.getSpokenLanguages();
+        userRadius = currentUser.getRadius();
 
-        int progress = radiusBar.getProgress();
-        radiusValue.setText(progress + "Km");
+        //int progress = radiusBar.getProgress();
+        radiusBar.setProgress(userRadius);
+        radiusValue.setText(userRadius + "Km");
 
         selectableLanguages = readLanguagesFromFile();
 
@@ -126,7 +130,7 @@ public class ProfileFragment extends Fragment {
 
         HomeFragment.newInstance(radiusBar.getProgress());
         radiusValue = view.findViewById(R.id.radiusValue);
-        radiusValue.setText(progress + " Km");
+        radiusValue.setText(userRadius + " Km");
 
         setUpProfilePhoto(view);
         setUpUserNickname(view);
@@ -275,6 +279,7 @@ public class ProfileFragment extends Fragment {
                 currentUser.setNickname(nicknameString);
                 currentUser.setStatus(statusString);
                 currentUser.setSpokenLanguages(languagesText);
+                currentUser.setRadius(userRadius);
                 //Write to DB
                 Database.getInstance().writeInstanceObj(currentUser, Database.Tables.USERS);
             }
@@ -323,6 +328,7 @@ public class ProfileFragment extends Fragment {
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             // updated continuously as the user slides the thumb
             radiusValue.setText(progress + " Km");
+            userRadius = progress;
 
             HomeFragment.newInstance(radiusBar.getProgress());
         }

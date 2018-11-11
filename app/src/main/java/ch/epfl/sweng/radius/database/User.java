@@ -32,7 +32,7 @@ public class User implements DatabaseObject {
         this.userID = userID;
         this.nickname = "New User " + userID;
         this.urlProfilePhoto = "";
-        this.radius = 500;
+        this.radius = 50;
         this.status = "Hi, I'm new to radius !";
         this.friendsRequests = new ArrayList<>();
         this.friendsInvitations = new ArrayList<>();
@@ -47,7 +47,7 @@ public class User implements DatabaseObject {
         this.userID = Long.toString(idGenerator++);
         this.nickname = "New User " + this.userID;
         this.urlProfilePhoto = "";
-        this.radius = 500;
+        this.radius = 50;
         this.status = "Hi, I'm new to radius !";
         this.friendsRequests = new ArrayList<>();
         this.friendsInvitations = new ArrayList<>();
