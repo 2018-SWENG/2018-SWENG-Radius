@@ -280,24 +280,25 @@ public class ProfileFragment extends Fragment {
                 String statusString = getDataFromTextInput(statusInput);
                 String interestsString = getDataFromTextInput(interestsInput);
 
+                User currentUser = UserInfos.getCurrentUser();
+
                 if (!nicknameString.isEmpty()) {
                     userNicknameString = nicknameString;
+                    currentUser.setNickname(nicknameString);
                     setUpUserNickname(mainView);
                 }
                 if (!statusString.isEmpty()) {
                     userStatusString = statusString;
+                    currentUser.setStatus(statusString);
                     setUpUserStatus(mainView);
                 }
 
                 if (!interestsString.isEmpty()) {
                     userInterestsString = interestsString;
+                    currentUser.setSpokenLanguages(languagesText);
                     setUpUserInterests(mainView);
                 }
 
-                User currentUser = UserInfos.getCurrentUser();
-                currentUser.setNickname(nicknameString);
-                currentUser.setStatus(statusString);
-                currentUser.setSpokenLanguages(languagesText);
                 currentUser.setRadius(userRadius);
                 //Write to DB
                 Database.getInstance().writeInstanceObj(currentUser, Database.Tables.USERS);
