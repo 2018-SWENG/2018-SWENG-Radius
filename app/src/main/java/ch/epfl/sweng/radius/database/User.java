@@ -16,7 +16,7 @@ public class User implements DatabaseObject {
 
     private String userID;
     private String nickname;
-    public String urlProfilePhoto;
+    private String urlProfilePhoto;
     private int radius; // meters
     private String status;
     private List<String> friendsRequests;
