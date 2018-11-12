@@ -42,6 +42,7 @@ import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
+import static android.content.Intent.ACTION_CHOOSER;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -56,6 +57,7 @@ class RelaunchActivityRule<T extends Activity> extends ActivityTestRule<T> {
         super(activityClass,false);
     }
 
+    /*
     public RelaunchActivityRule(Class<T> activityClass, boolean initialTouchMode) {
         super(activityClass, initialTouchMode,true);
     }
@@ -64,6 +66,7 @@ class RelaunchActivityRule<T extends Activity> extends ActivityTestRule<T> {
                                 boolean launchActivity) {
         super(activityClass, initialTouchMode, launchActivity);
     }
+    */
 
     @Override protected void afterActivityFinished() {
         super.afterActivityFinished();
@@ -123,12 +126,13 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
     public final RelaunchActivityRule<AccountActivity> mRelaunchRule = new RelaunchActivityRule<>(AccountActivity.class);
 
     private AccountActivity mblAccountActivity;
-    private FrameLayout fcontainer;
-    private ProfileFragment fragment;
-
+    //private FrameLayout fcontainer;
+    //private ProfileFragment fragment;
+    /*
     public ProfileFragmentTest(Class<AccountActivity> activityClass) {
         super(activityClass);
     }
+    */
 
     public ProfileFragmentTest() {
         super(AccountActivity.class);
@@ -176,6 +180,7 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
         view = fragment.getView().findViewById(R.id.spokenLanguages); assertNotNull(view);
         view = fragment.getView().findViewById(R.id.saveButton); assertNotNull(view);
         view = fragment.getView().findViewById(R.id.userInterests); assertNotNull(view);
+        view = fragment.getView().findViewById(R.id.interestsInput); assertNotNull(view);
     }
 
     @Test
@@ -186,14 +191,17 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
         Espresso.onView(withId(R.id.statusInput)).perform(typeText("User Status"));
         Espresso.closeSoftKeyboard();
         Espresso.onView(withId(R.id.saveButton)).perform(scrollTo(),click());
+        Espresso.onView(withId(R.id.userNickname)).equals("User Nickname");
+        Espresso.onView(withId(R.id.userStatus)).equals("User Status");
     }
 
     @Test
     public void testChangeInterests(){
         Espresso.onView(withId(R.id.navigation_profile)).perform(click());
-        Espresso.onView(withId(R.id.interestsInput)).perform(typeText("MyInterests"));
+        Espresso.onView(withId(R.id.interestsInput)).perform(typeText("User Interests"));
         Espresso.closeSoftKeyboard();
         Espresso.onView(withId(R.id.saveButton)).perform(scrollTo(),click());
+        Espresso.onView(withId(R.id.userInterests)).equals("User Interests");
     }
 
     @Test
