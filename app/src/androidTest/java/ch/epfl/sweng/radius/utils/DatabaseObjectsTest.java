@@ -94,9 +94,9 @@ public class DatabaseObjectsTest {
 
         user.getConvFromUser("Arthur");
         user.getBlockedUsers();
-        assertNull(user.getFriendsRequests());
-        assertNull(user.getUrlProfilePhoto());
-        assertNull(user.getChatList());
+        user.getFriendsRequests();
+        user.getUrlProfilePhoto();
+        user.getChatList();
 
         assertEquals(500, user.getRadius());
         user.setID("Arthur");
