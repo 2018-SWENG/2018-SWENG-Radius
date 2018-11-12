@@ -2,6 +2,7 @@ package ch.epfl.sweng.radius.utils;
 
 import android.Manifest;
 import android.support.test.rule.GrantPermissionRule;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -12,6 +13,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.MLocation;
@@ -81,6 +83,7 @@ public class DatabaseObjectsTest {
         User user = new User("1234");
         User user2 = new User("123");
         user.addFriendRequest(user2);
+        user2.addFriendRequest(user);
         user.addFriendRequest(user2);
         assert(user.getFriendsRequests().size() == 1);
 
@@ -92,11 +95,13 @@ public class DatabaseObjectsTest {
         } catch (Exception e){}
         assert(user.getStatus() == status);
 
-        user.getConvFromUser("Arthur");
-        user.getBlockedUsers();
-        user.getFriendsRequests();
-        user.getUrlProfilePhoto();
-        user.getChatList();
+        String chat = user.getConvFromUser("Arthur");
+        Log.e("Test", "Coucou");
+        assertNull(chat);
+        List<String> blocked = user.getBlockedUsers();
+        List<String> req = user.getFriendsRequests();
+        String url = user.getUrlProfilePhoto();
+        Map<String, String> chats = user.getChatList();
 
         assertEquals(500, user.getRadius());
         user.setID("Arthur");
