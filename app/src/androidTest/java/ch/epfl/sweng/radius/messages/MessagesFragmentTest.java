@@ -75,6 +75,7 @@ public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<Accou
                 .atPosition(0)
                 .onChildView(withId(R.id.profilePic))
                 .perform(click());
+        Espresso.onView(withId(R.id.clickedName)).equals("john doe");
     }
 
     @After
