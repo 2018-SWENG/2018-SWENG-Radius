@@ -287,35 +287,39 @@ public class ProfileFragment extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String nicknameString = getDataFromTextInput(nicknameInput);
-                String statusString = getDataFromTextInput(statusInput);
-                String interestsString = getDataFromTextInput(interestsInput);
-
-                User currentUser = UserInfos.getCurrentUser();
-
-                if (!nicknameString.isEmpty()) {
-                    userNicknameString = nicknameString;
-                    currentUser.setNickname(nicknameString);
-                    setUpUserNickname(mainView);
-                }
-                if (!statusString.isEmpty()) {
-                    userStatusString = statusString;
-                    currentUser.setStatus(statusString);
-                    setUpUserStatus(mainView);
-                }
-
-                if (!interestsString.isEmpty()) {
-                    userInterestsString = interestsString;
-                    currentUser.setInterests(interestsString);
-                    setUpUserInterests(mainView);
-                }
-
-                currentUser.setRadius(userRadius);
-                currentUser.setSpokenLanguages(languagesText);
-                //Write to DB
-                Database.getInstance().writeInstanceObj(currentUser, Database.Tables.USERS);
+                onClickSaveButton(mainView);
             }
         });
+    }
+
+    private void onClickSaveButton(View mainView) {
+        String nicknameString = getDataFromTextInput(nicknameInput);
+        String statusString = getDataFromTextInput(statusInput);
+        String interestsString = getDataFromTextInput(interestsInput);
+
+        User currentUser = UserInfos.getCurrentUser();
+
+        if (!nicknameString.isEmpty()) {
+            userNicknameString = nicknameString;
+            currentUser.setNickname(nicknameString);
+            setUpUserNickname(mainView);
+        }
+        if (!statusString.isEmpty()) {
+            userStatusString = statusString;
+            currentUser.setStatus(statusString);
+            setUpUserStatus(mainView);
+        }
+
+        if (!interestsString.isEmpty()) {
+            userInterestsString = interestsString;
+            currentUser.setInterests(interestsString);
+            setUpUserInterests(mainView);
+        }
+
+        currentUser.setRadius(userRadius);
+        currentUser.setSpokenLanguages(languagesText);
+        //Write to DB
+        Database.getInstance().writeInstanceObj(currentUser, Database.Tables.USERS);
     }
 
     private ArrayList<String> readLanguagesFromFile() {

@@ -115,11 +115,9 @@ class ColorMatcher extends TypeSafeMatcher<View> {
 public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<AccountActivity> {
 
     @Rule
-    public ActivityTestRule<AccountActivity> mblActivityTestRule
-            = new ActivityTestRule<AccountActivity>(AccountActivity.class);
+    public ActivityTestRule<AccountActivity> mblActivityTestRule = new ActivityTestRule<AccountActivity>(AccountActivity.class);
     @Rule
-    public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
-            Manifest.permission.ACCESS_FINE_LOCATION);
+    public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Rule
     public final RelaunchActivityRule<AccountActivity> mRelaunchRule = new RelaunchActivityRule<>(AccountActivity.class);
