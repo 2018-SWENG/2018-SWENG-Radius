@@ -69,6 +69,11 @@ public class MapUtilityTest {
         locations.add(location1);
         locations.add(location2);
 
+        User testUser = new User("testId");
+        testUser.setSpokenLanguages("English");
+
+        UserInfos.setCurrentUser(testUser);
+
         homeFragment = new HomeFragment();
         mapListener = new MapUtility(radius, users);
     }
