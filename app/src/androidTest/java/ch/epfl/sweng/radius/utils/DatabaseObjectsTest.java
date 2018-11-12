@@ -20,6 +20,7 @@ import ch.epfl.sweng.radius.database.User;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 
 public class DatabaseObjectsTest {
@@ -78,8 +79,9 @@ public class DatabaseObjectsTest {
     public void testUser() {
         // Test no duplicates friends requests
         User user = new User("1234");
-        user.addFriendRequest(new User("123"));
-        user.addFriendRequest(new User("123"));
+        User user2 = new User("123");
+        user.addFriendRequest(user2);
+        user.addFriendRequest(user2);
         assert(user.getFriendsRequests().size() == 1);
 
         // Test status max characters
@@ -89,6 +91,17 @@ public class DatabaseObjectsTest {
             assert(false);
         } catch (Exception e){}
         assert(user.getStatus() == status);
+
+        user.getConvFromUser("Arthur");
+        user.getBlockedUsers();
+        assertNull(user.getFriendsRequests());
+        assertNull(user.getUrlProfilePhoto());
+        assertNull(user.getChatList());
+
+        assertEquals(500, user.getRadius());
+        user.setID("Arthur");
+        assertEquals("Arthur", user.getID());
+
 
     }
 
