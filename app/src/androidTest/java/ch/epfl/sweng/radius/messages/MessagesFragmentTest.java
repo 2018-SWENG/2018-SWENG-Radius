@@ -1,9 +1,10 @@
 package ch.epfl.sweng.radius.messages;
 
-
-import android.app.Instrumentation;
+import android.content.Intent;
+import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.v4.app.Fragment;
+import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -15,38 +16,42 @@ import org.junit.Test;
 
 import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesActivity;
+import ch.epfl.sweng.radius.database.Database;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static org.junit.Assert.*;
+import static android.support.test.espresso.Espresso.onData;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.CoreMatchers.anything;
 
-public class MessagesFragmentTest {
-
+public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<AccountActivity> {
 
     @Rule
     public ActivityTestRule<AccountActivity> mblActivityTestRule
             = new ActivityTestRule<AccountActivity>(AccountActivity.class);
 
     private AccountActivity mblAccountActivity;
-    private FrameLayout fcontainer;
-    private Fragment fragment;
     private ListView chats;
-    private Instrumentation instrumentation;
-    private Instrumentation.ActivityMonitor monitor;
+
+    public MessagesFragmentTest() {
+        super(AccountActivity.class);
+    }
 
     @Before
     public void setUp() throws Exception {
+        super.setUp();
+        Database.activateDebugMode();
         mblAccountActivity = mblActivityTestRule.getActivity();
-        fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
-        fragment = new MessagesFragment();
-        instrumentation = getInstrumentation();
-        monitor = instrumentation.addMonitor(BrowseProfilesActivity.class.getName(), null, false);
+
+        Intent intent = new Intent();
+        mblAccountActivity = mblActivityTestRule.launchActivity(intent);
     }
 
     @Test
     public void testLaunch() {
+        FrameLayout fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
         assertNotNull(fcontainer);
 
+        Fragment fragment = new MessagesFragment();
         mblAccountActivity.getSupportFragmentManager().beginTransaction()
                 .add(fcontainer.getId(), fragment).commitAllowingStateLoss();
         getInstrumentation().waitForIdleSync();
@@ -64,21 +69,12 @@ public class MessagesFragmentTest {
 
     @Test
     public void testBrowseProfilesActivity() {
-        mblAccountActivity.getSupportFragmentManager().beginTransaction()
-                .add(fcontainer.getId(), fragment).commitAllowingStateLoss();
-        getInstrumentation().waitForIdleSync();
-
-        final ListView listview = mblAccountActivity.findViewById(R.id.listView);
-        assertNotNull(listview);
-
-        instrumentation.runOnMainSync(new Runnable() {
-            @Override
-            public void run() {
-                int position = 0;
-                listview.performItemClick(listview.getChildAt(position), position, listview.getAdapter().getItemId(position));
-
-            }
-        });
+        Espresso.onView(withId(R.id.navigation_messages)).perform(click());
+        onData(anything())
+                .inAdapterView(withId(R.id.listView))
+                .atPosition(0)
+                .onChildView(withId(R.id.profilePic))
+                .perform(click());
     }
 
     @After
