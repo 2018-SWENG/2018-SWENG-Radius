@@ -66,15 +66,10 @@ public class User implements DatabaseObject {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
-/*
-    public String getUrlProfilePhoto() {
-        return urlProfilePhoto;
-    }
 
     public void setUrlProfilePhoto(String urlProfilePhoto) {
         this.urlProfilePhoto = urlProfilePhoto;
     }
-*/
 
     public String getUrlProfilePhoto() {
         return urlProfilePhoto;

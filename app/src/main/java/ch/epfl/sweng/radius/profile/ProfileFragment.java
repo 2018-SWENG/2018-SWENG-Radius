@@ -3,14 +3,18 @@ package ch.epfl.sweng.radius.profile;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.button.MaterialButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +26,8 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -39,7 +45,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
 
-    private static Uri profilePictureUri;
+    private static Bitmap profilePictureUri;
     private static String userNicknameString;
     private static String userStatusString;
     private static String userInterestsString;
@@ -107,10 +113,15 @@ public class ProfileFragment extends Fragment {
         //Get the instance of current user & attributes
         User currentUser = UserInfos.getCurrentUser();
 
+        //Decode UrlProfilePhoto from Base64
+        byte[] decodedString = Base64.decode(currentUser.getUrlProfilePhoto(), Base64.DEFAULT);
+        profilePictureUri = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
         userNicknameString = currentUser.getNickname();
         userStatusString = currentUser.getStatus();
         languagesText = currentUser.getSpokenLanguages();
         userRadius = currentUser.getRadius();
+        userInterestsString = currentUser.getInterests();
 
         //int progress = radiusBar.getProgress();
         radiusBar.setProgress(userRadius);
@@ -180,7 +191,7 @@ public class ProfileFragment extends Fragment {
         userPhoto = view.findViewById(R.id.userPhoto);
 
         if (profilePictureUri != null) {
-            userPhoto.setImageURI(profilePictureUri);
+            userPhoto.setImageBitmap(profilePictureUri);
         }
 
         userPhoto.setOnClickListener(new View.OnClickListener() {
@@ -295,11 +306,12 @@ public class ProfileFragment extends Fragment {
 
                 if (!interestsString.isEmpty()) {
                     userInterestsString = interestsString;
-                    currentUser.setSpokenLanguages(languagesText);
+                    currentUser.setInterests(interestsString);
                     setUpUserInterests(mainView);
                 }
 
                 currentUser.setRadius(userRadius);
+                currentUser.setSpokenLanguages(languagesText);
                 //Write to DB
                 Database.getInstance().writeInstanceObj(currentUser, Database.Tables.USERS);
             }
@@ -337,8 +349,21 @@ public class ProfileFragment extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (resultCode == RESULT_OK && requestCode == 1) {
-            profilePictureUri = intent.getData();
-            userPhoto.setImageURI(profilePictureUri);
+            Uri imageUri = intent.getData();
+            userPhoto.setImageURI(imageUri);
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), imageUri);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos); //"bitmap" is the bitmap object
+                String encodedImage = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+
+                UserInfos.getCurrentUser().setUrlProfilePhoto(encodedImage);
+                Database.getInstance().writeInstanceObj(UserInfos.getCurrentUser(), Database.Tables.USERS);
+
+            } catch (IOException e) {
+            }
+
         }
     }
 
@@ -391,7 +416,7 @@ public class ProfileFragment extends Fragment {
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
-            profilePictureUri = (Uri) savedInstanceState.getSerializable("profilePictureUri");
+            profilePictureUri = savedInstanceState.getParcelable("profilePictureUri");
             CharSequence toSet = savedInstanceState.getCharSequence("userNickname",
                     "");
             userNicknameString = toSet.toString();
