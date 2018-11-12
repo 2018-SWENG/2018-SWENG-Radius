@@ -254,12 +254,6 @@ public class ProfileFragment extends Fragment {
 
         if (userNicknameString != null) {
             userNickname.setText(userNicknameString);
-        } else {
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if (user != null) {
-                String defaultUserName = user.getDisplayName();
-                userNickname.setText(defaultUserName);
-            }
         }
     }
 
