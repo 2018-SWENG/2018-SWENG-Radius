@@ -58,6 +58,16 @@
                     android:text="Default Status"
                     android:textColor="#636e72"
                     android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/userInterests"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/userStatus"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="9dp"
+                    android:text="Default Interests" />
+
             </RelativeLayout>
 
             <LinearLayout
@@ -92,6 +102,16 @@
                         android:layout_height="wrap_content"
                         android:hint="Status" />
 
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/interestsInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Interests" />
                 </android.support.design.widget.TextInputLayout>
 
                 <TextView

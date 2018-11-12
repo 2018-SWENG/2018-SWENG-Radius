@@ -26,6 +26,7 @@ public class User implements DatabaseObject {
     // Map is uID --> convID
     private Map<String, String> chatList;
     private String spokenLanguages;
+    private String interests;
 
     public User(String userID) {
         this.userID = userID;
@@ -39,6 +40,7 @@ public class User implements DatabaseObject {
         this.blockedUsers = new ArrayList<>();
         this.spokenLanguages = "";
         this.chatList = new HashMap<>();
+        this.interests = "";
     }
 
     // Debugging purpose only
@@ -53,6 +55,7 @@ public class User implements DatabaseObject {
         this.friends = new ArrayList<>();
         this.blockedUsers = new ArrayList<>();
         this.spokenLanguages = "";
+        this.interests = "";
     }
 
     // Getter
@@ -140,6 +143,15 @@ public class User implements DatabaseObject {
         if (spokenLanguages != null){
             this.spokenLanguages = spokenLanguages;
         }
+    }
+
+    public String getInterests() {
+        return interests;
+    }
+    public void setInterests(String interests) {
+        if (interests.length() > 100)
+            throw new IllegalArgumentException("Interests input is limited to 100 characters");
+        this.interests = interests;
     }
 
     public void addChat(String uID, String chatID) {

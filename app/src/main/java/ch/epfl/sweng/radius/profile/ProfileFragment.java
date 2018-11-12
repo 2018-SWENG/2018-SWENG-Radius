@@ -42,6 +42,7 @@ public class ProfileFragment extends Fragment {
     private static Uri profilePictureUri;
     private static String userNicknameString;
     private static String userStatusString;
+    private static String userInterestsString;
     private static int userRadius;
 
     CircleImageView userPhoto;
@@ -53,6 +54,8 @@ public class ProfileFragment extends Fragment {
     SeekBar radiusBar;
     TextView radiusValue;
     MaterialButton saveButton;
+    TextView userInterests;
+    TextInputEditText interestsInput;
 
     private Button selectLanguagesButton;
     private static ArrayList<String> selectableLanguages;
@@ -135,6 +138,7 @@ public class ProfileFragment extends Fragment {
         setUpProfilePhoto(view);
         setUpUserNickname(view);
         setUpUserStatus(view);
+        setUpUserInterests(view);
         setUpDataInput(view);
 
         // Inflate the layout for this fragment
@@ -256,9 +260,17 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    private void setUpUserInterests(View view) {
+        userInterests = view.findViewById(R.id.userInterests);
+        if (userInterestsString != null) {
+            userInterests.setText("Interests: " + userInterestsString);
+        }
+    }
+
     private void setUpDataInput(final View mainView) {
         nicknameInput = mainView.findViewById(R.id.nicknameInput);
         statusInput = mainView.findViewById(R.id.statusInput);
+        interestsInput = mainView.findViewById(R.id.interestsInput);
         saveButton = mainView.findViewById(R.id.saveButton);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -266,6 +278,8 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 String nicknameString = getDataFromTextInput(nicknameInput);
                 String statusString = getDataFromTextInput(statusInput);
+                String interestsString = getDataFromTextInput(interestsInput);
+
                 if (!nicknameString.isEmpty()) {
                     userNicknameString = nicknameString;
                     setUpUserNickname(mainView);
@@ -273,6 +287,11 @@ public class ProfileFragment extends Fragment {
                 if (!statusString.isEmpty()) {
                     userStatusString = statusString;
                     setUpUserStatus(mainView);
+                }
+
+                if (!interestsString.isEmpty()) {
+                    userInterestsString = interestsString;
+                    setUpUserInterests(mainView);
                 }
 
                 User currentUser = UserInfos.getCurrentUser();
@@ -360,6 +379,9 @@ public class ProfileFragment extends Fragment {
         if (userStatus != null) {
             outState.putCharSequence("userStatus", userStatus.getText());
         }
+        if (userInterests != null) {
+            outState.putCharSequence("userInterests", userInterests.getText());
+        }
         System.out.println("coucou");
 
     }
@@ -375,6 +397,10 @@ public class ProfileFragment extends Fragment {
             toSet = savedInstanceState.getCharSequence("userNickname",
                     "");
             userStatusString = toSet.toString();
+
+            toSet = savedInstanceState.getCharSequence("userInterests",
+                    "");
+            userInterestsString = toSet.toString();
         }
     }
 }
