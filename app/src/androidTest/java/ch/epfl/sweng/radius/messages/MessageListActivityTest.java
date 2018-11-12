@@ -97,12 +97,15 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
         onView(withId(R.id.button_chatbox_send)).perform(click());
 
         assert (mlActivity.findViewById(R.id.edittext_chatbox).toString().isEmpty());
+
+        MessagesFragment.newInstance("A", "B");
+
     }
 
     @Ignore
     @Test
     public void sendMessage() {
-        //Methode a tester dans ChatLogDbUtility lorsque cette derniere sera disponible
+
     }
 
     @Ignore
