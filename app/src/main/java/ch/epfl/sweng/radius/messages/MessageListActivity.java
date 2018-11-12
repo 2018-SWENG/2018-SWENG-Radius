@@ -4,13 +4,17 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.google.firebase.database.DatabaseError;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,8 +24,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.ChatLogDbUtility;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
@@ -34,6 +41,7 @@ public class MessageListActivity extends AppCompatActivity {
     private RecyclerView myMessageRecycler;
     private MessageListAdapter myMessageAdapter;
     private EditText messageZone;
+    private Button sendButton;
     private Firebase chatReference;
     private ChatLogs chatLogs;
     private ChatLogDbUtility chatLogDbUtility;
@@ -117,7 +125,8 @@ public class MessageListActivity extends AppCompatActivity {
      * If the button is clicked, add the message to the db
      */
     private void setUpSendButton() {
-        findViewById(R.id.button_chatbox_send).setOnClickListener(new View.OnClickListener() {
+        sendButton = findViewById(R.id.button_chatbox_send);
+        sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String message = messageZone.getText().toString();
@@ -205,5 +214,25 @@ public class MessageListActivity extends AppCompatActivity {
         setUpUI();
         setUpSendButton();
         setUpListener();
+
+        final Database database = Database.getInstance();
+        System.out.println("---------------------------------------" + database.getCurrent_user_id() + "------------------------------------------");
+        database.readObjOnce(new User(database.getCurrent_user_id()),
+                Database.Tables.USERS, new CallBackDatabase() {
+                    @Override
+                    public void onFinish(Object value) {
+                        User current_user = (User) value;
+                        //current_user.setNickname("God Emperor");
+                        System.out.println("------------------------------------------" + current_user.getNickname() + "----------------------------------");
+                    }
+
+                    @Override
+                    public void onError(DatabaseError error) {
+                        Log.e("Firebase Error", error.getMessage());
+                    }
+                });
+        /*messageZone.setFocusable(false);
+        messageZone.setText("User is out of radius.");
+        sendButton.setEnabled(false);*/
     }
 }

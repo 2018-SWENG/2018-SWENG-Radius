@@ -115,11 +115,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 return;
             }
 
-            mobileMap.setMyLocationEnabled(true); initMap();
+            if (mobileMap != null) {
+                mobileMap.setMyLocationEnabled(true);
+                initMap();
+            }
         }
     }
 
-    public void initMap() {
+    private void initMap() {
         if (mapListener.getCurrCoordinates() != null) {
             initCircle(mapListener.getCurrCoordinates());
             moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM);
@@ -127,7 +130,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    public void initCircle(LatLng currentCoordinates) {
+    private void initCircle(LatLng currentCoordinates) {
         radiusOptions = new CircleOptions().center(currentCoordinates)
                 .strokeColor(Color.RED)
                 .fillColor(Color.parseColor("#22FF0000"))
@@ -136,7 +139,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mobileMap.addCircle(radiusOptions);
     }
 
-    public void moveCamera(LatLng latLng, float zoom) {
+    private void moveCamera(LatLng latLng, float zoom) {
         Log.d( TAG, "moveCamera: moving the camera to: lat: "
                 + latLng.latitude + " long: " + latLng.longitude);
         mobileMap.moveCamera(CameraUpdateFactory.newLatLngZoom( latLng, zoom));
@@ -145,7 +148,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     /**
      * Marks the other users that are within the distance specified by the users.
      * */
-    public void markNearbyUsers() {
+    private void markNearbyUsers() {
         mobileMap.clear();
         mobileMap.addCircle(radiusOptions);
 
@@ -156,7 +159,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    public void markNearbyUser(int indexOfUser, String status, String userName) {
+    private void markNearbyUser(int indexOfUser, String status, String userName) {
         if ( mapListener.contains(users.get(indexOfUser).getLocation().latitude,
                 users.get(indexOfUser).getLocation().longitude) && !mapListener.speaksSameLanguage(users.get(indexOfUser)))
         {

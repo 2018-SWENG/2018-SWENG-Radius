@@ -2,6 +2,7 @@ package ch.epfl.sweng.radius.browseProfiles;
 
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
+import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 
 import org.junit.After;
@@ -19,15 +20,31 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.*;
 
-public class BrowseProfilesActivityTest {
+public class BrowseProfilesActivityTest extends ActivityInstrumentationTestCase2<BrowseProfilesActivity> {
+
+    private BrowseProfilesActivity mblBrowseProfilesActivity;
 
     @Rule
     public final ActivityTestRule<BrowseProfilesActivity> mActivityRule =
             new ActivityTestRule<>(BrowseProfilesActivity.class);
 
-    @Before
-    public void setUp() throws Exception {
+    public BrowseProfilesActivityTest() {
+        super(BrowseProfilesActivity.class);
     }
+
+    /*@Before
+    public void setUp() throws Exception {
+        super.setUp();
+
+        Intent intent = new Intent();
+        mblBrowseProfilesActivity = mActivityRule.launchActivity(intent);
+    }*/
+
+    /*@Test
+    public void testLaunch() {
+        //View view = mblBrowseProfilesActivity.getActionBar().getCustomView().findViewById(R.id.options);//.performClick();
+        //assertNotNull(view);
+    }*/
 
     /*@Test
     public void testOnCreate() {
@@ -37,8 +54,8 @@ public class BrowseProfilesActivityTest {
         //onView(withText("Block User")).perform(click());
     }*/
 
-    @After
+    /*@After
     public void tearDown() throws Exception {
 
-    }
+    }*/
 }

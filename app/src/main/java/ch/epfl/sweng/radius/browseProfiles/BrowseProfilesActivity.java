@@ -42,6 +42,7 @@ public class BrowseProfilesActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //MenuInflater inflater = getMenuInflater();
         //inflater.inflate(R.menu.profile_menu, menu);
+        super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.profile_menu, menu);
         return true;
     }
