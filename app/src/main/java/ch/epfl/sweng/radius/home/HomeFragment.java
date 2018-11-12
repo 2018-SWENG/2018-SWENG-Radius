@@ -1,6 +1,7 @@
 package ch.epfl.sweng.radius.home;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -70,6 +71,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public static HomeFragment newInstance(int radiusValue) {
         HomeFragment fragment = new HomeFragment();
         radius = radiusValue * 1000; // converting to meters.
+        return fragment;
+    }
+
+    public void setMyPos(MLocation myPos) {
+        this.myPos = myPos;
+    }
+
+    // For debug purpose only
+    public static HomeFragment newInstance(MapUtility mapUtility, GoogleMap googleMap,
+                                           int radiusValue) {
+        HomeFragment fragment = new HomeFragment();
+        radius = radiusValue*1000;
+        mobileMap = googleMap;
+        mapListener = mapUtility;
         return fragment;
     }
 
@@ -167,7 +182,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mapListener.fetchUsersInRadius((int) radius);
 
         usersLoc = mapListener.getOtherLocations();
-        Log.w("Map", "Size of others is " + Integer.toString(usersLoc.size()));
 
     }
 
@@ -187,11 +201,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private void getFriendsID() {
+    public void getFriendsID() {
 
         final Database database = Database.getInstance();
-
-        database.readObjOnce(new User(myPos.getID()),
+        User user = new User(myPos.getID());
+        database.readObjOnce(user,
                 Database.Tables.USERS, new CallBackDatabase() {
                                     @Override
                                     public void onFinish(Object value) {
@@ -212,31 +226,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         LatLng newPos = new LatLng(usersLoc.get(indexOfUser).getLatitude(),
                                     usersLoc.get(indexOfUser).getLongitude()    );
         float color = friendsID.contains(locID) ? BitmapDescriptorFactory.HUE_BLUE :
-                                                        BitmapDescriptorFactory.HUE_RED    ;
-        mobileMap.addMarker(new MarkerOptions().position(newPos)
-                .title(userName + ": " + status)
-                .icon(BitmapDescriptorFactory.defaultMarker(color)));
-
-    }
-        /*
-        if ( mapListener.contains(users.get(indexOfUser).getLocation().getLatitude(),
-                users.get(indexOfUser).getLocation().getLongitude()) && !mapListener.speaksSameLanguage(users.get(indexOfUser)))
-        {
-            LatLng newPos = new LatLng(users.get(indexOfUser).getLocation().getLatitude(),
-                    users.get(indexOfUser).getLocation().getLongitude());
+                                                        BitmapDescriptorFactory.HUE_RED;
+        // TODO REmove this horror
+        if(mobileMap.getCameraPosition() != null) {
             mobileMap.addMarker(new MarkerOptions().position(newPos)
                     .title(userName + ": " + status)
-                    .icon(BitmapDescriptorFactory
-                            .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-
-        } else if (mapListener.contains(users.get(indexOfUser).getLocation().getLatitude(),
-                users.get(indexOfUser).getLocation().getLongitude()) && mapListener.speaksSameLanguage(users.get(indexOfUser))) {
-            LatLng newPos = new LatLng(users.get(indexOfUser).getLocation().getLatitude(),
-                    users.get(indexOfUser).getLocation().getLongitude());
-                    mobileMap.addMarker(new MarkerOptions().position(newPos)
-                    .title(userName + ": " + status).icon(BitmapDescriptorFactory
-                            .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    .icon(BitmapDescriptorFactory.defaultMarker(color)));
         }
+
     }
-    */
 }
