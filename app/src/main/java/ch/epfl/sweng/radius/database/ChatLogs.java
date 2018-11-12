@@ -15,7 +15,7 @@ public class ChatLogs implements DatabaseObject{
 
     private List<String> membersId;
     private List<Message> messages; // List LIFO of all the message in the chat
-    private String chatLogsId = Long.toString(idGenerator++);
+    private String chatLogsId;
     private int numberOfMessages;
 
 
@@ -23,16 +23,22 @@ public class ChatLogs implements DatabaseObject{
         if(membersId.size() != 2) { throw new IllegalArgumentException("Chat must be between 2 users"); }
         this.membersId = new ArrayList<>(membersId);
         this.messages = new LinkedList<>();
-        numberOfMessages=0;
-        //this.chatLogsId = Long.toString(idGenerator++);
+        this.numberOfMessages=0;
+        this.chatLogsId = Long.toString(idGenerator++);
     }
 
 
     public ChatLogs(String chatLogsId) {
-        //if(membersId.size() != 2) { throw new IllegalArgumentException("Chat must be between 2 users");
         this.membersId = new ArrayList<>();
         this.messages = new LinkedList<>();
         this.chatLogsId = chatLogsId;
+    }
+
+    public ChatLogs() {
+        this.membersId = new ArrayList<>();
+        this.messages = new LinkedList<>();
+        this.chatLogsId = Long.toString(idGenerator++);
+        this.chatLogsId = "NULL";
     }
 
     // Getters
@@ -40,7 +46,7 @@ public class ChatLogs implements DatabaseObject{
         return membersId;
     }
 
-    public List<Message> getAllMessages() {
+    public List<Message> getMessages() {
         return messages;
     }
 
@@ -63,12 +69,24 @@ public class ChatLogs implements DatabaseObject{
         numberOfMessages++;
     }
 
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    public void removeMessage(Message msg){ messages.remove(msg);}
+
+    public void removeMessage(int index){ messages.remove(index);}
+
+    public String getID() {
+        return this.chatLogsId;
+    }
+
     public String getChatLogsId() {
         return chatLogsId;
     }
 
-    public String getID() {
-        return chatLogsId;
+    public void setChatLogsId(String chatLogsId) {
+        this.chatLogsId = chatLogsId;
     }
 
     public int getNumberOfMessages() {

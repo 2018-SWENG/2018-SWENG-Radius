@@ -2,24 +2,37 @@ package ch.epfl.sweng.radius.messages;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.firebase.database.DatabaseError;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.browseProfiles.ChatListItem;
 import ch.epfl.sweng.radius.browseProfiles.CustomAdapter;
+import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.database.User;
+import java.util.Date;
+
 
 
 public class MessagesFragment extends Fragment {
     List<ChatListItem> chatList;
     ListView listView;
+    HashMap<String, String> chatLogsId;
 
     public MessagesFragment() {
         // Required empty public constructor
@@ -45,7 +58,30 @@ public class MessagesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.w("MessageFragment" , "Just got onCreateViewed0");
+
+        User user = new User(Database.getInstance().getCurrent_user_id());
+        Date date = new Date();
+        ChatLogs chat = new ChatLogs("chatTest0");
+        chat.addMessage(new Message("userTest0", "Hellow", new Date()));
+        Database.getInstance().writeInstanceObj(chat, Database.Tables.CHATLOGS);
+        user.addChat("userTest0", "chatTest0");
+
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
+
+        Database.getInstance().readObjOnce(user,
+                Database.Tables.USERS, new CallBackDatabase<Object>() {
+            @Override
+            public void onFinish(Object value) {
+                User user = (User) value;
+                chatLogsId = (HashMap<String, String>) user.getChatList();
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+
+            }
+        });
 
         chatList = new ArrayList<>();
         listView = view.findViewById(R.id.listView);
@@ -72,14 +108,17 @@ public class MessagesFragment extends Fragment {
                     File f = new File(st+o.toString());
                     // do whatever u want to do with 'f' File object
                     */
-
+                String nextChatID = chatLogsId.get("userTest0");
+                if(nextChatID == null){
+                    chatLogsId.put("otherUserId", "chatTest0");
+                    nextChatID = "chatTest0";
+                }
                 Intent intent = new Intent(getActivity(), MessageListActivity.class);
                 Bundle b = new Bundle();
-                b.putString("otherUserId", "theOtherUserId");
-                b.putString("chatId", "theChatId");
+                b.putString("otherUserId", "userTest0");
+                b.putString("chatId", nextChatID);
                 intent.putExtras(b); //Put your id to your next Intent
                 startActivity(intent);
-
             }
         });
 

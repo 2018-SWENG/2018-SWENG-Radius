@@ -15,6 +15,12 @@ public class Message {
     private final String contentMessage;
     private final Date sendingTime;
 
+    public Message(){
+        this.senderId = "NULL";
+        this.contentMessage = null;
+        this.sendingTime = null;
+    }
+
     public Message(String senderId, String contentMessage, Date sendingTime){
         this.senderId = senderId;
         this.contentMessage = contentMessage;

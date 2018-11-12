@@ -53,6 +53,7 @@ public class User implements DatabaseObject {
         this.friends = new ArrayList<>();
         this.blockedUsers = new ArrayList<>();
         this.spokenLanguages = "";
+        this.chatList = new HashMap<>();
     }
 
     // Getter
@@ -63,15 +64,10 @@ public class User implements DatabaseObject {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
-/*
-    public String getUrlProfilePhoto() {
-        return urlProfilePhoto;
-    }
 
     public void setUrlProfilePhoto(String urlProfilePhoto) {
         this.urlProfilePhoto = urlProfilePhoto;
     }
-*/
 
     public String getUrlProfilePhoto() {
         return urlProfilePhoto;
@@ -116,6 +112,10 @@ public class User implements DatabaseObject {
         return chatList;
     }
 
+    public void setChatList(Map<String, String> chatList) {
+        this.chatList = chatList;
+    }
+
     public String getConvFromUser(String userID) {
         return chatList.get(userID);
     }
@@ -147,8 +147,7 @@ public class User implements DatabaseObject {
         return userID;
     }
 
-    public void setID(String id){
-        this.userID = id;
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
-
 }

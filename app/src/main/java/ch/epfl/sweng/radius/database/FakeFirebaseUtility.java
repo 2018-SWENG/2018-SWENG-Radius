@@ -55,7 +55,8 @@ public class FakeFirebaseUtility extends Database {
     @Override
     public void readObj(final DatabaseObject obj,
                         final Tables tableName,
-                        final CallBackDatabase callback) {
+                        final CallBackDatabase callback,
+                        String listenerID) {
     }
 
     @Override
@@ -108,6 +109,11 @@ public class FakeFirebaseUtility extends Database {
                 locationsTable.put(obj.getID(), (MLocation) obj);
                 break;
         }
+    }
+
+    @Override
+    public void stopListening(String listenerID, Tables tableName) {
+
     }
 
     private void fillDatabase(){

@@ -7,7 +7,9 @@
 package ch.epfl.sweng.radius.database;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.google.common.collect.Table;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,9 +17,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FirebaseUtility extends Database{
+
+    private static HashMap<String, ValueEventListener> listeners = new HashMap<>();
+
     public FirebaseUtility(){}
 
     @Override
@@ -54,11 +61,12 @@ public class FirebaseUtility extends Database{
     @Override
     public void readObj(final DatabaseObject obj,
                         final Tables tableName,
-                        final CallBackDatabase callback) {
-        FirebaseDatabase.getInstance()
-                .getReference(tableName.toString())
-                .child(obj.getID())
-                .addValueEventListener( new ValueEventListener() {
+                        final CallBackDatabase callback,
+                        String listenerID) {
+
+  //      Log.w("Firebase Message", "Read " + obj.getClass() + "Called by "+ getLogTagWithMethod());
+
+        ValueEventListener listener = new ValueEventListener() {
             @Override
             public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.hasChild(obj.getID())) {
@@ -73,7 +81,13 @@ public class FirebaseUtility extends Database{
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 callback.onError(databaseError);
             }
-        });
+        };
+
+        listeners.put(listenerID, listener);
+
+        FirebaseDatabase.getInstance()
+                .getReference(tableName.toString())
+                .addValueEventListener(listener);
     }
 
     @Override
@@ -132,10 +146,35 @@ public class FirebaseUtility extends Database{
 
     @Override
     public void writeInstanceObj(final DatabaseObject obj, final Tables tableName){
+
+   //     Log.w("Firebase Message", "Called for " + obj.getID());
+        if(obj.getClass() == ChatLogs.class) {
+            ChatLogs test = (ChatLogs) obj;
+  //          Log.w("Firebase Message", "Called for " + ((ChatLogs) obj).getMessages().size() +getLogTagWithMethod());
+        }
         FirebaseDatabase.getInstance()
                 .getReference(tableName.toString())
                 .child(obj.getID()).setValue(obj);
     }
+
+
+    @Override
+    public void stopListening(String listenerID, final Tables tableName){
+            FirebaseDatabase.getInstance()
+                    .getReference(tableName.toString())
+                    .removeEventListener(listeners.get(listenerID));
+
+            listeners.remove(listenerID);
+    }
+
+    private String getLogTagWithMethod() {
+
+        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+        return trace[3].getClassName() + "." + trace[3].getMethodName() + ":" + trace[3].getLineNumber() + "\n" +
+                trace[4].getClassName() + "." + trace[4].getMethodName() + ":" + trace[4].getLineNumber() + "\n" +
+                trace[5].getClassName() + "." + trace[5].getMethodName() + ":" + trace[5].getLineNumber() + "\n" ;
+    }
+
 }
 
 

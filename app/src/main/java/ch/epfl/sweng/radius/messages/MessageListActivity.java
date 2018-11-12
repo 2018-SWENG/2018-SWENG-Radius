@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -11,6 +12,8 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,7 +23,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
@@ -33,37 +38,48 @@ public class MessageListActivity extends AppCompatActivity {
     private RecyclerView myMessageRecycler;
     private MessageListAdapter myMessageAdapter;
     private EditText messageZone;
-    private Firebase chatReference;
     private ChatLogs chatLogs;
+    private String chatId;
+    private ValueEventListener listener;
 
     /**
      * Get all infos needed to create the activity
      * We get the chatId and otherUserId from the parent fragment
      *
-     * @param databaseUrl the url from the messages table of the database
      */
-    private void setInfo(String databaseUrl) {
+    private void setInfo() {
         Bundle b = getIntent().getExtras();
 
         //Get infos from parent fragment
         String otherUserId = "";
-        String chatId = "";
+
         if (b != null) {
+            chatId      = b.getString("chatId");
+            Log.w("Message", "ChatId is " + chatId);
             otherUserId = b.getString("otherUserId");
-            chatId = b.getString("chatId");
         }
         ArrayList<String> participantsId = new ArrayList<String>();
         participantsId.add(UserInfos.getUserId());
-        participantsId.add(otherUserId);
 
+        participantsId.add(otherUserId);
+        if(chatLogs == null)
+            chatLogs = new ChatLogs(chatId);
         //get chatlogs from db
         //chatLogDbUtility = new ChatLogDbUtility(chatId);
-        // chatLogs = ChatLogDbUtility.getChatLogs(chatId);
+        Database.getInstance().readObjOnce(chatLogs, Database.Tables.CHATLOGS,
+                new CallBackDatabase() {
+                    @Override
+                    public void onFinish(Object value) {
+                        chatLogs = (ChatLogs) value;
+                    }
 
-        chatLogs = new ChatLogs(participantsId);
+                    @Override
+                    public void onError(DatabaseError error) {
 
-        Firebase.setAndroidContext(this);
-        chatReference = new Firebase(databaseUrl + chatId);
+                    }
+                });
+
+    //    chatLogs = new ChatLogs(participantsId);
 
     }
 
@@ -74,7 +90,7 @@ public class MessageListActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_message_list);
         messageZone = (EditText) findViewById(R.id.edittext_chatbox);
-        myMessageAdapter = new MessageListAdapter(this, chatLogs.getAllMessages());
+        myMessageAdapter = new MessageListAdapter(this, chatLogs.getMessages());
         myMessageRecycler = findViewById(R.id.reyclerview_message_list);
         myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         myMessageRecycler.setAdapter(myMessageAdapter);
@@ -101,14 +117,17 @@ public class MessageListActivity extends AppCompatActivity {
      * @param date the date
      */
     private void sendMessage(String senderId,String message,Date date) {
-        if (!message.equals("")) {
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("senderId", senderId);
-            map.put("message", message);
-            map.put("sendingTime", date.toString());
-            chatReference.push().setValue(map);
+        if (!message.isEmpty()) {
+            Message msg = new Message(senderId, message, date);
+            Log.w("MessageActivity" , "Chatlogs ID is " + chatLogs.getID());
+
+            chatLogs.addMessage(msg);
+            Database.getInstance().writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
+
             messageZone.setText("");
+            receiveMessage(msg);
         }
+
     }
 
     /**
@@ -119,7 +138,7 @@ public class MessageListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String message = messageZone.getText().toString();
-                sendMessage( UserInfos.getUserId(), message, new Date());
+                sendMessage( Database.getInstance().getCurrent_user_id(), message, new Date());
             }
         });
 
@@ -144,64 +163,53 @@ public class MessageListActivity extends AppCompatActivity {
      * If a message is added in the db, add the message in the chat
      */
     private void setUpListener() {
-        chatReference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String pattern = "EEE MMM dd HH:mm:ss Z yyyy";
-                Map map = dataSnapshot.getValue(Map.class);
-                if (!map.isEmpty() && map.size() == Message.NUMBER_ELEMENTS_IN_MESSAGE) {
-                    if (map.containsKey("message") && map.containsKey("senderId")) {
-                        String message = map.get("message").toString();
-                        String senderId = map.get("senderId").toString();
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-                        Date sendingTime = null;
-                        try {
-                            sendingTime = simpleDateFormat.parse(map.get("sendingTime").toString());
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
+        Database.getInstance().readObj(chatLogs, Database.Tables.CHATLOGS,
+                new CallBackDatabase() {
+                    @Override
+                    public void onFinish(Object value) {
+                        String pattern = "EEE MMM dd HH:mm:ss Z yyyy";
+                        ArrayList<Message> messages = new ArrayList<>();
+                        ChatLogs  ret = (ChatLogs) value;
+                        messages.addAll(ret.getMessages());
 
-                        receiveMessage(new Message(senderId, message, sendingTime));
+                        for(Message msg : messages)
+                     //       if(!chatLogs.getMessages().contains(msg))
+                                receiveMessage(msg);
                     }
-                }
+
+                    @Override
+                    public void onError(DatabaseError error) {
+
+                    }
+                },
+            chatLogs.getID());
 
             }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.w("MessageActivity" , "Just got onCreated");
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_message_list);
         messageZone = findViewById(R.id.edittext_chatbox);
 
-        String databaseMessagesUrl = "https://radius-1538126456577.firebaseio.com/messages/";
-        setInfo(databaseMessagesUrl);
+        setInfo();
 
         setUpUI();
         setUpSendButton();
         setUpListener();
+    }
+
+    @Override
+    protected void onStop() {
+
+        super.onStop();
+
+        Database.getInstance().stopListening(chatLogs.getID(), Database.Tables.CHATLOGS);
+
+
     }
 }
