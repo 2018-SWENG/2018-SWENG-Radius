@@ -27,10 +27,12 @@ import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.ChatLogDbUtility;
 
+import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
 
@@ -45,6 +47,10 @@ public class MessageListActivity extends AppCompatActivity {
     private Button sendButton;
     private Firebase chatReference;
     private ChatLogs chatLogs;
+
+    private static User us, otherUser;
+    private static MLocation usLoc, otherUserLoc;
+    private final Database database = Database.getInstance();
 
     /**
      * Get all infos needed to create the activity
@@ -63,7 +69,7 @@ public class MessageListActivity extends AppCompatActivity {
             chatId = b.getString("chatId");
         }
         ArrayList<String> participantsId = new ArrayList<String>();
-        participantsId.add(UserInfos.getUserId());
+        participantsId.add(database.getCurrent_user_id());//UserInfos.getUserId()
         participantsId.add(otherUserId);
 
         //get chatlogs from db
@@ -81,14 +87,12 @@ public class MessageListActivity extends AppCompatActivity {
      * Set up the interface
      */
     private void setUpUI() {
-
         setContentView(R.layout.activity_message_list);
         messageZone = (EditText) findViewById(R.id.edittext_chatbox);
         myMessageAdapter = new MessageListAdapter(this, chatLogs.getAllMessages());
         myMessageRecycler = findViewById(R.id.reyclerview_message_list);
         myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         myMessageRecycler.setAdapter(myMessageAdapter);
-
     }
 
 
@@ -200,6 +204,95 @@ public class MessageListActivity extends AppCompatActivity {
         });
     }
 
+    private void prepareUsers() {
+        database.readObjOnce(us, Database.Tables.USERS, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                us.setRadius(((User) value).getRadius());
+                System.out.println("usLoc radius: " + us.getRadius());
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+                Log.e("Firebase Error", error.getMessage());
+            }
+        });
+
+        database.readObjOnce(otherUser, Database.Tables.USERS, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                otherUser.setRadius(((User) value).getRadius());
+                System.out.println("otherUserLoc radius: " + otherUser.getRadius());
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+                Log.e("Firebase Error", error.getMessage());
+            }
+        });
+    }
+
+    private void prepareLocataion() {
+        database.readObjOnce(usLoc, Database.Tables.USERS, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                usLoc.setLatitude(((MLocation) value).getLatitude());
+                usLoc.setLongitude(((MLocation) value).getLongitude());
+                System.out.println("usLoc Latitude: " + usLoc.getLatitude() + " Longtitude: " + usLoc.getLongitude());
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+                Log.e("Firebase Error", error.getMessage());
+            }
+        });
+
+        database.readObjOnce(otherUserLoc, Database.Tables.USERS, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                otherUserLoc.setLatitude(((MLocation) value).getLatitude());
+                otherUserLoc.setLongitude(((MLocation) value).getLongitude());
+                System.out.println("otherUserLoc Latitude: " + usLoc.getLatitude() + " Longtitude: " + usLoc.getLongitude());
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+                Log.e("Firebase Error", error.getMessage());
+            }
+        });
+    }
+
+    public boolean usersInRadius() { //this method needs to go through severe change - currently we are not saving the radius or the locations of users properly.
+        ArrayList<String> participants = (ArrayList) chatLogs.getMembersId();
+        us = new User(participants.get(0));
+        otherUser = new User(participants.get(1));
+        usLoc = new MLocation();
+        otherUserLoc = new MLocation();
+
+        usLoc.setID(us.getID());
+        otherUserLoc.setID(otherUser.getID());
+
+        prepareUsers();
+        prepareLocataion();
+
+        MapUtility mapListenerUs = new MapUtility(us.getRadius());
+        MapUtility mapListenerOtherUser = new MapUtility(otherUser.getRadius(), otherUserLoc.getLatitude(), otherUserLoc.getLongitude());
+        System.out.println("mapListenerOtherUser.contains(usLoc.getLatitude(), usLoc.getLongitude()) " + usLoc.getLatitude() + " " + usLoc.getLongitude());
+        return mapListenerOtherUser.contains(usLoc.getLatitude(), usLoc.getLongitude()) && mapListenerUs.contains(otherUserLoc.getLatitude(), otherUserLoc.getLongitude());
+    }
+
+    public void setEnabled(boolean enableChat) {
+        if (!enableChat) {
+            sendButton.setEnabled(false);
+            messageZone.setFocusable(false);
+            messageZone.setText("You can't text this user.");
+        }
+    }
+
+    //later add blocked users as well
+    public boolean canTalk() {
+        return usersInRadius();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,24 +308,6 @@ public class MessageListActivity extends AppCompatActivity {
         setUpSendButton();
         setUpListener();
 
-        final Database database = Database.getInstance();
-        System.out.println("---------------------------------------" + database.getCurrent_user_id() + "------------------------------------------");
-        database.readObjOnce(new User(database.getCurrent_user_id()),
-                Database.Tables.USERS, new CallBackDatabase() {
-                    @Override
-                    public void onFinish(Object value) {
-                        User current_user = (User) value;
-                        //current_user.setNickname("God Emperor");
-                        System.out.println("------------------------------------------" + current_user.getNickname() + "----------------------------------");
-                    }
-
-                    @Override
-                    public void onError(DatabaseError error) {
-                        Log.e("Firebase Error", error.getMessage());
-                    }
-                });
-        /*messageZone.setFocusable(false);
-        messageZone.setText("User is out of radius.");
-        sendButton.setEnabled(false);*/
+        //setEnabled(canTalk());
     }
 }

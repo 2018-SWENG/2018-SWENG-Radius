@@ -114,7 +114,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-       mapListener = new MapUtility(radius, users);
+       mapListener = new MapUtility(radius);
 
         mapView = view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
@@ -150,21 +150,32 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private void initMap() {
         if (mapListener.getCurrCoordinates() != null) {
             initCircle(mapListener.getCurrCoordinates());
-            moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM*(float) 0.9);
+            moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM *(float) 0.9);
             Log.w("Map", "Centering Camera");
+            // Push current location to DB
+            double lat = mapListener.getCurrCoordinates().latitude;
+            double lng = mapListener.getCurrCoordinates().longitude;
+            // myPos = new MLocation(FirebaseAuth.getInstance().getCurrentUser().getUid(), lat, lng);
+            // Debug purpose only
+            myPos = new MLocation("testUser3", lat, lng);
+
+            mapListener.setMyPos(myPos);
+
+            // Do locations here
+            markNearbyUsers();
         }
 
         // Push current location to DB
-        double lat = mapListener.getCurrCoordinates().latitude;
-        double lng = mapListener.getCurrCoordinates().longitude;
+        //double lat = mapListener.getCurrCoordinates().latitude;
+        //double lng = mapListener.getCurrCoordinates().longitude;
        // myPos = new MLocation(FirebaseAuth.getInstance().getCurrentUser().getUid(), lat, lng);
        // Debug purpose only
-        myPos = new MLocation("testUser3", lat, lng);
+        //myPos = new MLocation("testUser3", lat, lng);
 
-        mapListener.setMyPos(myPos);
+        //mapListener.setMyPos(myPos);
 
         // Do locations here
-        markNearbyUsers();
+        //markNearbyUsers();
     }
 
     private void initCircle(LatLng currentCoordinates) {
@@ -193,7 +204,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     /**
      * Marks the other users that are within the distance specified by the users.
      * */
-    private void markNearbyUsers() {
+    public void markNearbyUsers() {
         mobileMap.clear();
         mobileMap.addCircle(radiusOptions);
         getUsersInRadius();

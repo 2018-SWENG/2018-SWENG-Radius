@@ -43,17 +43,25 @@ public class MapUtility {
     private static double radius;
     private static LatLng currCoordinates;
 
-    private static ArrayList<User> users;
     private static HashMap<String, MLocation> otherPos;
 
 
-    public MapUtility(double radius, ArrayList<User> users) {
+    public MapUtility(double radius) {
         MapUtility.radius = radius;
-        MapUtility.users = users;
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
         this.myPos = new MLocation(Database.getInstance().getCurrent_user_id(),
                 DEFAULT_LONGITUDE,
                 DEFAULT_LATITUDE);
+        if(otherPos == null)
+            otherPos = new HashMap<>();
+    }
+
+    public MapUtility(double radius, double latitude, double longtitude) {
+        MapUtility.radius = radius;
+        currCoordinates = new LatLng(latitude, longtitude);
+        this.myPos = new MLocation(Database.getInstance().getCurrent_user_id(),
+                longtitude,
+                latitude);
         if(otherPos == null)
             otherPos = new HashMap<>();
     }
@@ -132,7 +140,6 @@ public class MapUtility {
                     @Override
                     public void onComplete(@NonNull Task task) {
                         if ( task.isSuccessful() && task.getResult() != null) {
-                            Log.e( TAG, "Found location");
                             currentLocation = (Location) task.getResult();
                             LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(),
                                     currentLocation.getLongitude());
