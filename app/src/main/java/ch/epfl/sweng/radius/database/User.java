@@ -28,7 +28,6 @@ public class User implements DatabaseObject {
     private Map<String, String> reportList;
 
     private String spokenLanguages;
-    private LatLng location;
 
     public User(String userID) {
         this.userID = userID;
@@ -114,14 +113,6 @@ public class User implements DatabaseObject {
 
     public List<String> getBlockedUsers() {
         return blockedUsers;
-    }
-
-    public LatLng getLocation() {
-        return location;
-    }
-
-    public void setLocation(LatLng location) {
-        this.location = location;
     }
 
     public Map<String, String> getChatList() {

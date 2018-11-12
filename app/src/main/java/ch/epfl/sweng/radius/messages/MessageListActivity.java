@@ -30,6 +30,7 @@ import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.ChatLogDbUtility;
+
 import ch.epfl.sweng.radius.utils.UserInfos;
 
 
@@ -44,7 +45,6 @@ public class MessageListActivity extends AppCompatActivity {
     private Button sendButton;
     private Firebase chatReference;
     private ChatLogs chatLogs;
-    private ChatLogDbUtility chatLogDbUtility;
 
     /**
      * Get all infos needed to create the activity

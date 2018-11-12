@@ -2,6 +2,9 @@ package ch.epfl.sweng.radius.utils;
 
 import android.Manifest;
 import android.support.test.rule.GrantPermissionRule;
+import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -10,10 +13,16 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 
 public class DatabaseObjectsTest {
@@ -72,8 +81,10 @@ public class DatabaseObjectsTest {
     public void testUser() {
         // Test no duplicates friends requests
         User user = new User("1234");
-        user.addFriendRequest(new User("123"));
-        user.addFriendRequest(new User("123"));
+        User user2 = new User("123");
+        user.addFriendRequest(user2);
+        user2.addFriendRequest(user);
+        user.addFriendRequest(user2);
         assert(user.getFriendsRequests().size() == 1);
 
         // Test status max characters
@@ -83,6 +94,44 @@ public class DatabaseObjectsTest {
             assert(false);
         } catch (Exception e){}
         assert(user.getStatus() == status);
+
+        String chat = user.getConvFromUser("Arthur");
+        Log.e("Test", "Coucou");
+        assertNull(chat);
+        List<String> blocked = user.getBlockedUsers();
+        List<String> req = user.getFriendsRequests();
+        String url = user.getUrlProfilePhoto();
+        Map<String, String> chats = user.getChatList();
+
+        assertEquals(500, user.getRadius());
+        user.setID("Arthur");
+        assertEquals("Arthur", user.getID());
+
+
+    }
+
+    @Test
+    public void testMLocation(){
+
+        MLocation mLocation = new MLocation();
+        MLocation mLocation1 = new MLocation("locTest");
+        MLocation mLocation2 = new MLocation("locTest", new LatLng(2.0, 3.0));
+
+        assertTrue(mLocation1.getID().equals("locTest"));
+        assertTrue(mLocation2.getLatitude() == 2.0);
+
+        mLocation.setMessage("Msg");
+        mLocation.setTitle("Title");
+        mLocation.setID("locTest");
+
+        assertEquals("Msg", mLocation.getMessage());
+        assertEquals("Title", mLocation.getTitle());
+
+        mLocation.setLatitude(1.0);
+        mLocation.setLongitude(4.0);
+        assert(mLocation2.getLatitude() == 1.0);
+        assert(mLocation2.getLongitude() == 4.0);
+
     }
 
 }
