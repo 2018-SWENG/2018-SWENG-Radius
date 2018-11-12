@@ -153,7 +153,7 @@ public class MapUtilityTest {
     @Test
     public void speaksSameLanguage() {
         user1.setSpokenLanguages("English");
-        //assertTrue(!mapListener.speaksSameLanguage(user1));
+        mapListener.speaksSameLanguage(user1);
     }
 
     @Test
