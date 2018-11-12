@@ -8,10 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
@@ -104,7 +100,6 @@ public class MessageListActivity extends AppCompatActivity {
      * @param message the new message
      */
     private void receiveMessage(Message message) {
-        chatLogs.addMessage(message);
         myMessageRecycler.smoothScrollToPosition(chatLogs.getNumberOfMessages());
         myMessageAdapter.notifyDataSetChanged();
     }
@@ -167,14 +162,11 @@ public class MessageListActivity extends AppCompatActivity {
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
+                        Log.w("Message", "Size of chat is " + chatLogs.getMessages().size());
                         String pattern = "EEE MMM dd HH:mm:ss Z yyyy";
                         ArrayList<Message> messages = new ArrayList<>();
                         ChatLogs  ret = (ChatLogs) value;
-                        messages.addAll(ret.getMessages());
-
-                        for(Message msg : messages)
-                     //       if(!chatLogs.getMessages().contains(msg))
-                                receiveMessage(msg);
+                        chatLogs.setMessages(ret.getMessages());
                     }
 
                     @Override
