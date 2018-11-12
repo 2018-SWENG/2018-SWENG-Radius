@@ -103,7 +103,7 @@ public class DatabaseObjectsTest {
         String url = user.getUrlProfilePhoto();
         Map<String, String> chats = user.getChatList();
 
-        assertEquals(500, user.getRadius());
+        assertEquals(50, user.getRadius());
         user.setID("Arthur");
         assertEquals("Arthur", user.getID());
 
