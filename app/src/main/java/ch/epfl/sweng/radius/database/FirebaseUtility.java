@@ -7,6 +7,7 @@
 package ch.epfl.sweng.radius.database;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -130,8 +131,34 @@ public class FirebaseUtility extends Database{
                 });
     }
 
+    public void listenToWholeTable(final DatabaseObject obj,
+                        final Tables tableName,
+                        final CallBackDatabase callback) {
+        FirebaseDatabase.getInstance()
+                .getReference(tableName.toString())
+                .child(obj.getID())
+                .addValueEventListener( new ValueEventListener() {
+                    @Override
+                    public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (!dataSnapshot.hasChild(obj.getID())) {
+                            writeInstanceObj(obj, tableName);
+                            callback.onFinish(obj);
+                        }
+                        else
+                            callback.onFinish(dataSnapshot.getValue(obj.getClass()));
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        callback.onError(databaseError);
+                    }
+                });
+    }
+
     @Override
     public void writeInstanceObj(final DatabaseObject obj, final Tables tableName){
+        Log.e( "writeInstance", "moveCamerafetchh: ");
+
         FirebaseDatabase.getInstance()
                 .getReference(tableName.toString())
                 .child(obj.getID()).setValue(obj);

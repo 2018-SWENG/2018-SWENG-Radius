@@ -60,24 +60,30 @@ public class MapUtility {
 
     public void fetchUsersInRadius(final int radius){
         final Database database = Database.getInstance();
+        Log.e( TAG, "moveCamerafetchh: ");
 
         database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
-                database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
-                    @Override
-                    public void onFinish(Object value) {
                         for(MLocation loc : (ArrayList<MLocation>) value){
+                            database.readObj(loc, Database.Tables.LOCATIONS, new CallBackDatabase() {
+                                @Override
+                                public void onFinish(Object value) {
+                                    otherPos.put(((MLocation)value).getID(), (MLocation) value);
+                                    Log.e( TAG, "moveCamera: ");
+
+                                }
+
+                                @Override
+                                public void onError(DatabaseError error) {
+
+                                }
+                            });
                             if(isInRadius(loc, radius)) {
                                     otherPos.put(loc.getID(), loc);
                             }
                         }
-                    }
-                    @Override
-                    public void onError(DatabaseError error) {
-                        Log.e("Firebase", error.getMessage());
-                    }
-                });
+
             }
             @Override
             public void onError(DatabaseError error) {
