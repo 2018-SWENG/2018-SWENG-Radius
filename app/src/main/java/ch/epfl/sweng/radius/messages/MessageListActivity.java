@@ -204,23 +204,13 @@ public class MessageListActivity extends AppCompatActivity {
         });
     }
 
-    private void prepareUsers() {
-        database.readObjOnce(us, Database.Tables.USERS, new CallBackDatabase() {
+    private void prepareUsers(ArrayList<String> participants) {
+        database.readListObjOnce(participants, Database.Tables.USERS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
                 us.setRadius(((User) value).getRadius());
                 System.out.println("usLoc radius: " + us.getRadius());
-            }
 
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("Firebase Error", error.getMessage());
-            }
-        });
-
-        database.readObjOnce(otherUser, Database.Tables.USERS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
                 otherUser.setRadius(((User) value).getRadius());
                 System.out.println("otherUserLoc radius: " + otherUser.getRadius());
             }
@@ -232,7 +222,8 @@ public class MessageListActivity extends AppCompatActivity {
         });
     }
 
-    private void prepareLocataion() {
+    private void prepareLocataion(ArrayList<String> participants) {
+
         database.readObjOnce(usLoc, Database.Tables.USERS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
@@ -272,13 +263,16 @@ public class MessageListActivity extends AppCompatActivity {
         usLoc.setID(us.getID());
         otherUserLoc.setID(otherUser.getID());
 
-        prepareUsers();
-        prepareLocataion();
+        prepareUsers(participants);
+        prepareLocataion(participants);
 
         MapUtility mapListenerUs = new MapUtility(us.getRadius());
+        System.out.println("-------------------------------------------------------------************************");
+        mapListenerUs.getDeviceLocation(this);
+        System.out.println("-------------------------------------------------------------************************");
         MapUtility mapListenerOtherUser = new MapUtility(otherUser.getRadius(), otherUserLoc.getLatitude(), otherUserLoc.getLongitude());
         System.out.println("mapListenerOtherUser.contains(usLoc.getLatitude(), usLoc.getLongitude()) " + usLoc.getLatitude() + " " + usLoc.getLongitude());
-        return mapListenerOtherUser.contains(usLoc.getLatitude(), usLoc.getLongitude()) && mapListenerUs.contains(otherUserLoc.getLatitude(), otherUserLoc.getLongitude());
+        return mapListenerUs.contains(otherUserLoc.getLatitude(), otherUserLoc.getLongitude());
     }
 
     public void setEnabled(boolean enableChat) {
@@ -308,6 +302,6 @@ public class MessageListActivity extends AppCompatActivity {
         setUpSendButton();
         setUpListener();
 
-        //setEnabled(canTalk());
+        setEnabled(true);
     }
 }

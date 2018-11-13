@@ -19,6 +19,8 @@ public class BrowseProfilesActivity extends AppCompatActivity {
     private BrowseProfilesUtility profileActivityListener;
     private Toolbar toolbar;
 
+    //THIS ACTIVITY HAS TO STORE THE ID OF THE USER WE ARE BROWSING THE PROFILE OF.
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +28,7 @@ public class BrowseProfilesActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int clickedPic = intent.getIntExtra("Clicked Picture",1);
         String clickedName = intent.getStringExtra("Clicked Name");
-        profileActivityListener = new BrowseProfilesUtility(clickedName);
+        profileActivityListener = new BrowseProfilesUtility(clickedName); // WHEN THE CLASS STORES THE ID OF THE USER WE CLICKED ON CHANGE CLICKED NAME WITH THE ID
 
         ImageView imageView = findViewById(R.id.clickedPic);
         imageView.setImageResource(clickedPic);
@@ -40,8 +42,6 @@ public class BrowseProfilesActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //MenuInflater inflater = getMenuInflater();
-        //inflater.inflate(R.menu.profile_menu, menu);
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.profile_menu, menu);
         return true;

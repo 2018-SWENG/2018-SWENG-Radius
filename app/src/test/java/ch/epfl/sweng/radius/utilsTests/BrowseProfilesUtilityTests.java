@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.utils.BrowseProfilesUtility;
 
 import static org.junit.Assert.assertTrue;
@@ -15,6 +16,7 @@ public class BrowseProfilesUtilityTests {
 
     @Before
     public void setUp() {
+        Database.activateDebugMode();
         profileOwner = "John Doe";
         profileListener = new BrowseProfilesUtility(profileOwner);
     }

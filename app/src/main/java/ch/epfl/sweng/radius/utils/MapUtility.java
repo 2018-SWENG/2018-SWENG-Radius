@@ -49,6 +49,7 @@ public class MapUtility {
     public MapUtility(double radius) {
         MapUtility.radius = radius;
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
+        System.out.println("----------------------------------------" + currCoordinates.latitude + " " + currCoordinates.longitude);
         this.myPos = new MLocation(Database.getInstance().getCurrent_user_id(),
                 DEFAULT_LONGITUDE,
                 DEFAULT_LATITUDE);
@@ -208,7 +209,7 @@ public class MapUtility {
         float[] distance = new float[3];
         Location.distanceBetween( currCoordinates.latitude, currCoordinates.longitude,
                 p2latitude, p2longtitude, distance);
-        Log.e("Map","Distance is :" + Double.toString(distance[0]));
+        Log.e("Map","Distance is :" + Double.toString(distance[0]) + "currCoordinates.latitude" + currCoordinates.latitude + "currCoordinates.longitude" + currCoordinates.longitude);
         return distance[0];
     }
 
