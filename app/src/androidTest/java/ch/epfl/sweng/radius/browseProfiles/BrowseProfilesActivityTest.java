@@ -32,6 +32,32 @@ public class BrowseProfilesActivityTest extends ActivityInstrumentationTestCase2
 
     private BrowseProfilesActivity mblBrowseProfilesActivity;
 
+    public BrowseProfilesActivityTest(){
+        super(BrowseProfilesActivity.class);
+    }
+
+    private BrowseProfilesActivity mActivity;
+
+    @Rule
+    public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
+            Manifest.permission.ACCESS_FINE_LOCATION);
+
+    public BrowseProfilesActivityTest(Class<BrowseProfilesActivity> activityClass) {
+        super(activityClass);
+    }
+
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        Database.activateDebugMode();
+
+
+        Intent intent = new Intent();
+        intent.putExtra("Clicked Picture", R.drawable.image1);
+        intent.putExtra("Clicked Name", "testUser3");
+        intent.putExtra("UID", "testUser3");
+        mActivity = mActivityRule.launchActivity(intent);
+    }
 
     @Test
     public void testLaunch() {
@@ -64,40 +90,6 @@ public class BrowseProfilesActivityTest extends ActivityInstrumentationTestCase2
         onView(withText("Spam")).perform(click());
     }
 
-    @After
-    public void tearDown() throws Exception {
-        mblBrowseProfilesActivity = null;
-    }
-
-
-    public BrowseProfilesActivityTest(){
-        super(BrowseProfilesActivity.class);
-    }
-
-    private BrowseProfilesActivity mActivity;
-
-    @Rule
-    public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
-            Manifest.permission.ACCESS_FINE_LOCATION);
-
-    public BrowseProfilesActivityTest(Class<BrowseProfilesActivity> activityClass) {
-        super(activityClass);
-    }
-
-
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-        Database.activateDebugMode();
-
-
-        Intent intent = new Intent();
-        intent.putExtra("Clicked Picture", R.drawable.image1);
-        intent.putExtra("Clicked Name", "testUser3");
-        intent.putExtra("UID", "testUser3");
-        mActivity = mActivityRule.launchActivity(intent);
-    }
-
     @Test
     public void testViewExists() {
         View view = mActivity.findViewById(R.id.clickedPic);
@@ -114,4 +106,10 @@ public class BrowseProfilesActivityTest extends ActivityInstrumentationTestCase2
     public void testAddFriends() {
         Espresso.onView(withId(R.id.add_user)).perform(click());
     }
+
+    @After
+    public void tearDown() throws Exception {
+        mblBrowseProfilesActivity = null;
+    }
+
 }
