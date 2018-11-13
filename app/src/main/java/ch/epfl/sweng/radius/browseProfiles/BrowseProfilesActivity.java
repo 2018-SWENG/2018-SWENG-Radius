@@ -37,10 +37,6 @@ public class BrowseProfilesActivity extends AppCompatActivity {
         imageView.setImageResource(clickedPic);
         TextView textViewName = findViewById(R.id.clickedName);
         textViewName.setText(clickedName);
-
-
-
-
     }
 
     private void setUpAddFriendButton(final String userUID){

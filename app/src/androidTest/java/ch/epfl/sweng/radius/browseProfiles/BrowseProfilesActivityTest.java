@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius;
+package ch.epfl.sweng.radius.browseProfiles;
 
 import android.Manifest;
 import android.content.Intent;
@@ -13,6 +13,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
+import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesActivity;
 import ch.epfl.sweng.radius.database.Database;
 
