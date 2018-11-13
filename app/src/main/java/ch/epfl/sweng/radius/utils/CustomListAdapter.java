@@ -40,14 +40,13 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
-        viewHolder.txtViewTitle.setText(items.get(position).getFriendName());
+        viewHolder.txtViewTitle.setText(items.get(position).getItemUser().getNickname());
         viewHolder.imgViewIcon.setImageResource(items.get(position).getFriendProfilePic());
 
         CustomListItem item = items.get(position);
         final int clickedPic = item.getFriendProfilePic();
-        final String clickedName = item.getFriendName();
 
-        new CustomListener(clickedPic, clickedName).setCustomOnClick(viewHolder.imgViewIcon, context);
+        new CustomListener(clickedPic, item.getItemUser()).setCustomOnClick(viewHolder.imgViewIcon, context);
 
     }
 
