@@ -53,7 +53,7 @@ public class PreferencesActivity extends PreferenceActivity {
                     .unregisterOnSharedPreferenceChangeListener(this);
         }
 
-        // TODO: New File with settings actions and call also in mainActivity
+        // TODO: New File with settings actions and call also in loginActivity
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             //System.out.println(key);
@@ -74,9 +74,9 @@ public class PreferencesActivity extends PreferenceActivity {
         }
 
         private void logOut() {
-            if (MainActivity.googleSignInClient != null) {
+            if (LoginActivity.googleSignInClient != null) {
                 FirebaseAuth.getInstance().signOut();
-                MainActivity.googleSignInClient.signOut()
+                LoginActivity.googleSignInClient.signOut()
                         .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -87,11 +87,11 @@ public class PreferencesActivity extends PreferenceActivity {
         }
 
         private void revokeAccess() {
-            MainActivity.googleSignInClient.revokeAccess()
+            LoginActivity.googleSignInClient.revokeAccess()
                     .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            startActivity(new Intent(getActivity(), MainActivity.class));
+                            startActivity(new Intent(getActivity(), LoginActivity.class));
                         }
                     });
         }

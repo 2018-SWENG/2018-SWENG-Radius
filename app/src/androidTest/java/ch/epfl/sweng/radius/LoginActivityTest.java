@@ -15,16 +15,16 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.radius.database.Database;
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginActivity> {
     @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+    public final ActivityTestRule<LoginActivity> mActivityRule =
+            new ActivityTestRule<>(LoginActivity.class);
     @Rule
     public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
             Manifest.permission.ACCESS_FINE_LOCATION);
 
-    public MainActivityTest(){
-        super(MainActivity.class);
+    public LoginActivityTest(){
+        super(LoginActivity.class);
     }
 
     @Before
