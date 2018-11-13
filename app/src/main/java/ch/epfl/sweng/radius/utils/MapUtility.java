@@ -69,7 +69,7 @@ public class MapUtility {
                     public void onFinish(Object value) {
                         for(MLocation loc : (ArrayList<MLocation>) value){
                             if(isInRadius(loc, radius)) {
-                                    otherPos.put(loc.getID(), loc);
+                                recordLocationIfVisible(loc);
                             }
                         }
                     }
@@ -84,6 +84,23 @@ public class MapUtility {
                 Log.e("Firebase Error", error.getMessage());
             }
         });
+    }
+
+    private void recordLocationIfVisible(final MLocation location) {
+        final Database database = Database.getInstance();
+        database.readObjOnce(new User(location.getID()),
+                Database.Tables.USERS, new CallBackDatabase() {
+                    @Override
+                    public void onFinish(Object value) {
+                        if (((User) value).isVisible()) {
+                            otherPos.put(location.getID(), location);
+                        }
+                    }
+                    @Override
+                    public void onError(DatabaseError error) {
+                        Log.e("Firebase Error", error.getMessage());
+                    }
+                });
     }
 
     public boolean isInRadius(MLocation loc, int radius){
