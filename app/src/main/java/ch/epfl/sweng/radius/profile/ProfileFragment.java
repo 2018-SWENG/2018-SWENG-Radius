@@ -37,11 +37,10 @@ import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.home.HomeFragment;
 import ch.epfl.sweng.radius.utils.UserInfos;
+import ch.epfl.sweng.radius.utils.profileFragmentUtils.TextFileReader;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
-
-
 
 public class ProfileFragment extends Fragment {
 
@@ -92,10 +91,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        System.out.println(readLanguagesFromFile().size());
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -127,8 +123,9 @@ public class ProfileFragment extends Fragment {
         radiusBar.setProgress(userRadius);
         radiusValue.setText(userRadius + "Km");
 
-        selectableLanguages = readLanguagesFromFile();
-
+        selectableLanguages = TextFileReader.readLanguagesFromFile(getActivity());//selectableLanguages = readLanguagesFromFile();
+        //spokenLanguages = new ArrayList<Integer>();
+      
         if (languagesText == null) {
             languagesText = "";
         }
@@ -316,7 +313,7 @@ public class ProfileFragment extends Fragment {
         Database.getInstance().writeInstanceObj(currentUser, Database.Tables.USERS);
     }
 
-    private ArrayList<String> readLanguagesFromFile() {
+    /*private ArrayList<String> readLanguagesFromFile() {
         try {
 
             InputStream inputStream = getActivity().getResources().openRawResource(R.raw.languages);
@@ -333,7 +330,7 @@ public class ProfileFragment extends Fragment {
             System.out.println(e.getMessage());
             return null;
         }
-    }
+    }*/
 
     private String getDataFromTextInput(TextInputEditText input) {
         if (input != null) {
@@ -389,43 +386,5 @@ public class ProfileFragment extends Fragment {
 
     public String getLanguagesText() {
         return languagesText;
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (profilePictureUri != null) {
-            outState.putParcelable("profilePictureUri", profilePictureUri);
-        }
-        if (userNickname != null) {
-            outState.putCharSequence("userNickname", userNickname.getText());
-        }
-        if (userStatus != null) {
-            outState.putCharSequence("userStatus", userStatus.getText());
-        }
-        if (userInterests != null) {
-            outState.putCharSequence("userInterests", userInterests.getText());
-        }
-        System.out.println("coucou");
-
-        outState.clear();
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
-            profilePictureUri = savedInstanceState.getParcelable("profilePictureUri");
-            CharSequence toSet = savedInstanceState.getCharSequence("userNickname",
-                    "");
-            userNicknameString = toSet.toString();
-            toSet = savedInstanceState.getCharSequence("userNickname",
-                    "");
-            userStatusString = toSet.toString();
-
-            toSet = savedInstanceState.getCharSequence("userInterests",
-                    "");
-            userInterestsString = toSet.toString();
-        }
     }
 }

@@ -77,7 +77,7 @@ public class MapUtilityTest {
         UserInfos.setCurrentUser(testUser);
 
         homeFragment = new HomeFragment();
-        mapListener = new MapUtility(radius, users);
+        mapListener = new MapUtility(radius);
     }
 
     @After

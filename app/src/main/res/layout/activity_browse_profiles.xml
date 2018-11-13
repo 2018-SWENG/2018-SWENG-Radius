@@ -14,6 +14,14 @@
         android:orientation="vertical"
         android:padding="30dp">
 
+        <include
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            layout="@layout/toolbar"
+            />
+
         <ImageView
             android:id="@+id/clickedPic"
             android:layout_width="157dp"
@@ -63,5 +71,4 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
     </LinearLayout>
-
 </android.support.constraint.ConstraintLayout>

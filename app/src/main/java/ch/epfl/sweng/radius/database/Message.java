@@ -12,8 +12,8 @@ public class Message {
     public final static Integer NUMBER_ELEMENTS_IN_MESSAGE = 3;
 
     private String senderId;
-    private final String contentMessage;
-    private final Date sendingTime;
+    private  String contentMessage;
+    private  Date sendingTime;
 
     public Message(String senderId, String contentMessage, Date sendingTime){
         this.senderId = senderId;
@@ -33,3 +33,4 @@ public class Message {
         return sendingTime;
     }
 }
+

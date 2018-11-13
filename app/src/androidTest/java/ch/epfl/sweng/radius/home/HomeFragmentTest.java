@@ -34,9 +34,7 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
     public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
             Manifest.permission.ACCESS_FINE_LOCATION);
 
-
-    private FrameLayout fcontainer;private AccountActivity mblAccountActivity;
-    private Fragment fragment;
+    private AccountActivity mblAccountActivity;
 
     public HomeFragmentTest(Class<AccountActivity> activityClass) {
         super(activityClass);
@@ -85,6 +83,22 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
         Espresso.onView(withText("TOPICS"))
                 .check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
+    }
+
+    public void testOnMapDoesNotFailWithBadInput() {
+        FrameLayout fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
+        final Fragment fragment = new HomeFragment();
+
+        mblAccountActivity.getSupportFragmentManager().beginTransaction()
+                .add(fcontainer.getId(), fragment).commitAllowingStateLoss();
+        getInstrumentation().waitForIdleSync();
+
+        mblAccountActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ((HomeFragment)fragment).onMapReady(null);
+            }
+        });
     }
 
     @Test
