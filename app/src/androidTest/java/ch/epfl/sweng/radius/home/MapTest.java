@@ -64,7 +64,7 @@ public class MapTest {
         locations.add(location2);
 
         homeFragment = new HomeFragment();
-        mapListener = new MapUtility(radius, users);
+        mapListener = new MapUtility(radius);
     }
 
     @Test

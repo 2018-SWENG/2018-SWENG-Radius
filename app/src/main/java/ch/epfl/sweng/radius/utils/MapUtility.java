@@ -38,18 +38,16 @@ public class MapUtility {
 
     private static FusedLocationProviderClient mblFusedLocationClient;
     private static boolean mblLocationPermissionGranted;
-    private static Location currentLocation;
-    private static MLocation myPos;
-    private static double radius;
-    private static LatLng currCoordinates;
+    private Location currentLocation;
+    private MLocation myPos;//private static MLocation myPos;
+    private double radius;
+    private LatLng currCoordinates;
 
-    private static ArrayList<User> users;
     private static HashMap<String, MLocation> otherPos;
 
 
-    public MapUtility(double radius, ArrayList<User> users) {
-        MapUtility.radius = radius;
-        MapUtility.users = users;
+    public MapUtility(double radius) {
+        this.radius = radius;
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
         this.myPos = new MLocation(Database.getInstance().getCurrent_user_id(),
                 DEFAULT_LONGITUDE,
@@ -87,7 +85,7 @@ public class MapUtility {
     }
 
     public boolean isInRadius(MLocation loc, int radius){
-        return computeDistance(loc) <= radius * 10000;
+        return computeDistance(loc) <= radius * 1000;
     }
 
     public ArrayList<MLocation> getOtherLocations() {
@@ -131,10 +129,11 @@ public class MapUtility {
                 location.addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
-                        if ( task.isSuccessful()) {
+                        if ( task.isSuccessful() && task.getResult() != null) {
                             currentLocation = (Location) task.getResult();
                             LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(),
                                     currentLocation.getLongitude());
+                            Log.e( TAG, "Found location " + currentLocation.getLatitude() + " " + currentLocation.getLongitude());
 
                             setCurrCoordinates(currentCoordinates);
                         }
@@ -153,7 +152,7 @@ public class MapUtility {
 
     public void setCurrCoordinates(LatLng currCoordinates) {
 
-        MapUtility.currCoordinates = currCoordinates;
+        this.currCoordinates = currCoordinates;
     }
 
     public LatLng getCurrCoordinates() {
@@ -199,7 +198,7 @@ public class MapUtility {
         float[] distance = new float[3];
         Location.distanceBetween( currCoordinates.latitude, currCoordinates.longitude,
                 p2latitude, p2longtitude, distance);
-        Log.e("Map","Distance is :" + Double.toString(distance[0]));
+        Log.e("Map","Distance is :" + Double.toString(distance[0]) + "currCoordinates.latitude" + currCoordinates.latitude + "currCoordinates.longitude" + currCoordinates.longitude);
         return distance[0];
     }
 

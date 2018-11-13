@@ -25,6 +25,8 @@ public class User implements DatabaseObject {
     private List<String> blockedUsers;
     // Map is uID --> convID
     private Map<String, String> chatList;
+    private Map<String, String> reportList;
+
     private String spokenLanguages;
 
     public User(String userID) {
@@ -39,6 +41,7 @@ public class User implements DatabaseObject {
         this.blockedUsers = new ArrayList<>();
         this.spokenLanguages = "";
         this.chatList = new HashMap<>();
+        this.reportList = new HashMap<>();
     }
 
     // Debugging purpose only
@@ -53,6 +56,7 @@ public class User implements DatabaseObject {
         this.friends = new ArrayList<>();
         this.blockedUsers = new ArrayList<>();
         this.spokenLanguages = "";
+        this.reportList = new HashMap<>();
     }
 
     // Getter
@@ -67,7 +71,6 @@ public class User implements DatabaseObject {
     public String getUrlProfilePhoto() {
         return urlProfilePhoto;
     }
-
     public void setUrlProfilePhoto(String urlProfilePhoto) {
         this.urlProfilePhoto = urlProfilePhoto;
     }
@@ -150,5 +153,19 @@ public class User implements DatabaseObject {
     public void setID(String id){
         this.userID = id;
     }
+
+    public void addReport(String reportingUserID, String reportingReason) {
+        reportList.put(reportingUserID, reportingReason);
+    }
+
+    public Map<String, String> getReportList() {
+        return reportList;
+    }
+
+    public String getReportFromUser(String userID) {
+        return reportList.get(userID);
+    }
+
+
 
 }

@@ -44,12 +44,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static final double DEFAULT_RADIUS = 50000; //In meters
 
     //properties
-    private static GoogleMap mobileMap;
+    private static GoogleMap mobileMap; //make sure the fragment doesn't crash if the map is null
     private static MapView mapView;
     private static CircleOptions radiusOptions;
     private static double radius;
-
     private MLocation myPos;
+
     private TabAdapter adapter;
     private TabLayout tabLayout;
 
@@ -114,7 +114,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-       mapListener = new MapUtility(radius, users);
+       mapListener = new MapUtility(radius);
 
         mapView = view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
@@ -138,31 +138,34 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
                 return;
             }
-            mobileMap.setMyLocationEnabled(true); initMap();
+
+            if (mobileMap != null) {
+                mobileMap.setMyLocationEnabled(true);
+                initMap();
+            }
+
         }
     }
 
-    public void initMap() {
+    private void initMap() {
         if (mapListener.getCurrCoordinates() != null) {
             initCircle(mapListener.getCurrCoordinates());
-            moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM*(float) 0.9);
+            moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM *(float) 0.9);
             Log.w("Map", "Centering Camera");
+            // Push current location to DB
+            double lat = mapListener.getCurrCoordinates().latitude;
+            double lng = mapListener.getCurrCoordinates().longitude;
+            // Write the location of the current user to the database
+            myPos = new MLocation(Database.getInstance().getCurrent_user_id(), lng, lat);
+            Database.getInstance().writeInstanceObj(myPos, Database.Tables.LOCATIONS);
+            mapListener.setMyPos(myPos);
+
+            // Do locations here
+            markNearbyUsers();
         }
-
-        // Push current location to DB
-        double lat = mapListener.getCurrCoordinates().latitude;
-        double lng = mapListener.getCurrCoordinates().longitude;
-       // myPos = new MLocation(FirebaseAuth.getInstance().getCurrentUser().getUid(), lat, lng);
-       // Debug purpose only
-        myPos = new MLocation("testUser3", lat, lng);
-
-        mapListener.setMyPos(myPos);
-
-        // Do locations here
-        markNearbyUsers();
     }
 
-    public void initCircle(LatLng currentCoordinates) {
+    private void initCircle(LatLng currentCoordinates) {
         radiusOptions = new CircleOptions().center(currentCoordinates)
                 .strokeColor(Color.RED)
                 .fillColor(Color.parseColor("#22FF0000"))
@@ -171,7 +174,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mobileMap.addCircle(radiusOptions);
     }
 
-    public void moveCamera(LatLng latLng, float zoom) {
+    private void moveCamera(LatLng latLng, float zoom) {
         Log.d( TAG, "moveCamera: moving the camera to: lat: "
                 + latLng.latitude + " long: " + latLng.longitude);
         mobileMap.moveCamera(CameraUpdateFactory.newLatLngZoom( latLng, zoom));
@@ -232,6 +235,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             mobileMap.addMarker(new MarkerOptions().position(newPos)
                     .title(userName + ": " + status)
                     .icon(BitmapDescriptorFactory.defaultMarker(color)));
+
         }
 
     }

@@ -14,7 +14,7 @@
 
     <!-- Top Bar application style -->
     <style name="AppTheme.TopBar" parent="AppTheme">
-        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorPrimary">@color/menu_item_color</item>
         <item name="android:textColorSecondary">@color/white</item>
         <item name="actionOverflowButtonStyle">@color/white</item>
 
