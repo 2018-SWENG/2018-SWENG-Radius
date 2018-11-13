@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.Database;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -32,30 +33,48 @@ public class BrowseProfilesActivityTest extends ActivityInstrumentationTestCase2
         super(BrowseProfilesActivity.class);
     }
 
-    /*@Before
+    @Before
     public void setUp() throws Exception {
         super.setUp();
 
+        Database.activateDebugMode();
         Intent intent = new Intent();
         mblBrowseProfilesActivity = mActivityRule.launchActivity(intent);
-    }*/
+    }
 
-    /*@Test
+    @Test
     public void testLaunch() {
-        //View view = mblBrowseProfilesActivity.getActionBar().getCustomView().findViewById(R.id.options);//.performClick();
-        //assertNotNull(view);
-    }*/
+        onView(withText("Options")).perform(click());
+    }
 
-    /*@Test
-    public void testOnCreate() {
-        View view = mActivityRule.getActivity().findViewById(R.id.navigationView);
-        assertNotNull(view);
-        //openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        //onView(withText("Block User")).perform(click());
-    }*/
+    @Test
+    public void testReportUserFor() {
+        onView(withText("Options")).perform(click());
+        onView(withText("Report User for:")).perform(click());
+    }
 
-    /*@After
+    @Test
+    public void testBlock() {
+        onView(withText("Options")).perform(click());
+        onView(withText("Block User")).perform(click());
+    }
+
+    @Test
+    public void testReportUserForLanguage() {
+        onView(withText("Options")).perform(click());
+        onView(withText("Report User for:")).perform(click());
+        onView(withText("Language")).perform(click());
+    }
+
+    @Test
+    public void testReportUserForSpam() {
+        onView(withText("Options")).perform(click());
+        onView(withText("Report User for:")).perform(click());
+        onView(withText("Spam")).perform(click());
+    }
+
+    @After
     public void tearDown() throws Exception {
-
-    }*/
+        mblBrowseProfilesActivity = null;
+    }
 }

@@ -49,20 +49,9 @@ public class MapUtility {
     public MapUtility(double radius) {
         this.radius = radius;
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
-        System.out.println("----------------------------------------" + currCoordinates.latitude + " " + currCoordinates.longitude);
         this.myPos = new MLocation(Database.getInstance().getCurrent_user_id(),
                 DEFAULT_LONGITUDE,
                 DEFAULT_LATITUDE);
-        if(otherPos == null)
-            otherPos = new HashMap<>();
-    }
-
-    public MapUtility(double radius, double latitude, double longtitude) {
-        this.radius = radius;
-        currCoordinates = new LatLng(latitude, longtitude);
-        this.myPos = new MLocation(Database.getInstance().getCurrent_user_id(),
-                longtitude,
-                latitude);
         if(otherPos == null)
             otherPos = new HashMap<>();
     }

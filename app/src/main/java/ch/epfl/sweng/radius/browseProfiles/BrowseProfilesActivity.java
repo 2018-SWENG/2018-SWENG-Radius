@@ -26,11 +26,15 @@ public class BrowseProfilesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse_profiles);
         Intent intent = getIntent();
-        int clickedPic = intent.getIntExtra("Clicked Picture",1);
+        int clickedPic = intent.getIntExtra("Clicked Picture",2131230869); // The default value is the id
+        // associated with the john doe picture - I set it to that instead of 1 because we actually don't have a resource
+        // numbered 1. As a tests can't initialize the activity.
         String clickedName = intent.getStringExtra("Clicked Name");
-        profileActivityListener = new BrowseProfilesUtility(clickedName); // WHEN THE CLASS STORES THE ID OF THE USER WE CLICKED ON CHANGE CLICKED NAME WITH THE ID
+        profileActivityListener = new BrowseProfilesUtility(clickedName); // WHEN THE CLASS STORES THE ID OF THE USER WE
+        // CLICKED ON CHANGE CLICKED NAME WITH THE ID
 
         ImageView imageView = findViewById(R.id.clickedPic);
+        System.out.println("clickedPic " + clickedPic);
         imageView.setImageResource(clickedPic);
         TextView textViewName = findViewById(R.id.clickedName);
         textViewName.setText(clickedName);
