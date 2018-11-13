@@ -408,6 +408,7 @@ public class ProfileFragment extends Fragment {
         }
         System.out.println("coucou");
 
+        outState.clear();
     }
 
     @Override

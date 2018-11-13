@@ -19,6 +19,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseError;
 
+import org.mockito.internal.matchers.Null;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -133,10 +135,15 @@ public class MapUtility {
                     public void onComplete(@NonNull Task task) {
                         if ( task.isSuccessful()) {
                             currentLocation = (Location) task.getResult();
-                            LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(),
-                                    currentLocation.getLongitude());
+                            try {
+                                LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(),
+                                        currentLocation.getLongitude());
 
-                            setCurrCoordinates(currentCoordinates);
+                                setCurrCoordinates(currentCoordinates);
+                            }catch(NullPointerException e){
+
+                            }
+
                         }
                         else {
                             Toast.makeText( activity.getApplicationContext(), "Unable to get current location",
