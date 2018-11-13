@@ -80,6 +80,17 @@ public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<Accou
         */
     }
 
+    @Test
+    public void testIfChatIsOpening(){
+        Espresso.onView(withId(R.id.navigation_messages)).perform(click());
+        onData(anything())
+                .inAdapterView(withId(R.id.listView))
+                .atPosition(0)
+                .onChildView(withId(R.id.username))
+                .perform(click());
+        Espresso.onView(withId(R.id.clickedName)).equals("john doe");
+    }
+
     @After
     public void tearDown() throws Exception {
         mblAccountActivity = null;

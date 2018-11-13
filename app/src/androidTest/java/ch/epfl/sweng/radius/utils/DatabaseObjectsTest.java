@@ -95,6 +95,14 @@ public class DatabaseObjectsTest {
         } catch (Exception e){}
         assert(user.getStatus() == status);
 
+        //Test interests max characters
+        String interests = user.getInterests();
+        try {
+            user.setInterests("12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678900");
+            assert(false);
+        } catch (Exception e){}
+        assert(user.getInterests() == interests);
+
         String chat = user.getConvFromUser("Arthur");
         Log.e("Test", "Coucou");
         assertNull(chat);
