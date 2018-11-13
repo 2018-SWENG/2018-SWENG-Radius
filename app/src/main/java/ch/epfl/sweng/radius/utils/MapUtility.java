@@ -96,10 +96,6 @@ public class MapUtility {
         this.myPos = myPos;
     }
 
-    public MLocation getMyPos() {
-        return this.myPos;
-    }
-
     public HashMap<String, MLocation> getOtherPos() {
         return otherPos;
     }

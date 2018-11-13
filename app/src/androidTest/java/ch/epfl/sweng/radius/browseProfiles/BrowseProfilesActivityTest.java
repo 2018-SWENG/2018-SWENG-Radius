@@ -10,37 +10,28 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import ch.epfl.sweng.radius.AccountActivity;
+
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Database;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
+
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.junit.Assert.*;
+
+
+import android.Manifest;
+import android.support.test.espresso.Espresso;
+import android.support.test.rule.GrantPermissionRule;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 public class BrowseProfilesActivityTest extends ActivityInstrumentationTestCase2<BrowseProfilesActivity> {
-
-    private BrowseProfilesActivity mblBrowseProfilesActivity;
-
     @Rule
     public final ActivityTestRule<BrowseProfilesActivity> mActivityRule =
             new ActivityTestRule<>(BrowseProfilesActivity.class);
 
-    public BrowseProfilesActivityTest() {
-        super(BrowseProfilesActivity.class);
-    }
+    private BrowseProfilesActivity mblBrowseProfilesActivity;
 
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-
-        Database.activateDebugMode();
-        Intent intent = new Intent();
-        mblBrowseProfilesActivity = mActivityRule.launchActivity(intent);
-    }
 
     @Test
     public void testLaunch() {
@@ -76,5 +67,51 @@ public class BrowseProfilesActivityTest extends ActivityInstrumentationTestCase2
     @After
     public void tearDown() throws Exception {
         mblBrowseProfilesActivity = null;
+    }
+
+
+    public BrowseProfilesActivityTest(){
+        super(BrowseProfilesActivity.class);
+    }
+
+    private BrowseProfilesActivity mActivity;
+
+    @Rule
+    public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
+            Manifest.permission.ACCESS_FINE_LOCATION);
+
+    public BrowseProfilesActivityTest(Class<BrowseProfilesActivity> activityClass) {
+        super(activityClass);
+    }
+
+
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        Database.activateDebugMode();
+
+
+        Intent intent = new Intent();
+        intent.putExtra("Clicked Picture", R.drawable.image1);
+        intent.putExtra("Clicked Name", "testUser3");
+        intent.putExtra("UID", "testUser3");
+        mActivity = mActivityRule.launchActivity(intent);
+    }
+
+    @Test
+    public void testViewExists() {
+        View view = mActivity.findViewById(R.id.clickedPic);
+        assertNotNull(view);
+        view = mActivity.findViewById(R.id.clickedName);
+        assertNotNull(view);
+        view = mActivity.findViewById(R.id.other_status);
+        assertNotNull(view);
+        view = mActivity.findViewById(R.id.add_user);
+        assertNotNull(view);
+    }
+
+    @Test
+    public void testAddFriends() {
+        Espresso.onView(withId(R.id.add_user)).perform(click());
     }
 }

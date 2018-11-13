@@ -121,7 +121,7 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
                 mlActivity.setEnabled(false);
             }
         });
-        
+
         onView(withId(R.id.edittext_chatbox)).perform(typeText("Test"));
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_chatbox_send)).perform(click());
