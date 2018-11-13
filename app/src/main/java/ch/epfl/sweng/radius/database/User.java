@@ -42,18 +42,8 @@ public class User implements DatabaseObject {
     }
 
     // Debugging purpose only
-    public User(){
-        this.userID = Long.toString(idGenerator++);
-        this.nickname = "New User " + this.userID;
-        this.urlProfilePhoto = "";
-        this.radius = 500;
-        this.status = "Hi, I'm new to radius !";
-        this.friendsRequests = new ArrayList<>();
-        this.friendsInvitations = new ArrayList<>();
-        this.friends = new ArrayList<>();
-        this.blockedUsers = new ArrayList<>();
-        this.chatList = new HashMap<>();
-        this.spokenLanguages = "";
+    public User() {
+        this(Long.toString(idGenerator++));
     }
 
     // Getter
@@ -119,9 +109,9 @@ public class User implements DatabaseObject {
 
     public String getConvFromUser(String userID) {
         String convId = chatList.get(userID);
-        if(convId == null){
+        if (convId == null) {
             return "";
-        }else{
+        } else {
             return convId;
         }
     }
@@ -132,7 +122,7 @@ public class User implements DatabaseObject {
             friendsInvitations.remove(friend.getID());
             friends.add(friend.getID());
             friend.friends.add(this.userID);
-        } else if(!friendsRequests.contains(friend.getID())) {
+        } else if (!friendsRequests.contains(friend.getID())) {
             friendsRequests.add(friend.getID());
             friend.friendsInvitations.add(this.userID);
         }
@@ -142,10 +132,32 @@ public class User implements DatabaseObject {
         return this.spokenLanguages;
     }
 
-    public void setSpokenLanguages(String spokenLanguages) { if (spokenLanguages != null) this.spokenLanguages = spokenLanguages; }
+    public void setSpokenLanguages(String spokenLanguages) {
+        if (spokenLanguages != null) this.spokenLanguages = spokenLanguages;
+    }
 
-    public void addChat(String uID, String chatID) {
-        this.chatList.put(uID, chatID);
+    /**
+     * add a chat to a user
+     * @param otherUserId the other user ID
+     * @param chatID the chat ID
+     * @return the chat ID
+     */
+    public String addChat(String otherUserId, String chatID) {
+        if (!chatList.containsKey(otherUserId)) {
+            this.chatList.put(otherUserId, chatID);
+            //TODO somehow we need to updatefriendId chat
+            //friendUser.chatList.put(getID(),chatID)
+        }
+        return chatID;
+    }
+
+    public String newChat(String otherUserId) {
+        ArrayList<String> ids = new ArrayList();
+        ids.add(otherUserId);
+        ids.add(getID());
+        ChatLogs chatLogs = new ChatLogs(ids);
+
+        return addChat(otherUserId, chatLogs.getID());
     }
 
     @Override
@@ -153,7 +165,7 @@ public class User implements DatabaseObject {
         return userID;
     }
 
-    public void setID(String id){
+    public void setID(String id) {
         this.userID = id;
     }
 

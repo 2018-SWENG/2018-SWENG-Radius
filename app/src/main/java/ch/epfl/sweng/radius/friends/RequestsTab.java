@@ -66,7 +66,7 @@ public class RequestsTab extends Fragment {
                                 for (User friend: (ArrayList<User>) value) {
                                     convId = friend.getConvFromUser(userId);
 
-                                    // si la conv n'existe pas, il faut la créer
+                                    // If the conversation doesn't exist, it has to be created
                                     if(convId.isEmpty()){
                                         ArrayList<String> ids = new ArrayList();
                                         ids.add(userId);

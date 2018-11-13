@@ -69,16 +69,14 @@ public class PeopleTab extends Fragment {
                     public void onFinish(Object value) {
                         ArrayList<CustomListItem> users = new ArrayList<>();
                         String convId;
-                        String userId = UserInfos.getUserId();
+                        String userId = database.getCurrent_user_id();
                         for (User friend: (ArrayList<User>) value) {
                             convId = friend.getConvFromUser(userId);
 
-                            // si la conv n'existe pas, il faut la créer
+                            // If the conversation doesn't exist, it has to be created
                             if(convId.isEmpty()){
-                                ArrayList<String> ids = new ArrayList();
-                                ids.add(userId);
-                                ids.add(friend.getID());
-                                convId = new ChatLogs(ids).getID();
+                                //Creation of the Chatlog
+                                convId = friend.newChat(userId);
                             }
                             users.add(new CustomListItem(friend, convId));
                         }

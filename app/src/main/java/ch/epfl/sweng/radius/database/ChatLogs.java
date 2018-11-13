@@ -63,10 +63,6 @@ public class ChatLogs implements DatabaseObject{
         numberOfMessages++;
     }
 
-    public String getChatLogsId() {
-        return chatLogsId;
-    }
-
     public String getID() {
         return chatLogsId;
     }

@@ -68,7 +68,6 @@ public class DatabaseObjectsTest {
 
         // Test Ids generation
         Assert.assertNotNull(chatLogs.getID());
-        Assert.assertNotNull(chatLogs.getChatLogsId());
 
         // Test messages
         List allmessages = chatLogs.getAllMessages();
