@@ -38,16 +38,16 @@ public class MapUtility {
 
     private static FusedLocationProviderClient mblFusedLocationClient;
     private static boolean mblLocationPermissionGranted;
-    private static Location currentLocation;
-    private static MLocation myPos;
-    private static double radius;
-    private static LatLng currCoordinates;
+    private Location currentLocation;
+    private MLocation myPos;//private static MLocation myPos;
+    private double radius;
+    private LatLng currCoordinates;
 
     private static HashMap<String, MLocation> otherPos;
 
 
     public MapUtility(double radius) {
-        MapUtility.radius = radius;
+        this.radius = radius;
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
         System.out.println("----------------------------------------" + currCoordinates.latitude + " " + currCoordinates.longitude);
         this.myPos = new MLocation(Database.getInstance().getCurrent_user_id(),
@@ -58,7 +58,7 @@ public class MapUtility {
     }
 
     public MapUtility(double radius, double latitude, double longtitude) {
-        MapUtility.radius = radius;
+        this.radius = radius;
         currCoordinates = new LatLng(latitude, longtitude);
         this.myPos = new MLocation(Database.getInstance().getCurrent_user_id(),
                 longtitude,
@@ -96,7 +96,7 @@ public class MapUtility {
     }
 
     public boolean isInRadius(MLocation loc, int radius){
-        return computeDistance(loc) <= radius * 10000;
+        return computeDistance(loc) <= radius * 1000;
     }
 
     public ArrayList<MLocation> getOtherLocations() {
@@ -105,6 +105,10 @@ public class MapUtility {
 
     public void setMyPos(MLocation myPos) {
         this.myPos = myPos;
+    }
+
+    public MLocation getMyPos() {
+        return this.myPos;
     }
 
     public HashMap<String, MLocation> getOtherPos() {
@@ -163,7 +167,7 @@ public class MapUtility {
 
     public void setCurrCoordinates(LatLng currCoordinates) {
 
-        MapUtility.currCoordinates = currCoordinates;
+        this.currCoordinates = currCoordinates;
     }
 
     public LatLng getCurrCoordinates() {

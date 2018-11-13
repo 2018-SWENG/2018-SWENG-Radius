@@ -48,6 +48,7 @@ public class MessageListActivity extends AppCompatActivity {
     private Firebase chatReference;
     private ChatLogs chatLogs;
 
+    //these might cause problems when we switch to multiple users and multiple different chats
     private static User us, otherUser;
     private static MLocation usLoc, otherUserLoc;
     private final Database database = Database.getInstance();
@@ -71,10 +72,6 @@ public class MessageListActivity extends AppCompatActivity {
         ArrayList<String> participantsId = new ArrayList<String>();
         participantsId.add(database.getCurrent_user_id());//UserInfos.getUserId()
         participantsId.add(otherUserId);
-
-        //get chatlogs from db
-        //chatLogDbUtility = new ChatLogDbUtility(chatId);
-        // chatLogs = ChatLogDbUtility.getChatLogs(chatId);
 
         chatLogs = new ChatLogs(participantsId);
 
@@ -137,21 +134,6 @@ public class MessageListActivity extends AppCompatActivity {
                 sendMessage( UserInfos.getUserId(), message, new Date());
             }
         });
-
-        /*
-        findViewById(R.id.button_chatbox_send).setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    String message = messageZone.getText().toString();
-                    sendMessage( UserInfos.getUserId(), message, new Date());
-                    return true;
-                }
-                return false;
-            }
-
-        });
-        */
     }
 
 
@@ -208,11 +190,8 @@ public class MessageListActivity extends AppCompatActivity {
         database.readListObjOnce(participants, Database.Tables.USERS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
-                us.setRadius(((User) value).getRadius());
-                System.out.println("usLoc radius: " + us.getRadius());
-
-                otherUser.setRadius(((User) value).getRadius());
-                System.out.println("otherUserLoc radius: " + otherUser.getRadius());
+                us.setRadius(((User) (((ArrayList) value).get(0))).getRadius());
+                otherUser.setRadius(((User) (((ArrayList) value).get(1))).getRadius());
             }
 
             @Override
@@ -222,28 +201,25 @@ public class MessageListActivity extends AppCompatActivity {
         });
     }
 
-    private void prepareLocataion(ArrayList<String> participants) {
+    private void compareLocataion(ArrayList<String> participants) {
 
-        database.readObjOnce(usLoc, Database.Tables.USERS, new CallBackDatabase() {
+        database.readListObjOnce(participants, Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
-                usLoc.setLatitude(((MLocation) value).getLatitude());
-                usLoc.setLongitude(((MLocation) value).getLongitude());
-                System.out.println("usLoc Latitude: " + usLoc.getLatitude() + " Longtitude: " + usLoc.getLongitude());
-            }
+                // set the locations of the users based on the values obtained from the database.
+                usLoc.setLatitude(((MLocation) (((ArrayList) value).get(0))).getLatitude());
+                usLoc.setLongitude(((MLocation) (((ArrayList) value).get(0))).getLongitude());
+                otherUserLoc.setLatitude(((MLocation) (((ArrayList) value).get(1))).getLatitude());
+                otherUserLoc.setLongitude(((MLocation) (((ArrayList) value).get(1))).getLongitude());
 
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("Firebase Error", error.getMessage());
-            }
-        });
+                // create map listeners so we can use the isInRadius function to compare locations of both of the users
+                MapUtility mapListenerUs = new MapUtility(us.getRadius());
+                mapListenerUs.setMyPos(usLoc);
+                MapUtility mapListenerOtherUser = new MapUtility(otherUser.getRadius());
+                mapListenerOtherUser.setMyPos(otherUserLoc);
 
-        database.readObjOnce(otherUserLoc, Database.Tables.USERS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                otherUserLoc.setLatitude(((MLocation) value).getLatitude());
-                otherUserLoc.setLongitude(((MLocation) value).getLongitude());
-                System.out.println("otherUserLoc Latitude: " + usLoc.getLatitude() + " Longtitude: " + usLoc.getLongitude());
+                // if both users are in each others' radius chat is enabled.
+                setEnabled(mapListenerOtherUser.isInRadius(usLoc, otherUser.getRadius()) && mapListenerUs.isInRadius(otherUserLoc, us.getRadius()));
             }
 
             @Override
@@ -253,7 +229,7 @@ public class MessageListActivity extends AppCompatActivity {
         });
     }
 
-    public boolean usersInRadius() { //this method needs to go through severe change - currently we are not saving the radius or the locations of users properly.
+    public void usersInRadius() { //this method needs to go through severe change - currently we are not saving the radius or the locations of users properly.
         ArrayList<String> participants = (ArrayList) chatLogs.getMembersId();
         us = new User(participants.get(0));
         otherUser = new User(participants.get(1));
@@ -263,16 +239,11 @@ public class MessageListActivity extends AppCompatActivity {
         usLoc.setID(us.getID());
         otherUserLoc.setID(otherUser.getID());
 
+        //read the users from the database in order to be able to access their radius in the compareLocation method.
         prepareUsers(participants);
-        prepareLocataion(participants);
 
-        MapUtility mapListenerUs = new MapUtility(us.getRadius());
-        System.out.println("-------------------------------------------------------------************************");
-        mapListenerUs.getDeviceLocation(this);
-        System.out.println("-------------------------------------------------------------************************");
-        MapUtility mapListenerOtherUser = new MapUtility(otherUser.getRadius(), otherUserLoc.getLatitude(), otherUserLoc.getLongitude());
-        System.out.println("mapListenerOtherUser.contains(usLoc.getLatitude(), usLoc.getLongitude()) " + usLoc.getLatitude() + " " + usLoc.getLongitude());
-        return mapListenerUs.contains(otherUserLoc.getLatitude(), otherUserLoc.getLongitude());
+        //compare the locations of the users and whether they are able to talk to each other or not.
+        compareLocataion(participants);
     }
 
     public void setEnabled(boolean enableChat) {
@@ -281,11 +252,6 @@ public class MessageListActivity extends AppCompatActivity {
             messageZone.setFocusable(false);
             messageZone.setText("You can't text this user.");
         }
-    }
-
-    //later add blocked users as well
-    public boolean canTalk() {
-        return usersInRadius();
     }
 
     @Override
@@ -298,10 +264,10 @@ public class MessageListActivity extends AppCompatActivity {
         String databaseMessagesUrl = "https://radius-1538126456577.firebaseio.com/messages/";
         setInfo(databaseMessagesUrl);
 
+        usersInRadius(); // This part enables or disables the chat
+
         setUpUI();
         setUpSendButton();
         setUpListener();
-
-        setEnabled(true);
     }
 }

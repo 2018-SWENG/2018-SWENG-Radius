@@ -157,8 +157,21 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             double lng = mapListener.getCurrCoordinates().longitude;
             // myPos = new MLocation(FirebaseAuth.getInstance().getCurrentUser().getUid(), lat, lng);
             // Debug purpose only
-            myPos = new MLocation("testUser3", lat, lng);
+            myPos = new MLocation(Database.getInstance().getCurrent_user_id(), lng, lat);
+            Database.getInstance().writeInstanceObj(myPos, Database.Tables.LOCATIONS);
+            Database.getInstance().readObjOnce(myPos, Database.Tables.LOCATIONS, new CallBackDatabase() {
+                @Override
+                public void onFinish(Object value) {
+                    System.out.println("*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*--*-*-");
+                    System.out.println(((MLocation) value).getLatitude() + " " + ((MLocation) value).getLongitude());
+                    System.out.println("*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*--*-*-");
+                }
 
+                @Override
+                public void onError(DatabaseError error) {
+
+                }
+            });
             mapListener.setMyPos(myPos);
 
             // Do locations here
