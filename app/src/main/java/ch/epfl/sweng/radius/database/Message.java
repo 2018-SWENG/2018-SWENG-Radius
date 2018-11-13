@@ -21,10 +21,6 @@ public class Message {
         this.sendingTime = sendingTime;
     }
 
-    public Message(){
-        this.senderId = "10";
-    }
-
     public String getSenderId() {
         return senderId;
     }
@@ -35,18 +31,6 @@ public class Message {
 
     public Date getSendingTime() {
         return sendingTime;
-    }
-
-    public void setSenderId(String senderId) {
-        this.senderId = senderId;
-    }
-
-    public void setContentMessage(String contentMessage) {
-        this.contentMessage = contentMessage;
-    }
-
-    public void setSendingTime(Date sendingTime) {
-        this.sendingTime = sendingTime;
     }
 }
 
