@@ -87,6 +87,24 @@ public class DatabaseObjectsTest {
         user.addFriendRequest(user2);
         assert(user.getFriendsRequests().size() == 1);
 
+        String chat = user.getConvFromUser("Arthur");
+        Log.e("Test", "Coucou");
+        assertNull(chat);
+        List<String> blocked = user.getBlockedUsers();
+        List<String> req = user.getFriendsRequests();
+        String url = user.getUrlProfilePhoto();
+        Map<String, String> chats = user.getChatList();
+
+        assertEquals(50, user.getRadius());
+        user.setID("Arthur");
+        assertEquals("Arthur", user.getID());
+    }
+
+    @Test
+    public void testMaxChars(){
+
+        User user = new User("1234");
+
         // Test status max characters
         String status = user.getStatus();
         try {
@@ -102,20 +120,6 @@ public class DatabaseObjectsTest {
             assert(false);
         } catch (Exception e){}
         assert(user.getInterests() == interests);
-
-        String chat = user.getConvFromUser("Arthur");
-        Log.e("Test", "Coucou");
-        assertNull(chat);
-        List<String> blocked = user.getBlockedUsers();
-        List<String> req = user.getFriendsRequests();
-        String url = user.getUrlProfilePhoto();
-        Map<String, String> chats = user.getChatList();
-
-        assertEquals(50, user.getRadius());
-        user.setID("Arthur");
-        assertEquals("Arthur", user.getID());
-
-
     }
 
     @Test
