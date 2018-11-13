@@ -1,14 +1,18 @@
 package ch.epfl.sweng.radius.home;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.google.firebase.database.DatabaseError;
 
@@ -19,6 +23,7 @@ import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.messages.MessageListActivity;
 import ch.epfl.sweng.radius.utils.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.CustomListItem;
 
@@ -29,6 +34,8 @@ public class PeopleTab extends Fragment {
     public PeopleTab() {
 
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,7 +51,6 @@ public class PeopleTab extends Fragment {
 
         //mock data for testing purposes
         setUpAdapter(adapter);
-
 
         // Inflate the layout for this fragment
         return view;
@@ -69,6 +75,7 @@ public class PeopleTab extends Fragment {
                     public void onError(DatabaseError error) {
                         Log.e("Firebase", error.getMessage());
                     }
+
                 });
     }
 }
