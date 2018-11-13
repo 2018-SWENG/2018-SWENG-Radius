@@ -121,7 +121,7 @@ public class User implements DatabaseObject {
     }
 
     public void addFriendRequest(User friend) {
-        if (friend.friendsRequests.contains(this.userID)) {
+        if (friendsInvitations.contains(friend.getID())) {
             friend.friendsRequests.remove(this.userID);
             friendsInvitations.remove(friend.getID());
             friends.add(friend.getID());
