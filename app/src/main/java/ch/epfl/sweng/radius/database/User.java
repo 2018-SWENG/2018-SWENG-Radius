@@ -52,6 +52,7 @@ public class User implements DatabaseObject {
         this.friendsInvitations = new ArrayList<>();
         this.friends = new ArrayList<>();
         this.blockedUsers = new ArrayList<>();
+        this.chatList = new HashMap<>();
         this.spokenLanguages = "";
     }
 
@@ -117,7 +118,12 @@ public class User implements DatabaseObject {
     }
 
     public String getConvFromUser(String userID) {
-        return chatList.get(userID);
+        String convId = chatList.get(userID);
+        if(convId == null){
+            return "";
+        }else{
+            return convId;
+        }
     }
 
     public void addFriendRequest(User friend) {

@@ -18,14 +18,17 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.messages.MessageListActivity;
 import ch.epfl.sweng.radius.utils.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.CustomListItem;
+import ch.epfl.sweng.radius.utils.UserInfos;
 
 
 public class PeopleTab extends Fragment {
@@ -65,8 +68,19 @@ public class PeopleTab extends Fragment {
                     @Override
                     public void onFinish(Object value) {
                         ArrayList<CustomListItem> users = new ArrayList<>();
+                        String convId;
+                        String userId = UserInfos.getUserId();
                         for (User friend: (ArrayList<User>) value) {
-                            users.add(new CustomListItem(friend));
+                            convId = friend.getConvFromUser(userId);
+
+                            // si la conv n'existe pas, il faut la créer
+                            if(convId.isEmpty()){
+                                ArrayList<String> ids = new ArrayList();
+                                ids.add(userId);
+                                ids.add(friend.getID());
+                                convId = new ChatLogs(ids).getID();
+                            }
+                            users.add(new CustomListItem(friend, convId));
                         }
                         adapter.setItems(users);
                         adapter.notifyDataSetChanged();

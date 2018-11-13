@@ -30,15 +30,15 @@ public class CustomListener {
         });
     }
 
-    public void setCustomOnClick(TextView textView, final Context context) {
+    public void setCustomOnClick(TextView textView, final Context context, final String userId, final String convId) {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Intent intent = new Intent(context, MessageListActivity.class);
                 Bundle b = new Bundle();
-                b.putString("otherUserId", "theOtherUserId");
-                b.putString("chatId", "theChatId");
+                b.putString("otherUserId",userId);
+                b.putString("chatId", convId);
                 intent.putExtras(b); //Put your id to your next Intent
                 context.startActivity(intent);
 
