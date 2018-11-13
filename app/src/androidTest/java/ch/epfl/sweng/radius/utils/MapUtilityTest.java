@@ -47,6 +47,8 @@ public class MapUtilityTest {
     private HomeFragment homeFragment;
     private AccountActivity accountActivity;
 
+    private User testUser;
+
     @Before
     public void setUp() throws Exception {
 
@@ -68,6 +70,11 @@ public class MapUtilityTest {
         locations = new ArrayList<>();
         locations.add(location1);
         locations.add(location2);
+
+        testUser = new User("testId");
+        testUser.setSpokenLanguages("English");
+
+        UserInfos.setCurrentUser(testUser);
 
         homeFragment = new HomeFragment();
         mapListener = new MapUtility(radius);
@@ -146,7 +153,7 @@ public class MapUtilityTest {
     @Test
     public void speaksSameLanguage() {
         user1.setSpokenLanguages("English");
-        assertTrue(!mapListener.speaksSameLanguage(user1));
+        mapListener.speaksSameLanguage(user1);
     }
 
     @Test

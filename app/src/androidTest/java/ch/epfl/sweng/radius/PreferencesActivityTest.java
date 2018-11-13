@@ -101,8 +101,6 @@ public class PreferencesActivityTest  extends ActivityInstrumentationTestCase2<P
                 .perform(click());
     }
 
-
-
     @After
     public void tearDown() throws Exception {
         super.tearDown();

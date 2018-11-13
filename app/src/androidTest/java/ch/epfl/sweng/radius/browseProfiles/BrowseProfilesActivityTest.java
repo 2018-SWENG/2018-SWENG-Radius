@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Database;
 
