@@ -18,6 +18,7 @@ import ch.epfl.sweng.radius.utils.UserInfos;
 
 public class PreferencesActivity extends PreferenceActivity {
 
+    private static final String INCOGNITO = "incognitoSwitch";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +33,7 @@ public class PreferencesActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.app_preferences);
             Preference logOutButton = findPreference("logOutButton");
+            initializeIncognitoPreference();
             logOutButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -39,6 +41,15 @@ public class PreferencesActivity extends PreferenceActivity {
                     return true;
                 }
             });
+        }
+
+        private void initializeIncognitoPreference() {
+            boolean isInvisible = UserInfos.getCurrentUser().isVisible();
+            if (isInvisible) {
+                findPreference(INCOGNITO).setDefaultValue("false");
+            } else {
+                findPreference(INCOGNITO).setDefaultValue("true");
+            }
         }
 
         @Override
@@ -63,7 +74,7 @@ public class PreferencesActivity extends PreferenceActivity {
             //System.out.println(key);
             //Log.println(Log.INFO,"Settings","change");
 
-            switch (key){
+            switch (key) {
                 case "incognitoSwitch": // TODO: set the incognito Mode
                     changeInvisibility();
                     //Preference pref = findPreference(key);
@@ -78,13 +89,11 @@ public class PreferencesActivity extends PreferenceActivity {
             }
         }
 
-
         private void changeInvisibility() {
             boolean isInvisible = UserInfos.getCurrentUser().isVisible();
             UserInfos.getCurrentUser().setVisibility(!isInvisible);
             Database.getInstance().writeInstanceObj(UserInfos.getCurrentUser(), Database.Tables.USERS);
         }
-
 
         private void logOut() {
             if (LoginActivity.googleSignInClient != null) {
