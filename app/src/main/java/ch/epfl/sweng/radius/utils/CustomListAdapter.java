@@ -2,6 +2,7 @@ package ch.epfl.sweng.radius.utils;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,8 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
+
+        Log.e("PeopleTab", "Items users size :" + items.size());
 
         viewHolder.txtViewTitle.setText(items.get(position).getItemUser().getNickname());
         viewHolder.imgViewIcon.setImageResource(items.get(position).getFriendProfilePic());

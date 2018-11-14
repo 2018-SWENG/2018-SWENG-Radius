@@ -186,9 +186,11 @@ public class User implements DatabaseObject {
         return userID;
     }
 
-    public void setUserID(String userID) {
+    public void setID(String userID) {
         this.userID = userID;
     }
+
+
 
     public void addReport(String reportingUserID, String reportingReason) {
         reportList.put(reportingUserID, reportingReason);

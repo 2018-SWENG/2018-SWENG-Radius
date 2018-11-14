@@ -108,6 +108,8 @@ public class FirebaseUtility extends Database{
                         allItems.add((DatabaseObject)postSnapshot
                                 .getValue(tableName.getTableClass()));
                     }
+                    Log.e("PeopleTab", "allItems users size :" + allItems.size());
+
                 }
                 callback.onFinish(allItems);
             }

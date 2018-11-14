@@ -27,6 +27,8 @@ public class CustomListItem {
         this.nickname = user.getNickname();
         this.userId = user.getID();
         this.convId = convId;
+        this.user = user;
+
         this.profilePic = R.drawable.user_photo_default;
     }
 
