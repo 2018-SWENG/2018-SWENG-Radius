@@ -46,22 +46,27 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         // Configure Google Sign In
-        final GoogleSignInOptions gso = new GoogleSignInOptions
+        final GoogleSignInOptions gso = setGSO();
+        setFirebase(gso);
+        setGoogleTools(gso);
+    }
+
+    private GoogleSignInOptions setGSO() {
+        return new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
+    }
 
+    private void setFirebase(final GoogleSignInOptions gso) {
         myAuth = FirebaseAuth.getInstance();
         myAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {
-
                     googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, gso);
-
                     Database database = Database.getInstance();
                     database.readObjOnce(new User(database.getCurrent_user_id()),
                             Database.Tables.USERS, new CallBackDatabase() {
@@ -75,12 +80,13 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.e("Firebase Error", error.getMessage());
                                 }
                             });
-
                     startActivity(new Intent(LoginActivity.this, AccountActivity.class));
                 }
             }
         };
+    }
 
+    private void setGoogleTools(GoogleSignInOptions gso) {
         myGoogleButton = findViewById(R.id.googleButton);
 
         myGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
@@ -101,8 +107,8 @@ public class LoginActivity extends AppCompatActivity {
                 signIn();
             }
         });
-
     }
+
 
     @Override
     protected void onStart() {
