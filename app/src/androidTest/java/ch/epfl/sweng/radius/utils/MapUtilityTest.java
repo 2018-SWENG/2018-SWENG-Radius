@@ -115,12 +115,6 @@ public class MapUtilityTest {
     }
 
     @Test
-    public void computeDistance() {
-        assertTrue(mapListener.computeDistance(location1) < radius);
-        assertTrue(mapListener.computeDistance(null) > radius);
-    }
-
-    @Test
     public void getDeviceLocation() {
         mapListener.setPermissionResult(true);
         mapListener.getDeviceLocation(accountActivity);

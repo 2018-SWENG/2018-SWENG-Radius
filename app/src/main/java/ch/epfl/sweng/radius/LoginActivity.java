@@ -28,6 +28,7 @@ import com.google.firebase.database.DatabaseError;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.AppData;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
 public class LoginActivity extends AppCompatActivity {
@@ -50,6 +51,12 @@ public class LoginActivity extends AppCompatActivity {
         final GoogleSignInOptions gso = setGSO();
         setFirebase(gso);
         setGoogleTools(gso);
+        if (AppData.INSTANCE.isTestModeOn()) {
+            FirebaseAuth.getInstance().signOut();
+            if (googleSignInClient != null) {
+                googleSignInClient.signOut();
+            }
+        }
     }
 
     private GoogleSignInOptions setGSO() {
@@ -162,4 +169,5 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }

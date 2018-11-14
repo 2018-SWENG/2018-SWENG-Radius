@@ -47,7 +47,6 @@ public class MapUtility {
 
     private static HashMap<String, MLocation> otherPos;
 
-
     public MapUtility(double radius) {
         this.radius = radius;
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
@@ -104,7 +103,7 @@ public class MapUtility {
     }
 
     public boolean isInRadius(MLocation loc, int radius){
-        return computeDistance(loc) <= radius * 1000;
+        return findDistance(loc.getLatitude(), loc.getLongitude()) <= radius * 1000;
     }
 
     public ArrayList<MLocation> getOtherLocations() {
@@ -115,10 +114,9 @@ public class MapUtility {
         this.myPos = myPos;
     }
 
-    public HashMap<String, MLocation> getOtherPos() {
-        return otherPos;
-    }
+    public HashMap<String, MLocation> getOtherPos() { return otherPos; }
 
+    /*
     public double computeDistance(MLocation loc){
 
         if(loc == null)
@@ -139,6 +137,7 @@ public class MapUtility {
 
         return new Float(distance * meterConversion).floatValue();
     }
+    */
 
     public void getDeviceLocation(final FragmentActivity activity) {
         mblFusedLocationClient = LocationServices.getFusedLocationProviderClient( activity);
@@ -171,19 +170,15 @@ public class MapUtility {
     }
 
     public void setCurrCoordinates(LatLng currCoordinates) {
-
         this.currCoordinates = currCoordinates;
     }
 
-    public LatLng getCurrCoordinates() {
-        return currCoordinates;
-    }
+    public LatLng getCurrCoordinates() { return currCoordinates; }
 
     public void getLocationPermission(Context context, FragmentActivity activity) {
         Log.d( TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
-
         //if we have permission to access location set
         // location permission to true else ask for permissions
         if ( ContextCompat.checkSelfPermission(context, FINE_LOCATION)
@@ -195,7 +190,6 @@ public class MapUtility {
         else {
             ActivityCompat.requestPermissions( activity, permissions, LOC_PERMIT_REQUEST_CODE);
         }
-
     }
 
     /**
@@ -203,8 +197,8 @@ public class MapUtility {
      * @param p2latitude - double - latitude of the user that is being checked
      * @param p2longtitude - double - longtitude of the user that is being checked
      * */
-    public boolean contains(double p2latitude, double p2longtitude) {
-        double distance = findDistance(p2latitude, p2longtitude);
+    public boolean contains(double p2latitude, double p2longitude) {
+        double distance = findDistance(p2latitude, p2longitude);
         return radius >= distance;
     }
 
@@ -214,10 +208,10 @@ public class MapUtility {
      * @param p2longtitude - double - longtitude of the second location
      * @return distance-double- the distance between the current location and the a second location
      * */
-    public double findDistance(double p2latitude, double p2longtitude) {
+    public double findDistance(double p2latitude, double p2longitude) {
         float[] distance = new float[3];
         Location.distanceBetween( currCoordinates.latitude, currCoordinates.longitude,
-                p2latitude, p2longtitude, distance);
+                p2latitude, p2longitude, distance);
         Log.e("Map","Distance is :" + Double.toString(distance[0]) + "currCoordinates.latitude" + currCoordinates.latitude + "currCoordinates.longitude" + currCoordinates.longitude);
         return distance[0];
     }
@@ -226,7 +220,6 @@ public class MapUtility {
         String[] languagesSpoken = user.getSpokenLanguages().split(" ");
         Fragment profileFragment = ProfileFragment.newInstance();
         String languagesSpokenByCurrUser = ((ProfileFragment)profileFragment).getLanguagesText();
-
         for (int i = 0; i < languagesSpoken.length; i++) {
             if (languagesSpokenByCurrUser != null && languagesSpokenByCurrUser.contains(languagesSpoken[i])) {
                 return true;
