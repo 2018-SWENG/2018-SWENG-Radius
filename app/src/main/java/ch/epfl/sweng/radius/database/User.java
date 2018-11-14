@@ -16,7 +16,7 @@ public class User implements DatabaseObject {
 
     private String userID;
     private String nickname;
-    public String urlProfilePhoto;
+    private String urlProfilePhoto;
     private int radius; // meters
     private String status;
     private List<String> friendsRequests;
@@ -25,13 +25,16 @@ public class User implements DatabaseObject {
     private List<String> blockedUsers;
     // Map is uID --> convID
     private Map<String, String> chatList;
+    private Map<String, String> reportList;
+
     private String spokenLanguages;
+    private String interests;
 
     public User(String userID) {
         this.userID = userID;
         this.nickname = "New User " + userID;
         this.urlProfilePhoto = "";
-        this.radius = 500;
+        this.radius = 50;
         this.status = "Hi, I'm new to radius !";
         this.friendsRequests = new ArrayList<>();
         this.friendsInvitations = new ArrayList<>();
@@ -39,6 +42,8 @@ public class User implements DatabaseObject {
         this.blockedUsers = new ArrayList<>();
         this.spokenLanguages = "";
         this.chatList = new HashMap<>();
+        this.interests = "";
+        this.reportList = new HashMap<>();
     }
 
     // Debugging purpose only
@@ -54,15 +59,10 @@ public class User implements DatabaseObject {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
-/*
-    public String getUrlProfilePhoto() {
-        return urlProfilePhoto;
-    }
 
     public void setUrlProfilePhoto(String urlProfilePhoto) {
         this.urlProfilePhoto = urlProfilePhoto;
     }
-*/
 
     public String getUrlProfilePhoto() {
         return urlProfilePhoto;
@@ -117,7 +117,7 @@ public class User implements DatabaseObject {
     }
 
     public void addFriendRequest(User friend) {
-        if (friend.friendsRequests.contains(this.userID)) {
+        if (friendsInvitations.contains(friend.getID())) {
             friend.friendsRequests.remove(this.userID);
             friendsInvitations.remove(friend.getID());
             friends.add(friend.getID());
@@ -130,10 +130,6 @@ public class User implements DatabaseObject {
 
     public String getSpokenLanguages() {
         return this.spokenLanguages;
-    }
-
-    public void setSpokenLanguages(String spokenLanguages) {
-        if (spokenLanguages != null) this.spokenLanguages = spokenLanguages;
     }
 
     /**
@@ -154,9 +150,24 @@ public class User implements DatabaseObject {
         ids.add(otherUserId);
         ids.add(getID());
         ChatLogs chatLogs = new ChatLogs(ids);
-
         return addChat(otherUserId, chatLogs.getID());
     }
+
+    public void setSpokenLanguages(String spokenLanguages) {
+        if (spokenLanguages != null){
+            this.spokenLanguages = spokenLanguages;
+        }
+    }
+
+    public String getInterests() {
+        return interests;
+    }
+    public void setInterests(String interests) {
+        if (interests.length() > 100)
+            throw new IllegalArgumentException("Interests input is limited to 100 characters");
+        this.interests = interests;
+    }
+
 
     @Override
     public String getID() {
@@ -166,5 +177,19 @@ public class User implements DatabaseObject {
     public void setID(String id) {
         this.userID = id;
     }
+
+    public void addReport(String reportingUserID, String reportingReason) {
+        reportList.put(reportingUserID, reportingReason);
+    }
+
+    public Map<String, String> getReportList() {
+        return reportList;
+    }
+
+    public String getReportFromUser(String userID) {
+        return reportList.get(userID);
+    }
+
+
 
 }

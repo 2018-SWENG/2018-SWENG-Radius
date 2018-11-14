@@ -13,6 +13,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.UserInfos;
 
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -43,6 +45,13 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
         super.setUp();
         Database.activateDebugMode();
 
+        User testUser = new User("testId");
+        testUser.setNickname("testNickname");
+        testUser.setStatus("testStatus");
+        testUser.setInterests("testInterests");
+        testUser.setSpokenLanguages("English");
+
+        UserInfos.setCurrentUser(testUser);
 
         Intent intent = new Intent();
         mActivity = mActivityRule.launchActivity(intent);

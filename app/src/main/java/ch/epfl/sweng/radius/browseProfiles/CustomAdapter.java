@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.User;
 
 /**
  * CustomAdapter class that extends the ArrayAdapter class
@@ -52,12 +53,12 @@ public class CustomAdapter extends ArrayAdapter<ChatListItem> {
         ChatListItem chatListItem = chatList.get(position);
 
         imageView.setImageDrawable(context.getResources().getDrawable(chatListItem.getImage()));
-        textViewName.setText(chatListItem.getName());
+        textViewName.setText(chatListItem.getUser().getNickname());
 
         final int clickedPic = chatListItem.getImage();
-        final String clickedName = chatListItem.getName();
+        final User clickedUser = chatListItem.getUser();
 
-        new CustomListener(clickedPic, clickedName).setCustomOnClick(imageView, context);
+        new CustomListener(clickedPic, clickedUser).setCustomOnClick(imageView, context);
         return view;
     }
 }

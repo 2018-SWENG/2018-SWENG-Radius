@@ -3,14 +3,18 @@ package ch.epfl.sweng.radius.profile;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.button.MaterialButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,23 +26,29 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.home.HomeFragment;
+import ch.epfl.sweng.radius.utils.UserInfos;
+import ch.epfl.sweng.radius.utils.profileFragmentUtils.TextFileReader;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
 
-
-
 public class ProfileFragment extends Fragment {
 
-    private static Uri profilePictureUri;
+    private static Bitmap profilePictureUri;
     private static String userNicknameString;
     private static String userStatusString;
+    private static String userInterestsString;
+    private static int userRadius;
 
     CircleImageView userPhoto;
     ImageButton changeProfilePictureButton;
@@ -49,6 +59,8 @@ public class ProfileFragment extends Fragment {
     SeekBar radiusBar;
     TextView radiusValue;
     MaterialButton saveButton;
+    TextView userInterests;
+    TextInputEditText interestsInput;
 
     private Button selectLanguagesButton;
     private static ArrayList<String> selectableLanguages;
@@ -79,10 +91,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        System.out.println(readLanguagesFromFile().size());
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,11 +105,27 @@ public class ProfileFragment extends Fragment {
         selectedLanguages =  view.findViewById(R.id.spokenLanguages);
         selectLanguagesButton = view.findViewById(R.id.languagesButton);
 
-        int progress = radiusBar.getProgress();
-        radiusValue.setText(progress + "Km");
 
-        selectableLanguages = readLanguagesFromFile();
+        //Get the instance of current user & attributes
+        User currentUser = UserInfos.getCurrentUser();
+
+        //Decode UrlProfilePhoto from Base64
+        byte[] decodedString = Base64.decode(currentUser.getUrlProfilePhoto(), Base64.DEFAULT);
+        profilePictureUri = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+        userNicknameString = currentUser.getNickname();
+        userStatusString = currentUser.getStatus();
+        languagesText = currentUser.getSpokenLanguages();
+        userRadius = currentUser.getRadius();
+        userInterestsString = currentUser.getInterests();
+
+        //int progress = radiusBar.getProgress();
+        radiusBar.setProgress(userRadius);
+        radiusValue.setText(userRadius + "Km");
+
+        selectableLanguages = TextFileReader.readLanguagesFromFile(getActivity());//selectableLanguages = readLanguagesFromFile();
         //spokenLanguages = new ArrayList<Integer>();
+      
         if (languagesText == null) {
             languagesText = "";
         }
@@ -116,11 +141,12 @@ public class ProfileFragment extends Fragment {
 
         HomeFragment.newInstance(radiusBar.getProgress());
         radiusValue = view.findViewById(R.id.radiusValue);
-        radiusValue.setText(progress + " Km");
+        radiusValue.setText(userRadius + " Km");
 
         setUpProfilePhoto(view);
         setUpUserNickname(view);
         setUpUserStatus(view);
+        setUpUserInterests(view);
         setUpDataInput(view);
 
         // Inflate the layout for this fragment
@@ -162,7 +188,7 @@ public class ProfileFragment extends Fragment {
         userPhoto = view.findViewById(R.id.userPhoto);
 
         if (profilePictureUri != null) {
-            userPhoto.setImageURI(profilePictureUri);
+            userPhoto.setImageBitmap(profilePictureUri);
         }
 
         userPhoto.setOnClickListener(new View.OnClickListener() {
@@ -225,12 +251,6 @@ public class ProfileFragment extends Fragment {
 
         if (userNicknameString != null) {
             userNickname.setText(userNicknameString);
-        } else {
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if (user != null) {
-                String defaultUserName = user.getDisplayName();
-                userNickname.setText(defaultUserName);
-            }
         }
     }
 
@@ -242,29 +262,58 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    private void setUpUserInterests(View view) {
+        userInterests = view.findViewById(R.id.userInterests);
+        if (userInterestsString != null) {
+            userInterests.setText("Interests: " + userInterestsString);
+        }
+    }
+
     private void setUpDataInput(final View mainView) {
         nicknameInput = mainView.findViewById(R.id.nicknameInput);
         statusInput = mainView.findViewById(R.id.statusInput);
+        interestsInput = mainView.findViewById(R.id.interestsInput);
         saveButton = mainView.findViewById(R.id.saveButton);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String nicknameString = getDataFromTextInput(nicknameInput);
-                String statusString = getDataFromTextInput(statusInput);
-                if (!nicknameString.isEmpty()) {
-                    userNicknameString = nicknameString;
-                    setUpUserNickname(mainView);
-                }
-                if (!statusString.isEmpty()) {
-                    userStatusString = statusString;
-                    setUpUserStatus(mainView);
-                }
+                onClickSaveButton(mainView);
             }
         });
     }
 
-    private ArrayList<String> readLanguagesFromFile() {
+    private void onClickSaveButton(View mainView) {
+        String nicknameString = getDataFromTextInput(nicknameInput);
+        String statusString = getDataFromTextInput(statusInput);
+        String interestsString = getDataFromTextInput(interestsInput);
+
+        User currentUser = UserInfos.getCurrentUser();
+
+        if (!nicknameString.isEmpty()) {
+            userNicknameString = nicknameString;
+            currentUser.setNickname(nicknameString);
+            setUpUserNickname(mainView);
+        }
+        if (!statusString.isEmpty()) {
+            userStatusString = statusString;
+            currentUser.setStatus(statusString);
+            setUpUserStatus(mainView);
+        }
+
+        if (!interestsString.isEmpty()) {
+            userInterestsString = interestsString;
+            currentUser.setInterests(interestsString);
+            setUpUserInterests(mainView);
+        }
+
+        currentUser.setRadius(userRadius);
+        currentUser.setSpokenLanguages(languagesText);
+        //Write to DB
+        Database.getInstance().writeInstanceObj(currentUser, Database.Tables.USERS);
+    }
+
+    /*private ArrayList<String> readLanguagesFromFile() {
         try {
 
             InputStream inputStream = getActivity().getResources().openRawResource(R.raw.languages);
@@ -281,7 +330,7 @@ public class ProfileFragment extends Fragment {
             System.out.println(e.getMessage());
             return null;
         }
-    }
+    }*/
 
     private String getDataFromTextInput(TextInputEditText input) {
         if (input != null) {
@@ -295,8 +344,21 @@ public class ProfileFragment extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (resultCode == RESULT_OK && requestCode == 1) {
-            profilePictureUri = intent.getData();
-            userPhoto.setImageURI(profilePictureUri);
+            Uri imageUri = intent.getData();
+            userPhoto.setImageURI(imageUri);
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), imageUri);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos); //"bitmap" is the bitmap object
+                String encodedImage = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+
+                UserInfos.getCurrentUser().setUrlProfilePhoto(encodedImage);
+                Database.getInstance().writeInstanceObj(UserInfos.getCurrentUser(), Database.Tables.USERS);
+
+            } catch (IOException e) {
+            }
+
         }
     }
 
@@ -306,6 +368,7 @@ public class ProfileFragment extends Fragment {
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             // updated continuously as the user slides the thumb
             radiusValue.setText(progress + " Km");
+            userRadius = progress;
 
             HomeFragment.newInstance(radiusBar.getProgress());
         }
@@ -323,35 +386,5 @@ public class ProfileFragment extends Fragment {
 
     public String getLanguagesText() {
         return languagesText;
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (profilePictureUri != null) {
-            outState.putParcelable("profilePictureUri", profilePictureUri);
-        }
-        if (userNickname != null) {
-            outState.putCharSequence("userNickname", userNickname.getText());
-        }
-        if (userStatus != null) {
-            outState.putCharSequence("userStatus", userStatus.getText());
-        }
-        System.out.println("coucou");
-
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
-            profilePictureUri = (Uri) savedInstanceState.getSerializable("profilePictureUri");
-            CharSequence toSet = savedInstanceState.getCharSequence("userNickname",
-                    "");
-            userNicknameString = toSet.toString();
-            toSet = savedInstanceState.getCharSequence("userNickname",
-                    "");
-            userStatusString = toSet.toString();
-        }
     }
 }

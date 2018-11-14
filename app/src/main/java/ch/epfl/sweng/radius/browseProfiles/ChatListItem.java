@@ -1,19 +1,21 @@
 package ch.epfl.sweng.radius.browseProfiles;
 
+import ch.epfl.sweng.radius.database.User;
+
 public class ChatListItem {
     private int image;
-    private String name;
+    private User user;
 
-    public ChatListItem(int image, String name){
+    public ChatListItem(int image, User user){
         this.image = image;
-        this.name = name;
+        this.user = user;
     }
 
     public int getImage() {
         return image;
     }
 
-    public String getName() {
-        return name;
+    public User getUser() {
+        return user;
     }
 }

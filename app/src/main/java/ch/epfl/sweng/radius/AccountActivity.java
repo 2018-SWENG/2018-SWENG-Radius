@@ -35,18 +35,11 @@ public class AccountActivity extends AppCompatActivity {
         // Set the layout
         setContentView(R.layout.activity_account);
 
-        if (savedInstanceState != null) {
-            homeFragment = getSupportFragmentManager().getFragment(savedInstanceState, "homeFragment");
-            friendsFragment = getSupportFragmentManager().getFragment(savedInstanceState, "friendsFragment");
-            messageFragment = getSupportFragmentManager().getFragment(savedInstanceState, "messageFragment");
-            profileFragment = getSupportFragmentManager().getFragment(savedInstanceState, "profileFragment");
-        }
-        else {
-            homeFragment = new HomeFragment();
-            messageFragment = new MessagesFragment();
-            friendsFragment = new FriendsFragment();
-            profileFragment = new ProfileFragment();
-        }
+        homeFragment = new HomeFragment();
+        messageFragment = new MessagesFragment();
+        friendsFragment = new FriendsFragment();
+        profileFragment = new ProfileFragment();
+
 
         loadFragment(homeFragment);
 
@@ -82,21 +75,6 @@ public class AccountActivity extends AppCompatActivity {
         // ToolBar initialization
         toolbar = findViewById(R.id.toolbar); // Attaching the layout to the toolbar object
         setSupportActionBar(toolbar);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        //Save the fragment's instance
-        if (homeFragment.isAdded())
-            getSupportFragmentManager().putFragment(outState, "homeFragment", homeFragment);//(outState, "myFragmentName", mContent);
-        if (messageFragment.isAdded())
-            getSupportFragmentManager().putFragment(outState, "messageFragment", messageFragment);
-        if (friendsFragment.isAdded())
-            getSupportFragmentManager().putFragment(outState, "settingsFragment", friendsFragment);
-        if (profileFragment.isAdded())
-            getSupportFragmentManager().putFragment(outState, "profileFragment", profileFragment);
     }
 
     private void loadFragment(Fragment fragment) {

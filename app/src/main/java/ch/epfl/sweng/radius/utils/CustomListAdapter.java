@@ -40,18 +40,16 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
-        viewHolder.txtViewTitle.setText(items.get(position).getFriendName());
+        viewHolder.txtViewTitle.setText(items.get(position).getItemUser().getNickname());
         viewHolder.imgViewIcon.setImageResource(items.get(position).getFriendProfilePic());
 
         CustomListItem item = items.get(position);
         final int clickedPic = item.getFriendProfilePic();
-        final String clickedName = item.getFriendName();
         final String clickedId = item.getUserId();
         final String clickedConv = item.getConvId();
-        CustomListener customListener = new CustomListener(clickedPic, clickedName);
+        CustomListener customListener = new CustomListener(clickedPic, item.getItemUser());
         customListener.setCustomOnClick(viewHolder.imgViewIcon, context);
         customListener.setCustomOnClick(viewHolder.txtViewTitle, context,clickedId,clickedConv);
-
     }
 
     // inner class to hold a reference to each item of RecyclerView

@@ -71,4 +71,5 @@ public class ChatLogs implements DatabaseObject{
     public int getNumberOfMessages() {
         return numberOfMessages;
     }
+
 }

@@ -11,7 +11,7 @@ An android app that connect people in the same area. Users can talk to other peo
 ![Alt text](docs/mockup.png?raw=true "")
 
 ## Team
-- Arthur Passuelo
+- Arthur Passuello
 - Berke Egeli
 - Efe Acer
 - François Quellec
