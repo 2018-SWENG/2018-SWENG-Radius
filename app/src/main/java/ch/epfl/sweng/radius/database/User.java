@@ -145,8 +145,6 @@ public class User implements DatabaseObject {
     public String addChat(String otherUserId, String chatID) {
         if (!chatList.containsKey(otherUserId)) {
             this.chatList.put(otherUserId, chatID);
-            //TODO somehow we need to updatefriendId chat
-            //friendUser.chatList.put(getID(),chatID)
         }
         return chatID;
     }

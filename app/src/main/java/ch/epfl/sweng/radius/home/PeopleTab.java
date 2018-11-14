@@ -1,6 +1,7 @@
 package ch.epfl.sweng.radius.home;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -61,24 +62,38 @@ public class PeopleTab extends Fragment {
 
     private void setUpAdapter(final CustomListAdapter adapter){
         final Database database = Database.getInstance();
+        final String userId = database.getCurrent_user_id();
 
-        database.readListObjOnce(Arrays.asList("testUser1", "testUser2", "testUser3", "testUser4"),
+        database.readListObjOnce(Arrays.asList(userId,"testUser1", "testUser2", "testUser3", "testUser4"),
                 Database.Tables.USERS,
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
                         ArrayList<CustomListItem> users = new ArrayList<>();
                         String convId;
-                        String userId = database.getCurrent_user_id();
-                        for (User friend: (ArrayList<User>) value) {
-                            convId = friend.getConvFromUser(userId);
-
-                            // If the conversation doesn't exist, it has to be created
-                            if(convId.isEmpty()){
-                                //Creation of the Chatlog
-                                convId = friend.newChat(userId);
+                        User us = null;
+                        for(User user:(ArrayList<User>) value ){
+                            if(user.getID().equals(userId)){
+                                us = user;
                             }
-                            users.add(new CustomListItem(friend, convId));
+                        }
+                        if(us == null){ throw new Resources.NotFoundException("Couldn't find main user in DB"); }
+                        for (User user: (ArrayList<User>) value) {
+                            if(!user.getID().equals(userId)) {
+                                convId = user.getConvFromUser(userId);
+                                // If the conversation doesn't exist, it has to be created
+                                if (convId.isEmpty()) {
+                                    //Creation of the Chatlog
+                                    convId =us.newChat(user.getID());
+                                    user.addChat(userId,convId);
+                                }
+
+                                if(!convId.equals(us.getConvFromUser(user.getID()))){
+                                    throw new AssertionError("Cannot have two different chatID for the same chat");
+                                }
+
+                                users.add(new CustomListItem(user, convId));
+                            }
                         }
                         adapter.setItems(users);
                         adapter.notifyDataSetChanged();
