@@ -28,7 +28,6 @@ before_script:
   - "./cc-test-reporter before-build"
 script:
   - "./gradlew build connectedCheck jacocoTestReport"
-  - chmod +x ./gradlew
 after_script:
  # Report test coverage to Code Climate
   - "export JACOCO_SOURCE_PATH=app/src/main/java/"
