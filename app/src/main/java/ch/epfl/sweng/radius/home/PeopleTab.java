@@ -60,9 +60,10 @@ public class PeopleTab extends Fragment {
         return view;
     }
 
-    private void setUpAdapter(final CustomListAdapter adapter){
+    private void setUpAdapter(final CustomListAdapter adapter) {
         final Database database = Database.getInstance();
         final String userId = database.getCurrent_user_id();
+
 
         database.readListObjOnce(Arrays.asList(userId,"testUser1", "testUser2", "testUser3", "testUser4"),
                 Database.Tables.USERS,
@@ -89,6 +90,8 @@ public class PeopleTab extends Fragment {
                                     //Creation of the Chatlog
                                     convId =us.newChat(user.getID());
                                     user.addChat(userId,convId);
+                                    database.writeInstanceObj(user, Database.Tables.USERS);
+
                                 }
 
                                 if(!convId.equals(us.getConvFromUser(user.getID()))){
@@ -98,8 +101,10 @@ public class PeopleTab extends Fragment {
                                 users.add(new CustomListItem(user, convId));
                             }
                         }
+                        database.writeInstanceObj(us, Database.Tables.USERS);
                         adapter.setItems(users);
                         adapter.notifyDataSetChanged();
+
                     }
                     @Override
                     public void onError(DatabaseError error) {
@@ -107,5 +112,8 @@ public class PeopleTab extends Fragment {
                     }
 
                 });
+        
     }
+
+
 }
