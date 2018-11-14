@@ -15,12 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
-import com.google.firebase.database.DatabaseError;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
@@ -31,6 +25,12 @@ import ch.epfl.sweng.radius.utils.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.CustomListItem;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
+import com.google.firebase.database.DatabaseError;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 
 public class PeopleTab extends Fragment {
 
@@ -38,7 +38,6 @@ public class PeopleTab extends Fragment {
     public PeopleTab() {
 
     }
-
 
 
     @Override
@@ -65,7 +64,7 @@ public class PeopleTab extends Fragment {
         final String userId = database.getCurrent_user_id();
 
 
-        database.readListObjOnce(Arrays.asList(userId,"testUser1", "testUser2", "testUser3", "testUser4"),
+        database.readListObjOnce(Arrays.asList(userId, "testUser1", "testUser2", "testUser3", "testUser4"),
                 Database.Tables.USERS,
                 new CallBackDatabase() {
                     @Override
@@ -75,26 +74,28 @@ public class PeopleTab extends Fragment {
 
                         //get the main user
                         User us = null;
-                        for(User user:(ArrayList<User>) value ){
-                            if(user.getID().equals(userId)){
+                        for (User user : (ArrayList<User>) value) {
+                            if (user.getID().equals(userId)) {
                                 us = user;
                             }
                         }
-                        if(us == null){ throw new Resources.NotFoundException("Couldn't find main user in DB"); }
+                        if (us == null) {
+                            throw new Resources.NotFoundException("Couldn't find main user in DB");
+                        }
 
-                        for (User user: (ArrayList<User>) value) {
-                            if(!user.getID().equals(userId)) {
+                        for (User user : (ArrayList<User>) value) {
+                            if (!user.getID().equals(userId)) {
                                 convId = user.getConvFromUser(userId);
                                 // If the conversation doesn't exist, it has to be created
                                 if (convId.isEmpty()) {
                                     //Creation of the Chatlog
-                                    convId =us.newChat(user.getID());
-                                    user.addChat(userId,convId);
+                                    convId = us.newChat(user.getID());
+                                    user.addChat(userId, convId);
                                     database.writeInstanceObj(user, Database.Tables.USERS);
 
                                 }
 
-                                if(!convId.equals(us.getConvFromUser(user.getID()))){
+                                if (!convId.equals(us.getConvFromUser(user.getID()))) {
                                     throw new AssertionError("Cannot have two different chatID for the same chat");
                                 }
 
@@ -106,13 +107,14 @@ public class PeopleTab extends Fragment {
                         adapter.notifyDataSetChanged();
 
                     }
+
                     @Override
                     public void onError(DatabaseError error) {
                         Log.e("Firebase", error.getMessage());
                     }
 
                 });
-        
+
     }
 
 
