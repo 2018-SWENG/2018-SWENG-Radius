@@ -14,9 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import ch.epfl.sweng.radius.database.Database;
 
-import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.database.CallBackDatabase;
-import com.google.firebase.database.DatabaseError;
+import ch.epfl.sweng.radius.utils.UserInfos;
 
 public class PreferencesActivity extends PreferenceActivity {
 
@@ -67,7 +65,7 @@ public class PreferencesActivity extends PreferenceActivity {
 
             switch (key){
                 case "incognitoSwitch": // TODO: set the incognito Mode
-
+                    changeInvisibility();
                     //Preference pref = findPreference(key);
                     //Log.println(Log.INFO,"Settings", String.valueOf((sharedPreferences.getBoolean(key, false))));
                     break;
@@ -80,25 +78,13 @@ public class PreferencesActivity extends PreferenceActivity {
             }
         }
 
-        /**
-        private void changeInvisibility() {
-            final Database database = Database.getInstance();
-            database.readObjOnce(new User(database.getCurrent_user_id()),
-                    Database.Tables.USERS, new CallBackDatabase() {
-                        @Override
-                        public void onFinish(Object value) {
-                            User currentUser = (User) value;
-                            boolean isİnvisible = currentUser.isVisible();
-                            database.
-                        }
 
-                        @Override
-                        public void onError(DatabaseError error) {
-                            Log.e("Firebase Error", error.getMessage());
-                        }
-                    });
+        private void changeInvisibility() {
+            boolean isInvisible = UserInfos.getCurrentUser().isVisible();
+            UserInfos.getCurrentUser().setVisibility(!isInvisible);
+            Database.getInstance().writeInstanceObj(UserInfos.getCurrentUser(), Database.Tables.USERS);
         }
-         */
+
 
         private void logOut() {
             if (LoginActivity.googleSignInClient != null) {
