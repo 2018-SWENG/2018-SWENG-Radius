@@ -12,7 +12,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import ch.epfl.sweng.radius.utils.UserInfos;
+
 public class PreferencesActivity extends PreferenceActivity {
+
+    private static final String INCOGNITO = "incognitoSwitch";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,7 @@ public class PreferencesActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.app_preferences);
             Preference logOutButton = findPreference("logOutButton");
+            initializeIncognitoPreference();
             logOutButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -35,6 +40,15 @@ public class PreferencesActivity extends PreferenceActivity {
                     return true;
                 }
             });
+        }
+
+        private void initializeIncognitoPreference() {
+            boolean isInvisible = UserInfos.getCurrentUser().isVisible();
+            if (isInvisible) {
+                findPreference(INCOGNITO).setDefaultValue("false");
+            } else {
+                findPreference(INCOGNITO).setDefaultValue("true");
+            }
         }
 
         @Override
