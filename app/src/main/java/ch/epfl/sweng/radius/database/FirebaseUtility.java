@@ -62,7 +62,7 @@ public class FirebaseUtility extends Database{
                 .addValueEventListener( new ValueEventListener() {
             @Override
             public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.hasChild(obj.getID())) {
+                if (!dataSnapshot.exists()) {
                     writeInstanceObj(obj, tableName);
                     callback.onFinish(obj);
                 }

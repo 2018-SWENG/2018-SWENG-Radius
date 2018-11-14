@@ -70,7 +70,7 @@ public class MapUtility {
                                 @Override
                                 public void onFinish(Object value) {
                                     otherPos.put(((MLocation)value).getID(), (MLocation) value);
-                                    Log.e( TAG, "moveCamera: ");
+                                    Log.e( TAG, "moveCamera: " + ((MLocation) value).getMessage());
 
                                 }
 
