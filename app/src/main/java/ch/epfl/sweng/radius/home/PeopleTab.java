@@ -77,7 +77,8 @@ public class PeopleTab extends Fragment {
         final String userId = database.getCurrent_user_id();
         userItems.clear();
         radiusListener = userId + "radiuslistener";
-        myUser = new User(userId);
+        if(myUser == null)
+            myUser = new User(userId);
         //  Get user Radius value and set listener for updates
         database.readObj(myUser, Database.Tables.USERS, new CallBackDatabase() {
             @Override
@@ -200,6 +201,7 @@ public class PeopleTab extends Fragment {
     private void updateList() {
         if(locationListener == null)
             return;
+        Log.e("PeopleTab", "Update");
 
         // TODO Update View
     }
