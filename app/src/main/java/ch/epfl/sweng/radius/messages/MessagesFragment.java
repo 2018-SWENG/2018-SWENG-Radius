@@ -86,11 +86,11 @@ public class MessagesFragment extends Fragment {
         chatList = new ArrayList<>();
         listView = view.findViewById(R.id.listView);
 
-        chatList.add(new ChatListItem(R.drawable.image1, "john doe"));
-        chatList.add(new ChatListItem(R.drawable.image2, "jane doe"));
-        chatList.add(new ChatListItem(R.drawable.image3, "alison star"));
-        chatList.add(new ChatListItem(R.drawable.image4, "mila noon"));
-        chatList.add(new ChatListItem(R.drawable.image5, "david doyle"));
+        chatList.add(new ChatListItem(R.drawable.image1, new User()));
+        chatList.add(new ChatListItem(R.drawable.image2, new User()));
+        chatList.add(new ChatListItem(R.drawable.image3, new User()));
+        chatList.add(new ChatListItem(R.drawable.image4, new User()));
+        chatList.add(new ChatListItem(R.drawable.image5, new User()));
 
         CustomAdapter adapter = new CustomAdapter(getActivity(), R.layout.chat_list_view, chatList);
         listView.setAdapter(adapter);

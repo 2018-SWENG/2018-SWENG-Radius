@@ -7,6 +7,7 @@ import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.EditText;
 
 import com.firebase.client.Firebase;
 
@@ -97,12 +98,40 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
         onView(withId(R.id.button_chatbox_send)).perform(click());
 
         assert (mlActivity.findViewById(R.id.edittext_chatbox).toString().isEmpty());
+
+        MessagesFragment.newInstance("A", "B");
+
+    }
+
+    @Test
+    public void testSetEnabledTrue() {
+        mlActivity.setEnabled(true);
+        onView(withId(R.id.edittext_chatbox)).perform(typeText("Test"));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.button_chatbox_send)).perform(click());
+
+        assert (mlActivity.findViewById(R.id.edittext_chatbox).toString().isEmpty());
+    }
+
+    @Test
+    public void testSetEnabledFalse() {
+        mlActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mlActivity.setEnabled(false);
+            }
+        });
+
+        onView(withId(R.id.edittext_chatbox)).perform(typeText("Test"));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.button_chatbox_send)).perform(click());
+        assertEquals("You can't text this user.",((EditText) mlActivity.findViewById(R.id.edittext_chatbox)).getText().toString());
     }
 
     @Ignore
     @Test
     public void sendMessage() {
-        //Methode a tester dans ChatLogDbUtility lorsque cette derniere sera disponible
+
     }
 
     @Ignore
