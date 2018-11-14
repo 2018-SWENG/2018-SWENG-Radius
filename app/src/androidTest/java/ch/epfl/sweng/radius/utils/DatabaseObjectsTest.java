@@ -96,7 +96,7 @@ public class DatabaseObjectsTest {
 
         String chat = user.getConvFromUser("Arthur");
         Log.e("Test", "Coucou");
-        assertNull(chat);
+        assert(chat.isEmpty());
         List<String> blocked = user.getBlockedUsers();
         List<String> req = user.getFriendsRequests();
         String url = user.getUrlProfilePhoto();

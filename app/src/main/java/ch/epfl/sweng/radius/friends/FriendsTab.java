@@ -65,7 +65,7 @@ public class FriendsTab extends Fragment {
                     public void onFinish(Object value) {
                         ArrayList<CustomListItem> users = new ArrayList<>();
                         String convId;
-                        String userId = UserInfos.getUserId();
+                        String userId = database.getCurrent_user_id();
                         for (User friend: (ArrayList<User>) value) {
                             convId = friend.getConvFromUser(userId);
 

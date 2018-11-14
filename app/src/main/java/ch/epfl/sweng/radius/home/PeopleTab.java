@@ -71,6 +71,8 @@ public class PeopleTab extends Fragment {
                     public void onFinish(Object value) {
                         ArrayList<CustomListItem> users = new ArrayList<>();
                         String convId;
+
+                        //get the main user
                         User us = null;
                         for(User user:(ArrayList<User>) value ){
                             if(user.getID().equals(userId)){
@@ -78,6 +80,7 @@ public class PeopleTab extends Fragment {
                             }
                         }
                         if(us == null){ throw new Resources.NotFoundException("Couldn't find main user in DB"); }
+
                         for (User user: (ArrayList<User>) value) {
                             if(!user.getID().equals(userId)) {
                                 convId = user.getConvFromUser(userId);
