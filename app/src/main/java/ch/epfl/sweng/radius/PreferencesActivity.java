@@ -12,6 +12,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import ch.epfl.sweng.radius.database.Database;
+
+import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.database.CallBackDatabase;
+import com.google.firebase.database.DatabaseError;
+
 public class PreferencesActivity extends PreferenceActivity {
 
     @Override
@@ -61,6 +67,7 @@ public class PreferencesActivity extends PreferenceActivity {
 
             switch (key){
                 case "incognitoSwitch": // TODO: set the incognito Mode
+
                     //Preference pref = findPreference(key);
                     //Log.println(Log.INFO,"Settings", String.valueOf((sharedPreferences.getBoolean(key, false))));
                     break;
@@ -72,6 +79,26 @@ public class PreferencesActivity extends PreferenceActivity {
                     break;
             }
         }
+
+        /**
+        private void changeInvisibility() {
+            final Database database = Database.getInstance();
+            database.readObjOnce(new User(database.getCurrent_user_id()),
+                    Database.Tables.USERS, new CallBackDatabase() {
+                        @Override
+                        public void onFinish(Object value) {
+                            User currentUser = (User) value;
+                            boolean isİnvisible = currentUser.isVisible();
+                            database.
+                        }
+
+                        @Override
+                        public void onError(DatabaseError error) {
+                            Log.e("Firebase Error", error.getMessage());
+                        }
+                    });
+        }
+         */
 
         private void logOut() {
             if (LoginActivity.googleSignInClient != null) {
