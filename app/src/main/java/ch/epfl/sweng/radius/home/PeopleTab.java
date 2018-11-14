@@ -50,6 +50,8 @@ public class PeopleTab extends Fragment {
     private MLocation myLocation;
     private String radiusListener;
     private String locationListener;
+    private User myUser;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,13 +76,14 @@ public class PeopleTab extends Fragment {
         final Database database = Database.getInstance();
         final String userId = database.getCurrent_user_id();
         userItems.clear();
-        final User myUser = new User(userId);
         radiusListener = userId + "radiuslistener";
+        myUser = new User(userId);
         //  Get user Radius value and set listener for updates
         database.readObj(myUser, Database.Tables.USERS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
                 myRadius = ((User)value).getRadius();
+                myUser = (User) value;
                 updateList();
             }
 

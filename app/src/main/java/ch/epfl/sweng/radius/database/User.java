@@ -190,8 +190,6 @@ public class User implements DatabaseObject {
         this.userID = userID;
     }
 
-
-
     public void addReport(String reportingUserID, String reportingReason) {
         reportList.put(reportingUserID, reportingReason);
     }
