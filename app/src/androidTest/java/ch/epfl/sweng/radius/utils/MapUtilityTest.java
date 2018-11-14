@@ -116,7 +116,8 @@ public class MapUtilityTest {
 
     @Test
     public void computeDistance() {
-        assertTrue(mapListener.findDistance(location1.getLatitude(), location1.getLongitude()) < radius);
+        assertTrue(mapListener.computeDistance(location1) < radius);
+        assertTrue(mapListener.computeDistance(null) > radius);
     }
 
     @Test

@@ -104,7 +104,7 @@ public class MapUtility {
     }
 
     public boolean isInRadius(MLocation loc, int radius){
-        return findDistance(loc.getLatitude(), loc.getLongitude()) <= radius * 1000;
+        return computeDistance(loc) <= radius * 1000;
     }
 
     public ArrayList<MLocation> getOtherLocations() {
@@ -119,7 +119,6 @@ public class MapUtility {
         return otherPos;
     }
 
-    /**
     public double computeDistance(MLocation loc){
 
         if(loc == null)
@@ -140,7 +139,6 @@ public class MapUtility {
 
         return new Float(distance * meterConversion).floatValue();
     }
-     **/
 
     public void getDeviceLocation(final FragmentActivity activity) {
         mblFusedLocationClient = LocationServices.getFusedLocationProviderClient( activity);
