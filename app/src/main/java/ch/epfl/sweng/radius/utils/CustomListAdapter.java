@@ -46,7 +46,11 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
         CustomListItem item = items.get(position);
         final int clickedPic = item.getFriendProfilePic();
 
-        new CustomListener(clickedPic, item.getItemUser()).setCustomOnClick(viewHolder.imgViewIcon, context);
+        CustomListener customListener = new CustomListener(clickedPic, item.getItemUser());
+        final String clickedId = item.getUserId();
+        final String clickedConv = item.getConvId();
+        customListener.setCustomOnClick(viewHolder.imgViewIcon, context);
+        customListener.setCustomOnClick(viewHolder.txtViewTitle, context,clickedId,clickedConv);
 
     }
 

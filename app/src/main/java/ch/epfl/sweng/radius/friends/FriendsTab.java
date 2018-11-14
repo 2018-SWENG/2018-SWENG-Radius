@@ -16,10 +16,12 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.CustomListItem;
+import ch.epfl.sweng.radius.utils.UserInfos;
 
 
 public class FriendsTab extends Fragment {
@@ -61,10 +63,22 @@ public class FriendsTab extends Fragment {
                         Database.Tables.USERS, new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
-                        ArrayList<CustomListItem> friends = new ArrayList<>();
-                        for (User friend: (ArrayList<User>) value)
-                            friends.add(new CustomListItem(friend));
-                        adapter.setItems(friends); adapter.notifyDataSetChanged();
+                        ArrayList<CustomListItem> users = new ArrayList<>();
+                        String convId;
+                        String userId = UserInfos.getUserId();
+                        for (User friend: (ArrayList<User>) value) {
+                            convId = friend.getConvFromUser(userId);
+
+                            // If the conversation doesn't exist, it has to be created
+                            if(convId.isEmpty()){
+                                ArrayList<String> ids = new ArrayList();
+                                ids.add(userId);
+                                ids.add(friend.getID());
+                                convId = new ChatLogs(ids).getID();
+                            }
+                            users.add(new CustomListItem(friend, convId));
+                        }
+                        adapter.setItems(users); adapter.notifyDataSetChanged();
                     }
                     @Override
                     public void onError(DatabaseError error) {

@@ -83,6 +83,7 @@ public class MessagesFragment extends Fragment {
             }
         });
 
+
         chatList = new ArrayList<>();
         listView = view.findViewById(R.id.listView);
 
@@ -92,8 +93,11 @@ public class MessagesFragment extends Fragment {
         chatList.add(new ChatListItem(R.drawable.image4, new User()));
         chatList.add(new ChatListItem(R.drawable.image5, new User()));
 
+
         CustomAdapter adapter = new CustomAdapter(getActivity(), R.layout.chat_list_view, chatList);
         listView.setAdapter(adapter);
+
+        // Step 2: if you click on someone, start a messageListActivity
 
         listView.setClickable(true);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

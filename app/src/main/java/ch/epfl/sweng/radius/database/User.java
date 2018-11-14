@@ -124,7 +124,12 @@ public class User implements DatabaseObject {
     }
 
     public String getConvFromUser(String userID) {
-        return chatList.get(userID);
+        String convId = chatList.get(userID);
+        if (convId == null) {
+            return "";
+        } else {
+            return convId;
+        }
     }
 
     public void addFriendRequest(User friend) {
@@ -133,7 +138,7 @@ public class User implements DatabaseObject {
             friendsInvitations.remove(friend.getID());
             friends.add(friend.getID());
             friend.friends.add(this.userID);
-        } else if(!friendsRequests.contains(friend.getID())) {
+        } else if (!friendsRequests.contains(friend.getID())) {
             friendsRequests.add(friend.getID());
             friend.friendsInvitations.add(this.userID);
         }
@@ -144,11 +149,30 @@ public class User implements DatabaseObject {
     }
 
     public void setSpokenLanguages(String spokenLanguages) {
-        if (spokenLanguages != null){
-            this.spokenLanguages = spokenLanguages;
-        }
+        if (spokenLanguages != null) this.spokenLanguages = spokenLanguages;
     }
 
+    /**
+     * add a chat to a user
+     * @param otherUserId the other user ID
+     * @param chatID the chat ID
+     * @return the chat ID
+     */
+    public String addChat(String otherUserId, String chatID) {
+        if (!chatList.containsKey(otherUserId)) {
+            this.chatList.put(otherUserId, chatID);
+        }
+        return chatID;
+    }
+
+    public String newChat(String otherUserId) {
+        ArrayList<String> ids = new ArrayList();
+        ids.add(otherUserId);
+        ids.add(getID());
+        ChatLogs chatLogs = new ChatLogs(ids);
+
+        return addChat(otherUserId, chatLogs.getID());
+    }
     public String getInterests() {
         return interests;
     }
@@ -157,11 +181,6 @@ public class User implements DatabaseObject {
             throw new IllegalArgumentException("Interests input is limited to 100 characters");
         this.interests = interests;
     }
-
-    public void addChat(String uID, String chatID) {
-        this.chatList.put(uID, chatID);
-    }
-
     @Override
     public String getID() {
         return userID;
