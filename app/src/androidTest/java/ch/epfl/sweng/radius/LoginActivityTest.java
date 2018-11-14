@@ -38,8 +38,8 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
     public void setUp() throws Exception {
         super.setUp();
         AppData.INSTANCE.setTestMode(true);
-        mActivityRule.finishActivity();
-        mActivityRule.launchActivity(new Intent());
+        //mActivityRule.finishActivity();
+        //mActivityRule.launchActivity(new Intent());
         Database.activateDebugMode();
     }
 
