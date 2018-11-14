@@ -15,6 +15,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -75,9 +76,6 @@ public class MessageListActivity extends AppCompatActivity {
         participantsId.add(otherUserId);
 
         chatLogs = new ChatLogs(participantsId);
-
-                    }
-                });
 
     //    chatLogs = new ChatLogs(participantsId);
 

@@ -170,4 +170,17 @@ public class User implements DatabaseObject {
     public void setUserID(String userID) {
         this.userID = userID;
     }
+
+    public void addReport(String reportingUserID, String reportingReason) {
+        reportList.put(reportingUserID, reportingReason);
+    }
+
+    public Map<String, String> getReportList() {
+        return reportList;
+    }
+
+    public String getReportFromUser(String userID) {
+        return reportList.get(userID);
+    }
+
 }
