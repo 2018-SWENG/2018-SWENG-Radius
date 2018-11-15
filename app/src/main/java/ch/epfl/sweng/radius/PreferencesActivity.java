@@ -6,13 +6,21 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.utils.UserInfos;
+
 public class PreferencesActivity extends PreferenceActivity {
+
+    private static final String INCOGNITO = "incognitoSwitch";
+    private static final String INVISIBLE = "You are currently invisible, nobody can see you in the map.";
+    private static final String VISIBLE = "You are visible, people can see your location in the map.";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +36,7 @@ public class PreferencesActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.app_preferences);
             Preference logOutButton = findPreference("logOutButton");
+            initializeIncognitoPreference();
             logOutButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -35,6 +44,18 @@ public class PreferencesActivity extends PreferenceActivity {
                     return true;
                 }
             });
+        }
+
+        private void initializeIncognitoPreference() {
+            boolean isVisible = UserInfos.getCurrentUser().isVisible();
+            SwitchPreference incognitoPref = (android.preference.SwitchPreference) findPreference(INCOGNITO);
+            if (isVisible) {
+                findPreference(INCOGNITO).setDefaultValue("false");
+                incognitoPref.setSummaryOff(VISIBLE);
+            } else {
+                findPreference(INCOGNITO).setDefaultValue("true");
+                incognitoPref.setSummaryOn(INVISIBLE);
+            }
         }
 
         @Override
@@ -61,6 +82,7 @@ public class PreferencesActivity extends PreferenceActivity {
 
             switch (key){
                 case "incognitoSwitch": // TODO: set the incognito Mode
+                    changeInvisibility();
                     //Preference pref = findPreference(key);
                     //Log.println(Log.INFO,"Settings", String.valueOf((sharedPreferences.getBoolean(key, false))));
                     break;
@@ -70,6 +92,18 @@ public class PreferencesActivity extends PreferenceActivity {
                 case "nightModeSwitch": // TODO: set the night Mode
                     //Log.println(Log.INFO,"Settings","night mode");
                     break;
+            }
+        }
+
+        private void changeInvisibility() {
+            boolean isVisible = UserInfos.getCurrentUser().isVisible();
+            UserInfos.getCurrentUser().setVisibility(!isVisible);
+            Database.getInstance().writeInstanceObj(UserInfos.getCurrentUser(), Database.Tables.USERS);
+            SwitchPreference incognitoPref = (android.preference.SwitchPreference) findPreference(INCOGNITO);
+            if (isVisible) {
+                incognitoPref.setSummaryOff(VISIBLE);
+            } else {
+                incognitoPref.setSummaryOn(INVISIBLE);
             }
         }
 

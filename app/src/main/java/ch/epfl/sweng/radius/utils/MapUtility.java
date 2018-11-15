@@ -28,6 +28,7 @@ import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.database.UserFetchCallback;
 import ch.epfl.sweng.radius.profile.ProfileFragment;
 
 public class MapUtility {
@@ -58,32 +59,9 @@ public class MapUtility {
             otherPos = new HashMap<>();
     }
 
-    public void fetchUsersInRadius(final int radius){
+    public void fetchUsersInRadius(final int radius) {
         final Database database = Database.getInstance();
-
-        database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
-                    @Override
-                    public void onFinish(Object value) {
-                        for(MLocation loc : (ArrayList<MLocation>) value){
-                            if(isInRadius(loc, radius)) {
-                                    otherPos.put(loc.getID(), loc);
-                            }
-                        }
-                    }
-                    @Override
-                    public void onError(DatabaseError error) {
-                        Log.e("Firebase", error.getMessage());
-                    }
-                });
-            }
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("Firebase Error", error.getMessage());
-            }
-        });
+        database.readAllTableOnce(Database.Tables.LOCATIONS, new UserFetchCallback(radius));
     }
 
     public boolean isInRadius(MLocation loc, int radius){
