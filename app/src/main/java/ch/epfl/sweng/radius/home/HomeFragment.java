@@ -22,6 +22,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DatabaseError;
 
@@ -60,6 +61,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static ArrayList<User> users;
     private static List<String> friendsID;
     private static ArrayList<MLocation> usersLoc;
+    private static List<MarkerOptions> mapMarkers = new ArrayList<>();
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -85,6 +87,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         radius = radiusValue*1000;
         mobileMap = googleMap;
         mapListener = mapUtility;
+
         return fragment;
     }
 
@@ -191,10 +194,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
      * */
     public void markNearbyUsers() {
 
-       // mobileMap.clear();
+        // Clear Markers
+        mapMarkers.removeAll(mapMarkers);
+        mobileMap.clear();
+
         mobileMap.addCircle(radiusOptions);
         if(usersLoc.size()==0)
             getUsersInRadius();
+        else
+            usersLoc = mapListener.getOtherLocations();
+
         if(usersLoc.size() > 3)
             Log.d( TAG, "moveCamera: moving the camera to: lat: " + usersLoc.size());
 
@@ -233,9 +242,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         float color = friendsID.contains(locID) ? BitmapDescriptorFactory.HUE_BLUE :
                                                         BitmapDescriptorFactory.HUE_RED;
 
-        mobileMap.addMarker(new MarkerOptions().position(newPos)
-                    .title(userName + ": " + status)
-                    .icon(BitmapDescriptorFactory.defaultMarker(color)));
+        MarkerOptions marker = new MarkerOptions().position(newPos)
+                .title(userName + ": " + status)
+                .icon(BitmapDescriptorFactory.defaultMarker(color));
+
+        mapMarkers.add(marker);
+        mobileMap.addMarker(marker);
+
 
     }
 }
