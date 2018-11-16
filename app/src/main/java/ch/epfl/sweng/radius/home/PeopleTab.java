@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.CustomLists.CustomTab;
+import ch.epfl.sweng.radius.utils.customLists.CustomTab;
 
 
 public class PeopleTab extends CustomTab {

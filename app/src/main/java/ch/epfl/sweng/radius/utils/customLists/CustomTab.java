@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.utils.CustomLists;
+package ch.epfl.sweng.radius.utils.customLists;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

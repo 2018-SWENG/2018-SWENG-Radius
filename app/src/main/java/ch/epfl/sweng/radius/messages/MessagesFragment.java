@@ -10,7 +10,7 @@ import android.widget.ListView;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.utils.CustomLists.CustomListItem;
+import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 
 
 public class MessagesFragment extends Fragment {
