@@ -88,7 +88,7 @@ public class MapUtilityTest {
     public void fetchUsersInRadius() {
 
         mapListener.fetchUsersInRadius((int) radius);
-        assertEquals(0, mapListener.getOtherPos().size());
+        assertEquals(4, mapListener.getOtherPos().size());
     }
 
     @Test
@@ -102,7 +102,7 @@ public class MapUtilityTest {
 
         mapListener.fetchUsersInRadius((int) radius);
         ArrayList<MLocation> otherPos = mapListener.getOtherLocations();
-        assertEquals(0, otherPos.size());
+        assertEquals(4, otherPos.size());
     }
 
 
@@ -111,7 +111,7 @@ public class MapUtilityTest {
 
         mapListener.fetchUsersInRadius((int) radius);
         HashMap<String, MLocation> otherPos = mapListener.getOtherPos();
-        assertEquals(0, otherPos.size());
+        assertEquals(4, otherPos.size());
     }
 
     @Test
