@@ -28,6 +28,7 @@ import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.database.UserFetchCallback;
 import ch.epfl.sweng.radius.profile.ProfileFragment;
 
 public class MapUtility {
@@ -58,7 +59,7 @@ public class MapUtility {
             otherPos = new HashMap<>();
     }
 
-    public void fetchUsersInRadius(final int radius){
+    public void fetchUsersInRadius(final int radius) {
         final Database database = Database.getInstance();
         Log.e( TAG, "moveCamerafetchh: ");
 
@@ -143,7 +144,7 @@ public class MapUtility {
                             try {
                                 LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(), currentLocation.getLongitude());
                                 setCurrCoordinates(currentCoordinates);
-                              
+
                             } catch(NullPointerException e) {}
                         }
                         else {
