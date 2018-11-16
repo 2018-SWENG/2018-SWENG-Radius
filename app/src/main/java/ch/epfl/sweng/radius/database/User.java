@@ -22,7 +22,7 @@ public class User implements DatabaseObject {
     private List<String> friends;
     private List<String> blockedUsers;
     // Map is uID --> convID
-    private Map<String, String> chatList;
+    private Map<String, String> chatList = new HashMap<>();
     private Map<String, String> reportList;
 
     private String spokenLanguages;

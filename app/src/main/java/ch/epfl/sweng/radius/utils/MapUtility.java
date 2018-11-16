@@ -40,17 +40,17 @@ public class MapUtility {
     private static FusedLocationProviderClient mblFusedLocationClient;
     private static boolean mblLocationPermissionGranted;
     private Location currentLocation;
-    private MLocation myPos;//private static MLocation myPos;
-    private double radius;
-    private LatLng currCoordinates;
+    private static MLocation myPos;//private static MLocation myPos;
+    public static double radius;
+    private static LatLng currCoordinates;
 
     private static HashMap<String, MLocation> otherPos;
 
 
-    public MapUtility(double radius) {
-        this.radius = radius;
+    public MapUtility(double rradius) {
+        radius = rradius;
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
-        this.myPos = new MLocation(Database.getInstance().getCurrent_user_id(),
+        myPos = new MLocation(Database.getInstance().getCurrent_user_id(),
                 DEFAULT_LONGITUDE,
                 DEFAULT_LATITUDE);
         if(otherPos == null)
@@ -62,7 +62,7 @@ public class MapUtility {
         database.readAllTableOnce(Database.Tables.LOCATIONS, new UserFetchCallback(radius));
     }
 
-    public boolean isInRadius(MLocation loc, int radius){
+    public static boolean isInRadius(MLocation loc, int radius){
         if(loc == null)
             return false;
         return findDistance(loc.getLatitude(), loc.getLongitude()) <= radius ;
@@ -72,8 +72,8 @@ public class MapUtility {
         return new ArrayList<>(otherPos.values());
     }
 
-    public void setMyPos(MLocation myPos) {
-        this.myPos = myPos;
+    public void setMyPos(MLocation mPos) {
+        myPos = mPos;
     }
 
     public HashMap<String, MLocation> getOtherPos() {
@@ -130,9 +130,9 @@ public class MapUtility {
         return new Float(distance * meterConversion).floatValue();
     }
 
-    public void setCurrCoordinates(LatLng currCoordinates) {
+    public void setCurrCoordinates(LatLng curCoordinates) {
 
-        this.currCoordinates = currCoordinates;
+        currCoordinates = curCoordinates;
     }
 
     public LatLng getCurrCoordinates() {
@@ -175,7 +175,7 @@ public class MapUtility {
      * @param p2longtitude - double - longtitude of the second location
      * @return distance-double- the distance between the current location and the a second location
      * */
-    public double findDistance(double p2latitude, double p2longtitude) {
+    public static double findDistance(double p2latitude, double p2longtitude) {
         float[] distance = new float[3];
         Location.distanceBetween( myPos.getLatitude(), myPos.getLongitude(),
                 p2latitude, p2longtitude, distance);

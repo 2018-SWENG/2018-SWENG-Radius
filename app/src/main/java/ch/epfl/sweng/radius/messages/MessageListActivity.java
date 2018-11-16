@@ -43,14 +43,14 @@ public class MessageListActivity extends AppCompatActivity {
     private MessageListAdapter myMessageAdapter;
     private EditText messageZone;
     private Button sendButton;
-    private Firebase chatReference;
     private ChatLogs chatLogs;
     private String chatId;
     private ValueEventListener listener;
 
     //these might cause problems when we switch to multiple users and multiple different chats
-    private static User us, otherUser;
-    private static MLocation usLoc, otherUserLoc;
+    //This field will be used to enable chat with FRIENDS not in radius
+    private static User myUser, otherUser;
+    private MLocation myLoc, otherLoc;
     private final Database database = Database.getInstance();
 
     /**
@@ -67,15 +67,50 @@ public class MessageListActivity extends AppCompatActivity {
         if (b != null) {
             chatId      = b.getString("chatId");
             Log.w("Message", "ChatId is " + chatId);
-            otherUserId = b.getString("otherUserId");
+        //    otherUserId = b.getString("otherUserId");
         }
-        ArrayList<String> participantsId = new ArrayList<String>();
-        participantsId.add(database.getCurrent_user_id());//UserInfos.getUserId()
-        participantsId.add(otherUserId);
+        chatLogs = new ChatLogs(chatId);
+        database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                    chatLogs = (ChatLogs) value;
+                    if(chatLogs.getMembersId().size() == 2){
+                        myLoc = new MLocation(database.getCurrent_user_id());
+                        database.readObjOnce(myLoc, Database.Tables.LOCATIONS, new CallBackDatabase() {
+                            @Override
+                            public void onFinish(Object value) {
+                                myLoc = (MLocation) value;
+                            }
 
-        chatLogs = new ChatLogs(participantsId);
+                            @Override
+                            public void onError(DatabaseError error) {
+                                Log.e("Firebase", "Error reading Database");
 
-    //    chatLogs = new ChatLogs(participantsId);
+                            }
+                        });
+                        String otherId = chatLogs.getMembersId().get(0) == database.getCurrent_user_id() ?
+                                chatLogs.getMembersId().get(0) : chatLogs.getMembersId().get(1);
+                        otherLoc = new MLocation(otherId);
+                        database.readObjOnce(otherLoc, Database.Tables.LOCATIONS, new CallBackDatabase() {
+                            @Override
+                            public void onFinish(Object value) {
+                                otherLoc = (MLocation) value;
+                            }
+
+                            @Override
+                            public void onError(DatabaseError error) {
+
+                            }
+                        });
+                    }
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+                Log.e("Firebase", "Error reading Database");
+            }
+        });
+
 
     }
 
@@ -115,7 +150,7 @@ public class MessageListActivity extends AppCompatActivity {
             Log.w("MessageActivity" , "Chatlogs ID is " + chatLogs.getID());
 
             chatLogs.addMessage(msg);
-            Database.getInstance().writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
+            database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
 
             messageZone.setText("");
             receiveMessage(msg);
@@ -132,7 +167,7 @@ public class MessageListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String message = messageZone.getText().toString();
-                sendMessage( Database.getInstance().getCurrent_user_id(), message, new Date());
+                sendMessage(database.getCurrent_user_id(), message, new Date());
             }
         });
     }
@@ -141,32 +176,27 @@ public class MessageListActivity extends AppCompatActivity {
      * If a message is added in the db, add the message in the chat
      */
     private void setUpListener() {
-        Database.getInstance().readObj(chatLogs, Database.Tables.CHATLOGS,
-                new CallBackDatabase() {
-                    @Override
-                    public void onFinish(Object value) {
-                        Log.w("Message", "Size of chat is " + chatLogs.getMessages().size());
-                        String pattern = "EEE MMM dd HH:mm:ss Z yyyy";
-                        ArrayList<Message> messages = new ArrayList<>();
-                        ChatLogs  ret = (ChatLogs) value;
-                        chatLogs.setMessages(ret.getMessages());
-                    }
 
-                    @Override
-                    public void onError(DatabaseError error) {
+        database.readObj(chatLogs, Database.Tables.CHATLOGS, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                chatLogs = (ChatLogs) value;
+            }
 
-                    }
-                },
-            chatLogs.getID());
+            @Override
+            public void onError(DatabaseError error) {
 
             }
+        }, chatLogs.getID() + "chatLogListener");
+
+    }
 
     private void prepareUsers(ArrayList<String> participants) {
         database.readListObjOnce(participants, Database.Tables.USERS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
                 if (((ArrayList) value).size() == 2) {
-                    us.setRadius(((User) (((ArrayList) value).get(0))).getRadius());
+                    myUser.setRadius(((User) (((ArrayList) value).get(0))).getRadius());
                     otherUser.setRadius(((User) (((ArrayList) value).get(1))).getRadius());
                 }
             }
@@ -178,36 +208,14 @@ public class MessageListActivity extends AppCompatActivity {
         });
     }
 
-    private void compareLocataion(ArrayList<String> participants) {
+    private void compareLocataion() {
 
-        database.readListObjOnce(participants, Database.Tables.LOCATIONS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                if (((ArrayList) value).size() == 2) {
-                    // set the locations of the users based on the values obtained from the database.
-                    usLoc.setLatitude(((MLocation) (((ArrayList) value).get(0))).getLatitude());
-                    usLoc.setLongitude(((MLocation) (((ArrayList) value).get(0))).getLongitude());
-                    otherUserLoc.setLatitude(((MLocation) (((ArrayList) value).get(1))).getLatitude());
-                    otherUserLoc.setLongitude(((MLocation) (((ArrayList) value).get(1))).getLongitude());
-
-                    // create map listeners so we can use the isInRadius function to compare locations of both of the users
-                    MapUtility mapListenerUs = new MapUtility(us.getRadius());
-                    mapListenerUs.setMyPos(usLoc);
-                    MapUtility mapListenerOtherUser = new MapUtility(otherUser.getRadius());
-                    mapListenerOtherUser.setMyPos(otherUserLoc);
-
-                    // if both users are in each others' radius chat is enabled.
-                    setEnabled(mapListenerOtherUser.isInRadius(usLoc, otherUser.getRadius()) && mapListenerUs.isInRadius(otherUserLoc, us.getRadius()));
-                }
-            }
-
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("Firebase Error", error.getMessage());
-            }
-        });
+        if(chatLogs.getMembersId().size() > 2)
+            setEnabled(MapUtility.isInRadius(otherLoc, (int) MapUtility.radius));
+        else
+            setEnabled(true);
     }
-
+/*
     public void usersInRadius() { //this method needs to go through severe change - currently we are not saving the radius or the locations of users properly.
         ArrayList<String> participants = (ArrayList) chatLogs.getMembersId();
         us = new User(participants.get(0));
@@ -224,7 +232,7 @@ public class MessageListActivity extends AppCompatActivity {
         //compare the locations of the users and whether they are able to talk to each other or not.
         compareLocataion(participants);
     }
-
+*/
     public void setEnabled(boolean enableChat) {
         if (!enableChat) {
             sendButton.setEnabled(false);
@@ -247,8 +255,9 @@ public class MessageListActivity extends AppCompatActivity {
         setUpUI();
         setUpSendButton();
         setUpListener();
+        setEnabled(true);
 
-        usersInRadius();// This part enables or disables the chat
+      //  usersInRadius();// This part enables or disables the chat
     }
 
     @Override
@@ -256,7 +265,7 @@ public class MessageListActivity extends AppCompatActivity {
 
         super.onStop();
 
-        Database.getInstance().stopListening(chatLogs.getID(), Database.Tables.CHATLOGS);
+        database.stopListening(chatLogs.getID() + "chatLogListener", Database.Tables.CHATLOGS);
 
 
     }
