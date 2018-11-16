@@ -21,7 +21,7 @@ public class UserFetchCallback implements CallBackDatabase {
     @Override
     public void onFinish(Object value) {
         for(MLocation loc : (ArrayList<MLocation>) value){
-            if(mapUtility.isInRadius(loc, radius)) {
+            if(mapUtility.contains(loc.getLatitude(), loc.getLongitude())) {
                 recordLocationIfVisible(loc);
             }
         }

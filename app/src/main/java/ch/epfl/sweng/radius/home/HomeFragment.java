@@ -22,6 +22,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DatabaseError;
 
@@ -60,6 +61,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static ArrayList<User> users;
     private static List<String> friendsID;
     private static ArrayList<MLocation> usersLoc;
+    private static List<MarkerOptions> mapMarkers = new ArrayList<>();
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -85,6 +87,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         radius = radiusValue*1000;
         mobileMap = googleMap;
         mapListener = mapUtility;
+        usersLoc = new ArrayList<>();
         return fragment;
     }
 
@@ -126,6 +129,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(getContext(), "Map is ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: map is ready");
+
+        if(googleMap == null)
+            return;
+
         mobileMap = googleMap; //use map utility here
         mapListener.getLocationPermission(getContext(), getActivity());
 
@@ -139,10 +146,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 return;
             }
 
-            if (mobileMap != null) {
                 mobileMap.setMyLocationEnabled(true);
                 initMap();
-            }
 
         }
     }
@@ -150,15 +155,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private void initMap() {
         if (mapListener.getCurrCoordinates() != null) {
             initCircle(mapListener.getCurrCoordinates());
-            moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM *(float) 0.9);
-            Log.w("Map", "Centering Camera");
+            moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM *(float) 0.7);
             // Push current location to DB
             double lat = mapListener.getCurrCoordinates().latitude;
             double lng = mapListener.getCurrCoordinates().longitude;
             // Write the location of the current user to the database
             myPos = new MLocation(Database.getInstance().getCurrent_user_id(), lng, lat);
             Database.getInstance().writeInstanceObj(myPos, Database.Tables.LOCATIONS);
-            mapListener.setMyPos(myPos);
+          //  mapListener.setMyPos(myPos);
 
             // Do locations here
             markNearbyUsers();
@@ -183,8 +187,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void getUsersInRadius(){
 
         mapListener.fetchUsersInRadius((int) radius);
-
+        usersLoc.clear();
         usersLoc = mapListener.getOtherLocations();
+
 
     }
 
@@ -192,15 +197,26 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
      * Marks the other users that are within the distance specified by the users.
      * */
     public void markNearbyUsers() {
-        mobileMap.clear();
-        mobileMap.addCircle(radiusOptions);
-        getUsersInRadius();
-        getFriendsID();
-        Log.w("Map", "Size of friendsID is " + Integer.toString(friendsID.size()));
 
-        for (int i = 0; usersLoc != null && i < usersLoc.size(); i++) {
-            markNearbyUser(i, usersLoc.get(i).getMessage(), usersLoc.get(i).getTitle(),
-                            usersLoc.get(i).getID());
+        // Clear Markers
+        mapMarkers.removeAll(mapMarkers);
+        mobileMap.clear();
+
+        mobileMap.addCircle(radiusOptions);
+        if(usersLoc.size()==0)
+            getUsersInRadius();
+        else
+            usersLoc = mapListener.getOtherLocations();
+
+        if(usersLoc.size() > 3)
+            Log.d( TAG, "moveCamera: moving the camera to: lat: " + usersLoc.size());
+
+        getFriendsID();
+        if(usersLoc != null) {
+            for (int i = 0; i < usersLoc.size(); i++) {
+                markNearbyUser(i, usersLoc.get(i).getMessage(), usersLoc.get(i).getTitle(),
+                usersLoc.get(i).getID());
+            }
         }
     }
 
@@ -225,18 +241,21 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void markNearbyUser(int indexOfUser, String status, String userName, String locID) {
-
         LatLng newPos = new LatLng(usersLoc.get(indexOfUser).getLatitude(),
                                     usersLoc.get(indexOfUser).getLongitude()    );
         float color = friendsID.contains(locID) ? BitmapDescriptorFactory.HUE_BLUE :
                                                         BitmapDescriptorFactory.HUE_RED;
-        // TODO REmove this horror
-        if(mobileMap.getCameraPosition() != null) {
-            mobileMap.addMarker(new MarkerOptions().position(newPos)
-                    .title(userName + ": " + status)
-                    .icon(BitmapDescriptorFactory.defaultMarker(color)));
+    // For testing purpose TODO: Find clean way to verify mobileMap is initiated(!instanciated)
+    if(mobileMap.getProjection() != null) {
+        MarkerOptions marker = new MarkerOptions().position(newPos)
+                .title(userName + ": " + status)
+                .icon(BitmapDescriptorFactory.defaultMarker(color));
 
-        }
+        mapMarkers.add(marker);
+        mobileMap.addMarker(marker);
+
+    }
+
 
     }
 }

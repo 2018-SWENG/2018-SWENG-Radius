@@ -65,7 +65,9 @@ public class MapUtility {
     }
 
     public boolean isInRadius(MLocation loc, int radius){
-        return computeDistance(loc) <= radius * 1000;
+        if(loc == null)
+            return false;
+        return findDistance(loc.getLatitude(), loc.getLongitude()) <= radius ;
     }
 
     public ArrayList<MLocation> getOtherLocations() {
@@ -78,6 +80,35 @@ public class MapUtility {
 
     public HashMap<String, MLocation> getOtherPos() {
         return otherPos;
+    }
+
+    public void getDeviceLocation(final FragmentActivity activity) {
+        mblFusedLocationClient = LocationServices.getFusedLocationProviderClient( activity);
+        try {
+            if ( mblLocationPermissionGranted) {
+                Task location = mblFusedLocationClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if ( task.isSuccessful() && task.getResult() != null) {
+                            currentLocation = (Location) task.getResult();
+                            try {
+                                LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(), currentLocation.getLongitude());
+                                setCurrCoordinates(currentCoordinates);
+
+                            } catch(NullPointerException e) {}
+                        }
+                        else {
+                            Toast.makeText( activity.getApplicationContext(), "Unable to get current location",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+
+        } catch ( SecurityException e) {
+            Log.e( TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
+        }
     }
 
     public double computeDistance(MLocation loc){
@@ -99,36 +130,6 @@ public class MapUtility {
         int meterConversion = 1609;
 
         return new Float(distance * meterConversion).floatValue();
-    }
-
-    public void getDeviceLocation(final FragmentActivity activity) {
-        mblFusedLocationClient = LocationServices.getFusedLocationProviderClient( activity);
-        try {
-            if ( mblLocationPermissionGranted) {
-                Task location = mblFusedLocationClient.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if ( task.isSuccessful() && task.getResult() != null) {
-                            currentLocation = (Location) task.getResult();
-
-                            try {
-                                LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(), currentLocation.getLongitude());
-                                setCurrCoordinates(currentCoordinates);
-                              
-                            } catch(NullPointerException e) {}
-                        }
-                        else {
-                            Toast.makeText( activity.getApplicationContext(), "Unable to get current location",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-
-        } catch ( SecurityException e) {
-            Log.e( TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
-        }
     }
 
     public void setCurrCoordinates(LatLng currCoordinates) {
@@ -166,6 +167,7 @@ public class MapUtility {
      * */
     public boolean contains(double p2latitude, double p2longtitude) {
         double distance = findDistance(p2latitude, p2longtitude);
+        Log.e("MapUtility", Boolean.toString(radius >= distance));
         return radius >= distance;
     }
 
@@ -177,7 +179,7 @@ public class MapUtility {
      * */
     public double findDistance(double p2latitude, double p2longtitude) {
         float[] distance = new float[3];
-        Location.distanceBetween( currCoordinates.latitude, currCoordinates.longitude,
+        Location.distanceBetween( myPos.getLatitude(), myPos.getLongitude(),
                 p2latitude, p2longtitude, distance);
         Log.e("Map","Distance is :" + Double.toString(distance[0]) + "currCoordinates.latitude" + currCoordinates.latitude + "currCoordinates.longitude" + currCoordinates.longitude);
         return distance[0];
