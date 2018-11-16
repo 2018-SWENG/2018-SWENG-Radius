@@ -90,6 +90,7 @@ public class MapUtility {
                 location.addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
+                        System.out.print( task.getResult() != null );
                         if ( task.isSuccessful() && task.getResult() != null) {
                             currentLocation = (Location) task.getResult();
 
@@ -110,6 +111,27 @@ public class MapUtility {
         } catch ( SecurityException e) {
             Log.e( TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
         }
+    }
+
+    public double computeDistance(MLocation loc){
+
+        if(loc == null)
+            return Double.MAX_VALUE;
+
+        double earthRadius = 3958.75;
+        double latDiff = Math.toRadians(loc.getLatitude() - myPos.getLatitude());
+        double lngDiff = Math.toRadians(loc.getLongitude()-myPos.getLongitude());
+        double a = Math.sin(latDiff /2) * Math.sin(latDiff /2) +
+                Math.cos(Math.toRadians(myPos.getLatitude())) *
+                        Math.cos(Math.toRadians(loc.getLatitude())) *
+                        Math.sin(lngDiff /2) * Math.sin(lngDiff /2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double distance = earthRadius * c;
+
+        int meterConversion = 1609;
+
+        return new Float(distance * meterConversion).floatValue();
     }
 
     public void setCurrCoordinates(LatLng currCoordinates) {

@@ -83,11 +83,16 @@ public class MapUtilityTest {
     @After
     public void tearDown() throws Exception {
     }
-
+    @Test
+    public void computeDistance() {
+        assertTrue(mapListener.computeDistance(location1) < radius);
+        assertTrue(mapListener.computeDistance(null) > radius);
+    }
     @Test
     public void fetchUsersInRadius() {
 
         mapListener.fetchUsersInRadius((int) radius);
+        mapListener.setMyPos(new MLocation("userTest0"));
         assertEquals(4, mapListener.getOtherPos().size());
     }
 
