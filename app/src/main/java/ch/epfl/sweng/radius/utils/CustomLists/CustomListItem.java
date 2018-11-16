@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.utils;
+package ch.epfl.sweng.radius.utils.CustomLists;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.User;

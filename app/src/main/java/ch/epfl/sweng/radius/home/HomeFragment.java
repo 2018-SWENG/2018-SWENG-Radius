@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     //constants
     private static final String TAG = "HomeFragment";
-    private static final float DEFAULT_ZOOM = 13f;
+    private static final float DEFAULT_ZOOM = 13f/2;
     private static final double DEFAULT_RADIUS = 50000; //In meters
 
     //properties

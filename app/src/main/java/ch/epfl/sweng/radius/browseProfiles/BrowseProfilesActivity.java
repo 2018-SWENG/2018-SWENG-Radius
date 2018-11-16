@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +17,6 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 
@@ -26,9 +24,7 @@ import ch.epfl.sweng.radius.utils.BrowseProfilesUtility;
 
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.DatabaseObject;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.CustomListItem;
 
 
 public class BrowseProfilesActivity extends AppCompatActivity {

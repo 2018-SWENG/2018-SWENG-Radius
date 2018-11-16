@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.browseProfiles;
+package ch.epfl.sweng.radius.utils.CustomLists;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,17 +7,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesActivity;
 import ch.epfl.sweng.radius.messages.MessageListActivity;
 
 import ch.epfl.sweng.radius.database.User;
 
-public class CustomListener {
+public class CustomListListeners {
     private int clickedPic;
     private String clickedName;
     private String userUID;
 
 
-    public CustomListener(int clickedPic, User itemUser){
+    public CustomListListeners(int clickedPic, User itemUser){
         this.clickedPic = clickedPic;
         this.clickedName = itemUser.getNickname();
         this.userUID = itemUser.getID();
