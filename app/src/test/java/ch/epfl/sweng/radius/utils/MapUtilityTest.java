@@ -47,6 +47,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -69,6 +70,7 @@ import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.doAnswer;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -88,13 +90,12 @@ public class MapUtilityTest {
         PowerMockito.mockStatic(ContextCompat.class);
         when(ContextCompat.checkSelfPermission(any(Context.class), anyString())).thenReturn(PackageManager.PERMISSION_GRANTED);
         Database.activateDebugMode();
-        when(ret.isSuccessful()).thenReturn(true);
-        when(ret.getResult()).thenReturn(new MLocation("coucou"));
+        verify(location).addOnCompleteListener(argument.capture());
         doAnswer(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                OnCompleteListener answer = argument.capture();
-
+                OnCompleteListener answer = argument.getValue();
+                if(answer == null) System.out.print("ISNULL");
                 return answer;
             }
 
@@ -285,7 +286,7 @@ public class MapUtilityTest {
             }
 
             @Override
-            public SQLiteDatabase openOrCreateDatabase(String s, int i, SQLiteDatabase.CursorFactory cursorFactory, @androidx.annotation.Nullable DatabaseErrorHandler databaseErrorHandler) {
+            public SQLiteDatabase openOrCreateDatabase(String s, int i, SQLiteDatabase.CursorFactory cursorFactory,  DatabaseErrorHandler databaseErrorHandler) {
                 return null;
             }
 
@@ -365,12 +366,12 @@ public class MapUtilityTest {
             }
 
             @Override
-            public void startIntentSender(IntentSender intentSender, @androidx.annotation.Nullable Intent intent, int i, int i1, int i2) throws IntentSender.SendIntentException {
+            public void startIntentSender(IntentSender intentSender,  Intent intent, int i, int i1, int i2) throws IntentSender.SendIntentException {
 
             }
 
             @Override
-            public void startIntentSender(IntentSender intentSender, @androidx.annotation.Nullable Intent intent, int i, int i1, int i2, @androidx.annotation.Nullable Bundle bundle) throws IntentSender.SendIntentException {
+            public void startIntentSender(IntentSender intentSender,  Intent intent, int i, int i1, int i2,  Bundle bundle) throws IntentSender.SendIntentException {
 
             }
 
@@ -380,17 +381,17 @@ public class MapUtilityTest {
             }
 
             @Override
-            public void sendBroadcast(Intent intent, @androidx.annotation.Nullable String s) {
+            public void sendBroadcast(Intent intent,  String s) {
 
             }
 
             @Override
-            public void sendOrderedBroadcast(Intent intent, @androidx.annotation.Nullable String s) {
+            public void sendOrderedBroadcast(Intent intent,  String s) {
 
             }
 
             @Override
-            public void sendOrderedBroadcast(@androidx.annotation.NonNull Intent intent, @androidx.annotation.Nullable String s, @androidx.annotation.Nullable BroadcastReceiver broadcastReceiver, @androidx.annotation.Nullable Handler handler, int i, @androidx.annotation.Nullable String s1, @androidx.annotation.Nullable Bundle bundle) {
+            public void sendOrderedBroadcast( Intent intent,  String s,  BroadcastReceiver broadcastReceiver,  Handler handler, int i,  String s1,  Bundle bundle) {
 
             }
 
@@ -400,12 +401,12 @@ public class MapUtilityTest {
             }
 
             @Override
-            public void sendBroadcastAsUser(Intent intent, UserHandle userHandle, @androidx.annotation.Nullable String s) {
+            public void sendBroadcastAsUser(Intent intent, UserHandle userHandle,  String s) {
 
             }
 
             @Override
-            public void sendOrderedBroadcastAsUser(Intent intent, UserHandle userHandle, @androidx.annotation.Nullable String s, BroadcastReceiver broadcastReceiver, @androidx.annotation.Nullable Handler handler, int i, @androidx.annotation.Nullable String s1, @androidx.annotation.Nullable Bundle bundle) {
+            public void sendOrderedBroadcastAsUser(Intent intent, UserHandle userHandle,  String s, BroadcastReceiver broadcastReceiver,  Handler handler, int i,  String s1,  Bundle bundle) {
 
             }
 
@@ -415,7 +416,7 @@ public class MapUtilityTest {
             }
 
             @Override
-            public void sendStickyOrderedBroadcast(Intent intent, BroadcastReceiver broadcastReceiver, @androidx.annotation.Nullable Handler handler, int i, @androidx.annotation.Nullable String s, @androidx.annotation.Nullable Bundle bundle) {
+            public void sendStickyOrderedBroadcast(Intent intent, BroadcastReceiver broadcastReceiver,  Handler handler, int i,  String s,  Bundle bundle) {
 
             }
 
@@ -430,7 +431,7 @@ public class MapUtilityTest {
             }
 
             @Override
-            public void sendStickyOrderedBroadcastAsUser(Intent intent, UserHandle userHandle, BroadcastReceiver broadcastReceiver, @androidx.annotation.Nullable Handler handler, int i, @androidx.annotation.Nullable String s, @androidx.annotation.Nullable Bundle bundle) {
+            public void sendStickyOrderedBroadcastAsUser(Intent intent, UserHandle userHandle, BroadcastReceiver broadcastReceiver,  Handler handler, int i,  String s,  Bundle bundle) {
 
             }
 
@@ -439,27 +440,27 @@ public class MapUtilityTest {
 
             }
 
-            @androidx.annotation.Nullable
+
             @Override
-            public Intent registerReceiver(@androidx.annotation.Nullable BroadcastReceiver broadcastReceiver, IntentFilter intentFilter) {
+            public Intent registerReceiver( BroadcastReceiver broadcastReceiver, IntentFilter intentFilter) {
                 return null;
             }
 
-            @androidx.annotation.Nullable
+
             @Override
-            public Intent registerReceiver(@androidx.annotation.Nullable BroadcastReceiver broadcastReceiver, IntentFilter intentFilter, int i) {
+            public Intent registerReceiver( BroadcastReceiver broadcastReceiver, IntentFilter intentFilter, int i) {
                 return null;
             }
 
-            @androidx.annotation.Nullable
+
             @Override
-            public Intent registerReceiver(BroadcastReceiver broadcastReceiver, IntentFilter intentFilter, @androidx.annotation.Nullable String s, @androidx.annotation.Nullable Handler handler) {
+            public Intent registerReceiver(BroadcastReceiver broadcastReceiver, IntentFilter intentFilter,  String s,  Handler handler) {
                 return null;
             }
 
-            @androidx.annotation.Nullable
+
             @Override
-            public Intent registerReceiver(BroadcastReceiver broadcastReceiver, IntentFilter intentFilter, @androidx.annotation.Nullable String s, @androidx.annotation.Nullable Handler handler, int i) {
+            public Intent registerReceiver(BroadcastReceiver broadcastReceiver, IntentFilter intentFilter,  String s,  Handler handler, int i) {
                 return null;
             }
 
@@ -468,13 +469,13 @@ public class MapUtilityTest {
 
             }
 
-            @androidx.annotation.Nullable
+
             @Override
             public ComponentName startService(Intent intent) {
                 return null;
             }
 
-            @androidx.annotation.Nullable
+
             @Override
             public ComponentName startForegroundService(Intent intent) {
                 return null;
@@ -486,63 +487,63 @@ public class MapUtilityTest {
             }
 
             @Override
-            public boolean bindService(Intent intent, @androidx.annotation.NonNull ServiceConnection serviceConnection, int i) {
+            public boolean bindService(Intent intent,  ServiceConnection serviceConnection, int i) {
                 return false;
             }
 
             @Override
-            public void unbindService(@androidx.annotation.NonNull ServiceConnection serviceConnection) {
+            public void unbindService( ServiceConnection serviceConnection) {
 
             }
 
             @Override
-            public boolean startInstrumentation(@androidx.annotation.NonNull ComponentName componentName, @androidx.annotation.Nullable String s, @androidx.annotation.Nullable Bundle bundle) {
+            public boolean startInstrumentation( ComponentName componentName,  String s,  Bundle bundle) {
                 return false;
             }
 
             @Override
-            public Object getSystemService(@androidx.annotation.NonNull String s) {
+            public Object getSystemService( String s) {
                 return null;
             }
 
-            @androidx.annotation.Nullable
+
             @Override
-            public String getSystemServiceName(@androidx.annotation.NonNull Class<?> aClass) {
+            public String getSystemServiceName( Class<?> aClass) {
                 return null;
             }
 
             @Override
-            public int checkPermission(@androidx.annotation.NonNull String s, int i, int i1) {
+            public int checkPermission( String s, int i, int i1) {
                 return 0;
             }
 
             @Override
-            public int checkCallingPermission(@androidx.annotation.NonNull String s) {
+            public int checkCallingPermission( String s) {
                 return 0;
             }
 
             @Override
-            public int checkCallingOrSelfPermission(@androidx.annotation.NonNull String s) {
+            public int checkCallingOrSelfPermission( String s) {
                 return 0;
             }
 
             @Override
-            public int checkSelfPermission(@androidx.annotation.NonNull String s) {
+            public int checkSelfPermission( String s) {
                 return 0;
             }
 
             @Override
-            public void enforcePermission(@androidx.annotation.NonNull String s, int i, int i1, @androidx.annotation.Nullable String s1) {
+            public void enforcePermission( String s, int i, int i1,  String s1) {
 
             }
 
             @Override
-            public void enforceCallingPermission(@androidx.annotation.NonNull String s, @androidx.annotation.Nullable String s1) {
+            public void enforceCallingPermission( String s,  String s1) {
 
             }
 
             @Override
-            public void enforceCallingOrSelfPermission(@androidx.annotation.NonNull String s, @androidx.annotation.Nullable String s1) {
+            public void enforceCallingOrSelfPermission( String s,  String s1) {
 
             }
 
@@ -577,7 +578,7 @@ public class MapUtilityTest {
             }
 
             @Override
-            public int checkUriPermission(@androidx.annotation.Nullable Uri uri, @androidx.annotation.Nullable String s, @androidx.annotation.Nullable String s1, int i, int i1, int i2) {
+            public int checkUriPermission( Uri uri,  String s,  String s1, int i, int i1, int i2) {
                 return 0;
             }
 
@@ -597,7 +598,7 @@ public class MapUtilityTest {
             }
 
             @Override
-            public void enforceUriPermission(@androidx.annotation.Nullable Uri uri, @androidx.annotation.Nullable String s, @androidx.annotation.Nullable String s1, int i, int i1, int i2, @androidx.annotation.Nullable String s2) {
+            public void enforceUriPermission( Uri uri,  String s,  String s1, int i, int i1, int i2,  String s2) {
 
             }
 
@@ -612,12 +613,12 @@ public class MapUtilityTest {
             }
 
             @Override
-            public Context createConfigurationContext(@androidx.annotation.NonNull Configuration configuration) {
+            public Context createConfigurationContext( Configuration configuration) {
                 return null;
             }
 
             @Override
-            public Context createDisplayContext(@androidx.annotation.NonNull Display display) {
+            public Context createDisplayContext( Display display) {
                 return null;
             }
 
@@ -636,6 +637,15 @@ public class MapUtilityTest {
 
     @Test
     public void getDeviceLocation() {
+        when(ret.isSuccessful()).thenReturn(true);
+        when(ret.getResult()).thenReturn(new MLocation("coucou"));
+        mapUtility.getDeviceLocation(new FragmentActivity());
+    }
+
+    @Test
+    public void getDeviceLocation2() {
+        when(ret.isSuccessful()).thenReturn(false);
+        when(ret.getResult()).thenReturn(null);
         mapUtility.getDeviceLocation(new FragmentActivity());
     }
 }
