@@ -196,6 +196,7 @@ public class FirebaseUtility extends Database{
             listeners.remove(listenerID);
     }
 
+    /*
     private String getLogTagWithMethod() {
 
         StackTraceElement[] trace = Thread.currentThread().getStackTrace();
@@ -203,5 +204,5 @@ public class FirebaseUtility extends Database{
                 trace[4].getClassName() + "." + trace[4].getMethodName() + ":" + trace[4].getLineNumber() + "\n" +
                 trace[5].getClassName() + "." + trace[5].getMethodName() + ":" + trace[5].getLineNumber() + "\n" ;
     }
-
+*/
 }

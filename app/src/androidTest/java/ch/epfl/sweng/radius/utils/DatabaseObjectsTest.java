@@ -56,6 +56,7 @@ public class DatabaseObjectsTest {
         }catch (Exception e){
 
         }
+        ChatLogs chat = new ChatLogs();
         usersIds.add("1234");
         usersIds.add("4321");
         ChatLogs chatLogs = new ChatLogs(usersIds);
@@ -70,10 +71,19 @@ public class DatabaseObjectsTest {
         Assert.assertNotNull(chatLogs.getID());
 
         // Test messages
-        List allmessages = chatLogs.getAllMessages();
+        List allmessages = chatLogs.getMessages();
         List Nmessages = chatLogs.getLastNMessages(10);
         assert(allmessages.contains(m));
         assert(Nmessages.contains(m));
+
+        chatLogs.removeMessage(m);
+        chatLogs.addMessage(m);
+        chatLogs.removeMessage(0);
+        chatLogs.setMessages(allmessages);
+
+        String id = chatLogs.getChatLogsId();
+        chatLogs.setChatLogsId(id);
+
     }
 
     @Test
@@ -88,7 +98,8 @@ public class DatabaseObjectsTest {
 
         String chat = user.getConvFromUser("Arthur");
         Log.e("Test", "Coucou");
-        assertNull(chat);
+        assert(chat.isEmpty());
+        user.newChat("Arthur");
         List<String> blocked = user.getBlockedUsers();
         List<String> req = user.getFriendsRequests();
         String url = user.getUrlProfilePhoto();
@@ -97,6 +108,11 @@ public class DatabaseObjectsTest {
         assertEquals(50, user.getRadius());
         user.setID("Arthur");
         assertEquals("Arthur", user.getID());
+
+        Map<String, String> userList = user.getChatList();
+        user.setChatList(userList);
+
+        userList = user.getReportList();
     }
 
     @Test

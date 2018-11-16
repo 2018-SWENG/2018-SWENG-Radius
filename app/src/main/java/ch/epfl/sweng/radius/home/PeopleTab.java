@@ -65,7 +65,7 @@ public class PeopleTab extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         userItems = new ArrayList<>();
-        //mock data for testing purposes
+        //mock data for testing purpose
         setUpAdapter(adapter);
 
         // Inflate the layout for this fragment

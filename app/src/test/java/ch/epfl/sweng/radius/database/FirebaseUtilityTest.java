@@ -1,5 +1,6 @@
 package ch.epfl.sweng.radius.database;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -229,8 +230,18 @@ public class FirebaseUtilityTest {
 
         when(mockedSnap.exists()).thenReturn(true);
         System.out.print(user.getID());
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-        fbUtil.readObj(user, Tables.USERS, callback);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        fbUtil.readObj(user, Tables.USERS, callback, "listener");
 
         assertEquals(otherUser.getStatus(), "HeyHeyHey");
     }
@@ -279,7 +290,7 @@ public class FirebaseUtilityTest {
 
         System.out.print(user.getID());
 
-        fbUtil.readObj(user, Tables.USERS, callback);
+        fbUtil.readObj(user, Tables.USERS, callback, "listener");
 
         assertEquals(otherUser.getStatus(), "HeyHeyHey");
     }
