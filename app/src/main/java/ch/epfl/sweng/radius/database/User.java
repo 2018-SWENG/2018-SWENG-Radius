@@ -50,20 +50,7 @@ public class User implements DatabaseObject {
 
     // Debugging purpose only
     public User(){
-        this.userID = Long.toString(idGenerator++);
-        this.nickname = "New User " + this.userID;
-        this.urlProfilePhoto = "";
-        this.radius = 50;
-        this.status = "Hi, I'm new to radius !";
-        this.friendsRequests = new ArrayList<>();
-        this.friendsInvitations = new ArrayList<>();
-        this.friends = new ArrayList<>();
-        this.blockedUsers = new ArrayList<>();
-        this.spokenLanguages = "";
-        this.interests = "";
-        this.reportList = new HashMap<>();
-
-        this.isVisible = true; // user is visible by default
+        this(Long.toString(idGenerator++));
     }
 
     // Getter
