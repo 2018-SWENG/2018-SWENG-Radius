@@ -218,6 +218,8 @@ public class FirebaseUtilityTest {
                 return ret_obj;
             }
         }).when(mockedSnap).getValue(User.class);
+
+        when(mockedSnap.exists()).thenReturn(true);
         System.out.print(user.getID());
 
         fbUtil.readObj(user, Tables.USERS, callback);

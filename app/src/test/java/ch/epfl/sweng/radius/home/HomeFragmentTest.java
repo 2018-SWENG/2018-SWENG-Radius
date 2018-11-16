@@ -36,6 +36,8 @@ public class HomeFragmentTest {
         Database.activateDebugMode();
         this.mapUtility = Mockito.mock(MapUtility.class);
         this.fragment = HomeFragment.newInstance(mapUtility, mockMap, 50000);
+        if(fragment == null)
+            System.out.print("ISNULL");
     }
 
     @Test
@@ -58,6 +60,7 @@ public class HomeFragmentTest {
             }
 
         }).when(mapUtility).getOtherLocations();
+
         fragment.setMyPos(new MLocation());
 
         fragment.getUsersInRadius();
