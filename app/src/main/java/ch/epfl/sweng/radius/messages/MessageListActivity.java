@@ -111,6 +111,8 @@ public class MessageListActivity extends AppCompatActivity {
             }
         });
 
+        database.readObj(chatLogs, Database.Tables.CHATLOGS);
+
 
     }
 
@@ -133,6 +135,7 @@ public class MessageListActivity extends AppCompatActivity {
      * @param message the new message
      */
     private void receiveMessage(Message message) {
+        chatLogs.addMessage(message);
         myMessageRecycler.smoothScrollToPosition(chatLogs.getNumberOfMessages());
         myMessageAdapter.notifyDataSetChanged();
     }
@@ -181,6 +184,7 @@ public class MessageListActivity extends AppCompatActivity {
             @Override
             public void onFinish(Object value) {
                 chatLogs = (ChatLogs) value;
+
             }
 
             @Override
