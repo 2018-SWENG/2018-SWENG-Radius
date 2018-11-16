@@ -1,7 +1,10 @@
 package ch.epfl.sweng.radius.browseProfiles;
 
+import android.Manifest;
 import android.content.Intent;
+import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.GrantPermissionRule;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 
@@ -13,16 +16,10 @@ import org.junit.Test;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Database;
 
-
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-
-
-import android.Manifest;
-import android.support.test.espresso.Espresso;
-import android.support.test.rule.GrantPermissionRule;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class BrowseProfilesActivityTest extends ActivityInstrumentationTestCase2<BrowseProfilesActivity> {
     @Rule

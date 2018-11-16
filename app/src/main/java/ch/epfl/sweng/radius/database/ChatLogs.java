@@ -32,6 +32,7 @@ public class ChatLogs implements DatabaseObject{
         this.membersId = new ArrayList<>();
         this.messages = new LinkedList<>();
         this.chatLogsId = chatLogsId;
+        numberOfMessages=0;
     }
 
     public ChatLogs() {

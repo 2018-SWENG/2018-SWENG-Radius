@@ -32,6 +32,7 @@ public class FirebaseUtility extends Database{
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
+
     @Override
     public void readObjOnce(final DatabaseObject obj,
                             final Tables tableName,

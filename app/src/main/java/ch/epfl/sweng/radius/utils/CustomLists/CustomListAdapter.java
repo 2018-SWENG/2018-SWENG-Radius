@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.utils;
+package ch.epfl.sweng.radius.utils.CustomLists;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +12,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.browseProfiles.CustomListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.ViewHolder>{
@@ -48,13 +47,11 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
 
         CustomListItem item = items.get(position);
         final int clickedPic = item.getFriendProfilePic();
-
-        CustomListener customListener = new CustomListener(clickedPic, item.getItemUser());
         final String clickedId = item.getUserId();
         final String clickedConv = item.getConvId();
+        CustomListListeners customListener = new CustomListListeners(clickedPic, item.getItemUser());
         customListener.setCustomOnClick(viewHolder.imgViewIcon, context);
         customListener.setCustomOnClick(viewHolder.txtViewTitle, context,clickedId,clickedConv);
-
     }
 
     // inner class to hold a reference to each item of RecyclerView
