@@ -146,6 +146,31 @@ public class FirebaseUtility extends Database{
                     }
                 });
     }
+/*
+    public void listenToWholeTable(final DatabaseObject obj,
+                        final Tables tableName,
+                        final CallBackDatabase callback) {
+        FirebaseDatabase.getInstance()
+                .getReference(tableName.toString())
+                .child(obj.getID())
+                .addValueEventListener( new ValueEventListener() {
+                    @Override
+                    public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (!dataSnapshot.hasChild(obj.getID())) {
+                            writeInstanceObj(obj, tableName);
+                            callback.onFinish(obj);
+                        }
+                        else
+                            callback.onFinish(dataSnapshot.getValue(obj.getClass()));
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        callback.onError(databaseError);
+                    }
+                });
+    }
+    */
 
     @Override
     public void writeInstanceObj(final DatabaseObject obj, final Tables tableName){
@@ -155,6 +180,7 @@ public class FirebaseUtility extends Database{
             ChatLogs test = (ChatLogs) obj;
   //          Log.w("Firebase Message", "Called for " + ((ChatLogs) obj).getMessages().size() +getLogTagWithMethod());
         }
+        Log.e( "writeInstance", "moveCamerafetchh: ");
         FirebaseDatabase.getInstance()
                 .getReference(tableName.toString())
                 .child(obj.getID()).setValue(obj);
@@ -179,5 +205,3 @@ public class FirebaseUtility extends Database{
     }
 
 }
-
-
