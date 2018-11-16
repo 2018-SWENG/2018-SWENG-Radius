@@ -90,16 +90,7 @@ public class MapUtilityTest {
         PowerMockito.mockStatic(ContextCompat.class);
         when(ContextCompat.checkSelfPermission(any(Context.class), anyString())).thenReturn(PackageManager.PERMISSION_GRANTED);
         Database.activateDebugMode();
-        verify(location).addOnCompleteListener(argument.capture());
-        doAnswer(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                OnCompleteListener answer = argument.getValue();
-                if(answer == null) System.out.print("ISNULL");
-                return answer;
-            }
 
-        }).when(location).addOnCompleteListener(argument.capture());
         when(mblFusedLocationClient.getLastLocation()).thenReturn(location);
 
         PowerMockito.mockStatic(LocationServices.class);
@@ -637,6 +628,18 @@ public class MapUtilityTest {
 
     @Test
     public void getDeviceLocation() {
+        doAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                verify(location).addOnCompleteListener(argument.capture());
+                OnCompleteListener answer = argument.getValue();
+                when(location.getResult()).thenReturn(null);
+                when(location.isSuccessful()).thenReturn(true);
+                answer.onComplete(location);
+                return null;
+            }
+
+        }).when(location).addOnCompleteListener(argument.capture());
         when(ret.isSuccessful()).thenReturn(true);
         when(ret.getResult()).thenReturn(new MLocation("coucou"));
         mapUtility.getDeviceLocation(new FragmentActivity());
@@ -644,6 +647,18 @@ public class MapUtilityTest {
 
     @Test
     public void getDeviceLocation2() {
+        doAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                verify(location).addOnCompleteListener(argument.capture());
+                OnCompleteListener answer = argument.getValue();
+                when(location.getResult()).thenReturn(null);
+                when(location.isSuccessful()).thenReturn(false);
+                answer.onComplete(location);
+                return null;
+            }
+
+        }).when(location).addOnCompleteListener(argument.capture());
         when(ret.isSuccessful()).thenReturn(false);
         when(ret.getResult()).thenReturn(null);
         mapUtility.getDeviceLocation(new FragmentActivity());
