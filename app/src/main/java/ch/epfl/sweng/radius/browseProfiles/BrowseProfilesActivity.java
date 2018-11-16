@@ -1,8 +1,11 @@
 package ch.epfl.sweng.radius.browseProfiles;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,6 +38,15 @@ public class BrowseProfilesActivity extends AppCompatActivity {
     //Might want to create and get the id of users along with their names.
     private BrowseProfilesUtility profileActivityListener;
     private Toolbar toolbar;
+    private final Database database = Database.getInstance();
+    private String userUID;
+
+    // UI elements
+    private ImageView userPhoto;
+    private TextView textViewName;
+    private TextView textViewStatus;
+    private TextView textViewInterests;
+    private TextView textViewLanguages;
 
     //THIS ACTIVITY HAS TO STORE THE ID OF THE USER WE ARE BROWSING THE PROFILE OF.
 
@@ -43,28 +55,51 @@ public class BrowseProfilesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse_profiles);
         Intent intent = getIntent();
-        int clickedPic = intent.getIntExtra("Clicked Picture",2131230869); // The default value is the id
-        // associated with the john doe picture - I set it to that instead of 1 because we actually don't have a resource
-        // numbered 1. As a tests can't initialize the activity.
-        String clickedName = intent.getStringExtra("Clicked Name");
 
-        profileActivityListener = new BrowseProfilesUtility(clickedName); // WHEN THE CLASS STORES THE ID OF THE USER WE
+        //profileActivityListener = new BrowseProfilesUtility(clickedName); // WHEN THE CLASS STORES THE ID OF THE USER WE
         // CLICKED ON CHANGE CLICKED NAME WITH THE ID
 
+        // Initialize UI Components
+        userUID = intent.getStringExtra("UID");
+        userPhoto = findViewById(R.id.userPhoto);
+        textViewName = findViewById(R.id.userNickname);
+        textViewStatus = findViewById(R.id.userStatus);
+        textViewInterests = findViewById(R.id.userInterests);
+        textViewLanguages = findViewById(R.id.userLanguages);
 
-        String userUID = intent.getStringExtra("UID");
-        setUpAddFriendButton(userUID);
 
-        ImageView imageView = findViewById(R.id.clickedPic);
-        System.out.println("clickedPic " + clickedPic);
-        imageView.setImageResource(clickedPic);
-        TextView textViewName = findViewById(R.id.clickedName);
-        textViewName.setText(clickedName);
+        // Get the current user profile from the DB
+        database.readObjOnce(new User(userUID),
+                Database.Tables.USERS, new CallBackDatabase() {
+                    @Override
+                    public void onFinish(Object value) {
+                        User current_user = (User) value;
+                        setUpAddFriendButton(current_user);
+                        setUpUIComponents(current_user);
+                    }
 
+                    @Override
+                    public void onError(DatabaseError error) {
+                        Log.e("Firebase", error.getMessage());
+                    }
+                });
 
         // ToolBar initialization
         toolbar = findViewById(R.id.toolbar); // Attaching the layout to the toolbar object
         setSupportActionBar(toolbar);
+    }
+
+    public void setUpUIComponents(User current_user){
+        /*
+        byte[] decodedString = Base64.decode(current_user.getUrlProfilePhoto(), Base64.DEFAULT);
+        Bitmap profilePictureUri = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        userPhoto.setImageBitmap(profilePictureUri);
+        */
+        userPhoto.setImageResource(R.drawable.ic_man);
+        textViewName.setText(current_user.getNickname());
+        textViewStatus.setText(current_user.getStatus());
+        textViewInterests.setText(current_user.getInterests());
+        textViewLanguages.setText(current_user.getSpokenLanguages());
     }
 
     @Override
@@ -96,43 +131,37 @@ public class BrowseProfilesActivity extends AppCompatActivity {
         }
     }
 
-    private void setUpAddFriendButton(final String userUID){
-        final Database database = Database.getInstance();
+    private void setUpAddFriendButton(final User profileUser){
         final Button addFriendButton = findViewById(R.id.add_user);
 
         // Disable the button if the current user is friend with this user
-        database.readListObjOnce(Arrays.asList(database.getCurrent_user_id(), userUID),
+        database.readObjOnce(new User(database.getCurrent_user_id()),
                 Database.Tables.USERS, new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
-                        ArrayList<User> users = ((ArrayList<User>) value);
-                        if (users.size() == 2) {
-                            final User currentUser = users.get(0).getID()
-                                    .equals(database.getCurrent_user_id()) ? users.get(0) : users.get(1);
-                            final User profileUser = users.get(0).getID()
-                                    .equals(database.getCurrent_user_id()) ? users.get(1) : users.get(0);
+                        final User currentUser = (User)value;
 
-                            if (currentUser.getFriends().contains(profileUser.getID())) {
-                                addFriendButton.setText("Already friends");
-                                addFriendButton.setEnabled(false);
-                            }
-                            if (currentUser.getFriendsRequests().contains(profileUser.getID())) {
+                        if (currentUser.getFriends().contains(profileUser.getID())) {
+                            addFriendButton.setText("Already friends");
+                            addFriendButton.setEnabled(false);
+                        }
+                        if (currentUser.getFriendsRequests().contains(profileUser.getID())) {
+                            addFriendButton.setText("Request sent");
+                            addFriendButton.setEnabled(false);
+                        }
+
+                        addFriendButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                currentUser.addFriendRequest(profileUser);
+                                database.writeInstanceObj(currentUser, Database.Tables.USERS);
+                                database.writeInstanceObj(profileUser, Database.Tables.USERS);
                                 addFriendButton.setText("Request sent");
                                 addFriendButton.setEnabled(false);
                             }
-
-                            addFriendButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    currentUser.addFriendRequest(profileUser);
-                                    database.writeInstanceObj(currentUser, Database.Tables.USERS);
-                                    database.writeInstanceObj(profileUser, Database.Tables.USERS);
-                                    addFriendButton.setText("Request sent");
-                                    addFriendButton.setEnabled(false);
-                                }
-                            });
-                        }
+                        });
                     }
+
 
                     @Override
                     public void onError(DatabaseError error) {
