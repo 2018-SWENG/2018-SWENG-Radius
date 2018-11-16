@@ -61,7 +61,7 @@ public class MapUtility {
 
     public void fetchUsersInRadius(final int radius) {
         final Database database = Database.getInstance();
-        Log.e( TAG, "moveCamerafetchh: and radius is" + Integer.toString(radius) );
+    //    Log.e( TAG, "moveCamerafetchh: and radius is" + Integer.toString(radius) );
 
         database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
@@ -72,11 +72,10 @@ public class MapUtility {
                                 public void onFinish(Object value) {
                                     MLocation loc = (MLocation) value;
                                     if(contains(loc.getLatitude(), loc.getLongitude())) {
-                                        Log.e("MapUtility", "Adder user " + loc.getID());
+                                //        Log.e("MapUtility", "Adder user " + loc.getID());
                                         otherPos.put(loc.getID(), loc);
                                     }
-                                    Log.e( TAG, "moveCamera: " + ((MLocation) value).getMessage());
-
+                                  //  Log.e( TAG, "moveCamera: " + ((MLocation) value).getMessage());
                                 }
 
                                 @Override
@@ -84,14 +83,7 @@ public class MapUtility {
 
                                 }
                             });
-                           /* if(contains(loc.getLatitude(), loc.getLongitude())) {
-                                Log.e("MapUtility", "Adder user " + loc.getID());
-                                    otherPos.put(loc.getID(), loc);
-                            }
-                            else
-                                otherPos.remove(loc.getID());*/
                         }
-
             }
             @Override
             public void onError(DatabaseError error) {
@@ -101,6 +93,8 @@ public class MapUtility {
     }
 
     public boolean isInRadius(MLocation loc, int radius){
+        if(loc == null)
+            return false;
         return findDistance(loc.getLatitude(), loc.getLongitude()) <= radius ;
     }
 
@@ -114,27 +108,6 @@ public class MapUtility {
 
     public HashMap<String, MLocation> getOtherPos() {
         return otherPos;
-    }
-
-    public double computeDistance(MLocation loc){
-
-        if(loc == null)
-            return Double.MAX_VALUE;
-
-        double earthRadius = 3958.75;
-        double latDiff = Math.toRadians(loc.getLatitude() - myPos.getLatitude());
-        double lngDiff = Math.toRadians(loc.getLongitude()-myPos.getLongitude());
-        double a = Math.sin(latDiff /2) * Math.sin(latDiff /2) +
-                Math.cos(Math.toRadians(myPos.getLatitude())) *
-                        Math.cos(Math.toRadians(loc.getLatitude())) *
-                        Math.sin(lngDiff /2) * Math.sin(lngDiff /2);
-
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        double distance = earthRadius * c;
-
-        int meterConversion = 1609;
-
-        return new Float(distance * meterConversion).floatValue();
     }
 
     public void getDeviceLocation(final FragmentActivity activity) {
