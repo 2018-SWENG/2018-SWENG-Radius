@@ -92,7 +92,6 @@ public class MapUtility {
                     public void onComplete(@NonNull Task task) {
                         if ( task.isSuccessful() && task.getResult() != null) {
                             currentLocation = (Location) task.getResult();
-                            System.out.print("Coucou");
                             try {
                                 LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(), currentLocation.getLongitude());
                                 setCurrCoordinates(currentCoordinates);
@@ -102,7 +101,6 @@ public class MapUtility {
                         else {
                             Toast.makeText( activity.getApplicationContext(), "Unable to get current location",
                                     Toast.LENGTH_SHORT).show();
-                            System.out.print("Coucouccc");
                         }
                     }
                 });
