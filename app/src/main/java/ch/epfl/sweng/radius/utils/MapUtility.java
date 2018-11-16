@@ -102,7 +102,7 @@ public class MapUtility {
                         else {
                             Toast.makeText( activity.getApplicationContext(), "Unable to get current location",
                                     Toast.LENGTH_SHORT).show();
-
+                            System.out.print("Coucouccc");
                         }
                     }
                 });

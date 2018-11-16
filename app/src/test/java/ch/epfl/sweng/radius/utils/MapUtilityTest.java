@@ -633,15 +633,13 @@ public class MapUtilityTest {
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 verify(location).addOnCompleteListener(argument.capture());
                 OnCompleteListener answer = argument.getValue();
-                when(location.getResult()).thenReturn(null);
+                when(location.getResult()).thenReturn(new Location("Arthur"));
                 when(location.isSuccessful()).thenReturn(true);
                 answer.onComplete(location);
                 return null;
             }
 
         }).when(location).addOnCompleteListener(argument.capture());
-        when(ret.isSuccessful()).thenReturn(true);
-        when(ret.getResult()).thenReturn(new MLocation("coucou"));
         mapUtility.getDeviceLocation(new FragmentActivity());
     }
 
@@ -652,15 +650,13 @@ public class MapUtilityTest {
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 verify(location).addOnCompleteListener(argument.capture());
                 OnCompleteListener answer = argument.getValue();
-                when(location.getResult()).thenReturn(null);
+                when(location.getResult()).thenReturn(new Location("Arthur"));
                 when(location.isSuccessful()).thenReturn(false);
                 answer.onComplete(location);
                 return null;
             }
 
         }).when(location).addOnCompleteListener(argument.capture());
-        when(ret.isSuccessful()).thenReturn(false);
-        when(ret.getResult()).thenReturn(null);
         mapUtility.getDeviceLocation(new FragmentActivity());
     }
 }
