@@ -56,7 +56,7 @@ public abstract class CustomTab extends Fragment {
                 Database.Tables.USERS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
-                setUpAdapterWithUser((User)value);
+                setUpAdapterWithList(getUsersIds((User)value));
             }
             @Override
             public void onError(DatabaseError error) {
@@ -65,25 +65,35 @@ public abstract class CustomTab extends Fragment {
         });
     }
 
-    protected void setUpAdapterWithList(List<User> listIds){
-        ArrayList<CustomListItem> users = new ArrayList<>();
-        String convId;
-        String userId = database.getCurrent_user_id();
-        for (User user: listIds) {
-            convId = user.getConvFromUser(userId);
+    protected void setUpAdapterWithList(List<String> listIds){
+        database.readListObjOnce(listIds,
+                Database.Tables.USERS, new CallBackDatabase() {
+                    @Override
+                    public void onFinish(Object value) {
+                        ArrayList<CustomListItem> usersItems = new ArrayList<>();
+                        String convId;
+                        String userId = database.getCurrent_user_id();
+                        for (User user: (List<User>)value) {
+                            convId = user.getConvFromUser(userId);
 
-            // If the conversation doesn't exist, it has to be created
-            if(convId.isEmpty()){
-                ArrayList<String> ids = new ArrayList();
-                ids.add(userId);
-                ids.add(user.getID());
-                convId = new ChatLogs(ids).getID();
-            }
+                            // If the conversation doesn't exist, it has to be created
+                            if(convId.isEmpty()){
+                                ArrayList<String> ids = new ArrayList();
+                                ids.add(userId);
+                                ids.add(user.getID());
+                                convId = new ChatLogs(ids).getID();
+                            }
 
-            users.add(new CustomListItem(user, convId));
-        }
-        adapter.setItems(users); adapter.notifyDataSetChanged();
+                            usersItems.add(new CustomListItem(user, convId));
+                        }
+                        adapter.setItems(usersItems); adapter.notifyDataSetChanged();
+                    }
+                    @Override
+                    public void onError(DatabaseError error) {
+                        Log.e("Firebase", error.getMessage());
+                    }
+                });
     }
 
-    protected abstract void setUpAdapterWithUser(User current_user);
+    protected abstract List<String> getUsersIds(User current_user);
 }

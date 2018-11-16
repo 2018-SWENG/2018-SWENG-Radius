@@ -8,9 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesActivity;
-import ch.epfl.sweng.radius.messages.MessageListActivity;
-
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.messages.MessageListActivity;
 
 public class CustomListListeners {
     private int clickedPic;

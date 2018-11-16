@@ -1,7 +1,5 @@
 package ch.epfl.sweng.radius.database;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
