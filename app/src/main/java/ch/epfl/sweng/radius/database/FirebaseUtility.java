@@ -130,7 +130,7 @@ public class FirebaseUtility extends Database{
                     }
                 });
     }
-
+/*
     public void listenToWholeTable(final DatabaseObject obj,
                         final Tables tableName,
                         final CallBackDatabase callback) {
@@ -154,6 +154,7 @@ public class FirebaseUtility extends Database{
                     }
                 });
     }
+    */
 
     @Override
     public void writeInstanceObj(final DatabaseObject obj, final Tables tableName){

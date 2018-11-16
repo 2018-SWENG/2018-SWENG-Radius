@@ -61,35 +61,7 @@ public class MapUtility {
 
     public void fetchUsersInRadius(final int radius) {
         final Database database = Database.getInstance();
-    //    Log.e( TAG, "moveCamerafetchh: and radius is" + Integer.toString(radius) );
-
-        database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                        for(MLocation loc : (ArrayList<MLocation>) value){
-                            database.readObj(loc, Database.Tables.LOCATIONS, new CallBackDatabase() {
-                                @Override
-                                public void onFinish(Object value) {
-                                    MLocation loc = (MLocation) value;
-                                    if(contains(loc.getLatitude(), loc.getLongitude())) {
-                                //        Log.e("MapUtility", "Adder user " + loc.getID());
-                                        otherPos.put(loc.getID(), loc);
-                                    }
-                                  //  Log.e( TAG, "moveCamera: " + ((MLocation) value).getMessage());
-                                }
-
-                                @Override
-                                public void onError(DatabaseError error) {
-
-                                }
-                            });
-                        }
-            }
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("Firebase Error", error.getMessage());
-            }
-        });
+        database.readAllTableOnce(Database.Tables.LOCATIONS, new UserFetchCallback(radius));
     }
 
     public boolean isInRadius(MLocation loc, int radius){
