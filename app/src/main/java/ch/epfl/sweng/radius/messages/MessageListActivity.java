@@ -48,38 +48,42 @@ public class MessageListActivity extends AppCompatActivity {
     private MLocation myLoc, otherLoc;
     private final Database database = Database.getInstance();
 
+    private final CallBackDatabase locationCallback = new CallBackDatabase() {
+        @Override
+        public void onFinish(Object value) {
+            myLoc = (MLocation) value;
+        }
+
+        @Override
+        public void onError(DatabaseError error) {
+            Log.e("Firebase", "Error reading Database");
+
+        }
+    };
+
+    private final CallBackDatabase otherLocationCallback = new CallBackDatabase() {
+        @Override
+        public void onFinish(Object value) {
+            otherLoc = (MLocation) value;
+        }
+
+        @Override
+        public void onError(DatabaseError error) {
+
+        }
+    };
+
     private final CallBackDatabase chatLogCallBack = new CallBackDatabase() {
         @Override
         public void onFinish(Object value) {
             chatLogs = (ChatLogs) value;
             if(chatLogs.getMembersId().size() == 2){
                 myLoc = new MLocation(database.getCurrent_user_id());
-                database.readObjOnce(myLoc, Database.Tables.LOCATIONS, new CallBackDatabase() {
-                    @Override
-                    public void onFinish(Object value) {
-                        myLoc = (MLocation) value;
-                    }
-
-                    @Override
-                    public void onError(DatabaseError error) {
-                        Log.e("Firebase", "Error reading Database");
-
-                    }
-                });
+                database.readObjOnce(myLoc, Database.Tables.LOCATIONS, locationCallback);
                 String otherId = chatLogs.getMembersId().get(0) == database.getCurrent_user_id() ?
                         chatLogs.getMembersId().get(0) : chatLogs.getMembersId().get(1);
                 otherLoc = new MLocation(otherId);
-                database.readObjOnce(otherLoc, Database.Tables.LOCATIONS, new CallBackDatabase() {
-                    @Override
-                    public void onFinish(Object value) {
-                        otherLoc = (MLocation) value;
-                    }
-
-                    @Override
-                    public void onError(DatabaseError error) {
-
-                    }
-                });
+                database.readObjOnce(otherLoc, Database.Tables.LOCATIONS, otherLocationCallback);
             }
             if(chatLogs.getMembersId().size() < 2 && otherUserId != null){
                 chatLogs.addMembersId(otherUserId);
