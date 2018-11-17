@@ -51,7 +51,7 @@ public class FirebaseUtility extends Database{
                                final Tables tableName,
                                final String childName,
                                final Class childClass,
-                               final CallBackDatabase2 callback) {
+                               final CallBackDatabase callback) {
 
         FirebaseDatabase.getInstance()
                 .getReference(tableName.toString())
@@ -60,7 +60,8 @@ public class FirebaseUtility extends Database{
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                            callback.onFinish(dataSnapshot.getValue(childClass), s);
+                        Log.e("message", "New child !");
+                            callback.onFinish(dataSnapshot.getValue(childClass));
                     }
 
                     @Override

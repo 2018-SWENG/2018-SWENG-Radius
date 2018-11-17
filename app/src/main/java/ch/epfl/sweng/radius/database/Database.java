@@ -120,5 +120,5 @@ public abstract class Database {
     public abstract void listenObjChild(final DatabaseObject obj,
                                final Tables tableName,
                                final String childName,final Class childClass,
-                               final CallBackDatabase2 callback);
+                               final CallBackDatabase callback);
 }

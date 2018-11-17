@@ -117,7 +117,7 @@ public class FakeFirebaseUtility extends Database {
     }
 
     @Override
-    public void listenObjChild(DatabaseObject obj, Tables tableName, String childName, Class childClass, CallBackDatabase2 callback) {
+    public void listenObjChild(DatabaseObject obj, Tables tableName, String childName, Class childClass, CallBackDatabase callback) {
 
     }
 

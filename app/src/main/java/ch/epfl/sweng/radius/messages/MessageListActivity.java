@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
@@ -142,7 +143,12 @@ public class MessageListActivity extends AppCompatActivity {
      * @param message the new message
      */
     private void receiveMessage(Message message) {
-        chatLogs.addMessage(message);
+
+      //  chatLogs.addMessage(message);
+        Log.e("message", "Messages size" + Integer.toString(chatLogs.getMessages().size()));
+        Log.e("message", "Messages size" + Integer.toString(chatLogs.getNumberOfMessages()));
+        //  database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
+        myMessageAdapter.setMessages(chatLogs.getMessages());
         myMessageRecycler.smoothScrollToPosition(chatLogs.getNumberOfMessages());
         myMessageAdapter.notifyDataSetChanged();
     }
@@ -157,14 +163,13 @@ public class MessageListActivity extends AppCompatActivity {
     private void sendMessage(String senderId,String message,Date date) {
         if (!message.isEmpty()) {
             Message msg = new Message(senderId, message, date);
-            Log.w("MessageActivity" , "Chatlogs ID is " + chatLogs.getID());
 
-           // chatLogs.addMessage(msg);
+            chatLogs.addMessage(msg);
           //  database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
             List<Message> newList = chatLogs.getMessages();
-            newList.add(msg);
+            Log.e("message", "NewList size is " + newList.size());
             database.writeToInstanceChild(chatLogs, Database.Tables.CHATLOGS, "messages",
-                    newList);
+                    chatLogs.getMessages());
 
             messageZone.setText("");
             //receiveMessage(msg);
@@ -192,18 +197,10 @@ public class MessageListActivity extends AppCompatActivity {
      */
     private void setUpListener() {
 
-        database.listenObjChild(chatLogs, Database.Tables.CHATLOGS, "messages", Message.class, new CallBackDatabase2() {
-            public void onFinish(Object value, String s) {
-                Log.e("message", "Message Received");
-
-                if(s != null && s.equals(Integer.toString(chatLogs.getNumberOfMessages()-1)))
-                    return;
-                receiveMessage((Message) value);
-            }
-
-            @Override
+        database.listenObjChild(chatLogs, Database.Tables.CHATLOGS, "messages", Message.class, new CallBackDatabase() {
             public void onFinish(Object value) {
-
+                Log.e("message", "message received " + ((Message)value).getContentMessage());
+                receiveMessage((Message) value);
             }
 
             @Override
