@@ -114,6 +114,8 @@ public class MessageListActivity extends AppCompatActivity {
                     chatLogs.addMembersId(database.getCurrent_user_id());
 
                 database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
+                Log.e("message", "Calllback Messages size" + Integer.toString(chatLogs.getMessages().size()));
+
             }
 
             @Override
@@ -121,6 +123,7 @@ public class MessageListActivity extends AppCompatActivity {
                 Log.e("Firebase", "Error reading Database");
             }
         });
+        Log.e("message", "Setup Messages size" + Integer.toString(chatLogs.getMessages().size()));
 
     }
 
@@ -144,7 +147,8 @@ public class MessageListActivity extends AppCompatActivity {
      */
     private void receiveMessage(Message message) {
 
-      //  chatLogs.addMessage(message);
+        if(!chatLogs.getMessages().contains(message))
+            chatLogs.addMessage(message);
         Log.e("message", "Messages size" + Integer.toString(chatLogs.getMessages().size()));
         Log.e("message", "Messages size" + Integer.toString(chatLogs.getNumberOfMessages()));
         //  database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);

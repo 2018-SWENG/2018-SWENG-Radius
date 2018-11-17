@@ -38,5 +38,25 @@ public class Message {
     public Date getSendingTime() {
         return sendingTime;
     }
+
+    @Override
+    public boolean equals(Object o){
+        if (o == this) {
+            return true;
+        }
+
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof Message)) {
+            return false;
+        }
+
+        // typecast o to Complex so that we can compare data members
+        Message m = (Message) o;
+
+        return m.sendingTime.toString().equals(this.sendingTime.toString())
+                && m.contentMessage.equals(this.contentMessage)
+                && m.senderId.equals(this.senderId);
+    }
 }
 
