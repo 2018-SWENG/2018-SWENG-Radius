@@ -9,32 +9,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
-import ch.epfl.sweng.radius.database.CallBackDatabase2;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.MapUtility;
-import ch.epfl.sweng.radius.utils.UserInfos;
 
 
 /**
@@ -212,21 +202,7 @@ public class MessageListActivity extends AppCompatActivity {
 
             }
         });
-/*
-        database.readObj(chatLogs, Database.Tables.CHATLOGS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                chatLogs = (ChatLogs) value;
-                receiveMessage(chatLogs.getMessages().get(chatLogs.getNumberOfMessages()-1));
 
-            }
-
-            @Override
-            public void onError(DatabaseError error) {
-
-            }
-        }, chatLogs.getID() + "chatLogListener");
-*/
     }
 
     private void prepareUsers(ArrayList<String> participants) {

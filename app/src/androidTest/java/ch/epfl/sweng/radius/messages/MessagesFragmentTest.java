@@ -56,10 +56,12 @@ public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<Accou
 
         View view = fragment.getView().findViewById(R.id.listView);
         assertNotNull(view);
+        /* Those are not present anymore
         view = fragment.getView().findViewById(R.id.username);
-        assertNotNull(view);
+       assertNotNull(view);
         view = fragment.getView().findViewById(R.id.profilePic);
-        assertNotNull(view);
+       assertNotNull(view);
+       */
 
         chats = fragment.getView().findViewById(R.id.listView);
         assertNotNull(chats);

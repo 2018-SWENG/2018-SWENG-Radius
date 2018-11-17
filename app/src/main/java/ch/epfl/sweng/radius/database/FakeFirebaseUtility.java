@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.lang.reflect.Field;
 
 public class FakeFirebaseUtility extends Database {
     private User currentUSer;
@@ -57,6 +58,10 @@ public class FakeFirebaseUtility extends Database {
                         final Tables tableName,
                         final CallBackDatabase callback,
                         String listenerID) {
+        HashMap<String, DatabaseObject> table = getTable(tableName);
+
+        DatabaseObject ret = table.get(obj.getID());
+        callback.onFinish(ret);
     }
 
     @Override
@@ -118,6 +123,16 @@ public class FakeFirebaseUtility extends Database {
 
     @Override
     public void listenObjChild(DatabaseObject obj, Tables tableName, String childName, Class childClass, CallBackDatabase callback) {
+        HashMap<String, DatabaseObject> table = getTable(tableName);
+        Field f1 = null;
+        DatabaseObject ret = table.get(obj.getID());
+        try {
+            f1 = ret.getClass().getField(childName);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        if(f1 != null)
+            callback.onFinish(f1);
 
     }
 
