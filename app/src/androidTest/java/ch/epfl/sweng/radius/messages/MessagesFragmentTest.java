@@ -47,8 +47,6 @@ public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<Accou
     @Test
     public void testLaunch() {
         FrameLayout fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
-        assertNotNull(fcontainer);
-
         Fragment fragment = new MessagesFragment();
         mblAccountActivity.getSupportFragmentManager().beginTransaction()
                 .add(fcontainer.getId(), fragment).commitAllowingStateLoss();
