@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +26,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -55,6 +57,7 @@ public class FirebaseUtilityTest {
     private CallBackDatabase            callback = Mockito.mock(CallBackDatabase.class);
     private String                      curRef = "1";
     private User                        otherUser;
+    private DatabaseError               dberror;
 
     @Before
     public void setUp() throws Exception {
@@ -70,7 +73,6 @@ public class FirebaseUtilityTest {
 
             mockedData.put(key, val);
         }
-
     }
 
     @Test
@@ -407,5 +409,69 @@ public class FirebaseUtilityTest {
 
     }
 
+    @Test
+    public void listenObjChild(){
+        ChatLogs chat = new ChatLogs();
+        PowerMockito.mockStatic(FirebaseDatabase.class);
+        when(FirebaseDatabase.getInstance()).thenReturn(mockedFb);
+        when(mockedFb.getReference(any(String.class))).thenReturn(mockedDb);
+
+        when(mockedDb.child((String) Matchers.argThat(new ArgumentMatcher(){
+
+            // Update current and print to console path to console
+            @Override
+            public boolean matches(Object argument) {
+                curRef = (String) argument;
+                return true;
+            }
+
+        }))).thenReturn(mockedDb);
+        doAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ChildEventListener valueEventListener = (ChildEventListener) invocation.getArguments()[0];
+                Object ret_obj = mockedData.get(curRef);
+
+                when(mockedSnap.getValue(Message.class)).thenReturn(new Message());
+                when(mockedSnap.hasChild(anyString())).thenReturn(true);
+
+                valueEventListener.onChildAdded(mockedSnap, "test");
+                valueEventListener.onChildChanged(mockedSnap, "test");
+                valueEventListener.onChildMoved(mockedSnap, "test");
+                valueEventListener.onChildRemoved(mockedSnap);
+                return valueEventListener;
+            }
+
+        }).when(mockedDb).addChildEventListener(any(ChildEventListener.class));
+
+
+
+        when(mockedSnap.exists()).thenReturn(true);
+
+        fbUtil.listenObjChild(chat, Tables.CHATLOGS, "message", Message.class, callback);
+
+    }
+
+    @Test
+    public void stopListening(){
+        ChatLogs chat = new ChatLogs();
+        PowerMockito.mockStatic(FirebaseDatabase.class);
+        when(FirebaseDatabase.getInstance()).thenReturn(mockedFb);
+        when(mockedFb.getReference(any(String.class))).thenReturn(mockedDb);
+
+        when(mockedDb.child((String) Matchers.argThat(new ArgumentMatcher(){
+
+            // Update current and print to console path to console
+            @Override
+            public boolean matches(Object argument) {
+                curRef = (String) argument;
+                return true;
+            }
+
+        }))).thenReturn(mockedDb);
+
+       fbUtil.stopListening("test", Tables.CHATLOGS);
+
+    }
 
 }
