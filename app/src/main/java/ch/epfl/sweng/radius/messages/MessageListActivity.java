@@ -38,7 +38,7 @@ public class MessageListActivity extends AppCompatActivity {
     private EditText messageZone;
     private Button sendButton;
     private ChatLogs chatLogs;
-    private String chatId, otherUserId;
+    private String chatId, otherUserId, myID = Database.getInstance().getCurrent_user_id();
     private ValueEventListener listener;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
 
@@ -73,17 +73,22 @@ public class MessageListActivity extends AppCompatActivity {
         }
     };
 
+    private String getOtherID(){
+        String tempID =  chatLogs.getMembersId().get(0);
+        String tempID2 =  chatLogs.getMembersId().get(1);
+        String otherId = tempID == database.getCurrent_user_id() ?
+                tempID : tempID2;
+        return otherId;
+    }
+
     private final CallBackDatabase chatLogCallBack = new CallBackDatabase() {
         @Override
         public void onFinish(Object value) {
             chatLogs = (ChatLogs) value;
             if(chatLogs.getMembersId().size() == 2){
-                myLoc = new MLocation(database.getCurrent_user_id());
+                myLoc = new MLocation(myID);
                 database.readObjOnce(myLoc, Database.Tables.LOCATIONS, locationCallback);
-                String tempID =  chatLogs.getMembersId().get(0);
-                String tempID2 =  chatLogs.getMembersId().get(1);
-                String otherId = tempID == database.getCurrent_user_id() ?
-                        tempID : tempID2;
+                String otherId = getOtherID();
                 otherLoc = new MLocation(otherId);
                 database.readObjOnce(otherLoc, Database.Tables.LOCATIONS, otherLocationCallback);
             }
