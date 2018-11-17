@@ -80,8 +80,10 @@ public class MessageListActivity extends AppCompatActivity {
             if(chatLogs.getMembersId().size() == 2){
                 myLoc = new MLocation(database.getCurrent_user_id());
                 database.readObjOnce(myLoc, Database.Tables.LOCATIONS, locationCallback);
-                String otherId = chatLogs.getMembersId().get(0) == database.getCurrent_user_id() ?
-                        chatLogs.getMembersId().get(0) : chatLogs.getMembersId().get(1);
+                String tempID =  chatLogs.getMembersId().get(0);
+                String tempID2 =  chatLogs.getMembersId().get(1);
+                String otherId = tempID == database.getCurrent_user_id() ?
+                        tempID : tempID2;
                 otherLoc = new MLocation(otherId);
                 database.readObjOnce(otherLoc, Database.Tables.LOCATIONS, otherLocationCallback);
             }
