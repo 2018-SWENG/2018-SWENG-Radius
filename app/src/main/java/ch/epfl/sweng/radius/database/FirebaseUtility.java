@@ -9,6 +9,7 @@ package ch.epfl.sweng.radius.database;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.util.Pair;
 
 import com.google.common.collect.Table;
 import com.google.firebase.FirebaseError;
@@ -49,19 +50,18 @@ public class FirebaseUtility extends Database{
     @Override
     public void listenObjChild(final DatabaseObject obj,
                                final Tables tableName,
-                               final String childName,
-                               final Class childClass,
+                               final Pair<String, Class> child,
                                final CallBackDatabase callback) {
 
         FirebaseDatabase.getInstance()
                 .getReference(tableName.toString())
                 .child(obj.getID())
-                .child(childName)
+                .child(child.first)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         Log.e("message", "New child !");
-                            callback.onFinish(dataSnapshot.getValue(childClass));
+                            callback.onFinish(dataSnapshot.getValue(child.second));
                     }
 
                     @Override

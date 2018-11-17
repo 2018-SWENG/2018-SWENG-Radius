@@ -1,5 +1,7 @@
 package ch.epfl.sweng.radius.database;
 
+import android.util.Pair;
+
 import com.google.common.collect.Table;
 import com.google.firebase.database.ValueEventListener;
 
@@ -119,6 +121,6 @@ public abstract class Database {
 
     public abstract void listenObjChild(final DatabaseObject obj,
                                final Tables tableName,
-                               final String childName,final Class childClass,
+                               final Pair<String, Class> child,
                                final CallBackDatabase callback);
 }

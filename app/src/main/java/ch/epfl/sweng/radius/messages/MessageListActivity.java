@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -193,7 +194,8 @@ public class MessageListActivity extends AppCompatActivity {
      */
     private void setUpListener() {
 
-        database.listenObjChild(chatLogs, Database.Tables.CHATLOGS, "messages", Message.class, new CallBackDatabase() {
+        Pair<String, Class> child = new Pair<String, Class>("messages", Message.class);
+        database.listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
             public void onFinish(Object value) {
                 Log.e("message", "message received " + ((Message)value).getContentMessage());
                 receiveMessage((Message) value);

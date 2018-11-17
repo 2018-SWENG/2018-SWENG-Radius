@@ -1,6 +1,7 @@
 package ch.epfl.sweng.radius.database;
 
 import android.support.annotation.NonNull;
+import android.util.Pair;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -448,7 +449,8 @@ public class FirebaseUtilityTest {
 
         when(mockedSnap.exists()).thenReturn(true);
 
-        fbUtil.listenObjChild(chat, Tables.CHATLOGS, "message", Message.class, callback);
+        fbUtil.listenObjChild(chat, Tables.CHATLOGS, new Pair<String, Class>("messages", Message.class)
+                , callback);
 
     }
 

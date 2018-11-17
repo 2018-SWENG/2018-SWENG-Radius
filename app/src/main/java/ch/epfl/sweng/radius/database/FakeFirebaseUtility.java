@@ -1,6 +1,7 @@
 package ch.epfl.sweng.radius.database;
 
 import android.util.Log;
+import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -122,12 +123,12 @@ public class FakeFirebaseUtility extends Database {
     }
 
     @Override
-    public void listenObjChild(DatabaseObject obj, Tables tableName, String childName, Class childClass, CallBackDatabase callback) {
+    public void listenObjChild(DatabaseObject obj, Tables tableName, Pair<String, Class> child, CallBackDatabase callback) {
         HashMap<String, DatabaseObject> table = getTable(tableName);
         Field f1 = null;
         DatabaseObject ret = table.get(obj.getID());
         try {
-            f1 = ret.getClass().getField(childName);
+            f1 = ret.getClass().getField(child.first);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
