@@ -53,11 +53,15 @@ public class Message {
         // typecast o to Complex so that we can compare data members
         Message m = (Message) o;
 
-        boolean time =  m.sendingTime.toString().equals(this.sendingTime.toString());
-        boolean content =  m.contentMessage.equals(this.contentMessage);
-        boolean sender =  m.senderId.equals(this.senderId);
+        return isTheSame(this, m);
+    }
 
-        return time && content && sender;
+    private  boolean isTheSame(Message m1, Message m2){
+        String date1 = m1.sendingTime.toString();
+        String date2 = m2.sendingTime.toString();
+
+        return date1.equals(date2) && m1.contentMessage.equals(m2.contentMessage)
+                && m1.senderId.equals(m2.senderId);
     }
 }
 
