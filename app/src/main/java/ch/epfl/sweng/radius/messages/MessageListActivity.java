@@ -47,6 +47,56 @@ public class MessageListActivity extends AppCompatActivity {
     private MLocation myLoc, otherLoc;
     private final Database database = Database.getInstance();
 
+    private final CallBackDatabase chatLogCallBack = new CallBackDatabase() {
+        @Override
+        public void onFinish(Object value) {
+            chatLogs = (ChatLogs) value;
+            if(chatLogs.getMembersId().size() == 2){
+                myLoc = new MLocation(database.getCurrent_user_id());
+                database.readObjOnce(myLoc, Database.Tables.LOCATIONS, new CallBackDatabase() {
+                    @Override
+                    public void onFinish(Object value) {
+                        myLoc = (MLocation) value;
+                    }
+
+                    @Override
+                    public void onError(DatabaseError error) {
+                        Log.e("Firebase", "Error reading Database");
+
+                    }
+                });
+                String otherId = chatLogs.getMembersId().get(0) == database.getCurrent_user_id() ?
+                        chatLogs.getMembersId().get(0) : chatLogs.getMembersId().get(1);
+                otherLoc = new MLocation(otherId);
+                database.readObjOnce(otherLoc, Database.Tables.LOCATIONS, new CallBackDatabase() {
+                    @Override
+                    public void onFinish(Object value) {
+                        otherLoc = (MLocation) value;
+                    }
+
+                    @Override
+                    public void onError(DatabaseError error) {
+
+                    }
+                });
+            }
+            if(chatLogs.getMembersId().size() < 2 && otherUserId != null){
+                chatLogs.addMembersId(otherUserId);
+            }
+            if(!chatLogs.getMembersId().contains(database.getCurrent_user_id()))
+                chatLogs.addMembersId(database.getCurrent_user_id());
+
+            database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
+            Log.e("message", "Calllback Messages size" + Integer.toString(chatLogs.getMessages().size()));
+
+        }
+
+        @Override
+        public void onError(DatabaseError error) {
+            Log.e("Firebase", "Error reading Database");
+        }
+    };
+
     /**
      * Get all infos needed to create the activity
      * We get the chatId and otherUserId from the parent fragment
@@ -64,55 +114,7 @@ public class MessageListActivity extends AppCompatActivity {
             otherUserId = b.getString("otherId");
         }
         chatLogs = new ChatLogs(chatId);
-        database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                    chatLogs = (ChatLogs) value;
-                    if(chatLogs.getMembersId().size() == 2){
-                        myLoc = new MLocation(database.getCurrent_user_id());
-                        database.readObjOnce(myLoc, Database.Tables.LOCATIONS, new CallBackDatabase() {
-                            @Override
-                            public void onFinish(Object value) {
-                                myLoc = (MLocation) value;
-                            }
-
-                            @Override
-                            public void onError(DatabaseError error) {
-                                Log.e("Firebase", "Error reading Database");
-
-                            }
-                        });
-                        String otherId = chatLogs.getMembersId().get(0) == database.getCurrent_user_id() ?
-                                chatLogs.getMembersId().get(0) : chatLogs.getMembersId().get(1);
-                        otherLoc = new MLocation(otherId);
-                        database.readObjOnce(otherLoc, Database.Tables.LOCATIONS, new CallBackDatabase() {
-                            @Override
-                            public void onFinish(Object value) {
-                                otherLoc = (MLocation) value;
-                            }
-
-                            @Override
-                            public void onError(DatabaseError error) {
-
-                            }
-                        });
-                    }
-                if(chatLogs.getMembersId().size() < 2 && otherUserId != null){
-                    chatLogs.addMembersId(otherUserId);
-                }
-                if(!chatLogs.getMembersId().contains(database.getCurrent_user_id()))
-                    chatLogs.addMembersId(database.getCurrent_user_id());
-
-                database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
-                Log.e("message", "Calllback Messages size" + Integer.toString(chatLogs.getMessages().size()));
-
-            }
-
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("Firebase", "Error reading Database");
-            }
-        });
+        database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, chatLogCallBack);
         Log.e("message", "Setup Messages size" + Integer.toString(chatLogs.getMessages().size()));
 
     }

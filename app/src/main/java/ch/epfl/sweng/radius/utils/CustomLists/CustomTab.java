@@ -28,6 +28,37 @@ public abstract class CustomTab extends Fragment {
     protected  CustomListAdapter adapter;
     protected User myUser;
 
+    private CallBackDatabase adapterCallback = new CallBackDatabase() {
+        @Override
+        public void onFinish(Object value) {
+            ArrayList<CustomListItem> usersItems = new ArrayList<>();
+            String convId;
+            String userId = database.getCurrent_user_id();
+            for (User user: (List<User>)value) {
+                convId = user.getConvFromUser(userId);
+
+                // If the conversation doesn't exist, it has to be created
+                if(convId.isEmpty()){
+                    ArrayList<String> ids = new ArrayList();
+                    ids.add(userId);
+                    ids.add(user.getID());
+                    convId = new ChatLogs(ids).getID();
+                    user.addChat(userId, convId);
+                    // Update database entry for temp user with new chatLof
+                    database.writeInstanceObj(user, Database.Tables.USERS);
+                    myUser.addChat(user.getID(), convId);
+
+                }
+                usersItems.add(new CustomListItem(user, convId));
+            }
+            adapter.setItems(usersItems); adapter.notifyDataSetChanged();
+            database.writeInstanceObj(myUser, Database.Tables.USERS);
+        }
+        @Override
+        public void onError(DatabaseError error) {
+            Log.e("Firebase", error.getMessage());
+        }
+    };
 
     public CustomTab() {}
 
@@ -81,37 +112,7 @@ public abstract class CustomTab extends Fragment {
         });
 
         database.readListObjOnce(listIds,
-                Database.Tables.USERS, new CallBackDatabase() {
-                    @Override
-                    public void onFinish(Object value) {
-                        ArrayList<CustomListItem> usersItems = new ArrayList<>();
-                        String convId;
-                        String userId = database.getCurrent_user_id();
-                        for (User user: (List<User>)value) {
-                            convId = user.getConvFromUser(userId);
-
-                            // If the conversation doesn't exist, it has to be created
-                            if(convId.isEmpty()){
-                                ArrayList<String> ids = new ArrayList();
-                                ids.add(userId);
-                                ids.add(user.getID());
-                                convId = new ChatLogs(ids).getID();
-                                user.addChat(userId, convId);
-                                // Update database entry for temp user with new chatLof
-                                database.writeInstanceObj(user, Database.Tables.USERS);
-                                myUser.addChat(user.getID(), convId);
-
-                            }
-                            usersItems.add(new CustomListItem(user, convId));
-                        }
-                        adapter.setItems(usersItems); adapter.notifyDataSetChanged();
-                        database.writeInstanceObj(myUser, Database.Tables.USERS);
-                    }
-                    @Override
-                    public void onError(DatabaseError error) {
-                        Log.e("Firebase", error.getMessage());
-                    }
-                });
+                Database.Tables.USERS, adapterCallback);
     }
 
     protected abstract List<String> getUsersIds(User current_user);
