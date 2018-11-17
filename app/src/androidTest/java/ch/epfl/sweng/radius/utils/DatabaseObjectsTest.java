@@ -49,26 +49,19 @@ public class DatabaseObjectsTest {
     @Test
     public void testChatLogs() {
         ArrayList<String> usersIds = new ArrayList<String>();
-        try{
-            new ChatLogs(usersIds);
-            assert(false);
-        }catch (Exception e){
+        new ChatLogs(usersIds);
 
-        }
         ChatLogs chat = new ChatLogs();
         usersIds.add("1234");
         usersIds.add("4321");
         ChatLogs chatLogs = new ChatLogs(usersIds);
         ChatLogs chatLogs1 = new ChatLogs("12345");
         Message m = new Message(chatLogs.getMembersId().get(0), chatLogs.getMembersId().get(1), new Date());
-
         chatLogs.addMessage(m);
         chatLogs.addMembersId("56789");
         chatLogs.addMembersId("56789");
-
         // Test Ids generation
         Assert.assertNotNull(chatLogs.getID());
-
         // Test messages
         List allmessages = chatLogs.getMessages();
         List Nmessages = chatLogs.getLastNMessages(10);
@@ -79,7 +72,6 @@ public class DatabaseObjectsTest {
         chatLogs.addMessage(m);
         chatLogs.removeMessage(0);
         chatLogs.setMessages(allmessages);
-
         String id = chatLogs.getChatLogsId();
         chatLogs.setChatLogsId(id);
 

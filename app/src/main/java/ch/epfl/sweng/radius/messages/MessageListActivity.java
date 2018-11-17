@@ -204,7 +204,7 @@ public class MessageListActivity extends AppCompatActivity {
         });
 
     }
-
+/*
     private void prepareUsers(ArrayList<String> participants) {
         database.readListObjOnce(participants, Database.Tables.USERS, new CallBackDatabase() {
             @Override
@@ -229,7 +229,7 @@ public class MessageListActivity extends AppCompatActivity {
         else
             setEnabled(true);
     }
-/*
+
     public void usersInRadius() { //this method needs to go through severe change - currently we are not saving the radius or the locations of users properly.
         ArrayList<String> participants = (ArrayList) chatLogs.getMembersId();
         us = new User(participants.get(0));

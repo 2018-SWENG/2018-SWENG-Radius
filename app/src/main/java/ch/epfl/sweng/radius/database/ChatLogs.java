@@ -20,7 +20,7 @@ public class ChatLogs implements DatabaseObject{
 
 
     public ChatLogs(List<String> membersId){
-        if(membersId.size() != 2) { throw new IllegalArgumentException("Chat must be between 2 users"); }
+    //    if(membersId.size() < 2) { throw new IllegalArgumentException("Chat must be between 2 users"); }
         this.membersId = new ArrayList<>(membersId);
         this.messages = new LinkedList<>();
         this.numberOfMessages=0;

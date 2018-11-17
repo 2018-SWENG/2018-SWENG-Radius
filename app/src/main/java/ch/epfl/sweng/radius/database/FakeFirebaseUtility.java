@@ -131,9 +131,8 @@ public class FakeFirebaseUtility extends Database {
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-        if(f1 != null)
-            callback.onFinish(f1);
-
+        // To fix if used elsewhere
+        callback.onFinish(new Message());
     }
 
 
