@@ -45,6 +45,7 @@ public class CustomListListeners {
                 Intent intent = new Intent(context, MessageListActivity.class);
                 Bundle b = new Bundle();
                 b.putString("chatId", convId);
+                b.putString("otherId", userId);
                 intent.putExtras(b); //Put your id to your next Intent
                 context.startActivity(intent);
 

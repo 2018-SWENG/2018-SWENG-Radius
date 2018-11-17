@@ -21,10 +21,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.CallBackDatabase2;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
@@ -44,8 +46,9 @@ public class MessageListActivity extends AppCompatActivity {
     private EditText messageZone;
     private Button sendButton;
     private ChatLogs chatLogs;
-    private String chatId;
+    private String chatId, otherUserId;
     private ValueEventListener listener;
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
 
     //these might cause problems when we switch to multiple users and multiple different chats
     //This field will be used to enable chat with FRIENDS not in radius
@@ -62,12 +65,12 @@ public class MessageListActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
 
         //Get infos from parent fragment
-        String otherUserId = "";
+        otherUserId = "";
 
         if (b != null) {
             chatId      = b.getString("chatId");
             Log.w("Message", "ChatId is " + chatId);
-        //    otherUserId = b.getString("otherUserId");
+            otherUserId = b.getString("otherId");
         }
         chatLogs = new ChatLogs(chatId);
         database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, new CallBackDatabase() {
@@ -103,6 +106,13 @@ public class MessageListActivity extends AppCompatActivity {
                             }
                         });
                     }
+                if(chatLogs.getMembersId().size() < 2 && otherUserId != null){
+                    chatLogs.addMembersId(otherUserId);
+                }
+                if(!chatLogs.getMembersId().contains(database.getCurrent_user_id()))
+                    chatLogs.addMembersId(database.getCurrent_user_id());
+
+                database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
             }
 
             @Override
@@ -110,9 +120,6 @@ public class MessageListActivity extends AppCompatActivity {
                 Log.e("Firebase", "Error reading Database");
             }
         });
-
-        database.readObj(chatLogs, Database.Tables.CHATLOGS);
-
 
     }
 
@@ -152,11 +159,15 @@ public class MessageListActivity extends AppCompatActivity {
             Message msg = new Message(senderId, message, date);
             Log.w("MessageActivity" , "Chatlogs ID is " + chatLogs.getID());
 
-            chatLogs.addMessage(msg);
-            database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
+           // chatLogs.addMessage(msg);
+          //  database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
+            List<Message> newList = chatLogs.getMessages();
+            newList.add(msg);
+            database.writeToInstanceChild(chatLogs, Database.Tables.CHATLOGS, "messages",
+                    newList);
 
             messageZone.setText("");
-            receiveMessage(msg);
+            //receiveMessage(msg);
         }
 
     }
@@ -169,6 +180,7 @@ public class MessageListActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.e("message", "Message Sent ");
                 String message = messageZone.getText().toString();
                 sendMessage(database.getCurrent_user_id(), message, new Date());
             }
@@ -180,10 +192,31 @@ public class MessageListActivity extends AppCompatActivity {
      */
     private void setUpListener() {
 
+        database.listenObjChild(chatLogs, Database.Tables.CHATLOGS, "messages", Message.class, new CallBackDatabase2() {
+            public void onFinish(Object value, String s) {
+                Log.e("message", "Message Received");
+
+                if(s != null && s.equals(Integer.toString(chatLogs.getNumberOfMessages()-1)))
+                    return;
+                receiveMessage((Message) value);
+            }
+
+            @Override
+            public void onFinish(Object value) {
+
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+
+            }
+        });
+/*
         database.readObj(chatLogs, Database.Tables.CHATLOGS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
                 chatLogs = (ChatLogs) value;
+                receiveMessage(chatLogs.getMessages().get(chatLogs.getNumberOfMessages()-1));
 
             }
 
@@ -192,7 +225,7 @@ public class MessageListActivity extends AppCompatActivity {
 
             }
         }, chatLogs.getID() + "chatLogListener");
-
+*/
     }
 
     private void prepareUsers(ArrayList<String> participants) {
@@ -269,7 +302,7 @@ public class MessageListActivity extends AppCompatActivity {
 
         super.onStop();
 
-        database.stopListening(chatLogs.getID() + "chatLogListener", Database.Tables.CHATLOGS);
+ //       database.stopListening(chatLogs.getID() + "chatLogListener", Database.Tables.CHATLOGS);
 
 
     }

@@ -7,10 +7,13 @@
 package ch.epfl.sweng.radius.database;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.common.collect.Table;
+import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -31,6 +34,58 @@ public class FirebaseUtility extends Database{
     public String getCurrent_user_id() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
+
+
+    @Override
+    public void writeToInstanceChild(final DatabaseObject obj, Tables tablename,
+                                              final String childName, final Object child){
+        FirebaseDatabase.getInstance()
+                .getReference(tablename.toString())
+                .child(obj.getID())
+                .child(childName)
+                .setValue(child);
+    }
+
+    @Override
+    public void listenObjChild(final DatabaseObject obj,
+                               final Tables tableName,
+                               final String childName,
+                               final Class childClass,
+                               final CallBackDatabase2 callback) {
+
+        FirebaseDatabase.getInstance()
+                .getReference(tableName.toString())
+                .child(obj.getID())
+                .child(childName)
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            callback.onFinish(dataSnapshot.getValue(childClass), s);
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        Log.e("Firebase", "Child Changed !");
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        callback.onError(databaseError);
+
+                    }
+                });
+    }
+
 
 
     @Override

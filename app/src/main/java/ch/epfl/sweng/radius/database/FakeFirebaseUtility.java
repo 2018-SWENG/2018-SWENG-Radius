@@ -116,6 +116,12 @@ public class FakeFirebaseUtility extends Database {
 
     }
 
+    @Override
+    public void listenObjChild(DatabaseObject obj, Tables tableName, String childName, Class childClass, CallBackDatabase2 callback) {
+
+    }
+
+
     private void fillDatabase(){
         // Define Current user
         currentUSer = new User("testUser1");
@@ -149,5 +155,10 @@ public class FakeFirebaseUtility extends Database {
 
         return (HashMap<String, DatabaseObject>) (tableName == Tables.USERS ? usersTable :
                         tableName == Tables.CHATLOGS ? chatLogsTable : locationsTable);
+    }
+    @Override
+    public  void writeToInstanceChild(final DatabaseObject obj, Tables tablename,
+                                              final String childName, final Object child){
+
     }
 }

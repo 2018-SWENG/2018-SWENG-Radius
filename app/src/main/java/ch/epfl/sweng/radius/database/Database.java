@@ -112,7 +112,13 @@ public abstract class Database {
     public abstract void writeInstanceObj(final DatabaseObject obj, Tables tableName);
 
 
+    public abstract void writeToInstanceChild(final DatabaseObject obj, Tables tablename,
+                                              final String childName, final Object child);
+
     public abstract void stopListening(String listenerID, final Tables tableName);
 
-
+    public abstract void listenObjChild(final DatabaseObject obj,
+                               final Tables tableName,
+                               final String childName,final Class childClass,
+                               final CallBackDatabase2 callback);
 }
