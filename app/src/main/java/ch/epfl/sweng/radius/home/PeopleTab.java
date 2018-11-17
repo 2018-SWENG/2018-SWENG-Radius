@@ -23,6 +23,51 @@ public class PeopleTab extends CustomTab {
     private MLocation myLocation;
     private double myRadius = -1;
     private String radiusListener;
+    List<String> userIDs = new ArrayList<>();
+
+    private final CallBackDatabase radiusCallback = new CallBackDatabase() {
+        @Override
+        public void onFinish(Object value) {
+            myRadius = ((User) value).getRadius();
+        }
+
+        @Override
+        public void onError(DatabaseError error) {
+
+        }
+    };
+
+    private final CallBackDatabase locationCallback = new CallBackDatabase() {
+        @Override
+        public void onFinish(Object value) {
+            myLocation = (MLocation) value;
+
+        }
+
+        @Override
+        public void onError(DatabaseError error) {
+            Log.e("PeopleTab", "Database read error on my Location");
+        }
+    };
+
+    private CallBackDatabase locationsCallback = new CallBackDatabase() {
+        @Override
+        public void onFinish(Object value) {
+            ArrayList<MLocation> locations = (ArrayList<MLocation>) value;
+            for(MLocation loc : locations){
+                // TODO Fix for non-user locations by checking TBD location type
+                if(isInRadius(loc)){
+                    userIDs.add(loc.getID());
+                }
+
+            }
+        }
+
+        @Override
+        public void onError(DatabaseError error) {
+            Log.e("PeopleTab", "Database read error all locations");
+        }
+    };
 
     public PeopleTab() {
     }
@@ -33,54 +78,16 @@ public class PeopleTab extends CustomTab {
         //  Get user Radius value and set listener for updates
         //  If it was already fetched, no need to read again, there is a listener
         if(myRadius < 0)
-            database.readObj(current_user, Database.Tables.USERS, new CallBackDatabase() {
-                @Override
-                public void onFinish(Object value) {
-                    myRadius = ((User)value).getRadius();
-                }
-
-                @Override
-                public void onError(DatabaseError error) {
-
-                }
-            }, radiusListener);
+            database.readObj(current_user, Database.Tables.USERS,
+            radiusCallback, radiusListener);
 
         // Get my Location
         // TODO Add listener like for radius
-        database.readObjOnce(new MLocation(userId), Database.Tables.LOCATIONS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                myLocation = (MLocation) value;
+        database.readObjOnce(new MLocation(userId), Database.Tables.LOCATIONS, locationCallback);
 
-            }
-
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("PeopleTab", "Database read error on my Location");
-            }
-        });
-
-        final List<String> userIDs = new ArrayList<>();
         // Get all other locations in Radius and add corresponding user to List
         // TODO Setup a Listener instead of reading once
-        database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                ArrayList<MLocation> locations = (ArrayList<MLocation>) value;
-                for(MLocation loc : locations){
-                    // TODO Fix for non-user locations by checking TBD location type
-                    if(isInRadius(loc)){
-                        userIDs.add(loc.getID());
-                    }
-
-                }
-            }
-
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("PeopleTab", "Database read error all locations");
-            }
-        });
+        database.readAllTableOnce(Database.Tables.LOCATIONS, locationsCallback);
         return userIDs;
     }
 
