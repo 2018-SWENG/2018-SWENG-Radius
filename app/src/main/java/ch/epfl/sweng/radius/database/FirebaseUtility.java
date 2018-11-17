@@ -25,6 +25,47 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+class ChildListener implements ChildEventListener {
+
+    CallBackDatabase callback;
+    Pair<String, Class> child;
+
+    ChildListener(CallBackDatabase callback, Pair<String, Class> child){
+        this.callback = callback;
+        this.child = child;
+    }
+
+    @Override
+    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        Log.e("message", "New child !");
+        callback.onFinish(dataSnapshot.getValue(child.second));
+    }
+
+    @Override
+    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        Log.e("Firebase", "Child Changed !");
+    }
+
+    @Override
+    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+    }
+
+    @Override
+    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+        callback.onError(databaseError);
+
+    }
+
+}
+
+}
+
 public class FirebaseUtility extends Database{
 
     private static HashMap<String, ValueEventListener> listeners = new HashMap<>();
@@ -53,38 +94,13 @@ public class FirebaseUtility extends Database{
                                final Pair<String, Class> child,
                                final CallBackDatabase callback) {
 
+        ChildListener childListener = new ChildListener(callback, child);
+
         FirebaseDatabase.getInstance()
                 .getReference(tableName.toString())
                 .child(obj.getID())
                 .child(child.first)
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        Log.e("message", "New child !");
-                            callback.onFinish(dataSnapshot.getValue(child.second));
-                    }
-
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        Log.e("Firebase", "Child Changed !");
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        callback.onError(databaseError);
-
-                    }
-                });
+                .addChildEventListener(childListener);
     }
 
 
@@ -203,31 +219,6 @@ public class FirebaseUtility extends Database{
                     }
                 });
     }
-/*
-    public void listenToWholeTable(final DatabaseObject obj,
-                        final Tables tableName,
-                        final CallBackDatabase callback) {
-        FirebaseDatabase.getInstance()
-                .getReference(tableName.toString())
-                .child(obj.getID())
-                .addValueEventListener( new ValueEventListener() {
-                    @Override
-                    public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (!dataSnapshot.hasChild(obj.getID())) {
-                            writeInstanceObj(obj, tableName);
-                            callback.onFinish(obj);
-                        }
-                        else
-                            callback.onFinish(dataSnapshot.getValue(obj.getClass()));
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        callback.onError(databaseError);
-                    }
-                });
-    }
-    */
 
     @Override
     public void writeInstanceObj(final DatabaseObject obj, final Tables tableName){
