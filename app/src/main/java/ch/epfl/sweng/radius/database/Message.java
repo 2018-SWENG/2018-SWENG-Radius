@@ -44,7 +44,6 @@ public class Message {
         if (o == this) {
             return true;
         }
-
         /* Check if o is an instance of Complex or not
           "null instanceof [type]" also returns false */
         if (!(o instanceof Message)) {
@@ -54,9 +53,11 @@ public class Message {
         // typecast o to Complex so that we can compare data members
         Message m = (Message) o;
 
-        return m.sendingTime.toString().equals(this.sendingTime.toString())
-                && m.contentMessage.equals(this.contentMessage)
-                && m.senderId.equals(this.senderId);
+        boolean time =  m.sendingTime.toString().equals(this.sendingTime.toString());
+        boolean content =  m.contentMessage.equals(this.contentMessage);
+        boolean sender =  m.senderId.equals(this.senderId);
+
+        return time && content && sender;
     }
 }
 
