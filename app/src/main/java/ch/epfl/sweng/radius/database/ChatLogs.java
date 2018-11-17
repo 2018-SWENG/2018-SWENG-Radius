@@ -63,11 +63,13 @@ public class ChatLogs implements DatabaseObject{
     public void addMembersId(String userID){
         if(!membersId.contains(userID))
             membersId.add(userID);
+        Database.getInstance().writeToInstanceChild(this, Database.Tables.CHATLOGS, "membersId",membersId);
+
     }
 
     public void addMessage(Message message){
         messages.add(message);
-        numberOfMessages++;
+        Database.getInstance().writeToInstanceChild(this, Database.Tables.CHATLOGS, "numberOfMessages",++numberOfMessages);
     }
 
     public void setMessages(List<Message> messages) {
