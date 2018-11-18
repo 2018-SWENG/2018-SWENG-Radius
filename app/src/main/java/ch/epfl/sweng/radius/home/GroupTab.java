@@ -5,18 +5,16 @@ import android.util.Log;
 
 import com.google.firebase.database.DatabaseError;
 
-import java.net.IDN;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.CustomLists.CustomTab;
+import ch.epfl.sweng.radius.utils.CustomLists.customGroups.CustomGroupTab;
 
-public class GroupTab extends CustomTab {
+public class GroupTab extends CustomGroupTab {
 
     private MLocation myLocation;
     private double myRadius = -1;
@@ -109,7 +107,7 @@ public class GroupTab extends CustomTab {
     }
 
     @Override
-    protected List<String> getUsersIds(User current_user) {
+    protected List<String> getIds(User current_user) {
         final String userId = current_user.getID();
         final Database database = Database.getInstance();
         radiusListener = userId + "_radiusListener";
@@ -132,14 +130,10 @@ public class GroupTab extends CustomTab {
             // 3 keep only the group which we are in the radius -
 
             List<MLocation> mLocationGroupCloseList = getMLocationClose(mLocationGroupList,new MLocation()); //user.getLocation());
-
-            // 4 show the lists of group in the group tabs -
-
-
-            // 5 clickListener to go to the groupConv -
         }
 
-
-        return new ArrayList<>();
+        ArrayList<String> test = new ArrayList<>();
+        test.add("1");
+        return test;
     }
 }

@@ -6,20 +6,18 @@ import android.util.Log;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.CustomLists.CustomTab;
-import ch.epfl.sweng.radius.utils.MapUtility;
+import ch.epfl.sweng.radius.utils.CustomLists.customUsers.CustomUserTab;
 
 // TODO : On activity end, clear myUser empty Chaltogs (no message) and repush do
     // TODO     the same for userIDs
 
-public class PeopleTab extends CustomTab {
+public class PeopleTab extends CustomUserTab {
     private MLocation myLocation;
     private double myRadius = -1;
     private String radiusListener;
@@ -71,7 +69,7 @@ public class PeopleTab extends CustomTab {
 
     public PeopleTab() {
     }
-    protected  List<String> getUsersIds(User current_user){
+    protected  List<String> getIds(User current_user){
         final String userId = current_user.getID();
         final Database database = Database.getInstance();
         radiusListener = userId + "_radiusListener";

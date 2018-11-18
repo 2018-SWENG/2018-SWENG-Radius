@@ -1,15 +1,15 @@
-package ch.epfl.sweng.radius.utils.CustomLists;
+package ch.epfl.sweng.radius.utils.CustomLists.customUsers;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.User;
 
-public class CustomListItem {
+public class CustomUserListItem {
     private User user;
     private String convId;
     private int profilePic;
 
-    public CustomListItem(User user, String convId){
+    public CustomUserListItem(User user, String convId){
         this.user = user;
         this.convId = convId;
         this.profilePic = R.drawable.user_photo_default;
