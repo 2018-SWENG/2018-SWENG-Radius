@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.utils.CustomLists;
+package ch.epfl.sweng.radius.utils.CustomLists.customUsers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,13 +12,13 @@ import ch.epfl.sweng.radius.messages.MessageListActivity;
 
 import ch.epfl.sweng.radius.database.User;
 
-public class CustomListListeners {
+public class CustomUserListListeners {
     private int clickedPic;
     private String clickedName;
     private String userUID;
 
 
-    public CustomListListeners(int clickedPic, User itemUser){
+    public CustomUserListListeners(int clickedPic, User itemUser){
         this.clickedPic = clickedPic;
         this.clickedName = itemUser.getNickname();
         this.userUID = itemUser.getID();

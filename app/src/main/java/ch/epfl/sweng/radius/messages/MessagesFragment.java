@@ -11,11 +11,11 @@ import android.widget.ListView;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.utils.CustomLists.CustomListItem;
+import ch.epfl.sweng.radius.utils.CustomLists.customUsers.CustomUserListItem;
 
 
 public class MessagesFragment extends Fragment {
-    List<CustomListItem> chatList;
+    List<CustomUserListItem> chatList;
     ListView listView;
 
     public MessagesFragment() {

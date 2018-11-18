@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.utils.CustomLists;
+package ch.epfl.sweng.radius.utils.CustomLists.customUsers;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -14,19 +14,19 @@ import java.util.List;
 import ch.epfl.sweng.radius.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.ViewHolder>{
+public class CustomUserListAdapter extends RecyclerView.Adapter<CustomUserListAdapter.ViewHolder>{
 
-    private List<CustomListItem> items;
+    private List<CustomUserListItem> items;
     Context context;
 
-    public CustomListAdapter(List<CustomListItem> items, Context context) {
+    public CustomUserListAdapter(List<CustomUserListItem> items, Context context) {
         this.items = items;
         this.context = context;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public CustomListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CustomUserListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View itemLayoutView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.custom_list_item_layout, null);
@@ -40,17 +40,16 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
-        //TODO Remove this log from CustomListAdapter
-        Log.e("PeopleTab", "Items users size :" + items.size());
+        Log.e("CustomUserListAdapter", "Items users size :" + items.size());
 
         viewHolder.txtViewTitle.setText(items.get(position).getItemUser().getNickname());
         viewHolder.imgViewIcon.setImageResource(items.get(position).getFriendProfilePic());
 
-        CustomListItem item = items.get(position);
+        CustomUserListItem item = items.get(position);
         final int clickedPic = item.getFriendProfilePic();
         final String clickedId = item.getUserId();
         final String clickedConv = item.getConvId();
-        CustomListListeners customListener = new CustomListListeners(clickedPic, item.getItemUser());
+        CustomUserListListeners customListener = new CustomUserListListeners(clickedPic, item.getItemUser());
         customListener.setCustomOnClick(viewHolder.imgViewIcon, context);
         customListener.setCustomOnClick(viewHolder.txtViewTitle, context,clickedId,clickedConv);
     }
@@ -75,7 +74,7 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
         return items.size();
     }
 
-    public void setItems(List<CustomListItem> items){
+    public void setItems(List<CustomUserListItem> items){
         this.items=items;
     }
 }
