@@ -74,10 +74,14 @@ public class MessageListActivity extends AppCompatActivity {
     };
 
     private String getOtherID(){
-        String tempID =  chatLogs.getMembersId().get(0);
-        String tempID2 =  chatLogs.getMembersId().get(1);
-        String otherId = tempID == database.getCurrent_user_id() ?
-                tempID : tempID2;
+        String otherId = this.otherUserId;
+        if(chatLogs.getMembersId().size() == 2){
+            String tempID =  chatLogs.getMembersId().get(0);
+            String tempID2 =  chatLogs.getMembersId().get(1);
+             otherId = tempID.equals(database.getCurrent_user_id()) ?
+                    tempID : tempID2;
+        }
+
         return otherId;
     }
 
