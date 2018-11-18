@@ -2,6 +2,7 @@ package ch.epfl.sweng.radius.database;
 
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
@@ -11,18 +12,36 @@ import ch.epfl.sweng.radius.utils.MapUtility;
 
 public class GroupLocationFetcher implements CallBackDatabase {
 
+    private final Database database = Database.getInstance();
     private HashMap<String, MLocation> groupLocations;
     private MapUtility mapUtility;
+    private MLocation currentUserLoc;
 
-    public GroupLocationFetcher(double radius) {
+    public GroupLocationFetcher() {
         groupLocations = new HashMap<>();
-        mapUtility = new MapUtility(radius);
+        currentUserLoc = new MLocation(database.getCurrent_user_id());
 
+        database.readObjOnce(currentUserLoc, Database.Tables.USERS, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                currentUserLoc = (MLocation) value;
+                Log.e("GroupLocationFetcher: ", "currentUser latitude" + currentUserLoc.getLatitude() +
+                        "currentUser longtitude" + currentUserLoc.getLongitude());
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+                Log.e("Firebase Error", error.getMessage());
+            }
+        });
     }
+
     @Override
     public void onFinish(Object value) {
         for(MLocation location : (ArrayList<MLocation>) value) {
-            if(mapUtility.contains(location.getLatitude(), location.getLongitude())) {
+            mapUtility = new MapUtility(location.getRadius());
+            mapUtility.setCurrCoordinates(new LatLng(location.getLatitude(), location.getLongitude()));
+            if(mapUtility.contains(currentUserLoc.getLatitude(), currentUserLoc.getLongitude())) { // compare it with the users location.
                 recordLocationIfGroup(location);
             }
         }
@@ -46,6 +65,7 @@ public class GroupLocationFetcher implements CallBackDatabase {
                     public void onFinish(Object value) {
                         if (((MLocation) value).getIsGroupLocation() == 1) {
                             groupLocations.put(((MLocation) value).getID(), (MLocation) value);
+                            Log.e("value.getID()", ((MLocation) value).getID());
                         }
                     }
 

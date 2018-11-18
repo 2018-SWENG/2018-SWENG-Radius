@@ -242,7 +242,9 @@ public class MessageListActivity extends AppCompatActivity {
     }
 
     private void compareLocataion() {
-
+        /*TODO check if other users radius contains current user.
+           The problem here is, if the other user is in my radius I can send messages to them, however, if current user
+           is not in the radius of the other user, they can not reply to those messages.*/
         if(chatLogs.getMembersId().size() == 2)
             setEnabled(MapUtility.isInRadius(otherLoc, (int) MapUtility.radius));
         else

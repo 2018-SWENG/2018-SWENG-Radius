@@ -4,6 +4,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class MLocation implements DatabaseObject {
 
+    public final double DEFAULT_GROUP_LOCATION_RADIUS = 2000;
+
     private static int locIDCounter = 0;
 
     private String userID;
@@ -13,6 +15,7 @@ public class MLocation implements DatabaseObject {
     private double latitude;
 
     private int isGroupLocation; // if 1, it means that the location belongs to a group not a user
+    private double radius; // Use it only if the mLocation is a group.
 
     public MLocation(String userID){
         this.userID = userID;
@@ -25,6 +28,7 @@ public class MLocation implements DatabaseObject {
         this.title = "New MLocation";
         this.message = "Here I am";
         this.isGroupLocation = 0;
+        this.radius = 0;
     }
 
     public MLocation(String userID, double longitude, double latitude){
@@ -34,6 +38,7 @@ public class MLocation implements DatabaseObject {
         this.title = "New MLocation";
         this.message = "Here I am";
         this.isGroupLocation = 0;
+        this.radius = 0;
     }
 
     public MLocation(String userID, LatLng pos){
@@ -43,6 +48,7 @@ public class MLocation implements DatabaseObject {
         this.title = "New MLocation";
         this.message = "Here I am";
         this.isGroupLocation = 0;
+        this.radius = 0;
     }
 
     public double getLatitude() {
@@ -92,6 +98,16 @@ public class MLocation implements DatabaseObject {
 
     public void setIsGroupLocation(int isGroupLocation) {
         this.isGroupLocation = isGroupLocation;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(double newRadius) {
+        if (getIsGroupLocation() == 1) {
+            radius = newRadius;
+        }
     }
 
 }
