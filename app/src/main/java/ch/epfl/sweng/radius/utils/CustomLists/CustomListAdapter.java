@@ -40,6 +40,7 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
+        //TODO Remove this log from CustomListAdapter
         Log.e("PeopleTab", "Items users size :" + items.size());
 
         viewHolder.txtViewTitle.setText(items.get(position).getItemUser().getNickname());

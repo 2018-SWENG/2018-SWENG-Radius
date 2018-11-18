@@ -108,6 +108,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         tabLayout = view.findViewById(R.id.tabLayout);
         adapter = new TabAdapter(this.getChildFragmentManager());
         adapter.addFragment(new PeopleTab(), "People");
+        adapter.addFragment(new GroupTab(), "Groups");
         adapter.addFragment(new TopicsTab(), "Topics");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
