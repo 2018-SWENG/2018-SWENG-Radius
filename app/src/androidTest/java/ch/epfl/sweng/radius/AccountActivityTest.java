@@ -13,6 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
@@ -44,6 +45,7 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
+        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
         User testUser = new User("testId");
         testUser.setNickname("testNickname");

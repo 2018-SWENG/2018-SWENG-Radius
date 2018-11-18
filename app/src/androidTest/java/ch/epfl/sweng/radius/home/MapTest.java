@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.MapUtility;
@@ -46,6 +47,9 @@ public class MapTest {
     @Before
     public void setup() {
         Database.activateDebugMode();
+        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
+
+
         accountActivity = mblActivityTestRule.getActivity();
         radius = 3000;
         user1 = new User("userTest1");

@@ -41,7 +41,7 @@ public class MapUtility {
     private static boolean mblLocationPermissionGranted;
     private Location currentLocation;
     private static MLocation myPos;//private static MLocation myPos;
-    public static double radius;
+    public static double radius = 5000;
     private static LatLng currCoordinates;
 
     private static HashMap<String, MLocation> otherPos;

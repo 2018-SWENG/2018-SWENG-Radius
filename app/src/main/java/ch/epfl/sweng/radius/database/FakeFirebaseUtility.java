@@ -4,6 +4,7 @@ import android.util.Log;
 import android.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.lang.reflect.Field;
@@ -21,6 +22,7 @@ public class FakeFirebaseUtility extends Database {
 
     public FakeFirebaseUtility(){
         fillDatabase();
+
     }
 
     @Override
@@ -137,7 +139,8 @@ public class FakeFirebaseUtility extends Database {
     }
 
 
-    private void fillDatabase(){
+    public void fillDatabase(){
+        if(currentUSer != null) return;
         // Define Current user
         currentUSer = new User("testUser1");
 
@@ -158,6 +161,14 @@ public class FakeFirebaseUtility extends Database {
                 defaultLat + 0.02));
         locationsTable.put("testUser4", new MLocation("testUser4",
                 defaultLng - 0.01, defaultLat - 0.01));
+
+        ChatLogs chat = new ChatLogs("0");
+        ArrayList<String> users = new ArrayList<String>();
+        chat.addMembersId("usertTest1");
+        chat.addMembersId("usertTest2");
+        chat.addMessage(new Message("usertTest1", "fff", new Date()));
+        chat.addMessage(new Message("usertTest2", "aaa", new Date()));
+        chatLogsTable.put("0", chat);
     }
 
     private int getTableSize(Tables tableName){

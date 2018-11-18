@@ -476,4 +476,26 @@ public class FirebaseUtilityTest {
 
     }
 
+    @Test
+    public void writeToInstanceChild(){
+        ChatLogs chat = new ChatLogs();
+        PowerMockito.mockStatic(FirebaseDatabase.class);
+        when(FirebaseDatabase.getInstance()).thenReturn(mockedFb);
+        when(mockedFb.getReference(any(String.class))).thenReturn(mockedDb);
+
+        when(mockedDb.child((String) Matchers.argThat(new ArgumentMatcher(){
+
+            // Update current and print to console path to console
+            @Override
+            public boolean matches(Object argument) {
+                curRef = (String) argument;
+                return true;
+            }
+
+        }))).thenReturn(mockedDb);
+        fbUtil.writeToInstanceChild(chat, Tables.CHATLOGS, "messages", new Message());
+
+        fbUtil.writeInstanceObj(chat, Tables.CHATLOGS);
+    }
+
 }

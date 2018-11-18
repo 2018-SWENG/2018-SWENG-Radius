@@ -19,6 +19,7 @@ import org.junit.Test;
 import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -51,6 +52,7 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
+        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
         Intent intent = new Intent();
         mblAccountActivity = mblActivityTestRule.launchActivity(intent);

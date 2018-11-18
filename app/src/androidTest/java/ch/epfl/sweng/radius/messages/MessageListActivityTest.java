@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 import ch.epfl.sweng.radius.database.User;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -66,8 +67,10 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
-
+        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
         Intent intent = new Intent();
+        intent.putExtra("chatId", "0");
+        intent.putExtra("otherId", "userTest1");
         mlActivity = mblActivityTestRule.launchActivity(intent);
         user1 = new User();
         user2 = new User();
@@ -78,7 +81,6 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
         databaseMessageUrl = "https://radius-1538126456577.firebaseio.com/messages/";
 
         Firebase.setAndroidContext(mlActivity);
-        chatReference = new Firebase(databaseMessageUrl + CHAT_TEST_ID);
     }
 
     @Test
@@ -131,7 +133,6 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
     @Ignore
     @Test
     public void sendMessage() {
-
     }
 
     @Ignore

@@ -21,6 +21,7 @@ import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.home.HomeFragment;
@@ -55,6 +56,7 @@ public class MapUtilityTest {
     public void setUp() throws Exception {
 
         Database.activateDebugMode();
+        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
         accountActivity = mblActivityTestRule.getActivity();
         radius = 50000;

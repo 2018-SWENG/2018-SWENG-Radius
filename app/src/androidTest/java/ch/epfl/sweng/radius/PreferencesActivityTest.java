@@ -16,6 +16,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -46,6 +47,7 @@ public class PreferencesActivityTest  extends ActivityInstrumentationTestCase2<P
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
+        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
         Intent intent = new Intent();
         mblPreferenceActivity = mblActivityTestRule.launchActivity(intent);

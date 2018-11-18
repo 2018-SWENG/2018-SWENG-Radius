@@ -17,6 +17,7 @@ import org.junit.Test;
 import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -38,6 +39,8 @@ public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<Accou
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
+        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
+
         mblAccountActivity = mblActivityTestRule.getActivity();
 
         Intent intent = new Intent();

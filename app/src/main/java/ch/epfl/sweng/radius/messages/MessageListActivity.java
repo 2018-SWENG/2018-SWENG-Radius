@@ -219,7 +219,7 @@ public class MessageListActivity extends AppCompatActivity {
         });
 
     }
-/*
+
     private void prepareUsers(ArrayList<String> participants) {
         database.readListObjOnce(participants, Database.Tables.USERS, new CallBackDatabase() {
             @Override
@@ -239,7 +239,7 @@ public class MessageListActivity extends AppCompatActivity {
 
     private void compareLocataion() {
 
-        if(chatLogs.getMembersId().size() > 2)
+        if(chatLogs.getMembersId().size() == 2)
             setEnabled(MapUtility.isInRadius(otherLoc, (int) MapUtility.radius));
         else
             setEnabled(true);
@@ -247,21 +247,18 @@ public class MessageListActivity extends AppCompatActivity {
 
     public void usersInRadius() { //this method needs to go through severe change - currently we are not saving the radius or the locations of users properly.
         ArrayList<String> participants = (ArrayList) chatLogs.getMembersId();
-        us = new User(participants.get(0));
-        otherUser = new User(participants.get(1));
-        usLoc = new MLocation();
-        otherUserLoc = new MLocation();
+        otherUser = new User(getOtherID());
+        myUser = new User(database.getCurrent_user_id());
 
-        usLoc.setID(us.getID());
-        otherUserLoc.setID(otherUser.getID());
-
+        myLoc = new MLocation(myUser.getID());
+        otherLoc = new MLocation(otherUser.getID());
         //read the users from the database in order to be able to access their radius in the compareLocation method.
         prepareUsers(participants);
 
         //compare the locations of the users and whether they are able to talk to each other or not.
-        compareLocataion(participants);
+        compareLocataion();
     }
-*/
+
     public void setEnabled(boolean enableChat) {
         if (!enableChat) {
             sendButton.setEnabled(false);
@@ -286,7 +283,7 @@ public class MessageListActivity extends AppCompatActivity {
         setUpListener();
         setEnabled(true);
 
-      //  usersInRadius();// This part enables or disables the chat
+        usersInRadius();// This part enables or disables the chat
     }
 
     @Override
@@ -294,7 +291,7 @@ public class MessageListActivity extends AppCompatActivity {
 
         super.onStop();
 
- //       database.stopListening(chatLogs.getID() + "chatLogListener", Database.Tables.CHATLOGS);
+        //database.stopListening(chatLogs.getID() + "chatLogListener", Database.Tables.CHATLOGS);
 
 
     }
