@@ -112,7 +112,6 @@ public class MapUtilityTest {
 
         }))).thenReturn(mockedDb);
         Database.activateDebugMode();
-        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
         PowerMockito.mockStatic(ContextCompat.class);
         when(ContextCompat.checkSelfPermission(any(Context.class), anyString())).thenReturn(PackageManager.PERMISSION_GRANTED);

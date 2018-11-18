@@ -67,7 +67,6 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
-        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
         Intent intent = new Intent();
         intent.putExtra("chatId", "0");
         intent.putExtra("otherId", "userTest1");

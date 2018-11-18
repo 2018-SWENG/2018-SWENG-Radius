@@ -32,7 +32,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
-        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
     }
     @Test

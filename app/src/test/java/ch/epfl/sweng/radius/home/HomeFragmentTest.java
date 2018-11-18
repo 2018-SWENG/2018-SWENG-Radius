@@ -59,7 +59,6 @@ public class HomeFragmentTest {
 
         }))).thenReturn(mockedDb);
         Database.activateDebugMode();
-        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
         this.mapUtility = Mockito.mock(MapUtility.class);
         this.fragment = HomeFragment.newInstance(mapUtility, mockMap, 50000);

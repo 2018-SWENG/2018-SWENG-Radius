@@ -47,7 +47,6 @@ public class MapTest {
     @Before
     public void setup() {
         Database.activateDebugMode();
-        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
 
         accountActivity = mblActivityTestRule.getActivity();

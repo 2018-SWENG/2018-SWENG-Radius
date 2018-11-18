@@ -47,7 +47,6 @@ public class BrowseProfilesActivityTest extends ActivityInstrumentationTestCase2
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
-        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
 
         Intent intent = new Intent();

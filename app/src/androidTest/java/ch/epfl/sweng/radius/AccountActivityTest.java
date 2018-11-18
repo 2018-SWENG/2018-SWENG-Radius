@@ -45,7 +45,6 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
-        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
         User testUser = new User("testId");
         testUser.setNickname("testNickname");

@@ -39,7 +39,6 @@ public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<Accou
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
-        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
         mblAccountActivity = mblActivityTestRule.getActivity();
 

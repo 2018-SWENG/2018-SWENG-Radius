@@ -12,7 +12,6 @@ public class ChatLogDbUtilityTest {
     @Before
     public void setUp() {
         Database.activateDebugMode();
-        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
 
     }
