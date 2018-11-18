@@ -13,12 +13,12 @@ import ch.epfl.sweng.radius.utils.MapUtility;
 public class GroupLocationFetcher implements CallBackDatabase {
 
     private final Database database = Database.getInstance();
-    private HashMap<String, MLocation> groupLocations;
+    private ArrayList<MLocation> groupLocations;
     private MapUtility mapUtility;
     private MLocation currentUserLoc;
 
     public GroupLocationFetcher() {
-        groupLocations = new HashMap<>();
+        groupLocations = new ArrayList<MLocation>();
         currentUserLoc = new MLocation(database.getCurrent_user_id());
 
         database.readObjOnce(currentUserLoc, Database.Tables.USERS, new CallBackDatabase() {
@@ -26,7 +26,7 @@ public class GroupLocationFetcher implements CallBackDatabase {
             public void onFinish(Object value) {
                 currentUserLoc = (MLocation) value;
                 Log.e("GroupLocationFetcher: ", "currentUser latitude" + currentUserLoc.getLatitude() +
-                        "currentUser longtitude" + currentUserLoc.getLongitude());
+                        "currentUser longitude" + currentUserLoc.getLongitude());
             }
 
             @Override
@@ -45,6 +45,8 @@ public class GroupLocationFetcher implements CallBackDatabase {
                 recordLocationIfGroup(location);
             }
         }
+
+
     }
 
     @Override
@@ -52,19 +54,19 @@ public class GroupLocationFetcher implements CallBackDatabase {
         Log.e("Firebase", error.getMessage());
     }
 
-    public HashMap<String, MLocation> getGroupLocations() {
+    public ArrayList<MLocation> getGroupLocations() {
         return groupLocations;
     }
 
     private void recordLocationIfGroup(final MLocation location) {
         final Database database = Database.getInstance();
         database.readObjOnce(new MLocation(location.getID()),
-                Database.Tables.USERS,
+                Database.Tables.LOCATIONS,
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
                         if (((MLocation) value).getIsGroupLocation() == 1) {
-                            groupLocations.put(((MLocation) value).getID(), (MLocation) value);
+                            groupLocations.add((MLocation) value);
                             Log.e("value.getID()", ((MLocation) value).getID());
                         }
                     }
