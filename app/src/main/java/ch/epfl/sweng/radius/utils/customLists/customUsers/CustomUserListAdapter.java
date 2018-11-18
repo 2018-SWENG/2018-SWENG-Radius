@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.utils.CustomLists.customGroups;
+package ch.epfl.sweng.radius.utils.customLists.customUsers;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,31 +9,30 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class CustomGroupListAdapter extends RecyclerView.Adapter<CustomGroupListAdapter.ViewHolder>{
+public class CustomUserListAdapter extends RecyclerView.Adapter<CustomUserListAdapter.ViewHolder>{
 
-    private List<CustomGroupListItem> items;
+    private List<CustomUserListItem> items;
     Context context;
 
-    public CustomGroupListAdapter(List<CustomGroupListItem> items, Context context) {
-        this.items = new ArrayList<>(items);
+    public CustomUserListAdapter(List<CustomUserListItem> items, Context context) {
+        this.items = items;
         this.context = context;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CustomUserListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View itemLayoutView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.custom_list_item_layout, null);
 
         // create ViewHolder
-        CustomGroupListAdapter.ViewHolder viewHolder = new CustomGroupListAdapter.ViewHolder(itemLayoutView);
+        ViewHolder viewHolder = new ViewHolder(itemLayoutView);
         return viewHolder;
     }
 
@@ -41,16 +40,18 @@ public class CustomGroupListAdapter extends RecyclerView.Adapter<CustomGroupList
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
-        Log.e("CustomGroupListAdapter", "Items groups size :" + items.size());
+        Log.e("CustomUserListAdapter", "Items users size :" + items.size());
 
-        viewHolder.txtViewTitle.setText(items.get(position).getGroupeName());
+        viewHolder.txtViewTitle.setText(items.get(position).getItemUser().getNickname());
+        viewHolder.imgViewIcon.setImageResource(items.get(position).getFriendProfilePic());
 
-        CustomGroupListItem item = items.get(position);
-        final String groupId = item.getGroupId();
-        final String groupName = item.getGroupeName();
-        final String convId = item.getConvId();
-        CustomGroupListListeners customListener = new CustomGroupListListeners(groupId,groupName,convId);
-        customListener.setCustomOnClick(viewHolder.txtViewTitle, context);
+        CustomUserListItem item = items.get(position);
+        final int clickedPic = item.getFriendProfilePic();
+        final String clickedId = item.getUserId();
+        final String clickedConv = item.getConvId();
+        CustomUserListListeners customListener = new CustomUserListListeners(clickedPic, item.getItemUser());
+        customListener.setCustomOnClick(viewHolder.imgViewIcon, context);
+        customListener.setCustomOnClick(viewHolder.txtViewTitle, context,clickedId,clickedConv);
     }
 
     // inner class to hold a reference to each item of RecyclerView
@@ -73,7 +74,7 @@ public class CustomGroupListAdapter extends RecyclerView.Adapter<CustomGroupList
         return items.size();
     }
 
-    public void setItems(List<CustomGroupListItem> items){
-        this.items = new ArrayList<>(items);
+    public void setItems(List<CustomUserListItem> items){
+        this.items=items;
     }
 }

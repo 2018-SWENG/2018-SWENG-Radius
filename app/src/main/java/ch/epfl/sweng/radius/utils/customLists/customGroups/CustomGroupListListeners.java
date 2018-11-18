@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.utils.CustomLists.customGroups;
+package ch.epfl.sweng.radius.utils.customLists.customGroups;
 
 import android.content.Context;
 import android.content.Intent;

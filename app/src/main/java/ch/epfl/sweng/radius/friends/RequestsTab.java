@@ -3,7 +3,7 @@ package ch.epfl.sweng.radius.friends;
 import java.util.List;
 
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.CustomLists.customUsers.CustomUserTab;
+import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserTab;
 
 public class RequestsTab extends CustomUserTab {
     public RequestsTab() {

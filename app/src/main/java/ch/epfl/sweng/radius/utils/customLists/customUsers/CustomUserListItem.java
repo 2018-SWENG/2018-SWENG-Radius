@@ -1,7 +1,6 @@
-package ch.epfl.sweng.radius.utils.CustomLists.customUsers;
+package ch.epfl.sweng.radius.utils.customLists.customUsers;
 
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.User;
 
 public class CustomUserListItem {

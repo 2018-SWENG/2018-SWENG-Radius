@@ -1,7 +1,4 @@
-package ch.epfl.sweng.radius.utils.CustomLists.customGroups;
-
-import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.database.User;
+package ch.epfl.sweng.radius.utils.customLists.customGroups;
 
 public class CustomGroupListItem {
     private String groupId;

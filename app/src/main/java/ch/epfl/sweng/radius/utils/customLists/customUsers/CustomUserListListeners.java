@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.utils.CustomLists.customUsers;
+package ch.epfl.sweng.radius.utils.customLists.customUsers;
 
 import android.content.Context;
 import android.content.Intent;

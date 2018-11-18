@@ -11,7 +11,7 @@ import android.widget.ListView;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.utils.CustomLists.customUsers.CustomUserListItem;
+import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserListItem;
 
 
 public class MessagesFragment extends Fragment {

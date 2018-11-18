@@ -12,7 +12,7 @@ import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.CustomLists.customGroups.CustomGroupTab;
+import ch.epfl.sweng.radius.utils.customLists.customGroups.CustomGroupTab;
 
 public class GroupTab extends CustomGroupTab {
 
