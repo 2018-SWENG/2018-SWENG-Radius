@@ -52,7 +52,6 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
-        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
         Intent intent = new Intent();
         mblAccountActivity = mblActivityTestRule.launchActivity(intent);
