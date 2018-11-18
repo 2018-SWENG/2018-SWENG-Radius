@@ -1,7 +1,6 @@
 package ch.epfl.sweng.radius.home;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -29,11 +28,11 @@ import com.google.firebase.database.DatabaseError;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.TabAdapter;
 
@@ -41,7 +40,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     //constants
     private static final String TAG = "HomeFragment";
-    private static final float DEFAULT_ZOOM = 13f;
+    private static final float DEFAULT_ZOOM = 13f/2;
     private static final double DEFAULT_RADIUS = 50000; //In meters
 
     //properties

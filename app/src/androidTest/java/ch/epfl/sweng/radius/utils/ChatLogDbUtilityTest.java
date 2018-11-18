@@ -5,12 +5,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 
 public class ChatLogDbUtilityTest {
 
     @Before
     public void setUp() {
         Database.activateDebugMode();
+
 
     }
 

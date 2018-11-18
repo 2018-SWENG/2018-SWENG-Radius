@@ -38,6 +38,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.junit.Before;
@@ -45,6 +47,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatcher;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -61,6 +65,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 import android.support.v4.content.ContextCompat;
@@ -75,7 +80,8 @@ import static org.powermock.api.mockito.PowerMockito.doAnswer;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({LocationServices.class, Location.class,FusedLocationProviderClient.class, Toast.class, ContextCompat.class})
+@PrepareForTest({LocationServices.class, Location.class,FusedLocationProviderClient.class, Toast.class, ContextCompat.class, ContextCompat.class,
+FirebaseDatabase.class})
 public class MapUtilityTest {
 
     private Location currentLocation = Mockito.mock(Location.class);
@@ -85,11 +91,30 @@ public class MapUtilityTest {
     Toast toast = Mockito.mock(Toast.class);
     private FusedLocationProviderClient mblFusedLocationClient = Mockito.mock(FusedLocationProviderClient.class);
     MapUtility mapUtility;
+    DatabaseReference mockedDb   = Mockito.mock(DatabaseReference.class);
+    FirebaseDatabase    mockedFb   = Mockito.mock(FirebaseDatabase.class);
+    String curRef;
+
     @Before
     public void setUp() throws Exception {
+        PowerMockito.mockStatic(FirebaseDatabase.class);
+        Mockito.when(FirebaseDatabase.getInstance()).thenReturn(mockedFb);
+        Mockito.when(mockedFb.getReference(any(String.class))).thenReturn(mockedDb);
+
+        Mockito.when(mockedDb.child((String) Matchers.argThat(new ArgumentMatcher(){
+
+            // Update current and print to console path to console
+            @Override
+            public boolean matches(Object argument) {
+                curRef = (String) argument;
+                return true;
+            }
+
+        }))).thenReturn(mockedDb);
+        Database.activateDebugMode();
+
         PowerMockito.mockStatic(ContextCompat.class);
         when(ContextCompat.checkSelfPermission(any(Context.class), anyString())).thenReturn(PackageManager.PERMISSION_GRANTED);
-        Database.activateDebugMode();
 
         when(mblFusedLocationClient.getLastLocation()).thenReturn(location);
 
@@ -628,6 +653,9 @@ public class MapUtilityTest {
 
     @Test
     public void getDeviceLocation() {
+        Database.activateDebugMode();
+        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
+
         doAnswer(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
