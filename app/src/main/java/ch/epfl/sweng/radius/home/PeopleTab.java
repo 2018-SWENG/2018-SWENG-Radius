@@ -27,6 +27,7 @@ public class PeopleTab extends CustomUserTab {
         @Override
         public void onFinish(Object value) {
             myRadius = ((User) value).getRadius();
+            // Call method to refresh userList
         }
 
         @Override

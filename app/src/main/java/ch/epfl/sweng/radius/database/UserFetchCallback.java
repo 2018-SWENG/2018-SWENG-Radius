@@ -35,6 +35,7 @@ public class UserFetchCallback implements CallBackDatabase {
                     if(mapUtility.contains(loc.getLatitude(), loc.getLongitude())) {
                         Log.e("MapUtility", "Adder user " + loc.getID());
                         otherPos.put(loc.getID(), loc);
+                        // Code update markers
 
                     }
 
