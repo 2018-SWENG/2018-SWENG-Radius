@@ -45,9 +45,13 @@ public abstract class CustomUserTab extends Fragment {
                     user.addChat(userId, convId);
                     // Update database entry for temp user with new chatLof
                     database.writeInstanceObj(user, Database.Tables.USERS);
-                    myUser.addChat(user.getID(), convId);
+
+
 
                 }
+                if(!myUser.getChatList().containsKey(user.getID()))
+                    myUser.addChat(user.getID(), convId);
+
                 usersItems.add(new CustomUserListItem(user, convId));
             }
             adapter.setItems(usersItems); adapter.notifyDataSetChanged();
