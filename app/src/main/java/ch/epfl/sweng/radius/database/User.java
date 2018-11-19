@@ -28,7 +28,6 @@ public class User implements DatabaseObject {
     private String spokenLanguages;
     private String interests;
 
-    private boolean isVisible; // added for invisibility feature
 
     public User(String userID) {
         this.userID = userID;
@@ -44,8 +43,6 @@ public class User implements DatabaseObject {
         this.chatList = new HashMap<>();
         this.interests = "";
         this.reportList = new HashMap<>();
-
-        this.isVisible = true; // user is visible by default
     }
 
     // Debugging purpose only
@@ -63,9 +60,7 @@ public class User implements DatabaseObject {
         this.chatList = new HashMap<>();
         this.interests = "";
         this.reportList = new HashMap<>();
-
-        this.isVisible = true; // user is visible by default
-    }
+        }
 
     // Getter
     public String getNickname() {
@@ -206,12 +201,5 @@ public class User implements DatabaseObject {
         return reportList.get(userID);
     }
 
-    public boolean isVisible() {
-        return isVisible;
-    }
-
-    public void setVisibility(boolean isVisible) {
-        this.isVisible = isVisible;
-    }
 
 }

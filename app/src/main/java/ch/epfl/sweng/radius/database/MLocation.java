@@ -13,6 +13,7 @@ public class MLocation implements DatabaseObject {
     private String message;
     private double longitude;
     private double latitude;
+    private boolean isVisible; // added for invisibility feature
 
     private int isGroupLocation; // if 1, it means that the location belongs to a group not a user
     private double radius; // Use it only if the mLocation is a group.
@@ -29,6 +30,7 @@ public class MLocation implements DatabaseObject {
         this.message = "Here I am";
         this.isGroupLocation = 0;
         this.radius = 0;
+        this.isVisible = true;
     }
 
     public MLocation(String userID, double longitude, double latitude){
@@ -39,6 +41,8 @@ public class MLocation implements DatabaseObject {
         this.message = "Here I am";
         this.isGroupLocation = 0;
         this.radius = 0;
+        this.isVisible = true;
+
     }
 
     public MLocation(String userID, LatLng pos){
@@ -49,6 +53,8 @@ public class MLocation implements DatabaseObject {
         this.message = "Here I am";
         this.isGroupLocation = 0;
         this.radius = 0;
+        this.isVisible = true;
+
     }
 
     public double getLatitude() {
@@ -109,5 +115,14 @@ public class MLocation implements DatabaseObject {
             radius = newRadius;
         }
     }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public void setVisibility(boolean isVisible) {
+        this.isVisible = isVisible;
+    }
+
 
 }

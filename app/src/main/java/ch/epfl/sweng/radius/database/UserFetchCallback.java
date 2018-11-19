@@ -18,11 +18,12 @@ public class UserFetchCallback implements CallBackDatabase {
         this.radius = (int) radius;
 
     }
+
     @Override
     public void onFinish(Object value) {
-        for(MLocation loc : (ArrayList<MLocation>) value){
-            if(mapUtility.contains(loc.getLatitude(), loc.getLongitude())) {
-                recordLocationIfVisible(loc);
+        for (MLocation loc : (ArrayList<MLocation>) value) {
+            if (mapUtility.contains(loc.getLatitude(), loc.getLongitude()) && loc.isVisible()) {
+                mapUtility.getOtherPos().put(loc.getID(), loc);
             }
         }
     }
@@ -32,6 +33,9 @@ public class UserFetchCallback implements CallBackDatabase {
         Log.e("Firebase", error.getMessage());
     }
 
+
+
+    /*
     private void recordLocationIfVisible(final MLocation location) {
         final Database database = Database.getInstance();
         database.readObjOnce(new User(location.getID()),
@@ -48,5 +52,6 @@ public class UserFetchCallback implements CallBackDatabase {
                     }
                 });
     }
+    */
 
 }

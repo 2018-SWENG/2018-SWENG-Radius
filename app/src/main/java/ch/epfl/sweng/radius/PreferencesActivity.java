@@ -7,13 +7,17 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
 
+import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
 public class PreferencesActivity extends PreferenceActivity {
@@ -21,6 +25,7 @@ public class PreferencesActivity extends PreferenceActivity {
     private static final String INCOGNITO = "incognitoSwitch";
     private static final String INVISIBLE = "You are currently invisible, nobody can see you in the map.";
     private static final String VISIBLE = "You are visible, people can see your location in the map.";
+    private static boolean isVisible = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +52,29 @@ public class PreferencesActivity extends PreferenceActivity {
         }
 
         private void initializeIncognitoPreference() {
-            boolean isVisible = UserInfos.getCurrentUser().isVisible();
-            SwitchPreference incognitoPref = (android.preference.SwitchPreference) findPreference(INCOGNITO);
-            if (isVisible) {
-                findPreference(INCOGNITO).setDefaultValue("false");
-                incognitoPref.setSummaryOff(VISIBLE);
-            } else {
-                findPreference(INCOGNITO).setDefaultValue("true");
-                incognitoPref.setSummaryOn(INVISIBLE);
-            }
+
+            Database.getInstance().readObjOnce(new MLocation(Database.getInstance().getCurrent_user_id()),
+                    Database.Tables.LOCATIONS, new CallBackDatabase() {
+                @Override
+                public void onFinish(Object value) {
+                    isVisible = ((MLocation) value).isVisible();
+                    SwitchPreference incognitoPref = (android.preference.SwitchPreference) findPreference(INCOGNITO);
+                    if (isVisible) {
+                        findPreference(INCOGNITO).setDefaultValue("true");
+                        incognitoPref.setSummaryOff(VISIBLE);
+                    } else {
+                        findPreference(INCOGNITO).setDefaultValue("false");
+                        incognitoPref.setSummaryOn(INVISIBLE);
+                    }
+                }
+
+                @Override
+                public void onError(DatabaseError error) {
+
+                }
+            });
+
+
         }
 
         @Override
@@ -96,15 +115,27 @@ public class PreferencesActivity extends PreferenceActivity {
         }
 
         private void changeInvisibility() {
-            boolean isVisible = UserInfos.getCurrentUser().isVisible();
-            UserInfos.getCurrentUser().setVisibility(!isVisible);
-            Database.getInstance().writeInstanceObj(UserInfos.getCurrentUser(), Database.Tables.USERS);
-            SwitchPreference incognitoPref = (android.preference.SwitchPreference) findPreference(INCOGNITO);
-            if (isVisible) {
-                incognitoPref.setSummaryOff(VISIBLE);
-            } else {
-                incognitoPref.setSummaryOn(INVISIBLE);
-            }
+            isVisible = !isVisible;
+            MLocation loc = new MLocation(Database.getInstance().getCurrent_user_id());
+            Database.getInstance().readObjOnce(loc, Database.Tables.LOCATIONS, new CallBackDatabase() {
+                @Override
+                public void onFinish(Object value) {
+                    MLocation readLoc = (MLocation) value;
+                    readLoc.setVisibility(isVisible);
+                    Database.getInstance().writeInstanceObj(readLoc, Database.Tables.LOCATIONS);
+                    SwitchPreference incognitoPref = (android.preference.SwitchPreference) findPreference(INCOGNITO);
+                    if (isVisible) {
+                        incognitoPref.setSummaryOff(VISIBLE);
+                    } else {
+                        incognitoPref.setSummaryOn(INVISIBLE);
+                    }
+                }
+
+                @Override
+                public void onError(DatabaseError error) {
+
+                }
+            });
         }
 
         private void logOut() {
