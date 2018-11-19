@@ -85,7 +85,7 @@ public class GroupTab extends CustomGroupTab {
 
     public GroupTab(){}
 
-    private static List<MLocation> getMLocationGroup(final List<MLocation> mLocationList) {
+    private List<MLocation> getMLocationGroup(final List<MLocation> mLocationList) {
         List<MLocation> result = new ArrayList<>();
         for (MLocation mLocation : mLocationList) {
             if (true){//mLocationList.isGroup()) { //
@@ -96,10 +96,10 @@ public class GroupTab extends CustomGroupTab {
     }
 
 
-    private static List<MLocation> getMLocationClose(final List<MLocation> mLocationList,MLocation userLocation ) {
+    private List<MLocation> getMLocationClose(final List<MLocation> mLocationList,MLocation userLocation ) {
         List<MLocation> result = new ArrayList<>();
         for (MLocation mLocation : mLocationList) {
-            if (true){// mLocation.isInRadius(userLocation){
+            if (isInRadius(mLocation)){
                 result.add(mLocation);
             }
         }

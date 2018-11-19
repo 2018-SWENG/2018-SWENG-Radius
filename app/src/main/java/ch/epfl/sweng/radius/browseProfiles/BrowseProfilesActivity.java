@@ -21,6 +21,7 @@ import java.util.Arrays;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.GroupLocationFetcher;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.BrowseProfilesUtility;
 
@@ -59,6 +60,9 @@ public class BrowseProfilesActivity extends AppCompatActivity {
         // ToolBar initialization
         toolbar = findViewById(R.id.toolbar); // Attaching the layout to the toolbar object
         setSupportActionBar(toolbar);
+        GroupLocationFetcher glf = new GroupLocationFetcher();
+        glf.setCurrentUserLoc();
+        Database.getInstance().readAllTableOnce(Database.Tables.LOCATIONS, glf);
     }
 
     @Override
