@@ -69,6 +69,7 @@ public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<Accou
 
     @Test
     public void testBrowseProfilesActivity() {
+        Espresso.onView(withId(R.id.navigation_messages)).perform(click());
         Espresso.onView(withId(R.id.messagesList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(0,
                         MyViewAction.clickChildViewWithId(R.id.profile_picture)));
@@ -85,6 +86,7 @@ public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<Accou
 
     @Test
     public void testIfChatIsOpening(){
+        Espresso.onView(withId(R.id.navigation_messages)).perform(click());
         Espresso.onView(withId(R.id.messagesList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(0,
                         MyViewAction.clickChildViewWithId(R.id.username)));
