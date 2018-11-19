@@ -221,6 +221,7 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
         Espresso.onView(withId(R.id.userPhoto)).check(ViewAssertions.matches(isDisplayed()));
         Espresso.onView(withId(R.id.userPhoto)).check(ViewAssertions.matches(new ColorMatcher(Color.GREEN)));
         Espresso.onView(withId(R.id.userPhoto)).check(ViewAssertions.matches(not(new ColorMatcher(Color.RED))));
+        Espresso.onView(withId(R.id.userPhoto)).perform(click());
     }
 
    @Test
@@ -255,23 +256,6 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
                .perform(click());
 
    }
-    @Ignore
-    @Test
-    public void testRestoreState() {
-        rotateScreen();
-    }
-
-    private void rotateScreen() {
-        Context context = InstrumentationRegistry.getTargetContext();
-        int orientation
-                = context.getResources().getConfiguration().orientation;
-
-        Activity activity = mblActivityTestRule.getActivity();
-        activity.setRequestedOrientation(
-                (orientation == Configuration.ORIENTATION_PORTRAIT) ?
-                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE :
-                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-    }
 
     @Test
     public void testSeekBar() {
