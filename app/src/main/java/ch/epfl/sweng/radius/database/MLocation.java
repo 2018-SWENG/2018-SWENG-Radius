@@ -12,6 +12,8 @@ public class MLocation implements DatabaseObject {
     private double longitude;
     private double latitude;
 
+    private int isGroupLocation; // if 1, it means that the location belongs to a group not a user
+
     public MLocation(String userID){
         this.userID = userID;
     }
@@ -22,6 +24,7 @@ public class MLocation implements DatabaseObject {
         this.longitude = 6.5681216000000004;
         this.title = "New MLocation";
         this.message = "Here I am";
+        this.isGroupLocation = 0;
     }
 
     public MLocation(String userID, double longitude, double latitude){
@@ -30,6 +33,7 @@ public class MLocation implements DatabaseObject {
         this.longitude = longitude;
         this.title = "New MLocation";
         this.message = "Here I am";
+        this.isGroupLocation = 0;
     }
 
     public MLocation(String userID, LatLng pos){
@@ -38,6 +42,7 @@ public class MLocation implements DatabaseObject {
         this.longitude = pos.longitude;
         this.title = "New MLocation";
         this.message = "Here I am";
+        this.isGroupLocation = 0;
     }
 
     public double getLatitude() {
@@ -80,4 +85,13 @@ public class MLocation implements DatabaseObject {
     public void setID(String userID) {
         this.userID = userID;
     }
+
+    public int getIsGroupLocation() {
+        return isGroupLocation;
+    }
+
+    public void setIsGroupLocation(int isGroupLocation) {
+        this.isGroupLocation = isGroupLocation;
+    }
+
 }
