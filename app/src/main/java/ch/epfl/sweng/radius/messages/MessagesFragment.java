@@ -28,6 +28,7 @@ import ch.epfl.sweng.radius.utils.CustomLists.CustomListItem;
 public class MessagesFragment extends Fragment {
     private final Database database = Database.getInstance();
     private CustomListAdapter adapter;
+    private User current_user;
 
 
     public MessagesFragment() {
@@ -71,39 +72,38 @@ public class MessagesFragment extends Fragment {
         return view;
     }
 
+    private final CallBackDatabase readListConv = new CallBackDatabase() {
+        @Override
+        public void onFinish(Object value) {
+            ArrayList<User> users = (ArrayList<User>)value;
+            final ArrayList <CustomListItem> conversations = new ArrayList<>();
+
+            for (User user:users) {
+                conversations.add(new CustomListItem(user,
+                        current_user.getChatList().get(user.getID())));
+            }
+            adapter.setItems(conversations);
+            adapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onError(DatabaseError error) {
+            Log.e("Firebase Error", error.getMessage());
+        }
+    };
+
     private void setUpAdapter(){
         database.readObjOnce(new User(database.getCurrent_user_id()),
                 Database.Tables.USERS, new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
-                        final User current_user = (User) value;
+                        current_user = (User) value;
                         List<String> usersConv = new ArrayList<String>();
                         usersConv.addAll(current_user.getChatList().keySet());
-                        final ArrayList <CustomListItem> conversations = new ArrayList<>();
 
-                        database.readListObjOnce(usersConv,
-                                Database.Tables.USERS, new CallBackDatabase() {
-                            @Override
-                            public void onFinish(Object value) {
-                                ArrayList<User> users = (ArrayList<User>)value;
-                                for (User user:users) {
-                                    conversations.add(new CustomListItem(user,
-                                            current_user.getChatList().get(user.getID())));
-                                }
-                                adapter.setItems(conversations);
-                                adapter.notifyDataSetChanged();
-
-                            }
-
-                            @Override
-                            public void onError(DatabaseError error) {
-                                Log.e("Firebase Error", error.getMessage());
-                            }
-                        });
-
-
-
+                        database.readListObjOnce(usersConv, Database.Tables.USERS, readListConv);
                     }
+
                     @Override
                     public void onError(DatabaseError error) {
                         Log.e("Firebase Error", error.getMessage());
