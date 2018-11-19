@@ -2,6 +2,7 @@ package ch.epfl.sweng.radius.utils;
 
 import android.support.v4.content.ContextCompat;
 
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -73,6 +74,13 @@ public class GroupLocationFetcherTest {
     public void testGetGroupLocation(){
         HashMap<String, MLocation> map = fetcher.getGroupLocations();
         assertTrue(map.isEmpty());
+    }
+
+    @Test
+    public void testOnError(){
+        Throwable testThrow = new Throwable();
+        DatabaseError testError = DatabaseError.fromException(testThrow);
+        fetcher.onError(testError);
     }
 
     @After
