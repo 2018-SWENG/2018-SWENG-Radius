@@ -5,6 +5,8 @@ import android.util.Log;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.epfl.sweng.radius.utils.MapUtility;
 
@@ -21,10 +23,28 @@ public class UserFetchCallback implements CallBackDatabase {
 
     @Override
     public void onFinish(Object value) {
+        final HashMap<String, MLocation> otherPos = mapUtility.getOtherPos();
         for (MLocation loc : (ArrayList<MLocation>) value) {
-            if (mapUtility.contains(loc.getLatitude(), loc.getLongitude()) && loc.isVisible()) {
-                mapUtility.getOtherPos().put(loc.getID(), loc);
-            }
+            Database.getInstance().readObj(loc, Database.Tables.LOCATIONS, new CallBackDatabase() {
+                @Override
+                public void onFinish(Object value) {
+                    MLocation loc = (MLocation) value;
+                    if(otherPos.containsKey(loc.getID()))
+                        otherPos.remove(loc.getID());
+
+                    if(mapUtility.contains(loc.getLatitude(), loc.getLongitude())) {
+                        Log.e("MapUtility", "Adder user " + loc.getID());
+                        otherPos.put(loc.getID(), loc);
+
+                    }
+
+                }
+
+                @Override
+                public void onError(DatabaseError error) {
+
+                }
+            }, loc.getID() + "_listener");
         }
     }
 
