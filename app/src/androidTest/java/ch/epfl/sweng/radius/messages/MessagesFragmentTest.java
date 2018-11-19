@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -29,7 +30,7 @@ public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<Accou
             = new ActivityTestRule<AccountActivity>(AccountActivity.class);
 
     private AccountActivity mblAccountActivity;
-    private ListView chats;
+    private RecyclerView chats;
 
     public MessagesFragmentTest() {
         super(AccountActivity.class);
@@ -54,7 +55,7 @@ public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<Accou
                 .add(fcontainer.getId(), fragment).commitAllowingStateLoss();
         getInstrumentation().waitForIdleSync();
 
-        View view = fragment.getView().findViewById(R.id.listView);
+        View view = fragment.getView().findViewById(R.id.messageLayout);
         assertNotNull(view);
         /* Those are not present anymore
         view = fragment.getView().findViewById(R.id.username);
@@ -63,7 +64,7 @@ public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<Accou
        assertNotNull(view);
        */
 
-        chats = fragment.getView().findViewById(R.id.listView);
+        chats = fragment.getView().findViewById(R.id.messagesList);
         assertNotNull(chats);
     }
 
