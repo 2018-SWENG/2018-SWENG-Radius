@@ -18,6 +18,7 @@ import android.support.test.espresso.matcher.RootMatchers;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
+import android.support.test.uiautomator.UiDevice;
 import android.support.v4.app.Fragment;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
@@ -222,7 +223,8 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
         Espresso.onView(withId(R.id.userPhoto)).check(ViewAssertions.matches(new ColorMatcher(Color.GREEN)));
         Espresso.onView(withId(R.id.userPhoto)).check(ViewAssertions.matches(not(new ColorMatcher(Color.RED))));
 
-        //Espresso.onView(withId(R.id.userPhoto)).perform(click());
+        Espresso.onView(withId(R.id.userPhoto)).perform(click());
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressBack();
     }
 
    @Test

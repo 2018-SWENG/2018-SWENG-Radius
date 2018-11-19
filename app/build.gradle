@@ -165,6 +165,10 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude module: 'recyclerview-v7'
     }
+
+    // For pressBack Test
+    androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+
 }
 
 tasks.withType(Test) {
