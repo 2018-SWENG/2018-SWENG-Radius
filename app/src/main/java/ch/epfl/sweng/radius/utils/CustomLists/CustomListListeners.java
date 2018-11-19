@@ -3,6 +3,7 @@ package ch.epfl.sweng.radius.utils.CustomLists;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -52,17 +53,14 @@ public class CustomListListeners {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // If the conversation doesn't exist, it has to be created
                 database.readListObjOnce(Arrays.asList(database.getCurrent_user_id(), userId),
                         Database.Tables.USERS, new CallBackDatabase() {
                             @Override
                             public void onFinish(Object value) {
-                                ArrayList<User> users = (ArrayList<User>)value;
-                                String chatId = convId;
-                                if(convId.isEmpty()){
+                                ArrayList<User> users = (ArrayList<User>)value; String chatId = convId;
+                                if(convId.isEmpty()){ // If the conversation doesn't exist, it has to be created
                                     ArrayList<String> ids = new ArrayList();
-                                    ids.add(userId);
-                                    ids.add(database.getCurrent_user_id());
+                                    ids.add(userId); ids.add(database.getCurrent_user_id());
                                     chatId = new ChatLogs(ids).getID();
                                     users.get(0).addChat(users.get(1).getID(), chatId);
                                     users.get(1).addChat(users.get(0).getID(), chatId);
@@ -70,25 +68,21 @@ public class CustomListListeners {
                                     database.writeInstanceObj(users.get(0), Database.Tables.USERS);
                                     database.writeInstanceObj(users.get(1), Database.Tables.USERS);
                                 }
-
-                                Intent intent = new Intent(context, MessageListActivity.class);
-                                Bundle b = new Bundle();
-                                b.putString("chatId", chatId);
-                                b.putString("otherId", userId);
-                                intent.putExtras(b); //Put your id to your next Intent
-                                context.startActivity(intent);
+                                goToMessageActivity(context, chatId, userId);
                             }
-
                             @Override
-                            public void onError(DatabaseError error) {
-
-                            }
+                            public void onError(DatabaseError error) {Log.e("Firebase", error.getMessage());}
                         });
-
             }
         });
+    }
 
-
+    private void goToMessageActivity(Context context, String chatId, String userId){
+        Intent intent = new Intent(context, MessageListActivity.class);
+        Bundle b = new Bundle();
+        b.putString("chatId", chatId);
+        b.putString("otherId", userId);
+        intent.putExtras(b); context.startActivity(intent);
     }
 
 }
