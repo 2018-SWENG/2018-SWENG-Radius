@@ -10,9 +10,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:padding="30dp">
-
+        android:orientation="vertical">
         <include
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -21,34 +19,69 @@
             layout="@layout/toolbar"
             />
 
-        <ImageView
-            android:id="@+id/clickedPic"
-            android:layout_width="157dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:scaleType="fitXY"
-            tools:srcCompat="@tools:sample/avatars" />
+        <RelativeLayout
+            android:id="@+id/profileLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:paddingBottom="10sp">
 
-        <TextView
-            android:id="@+id/clickedName"
-            android:layout_width="374dp"
-            android:layout_height="54dp"
-            android:text="dummy"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/userPhoto"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/user_photo_default"
+                android:elevation="5dp"
+                android:padding="5dp"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_man"
+                app:civ_border_width="3dp"
+                app:civ_border_color="#ecf0f1"/>
 
-        <TextView
-            android:id="@+id/other_status"
-            android:layout_width="375dp"
-            android:layout_height="66dp"
-            android:layout_marginBottom="13dp"
-            android:text='"In Lausanne for 2 weeks"'
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            android:textSize="18sp"
-            android:textStyle="italic"
-            android:typeface="sans"/>
+            <TextView
+                android:id="@+id/userNickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/userPhoto"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:text="Default"
+                android:textColor="#636e72"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/userStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/userNickname"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:textColor="#636e72"
+                android:textSize="14sp" />
+
+            <TextView
+            android:id="@+id/userInterests"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userStatus"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="9dp"/>
+
+            <TextView
+                android:id="@+id/userLanguages"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/userInterests"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="9dp"/>
+
+        </RelativeLayout>
+
+
 
         <Button
             android:id="@+id/block_user"
