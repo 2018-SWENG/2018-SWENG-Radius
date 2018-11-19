@@ -1,7 +1,5 @@
 package ch.epfl.sweng.radius.database;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +22,7 @@ public class User implements DatabaseObject {
     private List<String> friends;
     private List<String> blockedUsers;
     // Map is uID --> convID
-    private Map<String, String> chatList;
+    private Map<String, String> chatList = new HashMap<>();
     private Map<String, String> reportList;
 
     private String spokenLanguages;
@@ -62,6 +60,7 @@ public class User implements DatabaseObject {
         this.friends = new ArrayList<>();
         this.blockedUsers = new ArrayList<>();
         this.spokenLanguages = "";
+        this.chatList = new HashMap<>();
         this.interests = "";
         this.reportList = new HashMap<>();
 
@@ -124,8 +123,17 @@ public class User implements DatabaseObject {
         return chatList;
     }
 
+    public void setChatList(Map<String, String> chatList) {
+        this.chatList = chatList;
+    }
+
     public String getConvFromUser(String userID) {
-        return chatList.get(userID);
+        String convId = chatList.get(userID);
+        if (convId == null) {
+            return "";
+        } else {
+            return convId;
+        }
     }
 
     public void addFriendRequest(User friend) {
@@ -134,7 +142,7 @@ public class User implements DatabaseObject {
             friendsInvitations.remove(friend.getID());
             friends.add(friend.getID());
             friend.friends.add(this.userID);
-        } else if(!friendsRequests.contains(friend.getID())) {
+        } else if (!friendsRequests.contains(friend.getID())) {
             friendsRequests.add(friend.getID());
             friend.friendsInvitations.add(this.userID);
         }
@@ -145,11 +153,30 @@ public class User implements DatabaseObject {
     }
 
     public void setSpokenLanguages(String spokenLanguages) {
-        if (spokenLanguages != null){
-            this.spokenLanguages = spokenLanguages;
-        }
+        if (spokenLanguages != null) this.spokenLanguages = spokenLanguages;
     }
 
+    /**
+     * add a chat to a user
+     * @param otherUserId the other user ID
+     * @param chatID the chat ID
+     * @return the chat ID
+     */
+    public String addChat(String otherUserId, String chatID) {
+        if (!chatList.containsKey(otherUserId)) {
+            this.chatList.put(otherUserId, chatID);
+        }
+        return chatID;
+    }
+
+    public String newChat(String otherUserId) {
+        ArrayList<String> ids = new ArrayList();
+        ids.add(otherUserId);
+        ids.add(getID());
+        ChatLogs chatLogs = new ChatLogs(ids);
+
+        return addChat(otherUserId, chatLogs.getID());
+    }
     public String getInterests() {
         return interests;
     }
@@ -158,18 +185,13 @@ public class User implements DatabaseObject {
             throw new IllegalArgumentException("Interests input is limited to 100 characters");
         this.interests = interests;
     }
-
-    public void addChat(String uID, String chatID) {
-        this.chatList.put(uID, chatID);
-    }
-
     @Override
     public String getID() {
         return userID;
     }
 
-    public void setID(String id){
-        this.userID = id;
+    public void setID(String userID) {
+        this.userID = userID;
     }
 
     public void addReport(String reportingUserID, String reportingReason) {

@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
@@ -31,6 +32,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
+
     }
     @Test
     public void canSignIn() {

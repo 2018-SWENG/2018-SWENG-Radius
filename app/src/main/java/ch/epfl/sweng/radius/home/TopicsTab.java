@@ -1,28 +1,19 @@
 package ch.epfl.sweng.radius.home;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import java.util.ArrayList;
+import java.util.List;
 
-import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.CustomLists.CustomTab;
 
 
-public class TopicsTab extends Fragment {
-
+public class TopicsTab extends CustomTab {
 
     public TopicsTab() {
 
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.topics_tab, container, false);
-
-        // Inflate the layout for this fragment
-        return view;
+    protected  List<String> getUsersIds(User current_user){
+        return new ArrayList<>();
     }
 }

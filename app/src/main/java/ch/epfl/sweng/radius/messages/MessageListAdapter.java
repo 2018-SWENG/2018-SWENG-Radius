@@ -3,6 +3,7 @@ package ch.epfl.sweng.radius.messages;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.utils.UserInfos;
 
@@ -35,10 +37,15 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     }
 
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
     // Inflates the appropriate layout according to the ViewType.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
+        Log.e("message", "Updates view and message size is " + messages.size());
 
         if (viewType == VIEW_TYPE_MESSAGE_SENT) {
             view = LayoutInflater.from(parent.getContext())
@@ -80,7 +87,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         Message message = messages.get(position);
-        if (message.getSenderId().equals(UserInfos.getUserId())) {
+        if (message.getSenderId().equals(Database.getInstance().getCurrent_user_id())) {
             // If the current user is the sender of the message
             return VIEW_TYPE_MESSAGE_SENT;
         } else {

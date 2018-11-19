@@ -21,11 +21,14 @@ import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.home.HomeFragment;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class MapUtilityTest {
 
@@ -53,6 +56,7 @@ public class MapUtilityTest {
     public void setUp() throws Exception {
 
         Database.activateDebugMode();
+        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
         accountActivity = mblActivityTestRule.getActivity();
         radius = 50000;

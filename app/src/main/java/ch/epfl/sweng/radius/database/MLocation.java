@@ -18,8 +18,8 @@ public class MLocation implements DatabaseObject {
 
     public MLocation(){
         this.userID = "NewLoc" + Integer.toString(locIDCounter++);
-        this.latitude = 0;
-        this.longitude = 0;
+        this.latitude = 46.5360698;
+        this.longitude = 6.5681216000000004;
         this.title = "New MLocation";
         this.message = "Here I am";
     }
