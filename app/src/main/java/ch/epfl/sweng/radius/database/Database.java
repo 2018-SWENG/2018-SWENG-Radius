@@ -1,5 +1,10 @@
 package ch.epfl.sweng.radius.database;
 
+import android.util.Pair;
+
+import com.google.common.collect.Table;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.List;
 
 /**
@@ -77,7 +82,8 @@ public abstract class Database {
      */
     public abstract void readObj(final DatabaseObject obj,
                                  final Tables tableName,
-                                 final CallBackDatabase callback);
+                                 final CallBackDatabase callback,
+                                 String listenerID);
 
     /**
      * Read a list of objects with the ids mentioned in the table "tableName" of the DB
@@ -108,4 +114,13 @@ public abstract class Database {
     public abstract void writeInstanceObj(final DatabaseObject obj, Tables tableName);
 
 
+    public abstract void writeToInstanceChild(final DatabaseObject obj, Tables tablename,
+                                              final String childName, final Object child);
+
+    public abstract void stopListening(String listenerID, final Tables tableName);
+
+    public abstract void listenObjChild(final DatabaseObject obj,
+                               final Tables tableName,
+                               final Pair<String, Class> child,
+                               final CallBackDatabase callback);
 }

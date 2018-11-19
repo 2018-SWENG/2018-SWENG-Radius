@@ -15,6 +15,12 @@ public class Message {
     private  String contentMessage;
     private  Date sendingTime;
 
+    public Message(){
+        this.senderId = "NULL";
+        this.contentMessage = "";
+        this.sendingTime = new Date();
+    }
+
     public Message(String senderId, String contentMessage, Date sendingTime){
         this.senderId = senderId;
         this.contentMessage = contentMessage;
@@ -31,6 +37,31 @@ public class Message {
 
     public Date getSendingTime() {
         return sendingTime;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (o == this) {
+            return true;
+        }
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof Message)) {
+            return false;
+        }
+
+        // typecast o to Complex so that we can compare data members
+        Message m = (Message) o;
+
+        return isTheSame(this, m);
+    }
+
+    private  boolean isTheSame(Message m1, Message m2){
+        String date1 = m1.sendingTime.toString();
+        String date2 = m2.sendingTime.toString();
+
+        return date1.equals(date2) && m1.contentMessage.equals(m2.contentMessage)
+                && m1.senderId.equals(m2.senderId);
     }
 }
 

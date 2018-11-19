@@ -6,3 +6,5 @@ public interface CallBackDatabase<T> {
     void onFinish(T value);
     void onError(DatabaseError error);
 }
+
+

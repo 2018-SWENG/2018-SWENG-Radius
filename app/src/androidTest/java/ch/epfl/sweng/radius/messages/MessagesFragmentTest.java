@@ -17,11 +17,10 @@ import org.junit.Test;
 import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.CoreMatchers.anything;
 
 public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<AccountActivity> {
 
@@ -40,6 +39,7 @@ public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<Accou
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
+
         mblAccountActivity = mblActivityTestRule.getActivity();
 
         Intent intent = new Intent();
@@ -49,8 +49,6 @@ public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<Accou
     @Test
     public void testLaunch() {
         FrameLayout fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
-        assertNotNull(fcontainer);
-
         Fragment fragment = new MessagesFragment();
         mblAccountActivity.getSupportFragmentManager().beginTransaction()
                 .add(fcontainer.getId(), fragment).commitAllowingStateLoss();
@@ -58,10 +56,12 @@ public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<Accou
 
         View view = fragment.getView().findViewById(R.id.listView);
         assertNotNull(view);
+        /* Those are not present anymore
         view = fragment.getView().findViewById(R.id.username);
-        assertNotNull(view);
+       assertNotNull(view);
         view = fragment.getView().findViewById(R.id.profilePic);
-        assertNotNull(view);
+       assertNotNull(view);
+       */
 
         chats = fragment.getView().findViewById(R.id.listView);
         assertNotNull(chats);

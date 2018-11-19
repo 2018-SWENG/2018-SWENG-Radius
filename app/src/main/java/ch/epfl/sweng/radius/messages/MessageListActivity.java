@@ -5,23 +5,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
@@ -30,9 +25,7 @@ import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
-
 import ch.epfl.sweng.radius.utils.MapUtility;
-import ch.epfl.sweng.radius.utils.UserInfos;
 
 
 /**
@@ -44,38 +37,101 @@ public class MessageListActivity extends AppCompatActivity {
     private MessageListAdapter myMessageAdapter;
     private EditText messageZone;
     private Button sendButton;
-    private Firebase chatReference;
     private ChatLogs chatLogs;
+    private String chatId, otherUserId, myID = Database.getInstance().getCurrent_user_id();
+    private ValueEventListener listener;
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
 
     //these might cause problems when we switch to multiple users and multiple different chats
-    private static User us, otherUser;
-    private static MLocation usLoc, otherUserLoc;
+    //This field will be used to enable chat with FRIENDS not in radius
+    private static User myUser, otherUser;
+    private MLocation myLoc, otherLoc;
     private final Database database = Database.getInstance();
+
+    private final CallBackDatabase locationCallback = new CallBackDatabase() {
+        @Override
+        public void onFinish(Object value) {
+            myLoc = (MLocation) value;
+        }
+
+        @Override
+        public void onError(DatabaseError error) {
+            Log.e("Firebase", "Error reading Database");
+
+        }
+    };
+
+    private final CallBackDatabase otherLocationCallback = new CallBackDatabase() {
+        @Override
+        public void onFinish(Object value) {
+            otherLoc = (MLocation) value;
+        }
+
+        @Override
+        public void onError(DatabaseError error) {
+
+        }
+    };
+
+    private String getOtherID(){
+        String otherId = this.otherUserId;
+        if(chatLogs.getMembersId().size() == 2){
+            String tempID =  chatLogs.getMembersId().get(0);
+            String tempID2 =  chatLogs.getMembersId().get(1);
+             otherId = tempID.equals(database.getCurrent_user_id()) ?
+                    tempID : tempID2;
+        }
+
+        return otherId;
+    }
+
+    private final CallBackDatabase chatLogCallBack = new CallBackDatabase() {
+        @Override
+        public void onFinish(Object value) {
+            chatLogs = (ChatLogs) value;
+            if(chatLogs.getMembersId().size() == 2){
+                myLoc = new MLocation(myID);
+                database.readObjOnce(myLoc, Database.Tables.LOCATIONS, locationCallback);
+                String otherId = getOtherID();
+                otherLoc = new MLocation(otherId);
+                database.readObjOnce(otherLoc, Database.Tables.LOCATIONS, otherLocationCallback);
+            }
+            if(chatLogs.getMembersId().size() < 2 && otherUserId != null){
+                chatLogs.addMembersId(otherUserId);
+            }
+            if(!chatLogs.getMembersId().contains(database.getCurrent_user_id()))
+                chatLogs.addMembersId(database.getCurrent_user_id());
+
+            database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
+            Log.e("message", "Calllback Messages size" + Integer.toString(chatLogs.getMessages().size()));
+
+        }
+
+        @Override
+        public void onError(DatabaseError error) {
+            Log.e("Firebase", "Error reading Database");
+        }
+    };
 
     /**
      * Get all infos needed to create the activity
      * We get the chatId and otherUserId from the parent fragment
      *
-     * @param databaseUrl the url from the messages table of the database
      */
-    private void setInfo(String databaseUrl) {
+    private void setInfo() {
         Bundle b = getIntent().getExtras();
 
         //Get infos from parent fragment
-        String otherUserId = "";
-        String chatId = "";
+        otherUserId = "";
+
         if (b != null) {
-            otherUserId = b.getString("otherUserId");
-            chatId = b.getString("chatId");
+            chatId      = b.getString("chatId");
+            Log.w("Message", "ChatId is " + chatId);
+            otherUserId = b.getString("otherId");
         }
-        ArrayList<String> participantsId = new ArrayList<String>();
-        participantsId.add(database.getCurrent_user_id());//UserInfos.getUserId()
-        participantsId.add(otherUserId);
-
-        chatLogs = new ChatLogs(participantsId);
-
-        Firebase.setAndroidContext(this);
-        chatReference = new Firebase(databaseUrl + chatId);
+        chatLogs = new ChatLogs(chatId);
+        database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, chatLogCallBack);
+        Log.e("message", "Setup Messages size" + Integer.toString(chatLogs.getMessages().size()));
 
     }
 
@@ -85,7 +141,7 @@ public class MessageListActivity extends AppCompatActivity {
     private void setUpUI() {
         setContentView(R.layout.activity_message_list);
         messageZone = (EditText) findViewById(R.id.edittext_chatbox);
-        myMessageAdapter = new MessageListAdapter(this, chatLogs.getAllMessages());
+        myMessageAdapter = new MessageListAdapter(this, chatLogs.getMessages());
         myMessageRecycler = findViewById(R.id.reyclerview_message_list);
         myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         myMessageRecycler.setAdapter(myMessageAdapter);
@@ -98,7 +154,13 @@ public class MessageListActivity extends AppCompatActivity {
      * @param message the new message
      */
     private void receiveMessage(Message message) {
-        chatLogs.addMessage(message);
+
+        if(!chatLogs.getMessages().contains(message))
+            chatLogs.addMessage(message);
+        Log.e("message", "Messages size" + Integer.toString(chatLogs.getMessages().size()));
+        Log.e("message", "Messages size" + Integer.toString(chatLogs.getNumberOfMessages()));
+        //  database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
+        myMessageAdapter.setMessages(chatLogs.getMessages());
         myMessageRecycler.smoothScrollToPosition(chatLogs.getNumberOfMessages());
         myMessageAdapter.notifyDataSetChanged();
     }
@@ -111,14 +173,20 @@ public class MessageListActivity extends AppCompatActivity {
      * @param date the date
      */
     private void sendMessage(String senderId,String message,Date date) {
-        if (!message.equals("")) {
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("senderId", senderId);
-            map.put("message", message);
-            map.put("sendingTime", date.toString());
-            chatReference.push().setValue(map);
+        if (!message.isEmpty()) {
+            Message msg = new Message(senderId, message, date);
+
+            chatLogs.addMessage(msg);
+          //  database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
+            List<Message> newList = chatLogs.getMessages();
+            Log.e("message", "NewList size is " + newList.size());
+            database.writeToInstanceChild(chatLogs, Database.Tables.CHATLOGS, "messages",
+                    chatLogs.getMessages());
+
             messageZone.setText("");
+            //receiveMessage(msg);
         }
+
     }
 
     /**
@@ -129,8 +197,9 @@ public class MessageListActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.e("message", "Message Sent ");
                 String message = messageZone.getText().toString();
-                sendMessage( UserInfos.getUserId(), message, new Date());
+                sendMessage(database.getCurrent_user_id(), message, new Date());
             }
         });
     }
@@ -139,49 +208,20 @@ public class MessageListActivity extends AppCompatActivity {
      * If a message is added in the db, add the message in the chat
      */
     private void setUpListener() {
-        chatReference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String pattern = "EEE MMM dd HH:mm:ss Z yyyy";
-                Map map = dataSnapshot.getValue(Map.class);
-                if (!map.isEmpty() && map.size() == Message.NUMBER_ELEMENTS_IN_MESSAGE) {
-                    if (map.containsKey("message") && map.containsKey("senderId")) {
-                        String message = map.get("message").toString();
-                        String senderId = map.get("senderId").toString();
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-                        Date sendingTime = null;
-                        try {
-                            sendingTime = simpleDateFormat.parse(map.get("sendingTime").toString());
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
 
-                        receiveMessage(new Message(senderId, message, sendingTime));
-                    }
-                }
-
+        Pair<String, Class> child = new Pair<String, Class>("messages", Message.class);
+        database.listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
+            public void onFinish(Object value) {
+                Log.e("message", "message received " + ((Message)value).getContentMessage());
+                receiveMessage((Message) value);
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onError(DatabaseError error) {
 
             }
         });
+
     }
 
     private void prepareUsers(ArrayList<String> participants) {
@@ -189,7 +229,7 @@ public class MessageListActivity extends AppCompatActivity {
             @Override
             public void onFinish(Object value) {
                 if (((ArrayList) value).size() == 2) {
-                    us.setRadius(((User) (((ArrayList) value).get(0))).getRadius());
+                    myUser.setRadius(((User) (((ArrayList) value).get(0))).getRadius());
                     otherUser.setRadius(((User) (((ArrayList) value).get(1))).getRadius());
                 }
             }
@@ -201,51 +241,26 @@ public class MessageListActivity extends AppCompatActivity {
         });
     }
 
-    private void compareLocataion(ArrayList<String> participants) {
+    private void compareLocataion() {
 
-        database.readListObjOnce(participants, Database.Tables.LOCATIONS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                if (((ArrayList) value).size() == 2) {
-                    // set the locations of the users based on the values obtained from the database.
-                    usLoc.setLatitude(((MLocation) (((ArrayList) value).get(0))).getLatitude());
-                    usLoc.setLongitude(((MLocation) (((ArrayList) value).get(0))).getLongitude());
-                    otherUserLoc.setLatitude(((MLocation) (((ArrayList) value).get(1))).getLatitude());
-                    otherUserLoc.setLongitude(((MLocation) (((ArrayList) value).get(1))).getLongitude());
-
-                    // create map listeners so we can use the isInRadius function to compare locations of both of the users
-                    MapUtility mapListenerUs = new MapUtility(us.getRadius());
-                    mapListenerUs.setMyPos(usLoc);
-                    MapUtility mapListenerOtherUser = new MapUtility(otherUser.getRadius());
-                    mapListenerOtherUser.setMyPos(otherUserLoc);
-
-                    // if both users are in each others' radius chat is enabled.
-                    setEnabled(mapListenerOtherUser.isInRadius(usLoc, otherUser.getRadius()) && mapListenerUs.isInRadius(otherUserLoc, us.getRadius()));
-                }
-            }
-
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("Firebase Error", error.getMessage());
-            }
-        });
+        if(chatLogs.getMembersId().size() == 2)
+            setEnabled(MapUtility.isInRadius(otherLoc, (int) MapUtility.radius));
+        else
+            setEnabled(true);
     }
 
     public void usersInRadius() { //this method needs to go through severe change - currently we are not saving the radius or the locations of users properly.
         ArrayList<String> participants = (ArrayList) chatLogs.getMembersId();
-        us = new User(participants.get(0));
-        otherUser = new User(participants.get(1));
-        usLoc = new MLocation();
-        otherUserLoc = new MLocation();
+        otherUser = new User(getOtherID());
+        myUser = new User(database.getCurrent_user_id());
 
-        usLoc.setID(us.getID());
-        otherUserLoc.setID(otherUser.getID());
-
+        myLoc = new MLocation(myUser.getID());
+        otherLoc = new MLocation(otherUser.getID());
         //read the users from the database in order to be able to access their radius in the compareLocation method.
         prepareUsers(participants);
 
         //compare the locations of the users and whether they are able to talk to each other or not.
-        compareLocataion(participants);
+        compareLocataion();
     }
 
     public void setEnabled(boolean enableChat) {
@@ -258,18 +273,30 @@ public class MessageListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.w("MessageActivity" , "Just got onCreated");
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_message_list);
         messageZone = findViewById(R.id.edittext_chatbox);
 
-        String databaseMessagesUrl = "https://radius-1538126456577.firebaseio.com/messages/";
-        setInfo(databaseMessagesUrl);
+        setInfo();
 
         setUpUI();
         setUpSendButton();
         setUpListener();
+        setEnabled(true);
 
         usersInRadius();// This part enables or disables the chat
+    }
+
+    @Override
+    protected void onStop() {
+
+        super.onStop();
+
+        //database.stopListening(chatLogs.getID() + "chatLogListener", Database.Tables.CHATLOGS);
+
+
     }
 }

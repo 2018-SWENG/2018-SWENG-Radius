@@ -1,10 +1,13 @@
 package ch.epfl.sweng.radius.database;
 
 import android.util.Log;
+import android.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.lang.reflect.Field;
 
 public class FakeFirebaseUtility extends Database {
     private User currentUSer;
@@ -19,6 +22,7 @@ public class FakeFirebaseUtility extends Database {
 
     public FakeFirebaseUtility(){
         fillDatabase();
+
     }
 
     @Override
@@ -55,7 +59,12 @@ public class FakeFirebaseUtility extends Database {
     @Override
     public void readObj(final DatabaseObject obj,
                         final Tables tableName,
-                        final CallBackDatabase callback) {
+                        final CallBackDatabase callback,
+                        String listenerID) {
+        HashMap<String, DatabaseObject> table = getTable(tableName);
+
+        DatabaseObject ret = table.get(obj.getID());
+        callback.onFinish(ret);
     }
 
     @Override
@@ -110,7 +119,28 @@ public class FakeFirebaseUtility extends Database {
         }
     }
 
-    private void fillDatabase(){
+    @Override
+    public void stopListening(String listenerID, Tables tableName) {
+
+    }
+
+    @Override
+    public void listenObjChild(DatabaseObject obj, Tables tableName, Pair<String, Class> child, CallBackDatabase callback) {
+        HashMap<String, DatabaseObject> table = getTable(tableName);
+        Field f1 = null;
+        DatabaseObject ret = table.get(obj.getID());
+        try {
+            f1 = ret.getClass().getField(child.first);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        // To fix if used elsewhere
+        callback.onFinish(new Message());
+    }
+
+
+    public void fillDatabase(){
+        if(currentUSer != null) return;
         // Define Current user
         currentUSer = new User("testUser1");
 
@@ -131,6 +161,14 @@ public class FakeFirebaseUtility extends Database {
                 defaultLat + 0.02));
         locationsTable.put("testUser4", new MLocation("testUser4",
                 defaultLng - 0.01, defaultLat - 0.01));
+
+        ChatLogs chat = new ChatLogs("0");
+        ArrayList<String> users = new ArrayList<String>();
+        chat.addMembersId("usertTest1");
+        chat.addMembersId("usertTest2");
+        chat.addMessage(new Message("usertTest1", "fff", new Date()));
+        chat.addMessage(new Message("usertTest2", "aaa", new Date()));
+        chatLogsTable.put("0", chat);
     }
 
     private int getTableSize(Tables tableName){
@@ -143,5 +181,10 @@ public class FakeFirebaseUtility extends Database {
 
         return (HashMap<String, DatabaseObject>) (tableName == Tables.USERS ? usersTable :
                         tableName == Tables.CHATLOGS ? chatLogsTable : locationsTable);
+    }
+    @Override
+    public  void writeToInstanceChild(final DatabaseObject obj, Tables tablename,
+                                              final String childName, final Object child){
+
     }
 }

@@ -22,7 +22,6 @@ import ch.epfl.sweng.radius.database.User;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 
 public class DatabaseObjectsTest {
@@ -50,31 +49,32 @@ public class DatabaseObjectsTest {
     @Test
     public void testChatLogs() {
         ArrayList<String> usersIds = new ArrayList<String>();
-        try{
-            new ChatLogs(usersIds);
-            assert(false);
-        }catch (Exception e){
+        new ChatLogs(usersIds);
 
-        }
+        ChatLogs chat = new ChatLogs();
         usersIds.add("1234");
         usersIds.add("4321");
         ChatLogs chatLogs = new ChatLogs(usersIds);
         ChatLogs chatLogs1 = new ChatLogs("12345");
         Message m = new Message(chatLogs.getMembersId().get(0), chatLogs.getMembersId().get(1), new Date());
-
         chatLogs.addMessage(m);
         chatLogs.addMembersId("56789");
         chatLogs.addMembersId("56789");
-
         // Test Ids generation
         Assert.assertNotNull(chatLogs.getID());
-        Assert.assertNotNull(chatLogs.getChatLogsId());
-
         // Test messages
-        List allmessages = chatLogs.getAllMessages();
+        List allmessages = chatLogs.getMessages();
         List Nmessages = chatLogs.getLastNMessages(10);
         assert(allmessages.contains(m));
         assert(Nmessages.contains(m));
+
+        chatLogs.removeMessage(m);
+        chatLogs.addMessage(m);
+        chatLogs.removeMessage(0);
+        chatLogs.setMessages(allmessages);
+        String id = chatLogs.getChatLogsId();
+        chatLogs.setChatLogsId(id);
+
     }
 
     @Test
@@ -89,7 +89,8 @@ public class DatabaseObjectsTest {
 
         String chat = user.getConvFromUser("Arthur");
         Log.e("Test", "Coucou");
-        assertNull(chat);
+        assert(chat.isEmpty());
+        user.newChat("Arthur");
         List<String> blocked = user.getBlockedUsers();
         List<String> req = user.getFriendsRequests();
         String url = user.getUrlProfilePhoto();
@@ -98,6 +99,11 @@ public class DatabaseObjectsTest {
         assertEquals(50, user.getRadius());
         user.setID("Arthur");
         assertEquals("Arthur", user.getID());
+
+        Map<String, String> userList = user.getChatList();
+        user.setChatList(userList);
+
+        userList = user.getReportList();
     }
 
     @Test
