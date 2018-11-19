@@ -26,7 +26,6 @@ import ch.epfl.sweng.radius.database.User;
 public abstract class CustomTab extends Fragment {
     protected final Database database = Database.getInstance();
     protected  CustomListAdapter adapter;
-    protected User myUser;
 
     private CallBackDatabase adapterCallback = new CallBackDatabase() {
         @Override
@@ -36,23 +35,9 @@ public abstract class CustomTab extends Fragment {
             String userId = database.getCurrent_user_id();
             for (User user: (List<User>)value) {
                 convId = user.getConvFromUser(userId);
-
-                // If the conversation doesn't exist, it has to be created
-                if(convId.isEmpty()){
-                    ArrayList<String> ids = new ArrayList();
-                    ids.add(userId);
-                    ids.add(user.getID());
-                    convId = new ChatLogs(ids).getID();
-                    user.addChat(userId, convId);
-                    // Update database entry for temp user with new chatLof
-                    database.writeInstanceObj(user, Database.Tables.USERS);
-                    myUser.addChat(user.getID(), convId);
-
-                }
                 usersItems.add(new CustomListItem(user, convId));
             }
             adapter.setItems(usersItems); adapter.notifyDataSetChanged();
-            database.writeInstanceObj(myUser, Database.Tables.USERS);
         }
         @Override
         public void onError(DatabaseError error) {
@@ -98,19 +83,6 @@ public abstract class CustomTab extends Fragment {
     }
 
     protected void setUpAdapterWithList(List<String> listIds){
-        myUser = new User(database.getCurrent_user_id());
-        database.readObjOnce(myUser, Database.Tables.USERS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                myUser = (User) value;
-            }
-
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("Firebase Error", error.getMessage());
-            }
-        });
-
         database.readListObjOnce(listIds,
                 Database.Tables.USERS, adapterCallback);
     }

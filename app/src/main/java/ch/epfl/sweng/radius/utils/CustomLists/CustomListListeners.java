@@ -7,12 +7,23 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseError;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesActivity;
+import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.messages.MessageListActivity;
 
 import ch.epfl.sweng.radius.database.User;
 
 public class CustomListListeners {
+    private final Database database = Database.getInstance();
     private int clickedPic;
     private String clickedName;
     private String userUID;
@@ -41,13 +52,38 @@ public class CustomListListeners {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // If the conversation doesn't exist, it has to be created
+                database.readListObjOnce(Arrays.asList(database.getCurrent_user_id(), userId),
+                        Database.Tables.USERS, new CallBackDatabase() {
+                            @Override
+                            public void onFinish(Object value) {
+                                ArrayList<User> users = (ArrayList<User>)value;
+                                String chatId = convId;
+                                if(convId.isEmpty()){
+                                    ArrayList<String> ids = new ArrayList();
+                                    ids.add(userId);
+                                    ids.add(database.getCurrent_user_id());
+                                    chatId = new ChatLogs(ids).getID();
+                                    users.get(0).addChat(users.get(1).getID(), chatId);
+                                    users.get(1).addChat(users.get(0).getID(), chatId);
+                                    // Update database entry for temp user with new chatLof
+                                    database.writeInstanceObj(users.get(0), Database.Tables.USERS);
+                                    database.writeInstanceObj(users.get(1), Database.Tables.USERS);
+                                }
 
-                Intent intent = new Intent(context, MessageListActivity.class);
-                Bundle b = new Bundle();
-                b.putString("chatId", convId);
-                b.putString("otherId", userId);
-                intent.putExtras(b); //Put your id to your next Intent
-                context.startActivity(intent);
+                                Intent intent = new Intent(context, MessageListActivity.class);
+                                Bundle b = new Bundle();
+                                b.putString("chatId", chatId);
+                                b.putString("otherId", userId);
+                                intent.putExtras(b); //Put your id to your next Intent
+                                context.startActivity(intent);
+                            }
+
+                            @Override
+                            public void onError(DatabaseError error) {
+
+                            }
+                        });
 
             }
         });
