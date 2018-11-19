@@ -39,9 +39,6 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-
-        Log.e("PeopleTab", "Items users size :" + items.size());
-
         viewHolder.txtViewTitle.setText(items.get(position).getItemUser().getNickname());
         viewHolder.imgViewIcon.setImageResource(items.get(position).getFriendProfilePic());
 
