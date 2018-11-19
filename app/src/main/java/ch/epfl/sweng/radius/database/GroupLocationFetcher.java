@@ -40,7 +40,7 @@ public class GroupLocationFetcher implements CallBackDatabase {
     private void recordLocationIfGroup(final MLocation location) {
         final Database database = Database.getInstance();
         database.readObjOnce(new MLocation(location.getID()),
-                Database.Tables.USERS,
+                Database.Tables.LOCATIONS,
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
