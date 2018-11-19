@@ -56,7 +56,7 @@ public class BrowseProfilesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_browse_profiles);
         Intent intent = getIntent();
 
-        //profileActivityListener = new BrowseProfilesUtility(clickedName); // WHEN THE CLASS STORES THE ID OF THE USER WE
+        profileActivityListener = new BrowseProfilesUtility(intent.getStringExtra("Clicked Name")); // WHEN THE CLASS STORES THE ID OF THE USER WE
         // CLICKED ON CHANGE CLICKED NAME WITH THE ID
 
         // Initialize UI Components
