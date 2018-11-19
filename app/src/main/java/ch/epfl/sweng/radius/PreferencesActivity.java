@@ -60,10 +60,10 @@ public class PreferencesActivity extends PreferenceActivity {
                     isVisible = ((MLocation) value).isVisible();
                     SwitchPreference incognitoPref = (android.preference.SwitchPreference) findPreference(INCOGNITO);
                     if (isVisible) {
-                        findPreference(INCOGNITO).setDefaultValue("true");
+                        findPreference(INCOGNITO).setDefaultValue("false");
                         incognitoPref.setSummaryOff(VISIBLE);
                     } else {
-                        findPreference(INCOGNITO).setDefaultValue("false");
+                        findPreference(INCOGNITO).setDefaultValue("true");
                         incognitoPref.setSummaryOn(INVISIBLE);
                     }
                 }
