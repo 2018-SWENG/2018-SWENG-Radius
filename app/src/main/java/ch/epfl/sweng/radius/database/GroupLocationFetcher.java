@@ -19,6 +19,9 @@ public class GroupLocationFetcher implements CallBackDatabase {
 
     public GroupLocationFetcher() {
         groupLocations = new ArrayList<MLocation>();
+    }
+
+    public void setCurrentUserLoc() {
         currentUserLoc = new MLocation(database.getCurrent_user_id());
 
         database.readObjOnce(currentUserLoc, Database.Tables.USERS, new CallBackDatabase() {
@@ -38,15 +41,15 @@ public class GroupLocationFetcher implements CallBackDatabase {
 
     @Override
     public void onFinish(Object value) {
+        System.out.println(currentUserLoc.getLatitude() + " " + currentUserLoc.getLongitude());
         for(MLocation location : (ArrayList<MLocation>) value) {
+            System.out.println("location.getID()" + location.getID());
             mapUtility = new MapUtility(location.getRadius());
-            mapUtility.setCurrCoordinates(new LatLng(location.getLatitude(), location.getLongitude()));
-            if(mapUtility.contains(currentUserLoc.getLatitude(), currentUserLoc.getLongitude())) { // compare it with the users location.
+            mapUtility.setMyPos(location);
+            if(mapUtility.contains(currentUserLoc.getLatitude(), currentUserLoc.getLongitude())) {
                 recordLocationIfGroup(location);
             }
         }
-
-
     }
 
     @Override
