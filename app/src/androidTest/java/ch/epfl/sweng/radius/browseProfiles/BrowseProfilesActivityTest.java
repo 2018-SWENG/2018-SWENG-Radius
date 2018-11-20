@@ -89,13 +89,19 @@ public class BrowseProfilesActivityTest extends ActivityInstrumentationTestCase2
 
     @Test
     public void testViewExists() {
-        View view = mActivity.findViewById(R.id.clickedPic);
+        View view = mActivity.findViewById(R.id.userPhoto);
         assertNotNull(view);
-        view = mActivity.findViewById(R.id.clickedName);
+        view = mActivity.findViewById(R.id.userLanguages);
         assertNotNull(view);
-        view = mActivity.findViewById(R.id.other_status);
+        view = mActivity.findViewById(R.id.userStatus);
+        assertNotNull(view);
+        view = mActivity.findViewById(R.id.userNickname);
+        assertNotNull(view);
+        view = mActivity.findViewById(R.id.userInterests);
         assertNotNull(view);
         view = mActivity.findViewById(R.id.add_user);
+        assertNotNull(view);
+        view = mActivity.findViewById(R.id.block_user);
         assertNotNull(view);
     }
 

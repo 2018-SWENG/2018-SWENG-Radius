@@ -42,14 +42,14 @@ public class CustomUserListAdapter extends RecyclerView.Adapter<CustomUserListAd
 
         Log.e("CustomUserListAdapter", "Items users size :" + items.size());
 
-        viewHolder.txtViewTitle.setText(items.get(position).getItemUser().getNickname());
+        viewHolder.txtViewTitle.setText(items.get(position).getUserName());
         viewHolder.imgViewIcon.setImageResource(items.get(position).getFriendProfilePic());
 
         CustomUserListItem item = items.get(position);
         final int clickedPic = item.getFriendProfilePic();
         final String clickedId = item.getUserId();
         final String clickedConv = item.getConvId();
-        CustomUserListListeners customListener = new CustomUserListListeners(clickedPic, item.getItemUser());
+        CustomUserListListeners customListener = new CustomUserListListeners(clickedPic, item.getUserId(),item.getUserName());
         customListener.setCustomOnClick(viewHolder.imgViewIcon, context);
         customListener.setCustomOnClick(viewHolder.txtViewTitle, context,clickedId,clickedConv);
     }

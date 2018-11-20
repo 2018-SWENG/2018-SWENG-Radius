@@ -89,7 +89,7 @@ public class GroupTab extends CustomGroupTab {
     private List<MLocation> getMLocationGroup(final List<MLocation> mLocationList) {
         List<MLocation> result = new ArrayList<>();
         for (MLocation mLocation : mLocationList) {
-            if (true){//mLocationList.isGroup()) { //
+            if (mLocation.isGroupLocation()) { //
                 result.add(mLocation);
             }
         }

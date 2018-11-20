@@ -5,6 +5,8 @@ import android.util.Log;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.epfl.sweng.radius.utils.MapUtility;
 
@@ -18,12 +20,32 @@ public class UserFetchCallback implements CallBackDatabase {
         this.radius = (int) radius;
 
     }
+
     @Override
     public void onFinish(Object value) {
-        for(MLocation loc : (ArrayList<MLocation>) value){
-            if(mapUtility.contains(loc.getLatitude(), loc.getLongitude())) {
-                recordLocationIfVisible(loc);
-            }
+        final HashMap<String, MLocation> otherPos = mapUtility.getOtherPos();
+        for (MLocation loc : (ArrayList<MLocation>) value) {
+            Database.getInstance().readObj(loc, Database.Tables.LOCATIONS, new CallBackDatabase() {
+                @Override
+                public void onFinish(Object value) {
+                    MLocation loc = (MLocation) value;
+                    if(otherPos.containsKey(loc.getID()))
+                        otherPos.remove(loc.getID());
+
+                    if(mapUtility.contains(loc.getLatitude(), loc.getLongitude())) {
+                        Log.e("MapUtility", "Adder user " + loc.getID());
+                        otherPos.put(loc.getID(), loc);
+                        // Code update markers
+
+                    }
+
+                }
+
+                @Override
+                public void onError(DatabaseError error) {
+
+                }
+            }, loc.getID() + "_listener");
         }
     }
 
@@ -32,6 +54,9 @@ public class UserFetchCallback implements CallBackDatabase {
         Log.e("Firebase", error.getMessage());
     }
 
+
+
+    /*
     private void recordLocationIfVisible(final MLocation location) {
         final Database database = Database.getInstance();
         database.readObjOnce(new User(location.getID()),
@@ -48,5 +73,6 @@ public class UserFetchCallback implements CallBackDatabase {
                     }
                 });
     }
+    */
 
 }

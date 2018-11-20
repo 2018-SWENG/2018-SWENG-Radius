@@ -3,6 +3,7 @@ package ch.epfl.sweng.radius.database;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import static java.lang.Math.min;
 
@@ -24,7 +25,7 @@ public class ChatLogs implements DatabaseObject{
         this.membersId = new ArrayList<>(membersId);
         this.messages = new LinkedList<>();
         this.numberOfMessages=0;
-        this.chatLogsId = Long.toString(idGenerator++);
+        this.chatLogsId = UUID.randomUUID().toString();
     }
 
 
@@ -38,8 +39,7 @@ public class ChatLogs implements DatabaseObject{
     public ChatLogs() {
         this.membersId = new ArrayList<>();
         this.messages = new LinkedList<>();
-        this.chatLogsId = Long.toString(idGenerator++);
-        this.chatLogsId = "NULL";
+        this.chatLogsId = UUID.randomUUID().toString();
     }
 
     // Getters

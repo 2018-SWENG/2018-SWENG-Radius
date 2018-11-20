@@ -2,38 +2,31 @@ package ch.epfl.sweng.radius.utils.customLists.customUsers;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 
-public class CustomUserListItem {
-    private User user;
-    private String convId;
+public class CustomUserListItem extends CustomListItem{
+
     private int profilePic;
 
-    public CustomUserListItem(User user, String convId){
-        this.user = user;
-        this.convId = convId;
+    public CustomUserListItem(String itemId, String convId,String itemName){
+        super(itemId,convId,itemName);
         this.profilePic = R.drawable.user_photo_default;
     }
-
-    // getters & setters
-    public User getItemUser() {
-        return user;
-    }
-
 
     public int getFriendProfilePic() {
         return profilePic;
     }
 
     public String getUserId() {
-        return user.getID();
+        return super.getItemId();
     }
 
     public String getConvId() {
-        return convId;
+        return super.getConvId();
     }
-/*
-    public String getFriendName() {
-        return nickname;
+
+    public String getUserName() {
+        return super.getItemName();
     }
-    */
+
 }

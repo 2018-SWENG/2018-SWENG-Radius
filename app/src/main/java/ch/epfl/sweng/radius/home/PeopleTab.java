@@ -27,6 +27,7 @@ public class PeopleTab extends CustomUserTab {
         @Override
         public void onFinish(Object value) {
             myRadius = ((User) value).getRadius();
+            // Call method to refresh userList
         }
 
         @Override
@@ -54,7 +55,7 @@ public class PeopleTab extends CustomUserTab {
             ArrayList<MLocation> locations = (ArrayList<MLocation>) value;
             for(MLocation loc : locations){
                 // TODO Fix for non-user locations by checking TBD location type
-                if(isInRadius(loc)){
+                if(isInRadius(loc) && loc.isVisible()){
                     userIDs.add(loc.getID());
                 }
 

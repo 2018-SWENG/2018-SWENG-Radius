@@ -2,11 +2,9 @@ package ch.epfl.sweng.radius.database;
 
 import android.util.Log;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import ch.epfl.sweng.radius.utils.MapUtility;
 
@@ -14,17 +12,23 @@ public class GroupLocationFetcher implements CallBackDatabase {
 
     private final Database database = Database.getInstance();
     private ArrayList<MLocation> groupLocations;
-    private MapUtility mapUtility;
     private MLocation currentUserLoc;
 
     public GroupLocationFetcher() {
-        groupLocations = new ArrayList<MLocation>();
+        groupLocations = new ArrayList<>();
+        currentUserLoc = new MLocation(database.getCurrent_user_id());
+
+    }
+
+    public GroupLocationFetcher(double radius) {
+        groupLocations = new ArrayList<>();
+        currentUserLoc = new MLocation(database.getCurrent_user_id());
+
     }
 
     public void setCurrentUserLoc() {
-        currentUserLoc = new MLocation(database.getCurrent_user_id());
 
-        database.readObjOnce(currentUserLoc, Database.Tables.USERS, new CallBackDatabase() {
+        database.readObjOnce(currentUserLoc, Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
                 currentUserLoc = (MLocation) value;
@@ -41,10 +45,10 @@ public class GroupLocationFetcher implements CallBackDatabase {
 
     @Override
     public void onFinish(Object value) {
-        System.out.println(currentUserLoc.getLatitude() + " " + currentUserLoc.getLongitude());
+   //     System.out.println(currentUserLoc.getLatitude() + " " + currentUserLoc.getLongitude());
         for(MLocation location : (ArrayList<MLocation>) value) {
             System.out.println("location.getID()" + location.getID());
-            mapUtility = new MapUtility(location.getRadius());
+            MapUtility mapUtility = new MapUtility(location.getRadius());
             mapUtility.setMyPos(location);
             if(mapUtility.contains(currentUserLoc.getLatitude(), currentUserLoc.getLongitude())) {
                 recordLocationIfGroup(location);
@@ -68,7 +72,7 @@ public class GroupLocationFetcher implements CallBackDatabase {
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
-                        if (((MLocation) value).getIsGroupLocation() == 1) {
+                        if (((MLocation) value).isGroupLocation()) {
                             groupLocations.add((MLocation) value);
                             Log.e("value.getID()", ((MLocation) value).getID());
                         }

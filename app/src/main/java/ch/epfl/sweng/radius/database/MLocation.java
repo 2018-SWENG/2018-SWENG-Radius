@@ -13,8 +13,9 @@ public class MLocation implements DatabaseObject {
     private String message;
     private double longitude;
     private double latitude;
+    private boolean isVisible; // added for invisibility feature
 
-    private int isGroupLocation; // if 1, it means that the location belongs to a group not a user
+    private boolean isGroupLocation;
     private double radius; // Use it only if the mLocation is a group.
 
     public MLocation(String userID){
@@ -27,8 +28,9 @@ public class MLocation implements DatabaseObject {
         this.longitude = 6.5681216000000004;
         this.title = "New MLocation";
         this.message = "Here I am";
-        this.isGroupLocation = 0;
+        this.isGroupLocation = false;
         this.radius = 0;
+        this.isVisible = true;
     }
 
     public MLocation(String userID, double longitude, double latitude){
@@ -37,8 +39,10 @@ public class MLocation implements DatabaseObject {
         this.longitude = longitude;
         this.title = "New MLocation";
         this.message = "Here I am";
-        this.isGroupLocation = 0;
+        this.isGroupLocation = false;
         this.radius = 0;
+        this.isVisible = true;
+
     }
 
     public MLocation(String userID, LatLng pos){
@@ -47,8 +51,10 @@ public class MLocation implements DatabaseObject {
         this.longitude = pos.longitude;
         this.title = "New MLocation";
         this.message = "Here I am";
-        this.isGroupLocation = 0;
+        this.isGroupLocation = false;
         this.radius = 0;
+        this.isVisible = true;
+
     }
 
     public double getLatitude() {
@@ -92,11 +98,11 @@ public class MLocation implements DatabaseObject {
         this.userID = userID;
     }
 
-    public int getIsGroupLocation() {
+    public boolean isGroupLocation() {
         return isGroupLocation;
     }
 
-    public void setIsGroupLocation(int isGroupLocation) {
+    public void setIsGroupLocation(boolean isGroupLocation) {
         this.isGroupLocation = isGroupLocation;
     }
 
@@ -105,9 +111,18 @@ public class MLocation implements DatabaseObject {
     }
 
     public void setRadius(double newRadius) {
-        if (getIsGroupLocation() == 1) {
+        if (isGroupLocation()) {
             radius = newRadius;
         }
     }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public void setVisibility(boolean isVisible) {
+        this.isVisible = isVisible;
+    }
+
 
 }

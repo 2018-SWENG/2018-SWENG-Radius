@@ -253,7 +253,7 @@ public class MessageListActivity extends AppCompatActivity {
 
     public void usersInRadius() { //this method needs to go through severe change - currently we are not saving the radius or the locations of users properly.
         ArrayList<String> participants = (ArrayList) chatLogs.getMembersId();
-        otherUser = new User(getOtherID());
+        otherUser = new User(otherUserId);
         myUser = new User(database.getCurrent_user_id());
 
         myLoc = new MLocation(myUser.getID());

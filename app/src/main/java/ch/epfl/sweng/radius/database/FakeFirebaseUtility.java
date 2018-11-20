@@ -150,6 +150,9 @@ public class FakeFirebaseUtility extends Database {
         usersTable.put("testUser3", new User("testUser3"));
         usersTable.put("testUser4", new User("testUser4"));
 
+        usersTable.get("testUser1").addChat("testUser2", "chatid1234");
+        usersTable.get("testUser1").addChat("testUser3", "chatid1234");
+
         // TODO: Fill the chatLogs table
         currentLoc = new MLocation("testUser1", defaultLng, defaultLat);
 
