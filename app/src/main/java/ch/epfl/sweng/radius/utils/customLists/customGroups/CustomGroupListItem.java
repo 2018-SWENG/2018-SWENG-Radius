@@ -1,23 +1,20 @@
 package ch.epfl.sweng.radius.utils.customLists.customGroups;
 
-public class CustomGroupListItem {
-    private String groupId;
-    private String groupeName;
-    private String convId;
+import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
+
+public class CustomGroupListItem extends CustomListItem{
 
     public CustomGroupListItem(String groupId, String groupeName, String convId){
-        this.groupId = groupId;
-        this.groupeName = groupeName;
-        this.convId = convId;
+        super(groupId,convId,groupeName);
     }
 
-   public String getGroupId() { return groupId; }
+   public String getGroupId() { return super.getItemId(); }
 
     public String getConvId() {
-        return convId;
+        return super.getConvId();
     }
 
     public String getGroupeName() {
-        return groupeName;
+        return super.getItemName();
     }
 }
