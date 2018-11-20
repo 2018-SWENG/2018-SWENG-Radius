@@ -38,8 +38,11 @@ public abstract class CustomGroupTab extends CustomTab {
                 String convId;
                 String userId = database.getCurrent_user_id();
 
-                getAdapter().setItems(usersItems);
-                getAdapter().notifyDataSetChanged();
+                //TODO REMOVE THIS LINE WHEN NOT HARDCODED NEEDED ANYMORE
+                usersItems.add(new CustomListItem("GroupId","GroupConvId","EPFL_GROUP"));
+
+                adapter.setItems(usersItems);
+                adapter.notifyDataSetChanged();
             }
             @Override
             public void onError(DatabaseError error) {
@@ -49,7 +52,7 @@ public abstract class CustomGroupTab extends CustomTab {
     }
 
 
-    public CustomGroupTab() {}
+    public CustomGroupTab() { }
 
     protected abstract List<String> getIds(User current_user);
 }

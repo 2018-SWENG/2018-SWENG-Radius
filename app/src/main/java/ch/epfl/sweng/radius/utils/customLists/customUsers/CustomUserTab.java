@@ -35,6 +35,7 @@ public abstract class CustomUserTab extends CustomTab {
             @Override
             public void onFinish(Object value) {
                 ArrayList<CustomListItem> usersItems = new ArrayList<>();
+               // adapter = getAdapter(usersItems);
                 String convId;
                 String userId = database.getCurrent_user_id();
                 for (User user : (List<User>) value) {
@@ -44,8 +45,8 @@ public abstract class CustomUserTab extends CustomTab {
                         usersItems.add(new CustomListItem(user.getID(), convId, user.getNickname()));
                     }
                 }
-                getAdapter().setItems(usersItems);
-                getAdapter().notifyDataSetChanged();
+                adapter.setItems(usersItems);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
