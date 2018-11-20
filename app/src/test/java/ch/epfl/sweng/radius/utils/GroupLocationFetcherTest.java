@@ -56,7 +56,7 @@ public class GroupLocationFetcherTest {
 
         }))).thenReturn(mockedDb);
         Database.activateDebugMode();
-        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
+        //((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
         fetcher = new GroupLocationFetcher(RADIUS);
     }
@@ -66,9 +66,9 @@ public class GroupLocationFetcherTest {
         FakeFirebaseUtility testDB = (FakeFirebaseUtility) Database.getInstance();
         testDB.readAllTableOnce(Database.Tables.LOCATIONS, fetcher);
         HashMap<String , MLocation> groupLocations = fetcher.getGroupLocations();
-        //assertTrue(groupLocations.size() == 2);
-        //assertTrue(groupLocations.containsKey("EPFL"));
-        //assertTrue(groupLocations.containsKey("UNIL"));
+        assertTrue(groupLocations.size() == 2);
+        assertTrue(groupLocations.containsKey("EPFL"));
+        assertTrue(groupLocations.containsKey("UNIL"));
     }
 
     @Test

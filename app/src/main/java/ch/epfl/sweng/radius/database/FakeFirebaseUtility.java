@@ -87,18 +87,24 @@ public class FakeFirebaseUtility extends Database {
 
     @Override
     public void readAllTableOnce(Tables tableName, CallBackDatabase callback) {
-        ArrayList<DatabaseObject> objsRead = new ArrayList<>();
+        //ArrayList<DatabaseObject> objsRead = new ArrayList<>();
 
-        int size = getTableSize(tableName);
+        //int size = getTableSize(tableName);
+
         HashMap<String, DatabaseObject> table = getTable(tableName);
 
+        /*
         Log.w("Map Test", "Size of table " + size);
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size - 2; i++) {
             DatabaseObject objRead = table.get("testUser"+Integer.toString(i+1));
 
             if(objRead != null)
                 objsRead.add(objRead);
         }
+        */
+
+        ArrayList<DatabaseObject> objsRead = new ArrayList<DatabaseObject>(table.values());
+
         Log.w("Map Test", "Size of objReads " + objsRead.size());
 
         callback.onFinish(objsRead);

@@ -22,9 +22,11 @@ public class GroupLocationFetcher implements CallBackDatabase {
 
     @Override
     public void onFinish(Object value) {
-        for (MLocation location : (ArrayList<MLocation>) value) {
+        ArrayList<DatabaseObject> arrayList = (ArrayList<DatabaseObject>) value;
+        for (DatabaseObject DBObj : arrayList) {
+            MLocation location = (MLocation) DBObj;
             if (location.isGroupLocation() /* && contains condition using mapUtility */) {
-                groupLocations.put(location.getID(), (MLocation) value);
+                groupLocations.put(location.getID(), location);
             }
         }
     }
