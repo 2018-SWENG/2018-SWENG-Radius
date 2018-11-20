@@ -58,7 +58,9 @@ public abstract class CustomUserTab extends Fragment {
             adapter.notifyDataSetChanged();
             database.writeInstanceObj(myUser, Database.Tables.USERS);
 */
-                usersItems.add(new CustomUserListItem(user.getID(), convId, user.getNickname()));
+                if(!user.getID().equals(database.getCurrent_user_id())) {
+                    usersItems.add(new CustomUserListItem(user.getID(), convId, user.getNickname()));
+                }
             }
             adapter.setItems(usersItems);
             adapter.notifyDataSetChanged();
