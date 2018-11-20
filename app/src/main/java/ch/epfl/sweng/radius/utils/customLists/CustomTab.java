@@ -68,10 +68,7 @@ public abstract class CustomTab extends Fragment {
                 });
     }
 
-    protected void setUpAdapterWithList(List<String> listIds){
-        database.readListObjOnce(listIds,
-                Database.Tables.USERS, getAdapterCallback());
-    }
+    protected abstract void setUpAdapterWithList(List<String> listIds);
 
     protected abstract List<String> getIds(User current_user);
 }

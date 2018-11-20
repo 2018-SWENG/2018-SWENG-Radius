@@ -36,6 +36,7 @@ public class GroupLocationFetcherTest {
 
     private GroupLocationFetcher fetcher;
     private final double RADIUS = 50;
+    private MLocation groupLocation;
 
     DatabaseReference mockedDb   = Mockito.mock(DatabaseReference.class);
     FirebaseDatabase mockedFb   = Mockito.mock(FirebaseDatabase.class);
@@ -61,17 +62,35 @@ public class GroupLocationFetcherTest {
         Database.activateDebugMode();
         //((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
+<<<<<<< HEAD
         fetcher = new GroupLocationFetcher(RADIUS);
+=======
+        groupLocation = new MLocation();
+
+        fetcher = new GroupLocationFetcher();
+        groupLocation.setIsGroupLocation(true);
+//        fetcher = new GroupLocationFetcher(RADIUS);
+
+>>>>>>> f3346ed6bcd34792055742524cd23e0d11d4e342
     }
 
     @Test
     public void testGroupLocationFetch() {
         FakeFirebaseUtility testDB = (FakeFirebaseUtility) Database.getInstance();
         testDB.readAllTableOnce(Database.Tables.LOCATIONS, fetcher);
-        HashMap<String , MLocation> groupLocations = fetcher.getGroupLocations();
+        ArrayList<MLocation> groupLocations = fetcher.getGroupLocations();
         assertTrue(groupLocations.size() == 2);
-        assertTrue(groupLocations.containsKey("EPFL"));
-        assertTrue(groupLocations.containsKey("UNIL"));
+        boolean isEPFL = false, isUnil = false;
+        for (MLocation loc : groupLocations){
+            if(loc.getID().equals("EPFL"))
+                isEPFL = true;
+            if(loc.getID().equals("UNIL"))
+                isUnil = true;
+        }
+        assertTrue(isEPFL);
+        assertTrue(isUnil);
+
+
     }
 
     @Test

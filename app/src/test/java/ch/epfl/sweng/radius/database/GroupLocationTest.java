@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertFalse;
 
 public class GroupLocationTest {
 
@@ -26,8 +25,6 @@ public class GroupLocationTest {
         testLocation.setisGroupLocation(true);
         assertTrue(testLocation.isGroupLocation());
         testLocation.setisGroupLocation(false);
-        assertFalse(testLocation.isGroupLocation());
-
         assertFalse(testLocation.isGroupLocation());
     }
 

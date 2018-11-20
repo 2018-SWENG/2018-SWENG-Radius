@@ -60,5 +60,11 @@ public abstract class CustomUserTab extends CustomTab {
 
     public CustomUserTab() { }
 
+    @Override
+    protected void setUpAdapterWithList(List<String> listIds){
+        database.readListObjOnce(listIds,
+                Database.Tables.USERS, getAdapterCallback());
+    }
+
     protected abstract List<String> getIds(User current_user);
 }
