@@ -59,7 +59,7 @@ public class GroupLocationFetcherTest {
 
         }))).thenReturn(mockedDb);
         Database.activateDebugMode();
-        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
+        //((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
         fetcher = new GroupLocationFetcher(RADIUS);
     }
