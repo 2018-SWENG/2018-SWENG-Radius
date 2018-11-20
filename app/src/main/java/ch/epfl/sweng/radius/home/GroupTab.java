@@ -7,11 +7,13 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.customLists.customGroups.CustomGroupTab;
 
 public class GroupTab extends CustomGroupTab {
@@ -68,19 +70,7 @@ public class GroupTab extends CustomGroupTab {
 
     private boolean isInRadius(MLocation loc) {
 
-        return findDistance(loc.getLatitude(), loc.getLongitude()) < myRadius*1000;
-    }
-
-    public double findDistance(double p2latitude, double p2longtitude) {
-        float[] distance = new float[3];
-        Location.distanceBetween( myLocation.getLatitude(), myLocation.getLongitude(),
-                p2latitude, p2longtitude, distance);
-       /*
-        Log.e("Map","Distance is :" + Double.toString(distance[0])
-                + "currCoordinates.latitude" + myLocation.getLatitude()
-                + "currCoordinates.longitude" + myLocation.getLongitude());
-                */
-        return distance[0];
+        return MapUtility.findDistance(myLocation, loc) < myRadius*1000;
     }
 
     public GroupTab(){}

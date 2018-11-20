@@ -180,6 +180,13 @@ public class MapUtility {
         return distance[0];
     }
 
+    public static double findDistance(MLocation loc1, MLocation loc2) {
+        float[] distance = new float[3];
+        Location.distanceBetween( loc1.getLatitude(), loc1.getLongitude(),
+                loc2.getLatitude(), loc2.getLongitude(), distance);
+        return distance[0];
+    }
+
     public boolean speaksSameLanguage(User user) {
         String[] languagesSpoken = user.getSpokenLanguages().split(" ");
         Fragment profileFragment = ProfileFragment.newInstance();

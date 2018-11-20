@@ -12,6 +12,7 @@ import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserTab;
 
 // TODO : On activity end, clear myUser empty Chaltogs (no message) and repush do
@@ -92,18 +93,7 @@ public class PeopleTab extends CustomUserTab {
 
     private boolean isInRadius(MLocation loc) {
 
-        return findDistance(loc.getLatitude(), loc.getLongitude()) < myRadius*1000;
+        return MapUtility.findDistance(myLocation, loc) < myRadius*1000;
     }
 
-    public double findDistance(double p2latitude, double p2longtitude) {
-        float[] distance = new float[3];
-        Location.distanceBetween( myLocation.getLatitude(), myLocation.getLongitude(),
-                p2latitude, p2longtitude, distance);
-       /*
-        Log.e("Map","Distance is :" + Double.toString(distance[0])
-                + "currCoordinates.latitude" + myLocation.getLatitude()
-                + "currCoordinates.longitude" + myLocation.getLongitude());
-                */
-        return distance[0];
-    }
 }

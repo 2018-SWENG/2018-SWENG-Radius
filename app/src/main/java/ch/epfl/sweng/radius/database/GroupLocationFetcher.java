@@ -51,7 +51,7 @@ public class GroupLocationFetcher implements CallBackDatabase {
             MapUtility mapUtility = new MapUtility(location.getRadius());
             mapUtility.setMyPos(location);
             if(location.isGroupLocation()  && mapUtility.contains(currentUserLoc.getLatitude(), currentUserLoc.getLongitude())) {
-                groupLocations.put(location.getID(), location);
+                groupLocations.add(location);
             }
         }
     }
