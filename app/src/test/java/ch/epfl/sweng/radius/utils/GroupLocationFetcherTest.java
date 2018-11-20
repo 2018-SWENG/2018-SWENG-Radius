@@ -33,8 +33,6 @@ public class GroupLocationFetcherTest {
 
     private GroupLocationFetcher fetcher;
     private final double RADIUS = 50;
-    private final MLocation groupLocation = new MLocation();
-    private final MLocation notGroupLocation = new MLocation();
 
     DatabaseReference mockedDb   = Mockito.mock(DatabaseReference.class);
     FirebaseDatabase mockedFb   = Mockito.mock(FirebaseDatabase.class);
@@ -61,23 +59,20 @@ public class GroupLocationFetcherTest {
         ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
         fetcher = new GroupLocationFetcher(RADIUS);
-        groupLocation.setIsGroupLocation(1);
     }
 
     @Test
-    public void testRecordLocationIfGroup() {
-        Database.getInstance().writeInstanceObj(groupLocation, Database.Tables.LOCATIONS);
-        Database.getInstance().readAllTableOnce(Database.Tables.LOCATIONS, fetcher);
+    public void testGroupLocationFetch() {
+        FakeFirebaseUtility testDB = (FakeFirebaseUtility) Database.getInstance();
+        testDB.readAllTableOnce(Database.Tables.LOCATIONS, fetcher);
+        HashMap<String , MLocation> groupLocations = fetcher.getGroupLocations();
+        //assertTrue(groupLocations.size() == 2);
+        //assertTrue(groupLocations.containsKey("EPFL"));
+        //assertTrue(groupLocations.containsKey("UNIL"));
     }
 
     @Test
-    public void testGetGroupLocation(){
-        HashMap<String, MLocation> map = fetcher.getGroupLocations();
-        assertTrue(map.isEmpty());
-    }
-
-    @Test
-    public void testOnError(){
+    public void testOnError() {
         Throwable testThrow = new Throwable();
         DatabaseError testError = DatabaseError.fromException(testThrow);
         fetcher.onError(testError);

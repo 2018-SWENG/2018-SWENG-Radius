@@ -166,10 +166,16 @@ public class FakeFirebaseUtility extends Database {
                 defaultLng - 0.01, defaultLat - 0.01));
 
         // Fill the group locations
-        locationsTable.put("EPFL",
-                new MLocation("EPFL", defaultLng + 0.5, defaultLat - 0.5));
-        locationsTable.put("UNIL",
-                new MLocation("EPFL", defaultLng + 1.5, defaultLat - 1.5));
+        MLocation EPFL = new MLocation("EPFL",
+                defaultLng + 0.5,
+                defaultLat - 0.5);
+        EPFL.setIsGroupLocation(1); // set EPFL as group location
+        locationsTable.put(EPFL.getID(), EPFL);
+        MLocation UNIL = new MLocation("UNIL",
+                defaultLng + 1.5,
+                defaultLat - 1.5);
+        UNIL.setIsGroupLocation(1); // set UNIL as group location
+        locationsTable.put(UNIL.getID(), UNIL);
 
         ChatLogs chat = new ChatLogs("0");
         ArrayList<String> users = new ArrayList<String>();
