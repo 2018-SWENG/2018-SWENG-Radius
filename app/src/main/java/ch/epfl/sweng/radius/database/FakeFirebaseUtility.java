@@ -87,18 +87,10 @@ public class FakeFirebaseUtility extends Database {
 
     @Override
     public void readAllTableOnce(Tables tableName, CallBackDatabase callback) {
-        ArrayList<DatabaseObject> objsRead = new ArrayList<>();
 
-        int size = getTableSize(tableName);
         HashMap<String, DatabaseObject> table = getTable(tableName);
+        ArrayList<DatabaseObject> objsRead = new ArrayList<DatabaseObject>(table.values());
 
-        Log.w("Map Test", "Size of table " + size);
-        for (int i = 0; i < size; i++) {
-            DatabaseObject objRead = table.get("testUser"+Integer.toString(i+1));
-
-            if(objRead != null)
-                objsRead.add(objRead);
-        }
         Log.w("Map Test", "Size of objReads " + objsRead.size());
 
         callback.onFinish(objsRead);
@@ -155,15 +147,7 @@ public class FakeFirebaseUtility extends Database {
 
         // TODO: Fill the chatLogs table
         currentLoc = new MLocation("testUser1", defaultLng, defaultLat);
-
-        // Fill the users table
-        locationsTable.put("testUser1", currentLoc);
-        locationsTable.put("testUser2", new MLocation("testUser2", defaultLng + 0.01,
-                defaultLat + 0.01));
-        locationsTable.put("testUser3", new MLocation("testUser3", defaultLng - 0.02,
-                defaultLat + 0.02));
-        locationsTable.put("testUser4", new MLocation("testUser4",
-                defaultLng - 0.01, defaultLat - 0.01));
+        fillLocationsTable();
 
         ChatLogs chat = new ChatLogs("0");
         ArrayList<String> users = new ArrayList<String>();
@@ -174,10 +158,26 @@ public class FakeFirebaseUtility extends Database {
         chatLogsTable.put("0", chat);
     }
 
-    private int getTableSize(Tables tableName){
+    private void fillLocationsTable(){
+        locationsTable.put("testUser1", currentLoc);
+        locationsTable.put("testUser2", new MLocation("testUser2", defaultLng + 0.01,
+                defaultLat + 0.01));
+        locationsTable.put("testUser3", new MLocation("testUser3", defaultLng - 0.02,
+                defaultLat + 0.02));
+        locationsTable.put("testUser4", new MLocation("testUser4",
+                defaultLng - 0.01, defaultLat - 0.01));
 
-        return tableName == Tables.USERS ? usersTable.size() :
-                tableName == Tables.CHATLOGS ? chatLogsTable.size() : locationsTable.size();
+        // Fill the group locations
+        MLocation EPFL = new MLocation("EPFL",
+                defaultLng + 0.5,
+                defaultLat - 0.5);
+        EPFL.setIsGroupLocation(1); // set EPFL as group location
+        locationsTable.put(EPFL.getID(), EPFL);
+        MLocation UNIL = new MLocation("UNIL",
+                defaultLng + 1.5,
+                defaultLat - 1.5);
+        UNIL.setIsGroupLocation(1); // set UNIL as group location
+        locationsTable.put(UNIL.getID(), UNIL);
     }
 
     private HashMap<String,DatabaseObject> getTable(Tables tableName){
