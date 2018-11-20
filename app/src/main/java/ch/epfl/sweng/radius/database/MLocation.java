@@ -15,7 +15,7 @@ public class MLocation implements DatabaseObject {
     private double latitude;
     private boolean isVisible; // added for invisibility feature
 
-    private boolean isGroupLocation;
+    private int isGroupLocation;
     private double radius; // Use it only if the mLocation is a group.
 
     public MLocation(String userID){
@@ -28,7 +28,7 @@ public class MLocation implements DatabaseObject {
         this.longitude = 6.5681216000000004;
         this.title = "New MLocation";
         this.message = "Here I am";
-        this.isGroupLocation = false;
+        this.isGroupLocation = 0;
         this.radius = 0;
         this.isVisible = true;
     }
@@ -39,7 +39,7 @@ public class MLocation implements DatabaseObject {
         this.longitude = longitude;
         this.title = "New MLocation";
         this.message = "Here I am";
-        this.isGroupLocation = false;
+        this.isGroupLocation = 0;
         this.radius = 0;
         this.isVisible = true;
     }
@@ -50,7 +50,7 @@ public class MLocation implements DatabaseObject {
         this.longitude = pos.longitude;
         this.title = "New MLocation";
         this.message = "Here I am";
-        this.isGroupLocation = false;
+        this.isGroupLocation = 0;
         this.radius = 0;
         this.isVisible = true;
 
@@ -97,11 +97,11 @@ public class MLocation implements DatabaseObject {
         this.userID = userID;
     }
 
-    public boolean isGroupLocation() {
+    public int isGroupLocation() {
         return isGroupLocation;
     }
 
-    public void setisGroupLocation(boolean groupLocation) {
+    public void setisGroupLocation(int groupLocation) {
         isGroupLocation = groupLocation;
     }
 
@@ -110,7 +110,7 @@ public class MLocation implements DatabaseObject {
     }
 
     public void setRadius(double newRadius) {
-        //if (isGroupLocation()) {
+        //if (isGroupLocation() == 1) {
             radius = newRadius;
         //}
     }

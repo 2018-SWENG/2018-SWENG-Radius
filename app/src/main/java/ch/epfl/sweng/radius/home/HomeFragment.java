@@ -161,6 +161,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             double lat = mapListener.getCurrCoordinates().latitude;
             double lng = mapListener.getCurrCoordinates().longitude;
             // Write the location of the current user to the database
+            Database.getInstance().readObjOnce(new MLocation("EPFL"), Database.Tables.LOCATIONS, new CallBackDatabase() {
+                @Override
+                public void onFinish(Object value) {
+                    MLocation epfl2 = (MLocation) value;
+                    epfl2.setisGroupLocation(1);
+                    epfl2.setRadius(2000);
+                    Database.getInstance().writeInstanceObj(epfl2, Database.Tables.LOCATIONS);
+                }
+
+                @Override
+                public void onError(DatabaseError error) {
+
+                }
+            });
             myPos = new MLocation(Database.getInstance().getCurrent_user_id(), lng, lat);
             Database.getInstance().writeInstanceObj(myPos, Database.Tables.LOCATIONS);
           //  mapListener.setMyPos(myPos);
