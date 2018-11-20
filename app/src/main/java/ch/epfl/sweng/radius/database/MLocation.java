@@ -94,4 +94,14 @@ public class MLocation implements DatabaseObject {
         this.isGroupLocation = isGroupLocation;
     }
 
+    // isGroupLocation property is an int for database storage reasons, use this to think of it
+    // as a boolean variable
+    public boolean isGroupLocation() {
+        if (isGroupLocation == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
