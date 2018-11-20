@@ -246,7 +246,7 @@ public class MessageListActivity extends AppCompatActivity {
            The problem here is, if the other user is in my radius I can send messages to them, however, if current user
            is not in the radius of the other user, they can not reply to those messages.*/
         if(chatLogs.getMembersId().size() == 2)
-            setEnabled(MapUtility.isInRadius(otherLoc, 2000));//(int) MapUtility.radius));
+            setEnabled(MapUtility.isInRadius(otherLoc, (int) MapUtility.radius));
         else
             setEnabled(true);
     }
