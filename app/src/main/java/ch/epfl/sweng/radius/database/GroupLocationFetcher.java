@@ -21,9 +21,9 @@ public class GroupLocationFetcher implements CallBackDatabase {
     }
     @Override
     public void onFinish(Object value) {
-        for(MLocation location : (ArrayList<MLocation>) value) {
-            if(mapUtility.contains(location.getLatitude(), location.getLongitude())) {
-                recordLocationIfGroup(location);
+        for (MLocation location : (ArrayList<MLocation>) value) {
+            if (location.isGroupLocation() /* && contains condition using mapUtility */) {
+                groupLocations.put(location.getID(), (MLocation) value);
             }
         }
     }
@@ -35,25 +35,6 @@ public class GroupLocationFetcher implements CallBackDatabase {
 
     public HashMap<String, MLocation> getGroupLocations() {
         return groupLocations;
-    }
-
-    private void recordLocationIfGroup(final MLocation location) {
-        final Database database = Database.getInstance();
-        database.readObjOnce(new MLocation(location.getID()),
-                Database.Tables.LOCATIONS,
-                new CallBackDatabase() {
-                    @Override
-                    public void onFinish(Object value) {
-                        if (((MLocation) value).getIsGroupLocation() == 1) {
-                            groupLocations.put(((MLocation) value).getID(), (MLocation) value);
-                        }
-                    }
-
-                    @Override
-                    public void onError(DatabaseError error) {
-                        Log.e("Firebase Error", error.getMessage());
-                    }
-                });
     }
 
 }
