@@ -90,7 +90,7 @@ public class GroupLocationFetcher implements CallBackDatabase {
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
-                        if (((MLocation) value).isGroupLocation() == 1) {
+                        if (((MLocation) value).isGroupLocation()) {
                             groupLocations.add(((MLocation) value).getID());
                             Log.e("value.getID()", ((MLocation) value).getID());
                         }

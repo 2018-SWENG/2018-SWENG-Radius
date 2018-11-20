@@ -28,8 +28,6 @@ public class GroupTab extends CustomGroupTab {
         final Database database = Database.getInstance();
         //  Get user Radius value and set listener for updates
         //  If it was already fetched, no need to read again, there is a listener
-        if(myRadius < 0){
-        }
 
         GroupLocationFetcher groupLocationFetcher = new GroupLocationFetcher();
         database.readAllTableOnce(Database.Tables.LOCATIONS, groupLocationFetcher);

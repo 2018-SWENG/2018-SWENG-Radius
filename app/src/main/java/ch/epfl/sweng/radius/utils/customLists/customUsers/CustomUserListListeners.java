@@ -58,7 +58,8 @@ public class CustomUserListListeners {
                         Database.Tables.USERS, new CallBackDatabase() {
                             @Override
                             public void onFinish(Object value) {
-                                ArrayList<User> users = (ArrayList<User>)value; String chatId = convId;
+                                ArrayList<User> users = (ArrayList<User>)value;
+                                String chatId = convId;
                                 if(convId.isEmpty()){ // If the conversation doesn't exist, it has to be created
                                     ArrayList<String> ids = new ArrayList();
                                     ids.add(userId); ids.add(database.getCurrent_user_id());

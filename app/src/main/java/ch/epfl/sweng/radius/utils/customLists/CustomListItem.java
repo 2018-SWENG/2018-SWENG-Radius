@@ -1,16 +1,25 @@
 package ch.epfl.sweng.radius.utils.customLists;
 
-public abstract class CustomListItem {
+import ch.epfl.sweng.radius.R;
+
+public class CustomListItem {
     private String itemId;
     private String itemName;
     private String convId;
+    private int profilePic;
+
 
     public CustomListItem(String itemId, String convId,String itemName){
         this.itemId = itemId;
         this.itemName = itemName;
         this.convId = convId;
+        this.profilePic = R.drawable.user_photo_default;
+
     }
 
+    public int getProfilePic() {
+        return profilePic;
+    }
 
     public String getItemId() {
         return itemId;

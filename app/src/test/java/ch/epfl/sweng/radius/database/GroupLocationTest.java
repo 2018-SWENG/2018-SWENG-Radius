@@ -3,6 +3,7 @@ package ch.epfl.sweng.radius.database;
 import org.junit.Before;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 
@@ -26,6 +27,9 @@ public class GroupLocationTest {
         assertTrue(testLocation.isGroupLocation());
         testLocation.setisGroupLocation(false);
         assertFalse(testLocation.isGroupLocation());
+
+        assertFalse(testLocation.isGroupLocation());
     }
+
 
 }

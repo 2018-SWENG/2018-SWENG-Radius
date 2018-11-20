@@ -17,119 +17,48 @@ import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
-import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
+import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
+import ch.epfl.sweng.radius.utils.customLists.CustomTab;
 
 
-public abstract class CustomUserTab extends Fragment {
-    protected final Database database = Database.getInstance();
-    protected CustomUserListAdapter adapter;
-    //protected User myUser;
+public abstract class CustomUserTab extends CustomTab {
 
-
-    private CallBackDatabase adapterCallback = new CallBackDatabase() {
-        @Override
-        public void onFinish(Object value) {
-            ArrayList<CustomUserListItem> usersItems = new ArrayList<>();
-            String convId;
-            String userId = database.getCurrent_user_id();
-            for (User user : (List<User>) value) {
-                convId = user.getConvFromUser(userId);
-/*
-                // If the conversation doesn't exist, it has to be created
-                if (convId.isEmpty()) {
-                    ArrayList<String> ids = new ArrayList();
-                    ids.add(userId);
-                    ids.add(user.getID());
-                    convId = new ChatLogs(ids).getID();
-                    user.addChat(userId, convId);
-                    // Update database entry for temp user with new chatLof
-                    database.writeInstanceObj(user, Database.Tables.USERS);
-
-                }
-                if (!myUser.getChatList().containsKey(user.getID()))
-                    myUser.addChat(user.getID(), convId);
-
-
-                usersItems.add(new CustomUserListItem(user.getID(), convId, user.getNickname()));
-            }
-            adapter.setItems(usersItems);
-            adapter.notifyDataSetChanged();
-            database.writeInstanceObj(myUser, Database.Tables.USERS);
-*/
-                if(!user.getID().equals(database.getCurrent_user_id())) {
-                    usersItems.add(new CustomUserListItem(user.getID(), convId, user.getNickname()));
-                }
-            }
-            adapter.setItems(usersItems);
-            adapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onError(DatabaseError error) {
-            Log.e("Firebase", error.getMessage());
-        }
-    };
-
-    public CustomUserTab() {
+    public CustomListAdapter getAdapter(List<CustomListItem> items) {
+        return new CustomUserListAdapter(items, getContext());
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        View view = inflater.inflate(R.layout.friends_tab, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.friendsList);
-
-        ArrayList<CustomUserListItem> items = new ArrayList<>();
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        adapter = new CustomUserListAdapter(items, getContext());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        // Load the friends from the DB
-        setUpAdapter();
-
-        // Inflate the layout for this fragment
-        return view;
-    }
-
-    private void setUpAdapter() {
-        database.readObjOnce(new User(database.getCurrent_user_id()),
-                Database.Tables.USERS, new CallBackDatabase() {
-                    @Override
-                    public void onFinish(Object value) {
-                        setUpAdapterWithList(getIds((User) value));
-                    }
-
-                    @Override
-                    public void onError(DatabaseError error) {
-                        Log.e("Firebase Error", error.getMessage());
-                    }
-                });
-    }
-
-/*    protected void setUpAdapterWithList(List<String> listIds) {
-        myUser = new User(database.getCurrent_user_id());
-        database.readObjOnce(myUser, Database.Tables.USERS, new CallBackDatabase() {
+    public CallBackDatabase getAdapterCallback() {
+        return new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
-                myUser = (User) value;
+                ArrayList<CustomListItem> usersItems = new ArrayList<>();
+               // adapter = getAdapter(usersItems);
+                String convId;
+                String userId = database.getCurrent_user_id();
+                for (User user : (List<User>) value) {
+                    convId = user.getConvFromUser(userId);
+
+                    if (!user.getID().equals(database.getCurrent_user_id())) {
+                        usersItems.add(new CustomListItem(user.getID(), convId, user.getNickname()));
+                    }
+                }
+                adapter.setItems(usersItems);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onError(DatabaseError error) {
-                Log.e("Firebase Error", error.getMessage());
+                Log.e("Firebase", error.getMessage());
             }
-        });
+        };
 
-*/
-    protected void setUpAdapterWithList(List<String> listIds){
-        database.readListObjOnce(listIds,
-                Database.Tables.USERS, adapterCallback);
     }
+
+
+    public CustomUserTab() { }
 
     protected abstract List<String> getIds(User current_user);
 }
