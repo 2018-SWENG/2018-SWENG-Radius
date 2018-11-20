@@ -67,6 +67,18 @@ public class FakeFirebaseUtility extends Database {
         callback.onFinish(ret);
     }
 
+    private ChatLogs getChat(){
+        ChatLogs chat = new ChatLogs("1");
+        chat.addMembersId("usertTest1");
+        chat.addMembersId("usertTest2");
+        chat.addMembersId("usertTest0");
+        chat.addMessage(new Message("usertTest0", "helo", new Date()));
+        chat.addMessage(new Message("usertTest1", "aaa", new Date()));
+        chat.addMessage(new Message("as", "aaa", new Date()));
+        chatLogsTable.put("1", chat);
+        return chat;
+    }
+
     @Override
     public void readListObjOnce(final List<String> ids,
                             final Tables tableName,
@@ -84,15 +96,8 @@ public class FakeFirebaseUtility extends Database {
 
         if(objsRead.isEmpty())
             if(tableName == Tables.CHATLOGS){
-                ChatLogs chat = new ChatLogs("1");
-                chat.addMembersId("usertTest1");
-                chat.addMembersId("usertTest2");
-                chat.addMembersId("usertTest0");
-                chat.addMessage(new Message("usertTest0", "helo", new Date()));
-                chat.addMessage(new Message("usertTest1", "aaa", new Date()));
-                chat.addMessage(new Message("as", "aaa", new Date()));
-                chatLogsTable.put("1", chat);
-                objsRead.add(chat);
+
+                objsRead.add(getChat());
 
             }
 
