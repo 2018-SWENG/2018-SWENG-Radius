@@ -60,11 +60,6 @@ public abstract class CustomGroupTab extends CustomTab {
     public CustomGroupTab() { }
 
     @Override
-    protected void setUpAdapter() {
-        setUpAdapterWithList(getIds(new User()));
-    }
-
-    @Override
     protected void setUpAdapterWithList(List<String> listIds){
         database.readListObjOnce(listIds,
                 Database.Tables.CHATLOGS, getAdapterCallback());

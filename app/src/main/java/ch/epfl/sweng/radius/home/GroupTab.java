@@ -23,6 +23,7 @@ public class GroupTab extends CustomGroupTab {
         for(String s :groupLocationFetcher.getGroupLocationsIds()) {
             System.out.println(s);
         }
+
         return groupLocationFetcher.getGroupLocationsIds();
     }
 }
