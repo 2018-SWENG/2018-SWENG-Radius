@@ -36,8 +36,6 @@ public class GroupLocationFetcherTest {
 
     private GroupLocationFetcher fetcher;
     private final double RADIUS = 50;
-    private final MLocation groupLocation = new MLocation();
-    private final MLocation notGroupLocation = new MLocation();
 
     DatabaseReference mockedDb   = Mockito.mock(DatabaseReference.class);
     FirebaseDatabase mockedFb   = Mockito.mock(FirebaseDatabase.class);
@@ -64,33 +62,20 @@ public class GroupLocationFetcherTest {
         ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
         fetcher = new GroupLocationFetcher(RADIUS);
-        groupLocation.setIsGroupLocation(1);
     }
 
     @Test
-    public void testGetGroupLocation(){
-        //Database.getInstance().writeInstanceObj(groupLocation, Database.Tables.LOCATIONS);
-        Database database = Database.getInstance();
-        database.readObjOnce(new User(database.getCurrent_user_id()),
-                Database.Tables.LOCATIONS, new CallBackDatabase() {
-                    @Override
-                    public void onFinish(Object value) {
-                        Database.getInstance().readAllTableOnce(Database.Tables.LOCATIONS, fetcher);
-                    }
-
-                    @Override
-                    public void onError(DatabaseError error) {
-                        Log.e("Firebase Error", error.getMessage());
-                    }
-                });
-
-
-        HashMap<String, MLocation> map = fetcher.getGroupLocations();
-        assertTrue(map.isEmpty());
+    public void testGroupLocationFetch() {
+        FakeFirebaseUtility testDB = (FakeFirebaseUtility) Database.getInstance();
+        testDB.readAllTableOnce(Database.Tables.LOCATIONS, fetcher);
+        HashMap<String , MLocation> groupLocations = fetcher.getGroupLocations();
+        //assertTrue(groupLocations.size() == 2);
+        //assertTrue(groupLocations.containsKey("EPFL"));
+        //assertTrue(groupLocations.containsKey("UNIL"));
     }
 
     @Test
-    public void testOnError(){
+    public void testOnError() {
         Throwable testThrow = new Throwable();
         DatabaseError testError = DatabaseError.fromException(testThrow);
         fetcher.onError(testError);

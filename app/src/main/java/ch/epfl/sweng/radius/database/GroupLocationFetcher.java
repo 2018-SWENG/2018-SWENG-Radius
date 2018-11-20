@@ -19,6 +19,7 @@ public class GroupLocationFetcher implements CallBackDatabase {
         mapUtility = new MapUtility(radius);
 
     }
+
     @Override
     public void onFinish(Object value) {
         for (MLocation location : (ArrayList<MLocation>) value) {
