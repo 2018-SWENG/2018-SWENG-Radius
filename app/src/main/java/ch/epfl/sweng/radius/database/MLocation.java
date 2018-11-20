@@ -98,7 +98,7 @@ public class MLocation implements DatabaseObject {
         this.userID = userID;
     }
 
-    public boolean getIsGroupLocation() {
+    public boolean isGroupLocation() {
         return isGroupLocation;
     }
 
@@ -111,7 +111,7 @@ public class MLocation implements DatabaseObject {
     }
 
     public void setRadius(double newRadius) {
-        if (getIsGroupLocation()) {
+        if (isGroupLocation()) {
             radius = newRadius;
         }
     }

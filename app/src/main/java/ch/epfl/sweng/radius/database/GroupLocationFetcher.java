@@ -2,11 +2,9 @@ package ch.epfl.sweng.radius.database;
 
 import android.util.Log;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import ch.epfl.sweng.radius.utils.MapUtility;
 
@@ -74,7 +72,7 @@ public class GroupLocationFetcher implements CallBackDatabase {
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
-                        if (((MLocation) value).getIsGroupLocation()) {
+                        if (((MLocation) value).isGroupLocation()) {
                             groupLocations.add((MLocation) value);
                             Log.e("value.getID()", ((MLocation) value).getID());
                         }
