@@ -93,12 +93,18 @@ public class FakeFirebaseUtility extends Database {
         HashMap<String, DatabaseObject> table = getTable(tableName);
 
         Log.w("Map Test", "Size of table " + size);
-        for (int i = 0; i < size; i++) {
-            DatabaseObject objRead = table.get("testUser"+Integer.toString(i+1));
+        //for (int i = 0; i < size; i++) {
+            //DatabaseObject objRead = table.get("testUser"+Integer.toString(i+1));
 
-            if(objRead != null)
-                objsRead.add(objRead);
-        }
+            for(DatabaseObject objRead : table.values()){
+                if(objRead != null){
+                    objsRead.add(objRead);
+                }
+            }
+
+            //if(objRead != null)
+                //objsRead.add(objRead);
+        //}
         Log.w("Map Test", "Size of objReads " + objsRead.size());
 
         callback.onFinish(objsRead);
