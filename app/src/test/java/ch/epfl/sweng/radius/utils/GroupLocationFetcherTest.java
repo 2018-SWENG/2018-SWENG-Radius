@@ -1,6 +1,7 @@
 package ch.epfl.sweng.radius.utils;
 
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,10 +20,12 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.HashMap;
 
+import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 import ch.epfl.sweng.radius.database.GroupLocationFetcher;
 import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.User;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Matchers.any;
@@ -67,7 +70,21 @@ public class GroupLocationFetcherTest {
     @Test
     public void testGetGroupLocation(){
         //Database.getInstance().writeInstanceObj(groupLocation, Database.Tables.LOCATIONS);
-        Database.getInstance().readAllTableOnce(Database.Tables.LOCATIONS, fetcher);
+        Database database = Database.getInstance();
+        database.readObjOnce(new User(database.getCurrent_user_id()),
+                Database.Tables.LOCATIONS, new CallBackDatabase() {
+                    @Override
+                    public void onFinish(Object value) {
+                        Database.getInstance().readAllTableOnce(Database.Tables.LOCATIONS, fetcher);
+                    }
+
+                    @Override
+                    public void onError(DatabaseError error) {
+                        Log.e("Firebase Error", error.getMessage());
+                    }
+                });
+
+
         HashMap<String, MLocation> map = fetcher.getGroupLocations();
         assertTrue(map.isEmpty());
     }
