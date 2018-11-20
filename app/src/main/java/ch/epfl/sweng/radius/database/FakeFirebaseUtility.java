@@ -95,13 +95,27 @@ public class FakeFirebaseUtility extends Database {
         }
 
         if(objsRead.isEmpty())
-            if(tableName == Tables.CHATLOGS){
-
-                objsRead.add(getChat());
-
-            }
+            objsRead.add(getNewEl(tableName));
 
         callback.onFinish(objsRead);
+    }
+
+    private DatabaseObject getNewEl(Tables tableName) {
+
+        DatabaseObject ret = null;
+        switch (tableName){
+            case LOCATIONS:
+                ret = new MLocation();
+                break;
+            case CHATLOGS:
+                ret = getChat();
+                break;
+            case USERS:
+                ret = new User();
+                break;
+
+        }
+        return ret;
     }
 
     @Override
