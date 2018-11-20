@@ -65,13 +65,9 @@ public class GroupLocationFetcherTest {
     }
 
     @Test
-    public void testRecordLocationIfGroup() {
-        Database.getInstance().writeInstanceObj(groupLocation, Database.Tables.LOCATIONS);
-        Database.getInstance().readAllTableOnce(Database.Tables.LOCATIONS, fetcher);
-    }
-
-    @Test
     public void testGetGroupLocation(){
+        //Database.getInstance().writeInstanceObj(groupLocation, Database.Tables.LOCATIONS);
+        Database.getInstance().readAllTableOnce(Database.Tables.LOCATIONS, fetcher);
         HashMap<String, MLocation> map = fetcher.getGroupLocations();
         assertTrue(map.isEmpty());
     }
