@@ -17,6 +17,7 @@ import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
@@ -34,15 +35,20 @@ public abstract class CustomGroupTab extends CustomTab {
         return new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
-                ArrayList<CustomListItem> usersItems = new ArrayList<>();
-                String convId;
+
+                ArrayList<CustomListItem> groupsItems = new ArrayList<>();
                 String userId = database.getCurrent_user_id();
-
-                //TODO REMOVE THIS LINE WHEN NOT HARDCODED NEEDED ANYMORE
-                usersItems.add(new CustomListItem("GroupId","GroupConvId","EPFL_GROUP"));
-
-                adapter.setItems(usersItems);
+                String groupId;
+                String convId;
+                for (ChatLogs groups : (List<ChatLogs>) value) {
+                    groupId = groups.getID();
+                    convId = groups.getChatLogsId();
+                    // The groupId serves also as a name
+                    groupsItems.add(new CustomListItem(groupId, convId, groupId));
+                }
+                adapter.setItems(groupsItems);
                 adapter.notifyDataSetChanged();
+
             }
             @Override
             public void onError(DatabaseError error) {
@@ -50,9 +56,14 @@ public abstract class CustomGroupTab extends CustomTab {
             }
         };
     }
-
-
+    
     public CustomGroupTab() { }
+
+    @Override
+    protected void setUpAdapterWithList(List<String> listIds){
+        database.readListObjOnce(listIds,
+                Database.Tables.CHATLOGS, getAdapterCallback());
+    }
 
     protected abstract List<String> getIds(User current_user);
 }
