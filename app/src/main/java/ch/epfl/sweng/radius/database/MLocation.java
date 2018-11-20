@@ -124,12 +124,4 @@ public class MLocation implements DatabaseObject {
         this.isVisible = isVisible;
     }
 
-    public boolean isGroupLocation() {
-        if (isGroupLocation == 1) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 }
