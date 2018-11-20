@@ -17,6 +17,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import ch.epfl.sweng.radius.database.Database;
@@ -60,7 +61,7 @@ public class GroupLocationFetcherTest {
         Database.activateDebugMode();
         ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
-        fetcher = new GroupLocationFetcher(RADIUS);
+        fetcher = new GroupLocationFetcher();
         groupLocation.setIsGroupLocation(1);
     }
 
@@ -72,7 +73,7 @@ public class GroupLocationFetcherTest {
 
     @Test
     public void testGetGroupLocation(){
-        HashMap<String, MLocation> map = fetcher.getGroupLocations();
+        ArrayList<MLocation> map = fetcher.getGroupLocations();
         assertTrue(map.isEmpty());
     }
 

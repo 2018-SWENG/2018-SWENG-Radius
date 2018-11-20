@@ -18,13 +18,17 @@ public class GroupLocationFetcher implements CallBackDatabase {
     private MLocation currentUserLoc;
 
     public GroupLocationFetcher() {
-        groupLocations = new ArrayList<MLocation>();
+        groupLocations = new ArrayList<>();
+    }
+
+    public GroupLocationFetcher(double radius) {
+        groupLocations = new ArrayList<>();
     }
 
     public void setCurrentUserLoc() {
         currentUserLoc = new MLocation(database.getCurrent_user_id());
 
-        database.readObjOnce(currentUserLoc, Database.Tables.USERS, new CallBackDatabase() {
+        database.readObjOnce(currentUserLoc, Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
                 currentUserLoc = (MLocation) value;
