@@ -147,8 +147,18 @@ public class FakeFirebaseUtility extends Database {
 
         // TODO: Fill the chatLogs table
         currentLoc = new MLocation("testUser1", defaultLng, defaultLat);
+        fillLocationsTable();
 
-        // Fill the users table
+        ChatLogs chat = new ChatLogs("0");
+        ArrayList<String> users = new ArrayList<String>();
+        chat.addMembersId("usertTest1");
+        chat.addMembersId("usertTest2");
+        chat.addMessage(new Message("usertTest1", "fff", new Date()));
+        chat.addMessage(new Message("usertTest2", "aaa", new Date()));
+        chatLogsTable.put("0", chat);
+    }
+
+    private void fillLocationsTable(){
         locationsTable.put("testUser1", currentLoc);
         locationsTable.put("testUser2", new MLocation("testUser2", defaultLng + 0.01,
                 defaultLat + 0.01));
@@ -168,20 +178,6 @@ public class FakeFirebaseUtility extends Database {
                 defaultLat - 1.5);
         UNIL.setIsGroupLocation(1); // set UNIL as group location
         locationsTable.put(UNIL.getID(), UNIL);
-
-        ChatLogs chat = new ChatLogs("0");
-        ArrayList<String> users = new ArrayList<String>();
-        chat.addMembersId("usertTest1");
-        chat.addMembersId("usertTest2");
-        chat.addMessage(new Message("usertTest1", "fff", new Date()));
-        chat.addMessage(new Message("usertTest2", "aaa", new Date()));
-        chatLogsTable.put("0", chat);
-    }
-
-    private int getTableSize(Tables tableName){
-
-        return tableName == Tables.USERS ? usersTable.size() :
-                tableName == Tables.CHATLOGS ? chatLogsTable.size() : locationsTable.size();
     }
 
     private HashMap<String,DatabaseObject> getTable(Tables tableName){
