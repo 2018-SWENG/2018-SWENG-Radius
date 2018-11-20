@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class GroupLocationTest {
 
@@ -16,15 +17,15 @@ public class GroupLocationTest {
 
     @Test
     public void testInitialState() {
-        assertTrue(testLocation.isGroupLocation() == 0);
+        assertFalse(testLocation.isGroupLocation());
     }
 
     @Test
     public void testSetIsGroupLocation() {
-        testLocation.setIsGroupLocation(1);
-        assertTrue(testLocation.isGroupLocation() == 1);
-        testLocation.setIsGroupLocation(0);
-        assertTrue(testLocation.isGroupLocation() == 0);
+        testLocation.setIsGroupLocation(true);
+        assertTrue(testLocation.isGroupLocation());
+        testLocation.setIsGroupLocation(false);
+        assertFalse(testLocation.isGroupLocation());
     }
 
 }

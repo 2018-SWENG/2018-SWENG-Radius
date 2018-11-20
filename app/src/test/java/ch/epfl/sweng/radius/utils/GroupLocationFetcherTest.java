@@ -62,7 +62,7 @@ public class GroupLocationFetcherTest {
         ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
         fetcher = new GroupLocationFetcher();
-        groupLocation.setIsGroupLocation(1);
+        groupLocation.setIsGroupLocation(true);
     }
 
     @Test
