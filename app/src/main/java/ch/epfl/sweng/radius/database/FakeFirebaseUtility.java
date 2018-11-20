@@ -165,6 +165,12 @@ public class FakeFirebaseUtility extends Database {
         locationsTable.put("testUser4", new MLocation("testUser4",
                 defaultLng - 0.01, defaultLat - 0.01));
 
+        // Fill the group locations
+        locationsTable.put("EPFL",
+                new MLocation("EPFL", defaultLng + 0.5, defaultLat - 0.5));
+        locationsTable.put("UNIL",
+                new MLocation("EPFL", defaultLng + 1.5, defaultLat - 1.5));
+
         ChatLogs chat = new ChatLogs("0");
         ArrayList<String> users = new ArrayList<String>();
         chat.addMembersId("usertTest1");
