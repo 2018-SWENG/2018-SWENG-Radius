@@ -69,24 +69,18 @@ public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<Accou
 
     @Test
     public void testBrowseProfilesActivity() {
-        try {
-            Espresso.onView(withId(R.id.navigation_messages)).perform(click());
-            Espresso.onView(withId(R.id.messagesList)).perform(
-                    RecyclerViewActions.actionOnItemAtPosition(0,
-                            MyViewAction.clickChildViewWithId(R.id.profile_picture)));
-        }
-        catch (Exception e){}
+        Espresso.onView(withId(R.id.navigation_messages)).perform(click());
+        Espresso.onView(withId(R.id.messagesList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(0,
+                        MyViewAction.clickChildViewWithId(R.id.profile_picture)));
     }
 
     @Test
     public void testIfChatIsOpening(){
-        try{
         Espresso.onView(withId(R.id.navigation_messages)).perform(click());
         Espresso.onView(withId(R.id.messagesList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(0,
                         MyViewAction.clickChildViewWithId(R.id.username)));
-    }
-        catch (Exception e){}
     }
 
     @After

@@ -75,22 +75,16 @@ public class BrowseProfilesActivityTest extends ActivityInstrumentationTestCase2
 
     @Test
     public void testReportUserForLanguage() {
-        try{
         onView(withText("Options")).perform(click());
         onView(withText("Report User for:")).perform(click());
         onView(withText("Language")).perform(click());
-        }
-        catch (Exception e){}
     }
 
     @Test
     public void testReportUserForSpam() {
-        try{
         onView(withText("Options")).perform(click());
         onView(withText("Report User for:")).perform(click());
         onView(withText("Spam")).perform(click());
-        }
-        catch (Exception e){}
     }
 
     @Test

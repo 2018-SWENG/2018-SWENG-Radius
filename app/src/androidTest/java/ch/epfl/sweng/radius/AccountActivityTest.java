@@ -46,7 +46,7 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
         super.setUp();
         Database.activateDebugMode();
 
-        User testUser = new User("usertTest0");
+        User testUser = new User("testId");
         testUser.setNickname("testNickname");
         testUser.setStatus("testStatus");
         testUser.setInterests("testInterests");
