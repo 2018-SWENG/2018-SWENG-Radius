@@ -1,4 +1,4 @@
-/*package ch.epfl.sweng.radius.utils;
+package ch.epfl.sweng.radius.utils;
 
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -19,6 +19,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.HashMap;
+import java.util.List;
 
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
@@ -62,29 +63,25 @@ public class GroupLocationFetcherTest {
         Database.activateDebugMode();
         //((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
-<<<<<<< HEAD
-        fetcher = new GroupLocationFetcher(RADIUS);
-=======
         groupLocation = new MLocation();
 
         fetcher = new GroupLocationFetcher();
-        groupLocation.setIsGroupLocation(true);
+        groupLocation.setIsGroupLocation(1);
 //        fetcher = new GroupLocationFetcher(RADIUS);
 
->>>>>>> f3346ed6bcd34792055742524cd23e0d11d4e342
     }
 
     @Test
     public void testGroupLocationFetch() {
         FakeFirebaseUtility testDB = (FakeFirebaseUtility) Database.getInstance();
         testDB.readAllTableOnce(Database.Tables.LOCATIONS, fetcher);
-        ArrayList<MLocation> groupLocations = fetcher.getGroupLocations();
+        List<String> groupLocations = fetcher.getGroupLocationsIds();
         assertTrue(groupLocations.size() == 2);
         boolean isEPFL = false, isUnil = false;
-        for (MLocation loc : groupLocations){
-            if(loc.getID().equals("EPFL"))
+        for (String loc : groupLocations){
+            if(loc.equals("EPFL"))
                 isEPFL = true;
-            if(loc.getID().equals("UNIL"))
+            if(loc.equals("UNIL"))
                 isUnil = true;
         }
         assertTrue(isEPFL);
@@ -105,4 +102,4 @@ public class GroupLocationFetcherTest {
         fetcher = null;
     }
 
-}*/
+}

@@ -53,21 +53,7 @@ public abstract class CustomTab extends Fragment {
         return view;
     }
 
-    private void setUpAdapter() {
-        database.readObjOnce(new User(database.getCurrent_user_id()),
-                Database.Tables.USERS, new CallBackDatabase() {
-                    @Override
-                    public void onFinish(Object value) {
-                        setUpAdapterWithList(getIds((User) value));
-                    }
-
-                    @Override
-                    public void onError(DatabaseError error) {
-                        Log.e("Firebase Error", error.getMessage());
-                    }
-                });
-    }
-
+    protected abstract void setUpAdapter();
     protected abstract void setUpAdapterWithList(List<String> listIds);
 
     protected abstract List<String> getIds(User current_user);

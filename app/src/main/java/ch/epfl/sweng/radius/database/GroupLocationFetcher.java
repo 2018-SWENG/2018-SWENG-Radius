@@ -12,11 +12,11 @@ import ch.epfl.sweng.radius.utils.MapUtility;
 public class GroupLocationFetcher implements CallBackDatabase {
 
     private final Database database = Database.getInstance();
-    private List<String> groupLocations;
+    private List<String> groupLocationsIds;
     private MLocation currentUserLoc;
 
     public GroupLocationFetcher() {
-        groupLocations = new ArrayList<>();
+        groupLocationsIds = new ArrayList<>();
         currentUserLoc = new MLocation(database.getCurrent_user_id());
 
 
@@ -37,39 +37,20 @@ public class GroupLocationFetcher implements CallBackDatabase {
     }
 
     public GroupLocationFetcher(double radius) {
-        groupLocations = new ArrayList<>();
+        groupLocationsIds = new ArrayList<>();
         currentUserLoc = new MLocation(database.getCurrent_user_id());
 
     }
 
-    /*public void setCurrentUserLoc() {
-        database.readObjOnce(currentUserLoc, Database.Tables.LOCATIONS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                currentUserLoc = (MLocation) value;
-                Log.e("GroupLocationFetcher: ", "currentUser latitude" + currentUserLoc.getLatitude() +
-                        "currentUser longitude" + currentUserLoc.getLongitude());
-            }
-
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("Firebase Error", error.getMessage());
-            }
-        });
-    }*/
-
     @Override
     public void onFinish(Object value) {
         for(MLocation location : (ArrayList<MLocation>) value) {
-            System.out.println("currentUserLoc.getLatitude() + \" \" + currentUserLoc.getLongitude()" + currentUserLoc.getLatitude() + " " + currentUserLoc.getLongitude());
-            System.out.println("location.getID()" + location.getID());
-            System.out.println("MapUtility mapUtility = new MapUtility(location.getRadius());"+ location.getRadius());
-            System.out.println("isGroupLocation " + location.getIsGroupLocation());
-            System.out.println("isVisible " + location.isVisible());
             MapUtility mapUtility = new MapUtility(location.getRadius());
             mapUtility.setMyPos(location);
-            if(mapUtility.contains(currentUserLoc.getLatitude(), currentUserLoc.getLongitude())) {
-                recordLocationIfGroup(location);
+            if(mapUtility.contains(currentUserLoc.getLatitude(), currentUserLoc.getLongitude()) && location.getIsGroupLocation() == 1) {
+                groupLocationsIds.add(location.getID());
+                Log.e("value.getID()", location.getID());
+                //recordLocationIfGroup(location);
             }
         }
     }
@@ -79,11 +60,11 @@ public class GroupLocationFetcher implements CallBackDatabase {
         Log.e("Firebase", error.getMessage());
     }
 
-    public List<String> getGroupLocations() {
-        return groupLocations;
+    public List<String> getGroupLocationsIds() {
+        return groupLocationsIds;
     }
 
-    private void recordLocationIfGroup(final MLocation location) {
+    /*private void recordLocationIfGroup(final MLocation location) {
         final Database database = Database.getInstance();
         database.readObjOnce(new MLocation(location.getID()),
                 Database.Tables.LOCATIONS,
@@ -91,7 +72,7 @@ public class GroupLocationFetcher implements CallBackDatabase {
                     @Override
                     public void onFinish(Object value) {
                         if (((MLocation) value).getIsGroupLocation() == 1) {
-                            groupLocations.add(((MLocation) value).getID());
+                            groupLocationsIds.add(((MLocation) value).getID());
                             Log.e("value.getID()", ((MLocation) value).getID());
                         }
                     }
@@ -101,6 +82,6 @@ public class GroupLocationFetcher implements CallBackDatabase {
                         Log.e("Firebase Error", error.getMessage());
                     }
                 });
-    }
+    }*/
 
 }

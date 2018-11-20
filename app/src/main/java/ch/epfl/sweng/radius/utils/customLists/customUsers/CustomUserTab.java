@@ -61,6 +61,22 @@ public abstract class CustomUserTab extends CustomTab {
     public CustomUserTab() { }
 
     @Override
+    protected void setUpAdapter() {
+        database.readObjOnce(new User(database.getCurrent_user_id()),
+                Database.Tables.USERS, new CallBackDatabase() {
+                    @Override
+                    public void onFinish(Object value) {
+                        setUpAdapterWithList(getIds((User) value));
+                    }
+
+                    @Override
+                    public void onError(DatabaseError error) {
+                        Log.e("Firebase Error", error.getMessage());
+                    }
+                });
+    }
+
+    @Override
     protected void setUpAdapterWithList(List<String> listIds){
         database.readListObjOnce(listIds,
                 Database.Tables.USERS, getAdapterCallback());

@@ -1,20 +1,10 @@
 package ch.epfl.sweng.radius.home;
 
-import android.location.Location;
-import android.util.Log;
-
-import com.google.firebase.database.DatabaseError;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.GroupLocationFetcher;
-import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.customLists.customGroups.CustomGroupTab;
 
 public class GroupTab extends CustomGroupTab {
@@ -30,6 +20,9 @@ public class GroupTab extends CustomGroupTab {
         GroupLocationFetcher groupLocationFetcher = new GroupLocationFetcher();
         database.readAllTableOnce(Database.Tables.LOCATIONS, groupLocationFetcher);
 
-        return groupLocationFetcher.getGroupLocations();
+        for(String s :groupLocationFetcher.getGroupLocationsIds()) {
+            System.out.println(s);
+        }
+        return groupLocationFetcher.getGroupLocationsIds();
     }
 }
