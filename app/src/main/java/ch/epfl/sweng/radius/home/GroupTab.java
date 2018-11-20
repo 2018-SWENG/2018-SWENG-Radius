@@ -10,6 +10,7 @@ import java.util.List;
 
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.GroupLocationFetcher;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.customLists.customGroups.CustomGroupTab;
@@ -130,6 +131,10 @@ public class GroupTab extends CustomGroupTab {
             // 3 keep only the group which we are in the radius -
 
             List<MLocation> mLocationGroupCloseList = getMLocationClose(mLocationGroupList,new MLocation()); //user.getLocation());
+            GroupLocationFetcher groupLocationFetcher = new GroupLocationFetcher();
+            database.readAllTableOnce(Database.Tables.LOCATIONS, groupLocationFetcher);
+
+            System.out.println(groupLocationFetcher.getGroupLocations().size());
         }
 
         ArrayList<String> test = new ArrayList<>();
