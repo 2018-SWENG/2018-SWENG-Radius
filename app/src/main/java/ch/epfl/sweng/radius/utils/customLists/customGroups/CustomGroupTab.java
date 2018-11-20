@@ -19,6 +19,7 @@ import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 
 
 public abstract class CustomGroupTab extends Fragment {
@@ -52,10 +53,10 @@ public abstract class CustomGroupTab extends Fragment {
         View view = inflater.inflate(R.layout.friends_tab, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.friendsList);
 
-        ArrayList<CustomGroupListItem> items = new ArrayList<>();
+        ArrayList<CustomListItem> items = new ArrayList<>();
 
         //TODO REMOVE THIS LINE : test purposes
-        items.add(new CustomGroupListItem("testGroupId","group_EPFL","convIdGroup"));
+        items.add(new CustomListItem("testGroupId","group_EPFL","convIdGroup"));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         adapter = new CustomGroupListAdapter(items, getContext());

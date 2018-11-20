@@ -9,24 +9,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserListAdapter;
-import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserListItem;
 
-/*
-public class MessagesFragment extends Fragment {
-    List<CustomUserListItem> chatList;
-    ListView listView;
-*/
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
@@ -65,7 +57,7 @@ public class MessagesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.messagesList);
 
-        ArrayList<CustomUserListItem> items = new ArrayList<>();
+        ArrayList<CustomListItem> items = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         adapter = new CustomUserListAdapter(items, getContext());
         recyclerView.setAdapter(adapter);
@@ -82,11 +74,11 @@ public class MessagesFragment extends Fragment {
         @Override
         public void onFinish(Object value) {
             ArrayList<User> users = (ArrayList<User>)value;
-            final ArrayList <CustomUserListItem> conversations = new ArrayList<>();
+            final ArrayList <CustomListItem> conversations = new ArrayList<>();
 
             for (User user:users) {
                 if(!user.getID().equals(database.getCurrent_user_id())) {
-                    conversations.add(new CustomUserListItem(user.getID(),
+                    conversations.add(new CustomListItem(user.getID(),
                             current_user.getChatList().get(user.getID()), user.getNickname()));
                 }
             }

@@ -17,9 +17,9 @@ import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
-import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 
 
 public abstract class CustomUserTab extends Fragment {
@@ -31,35 +31,14 @@ public abstract class CustomUserTab extends Fragment {
     private CallBackDatabase adapterCallback = new CallBackDatabase() {
         @Override
         public void onFinish(Object value) {
-            ArrayList<CustomUserListItem> usersItems = new ArrayList<>();
+            ArrayList<CustomListItem> usersItems = new ArrayList<>();
             String convId;
             String userId = database.getCurrent_user_id();
             for (User user : (List<User>) value) {
                 convId = user.getConvFromUser(userId);
-/*
-                // If the conversation doesn't exist, it has to be created
-                if (convId.isEmpty()) {
-                    ArrayList<String> ids = new ArrayList();
-                    ids.add(userId);
-                    ids.add(user.getID());
-                    convId = new ChatLogs(ids).getID();
-                    user.addChat(userId, convId);
-                    // Update database entry for temp user with new chatLof
-                    database.writeInstanceObj(user, Database.Tables.USERS);
 
-                }
-                if (!myUser.getChatList().containsKey(user.getID()))
-                    myUser.addChat(user.getID(), convId);
-
-
-                usersItems.add(new CustomUserListItem(user.getID(), convId, user.getNickname()));
-            }
-            adapter.setItems(usersItems);
-            adapter.notifyDataSetChanged();
-            database.writeInstanceObj(myUser, Database.Tables.USERS);
-*/
                 if(!user.getID().equals(database.getCurrent_user_id())) {
-                    usersItems.add(new CustomUserListItem(user.getID(), convId, user.getNickname()));
+                    usersItems.add(new CustomListItem(user.getID(), convId, user.getNickname()));
                 }
             }
             adapter.setItems(usersItems);
@@ -83,7 +62,7 @@ public abstract class CustomUserTab extends Fragment {
         View view = inflater.inflate(R.layout.friends_tab, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.friendsList);
 
-        ArrayList<CustomUserListItem> items = new ArrayList<>();
+        ArrayList<CustomListItem> items = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         adapter = new CustomUserListAdapter(items, getContext());
         recyclerView.setAdapter(adapter);
@@ -111,21 +90,6 @@ public abstract class CustomUserTab extends Fragment {
                 });
     }
 
-/*    protected void setUpAdapterWithList(List<String> listIds) {
-        myUser = new User(database.getCurrent_user_id());
-        database.readObjOnce(myUser, Database.Tables.USERS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                myUser = (User) value;
-            }
-
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("Firebase Error", error.getMessage());
-            }
-        });
-
-*/
     protected void setUpAdapterWithList(List<String> listIds){
         database.readListObjOnce(listIds,
                 Database.Tables.USERS, adapterCallback);

@@ -13,14 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CustomGroupListAdapter extends RecyclerView.Adapter<CustomGroupListAdapter.ViewHolder>{
 
-    private List<CustomGroupListItem> items;
+    private List<CustomListItem> items;
     Context context;
 
-    public CustomGroupListAdapter(List<CustomGroupListItem> items, Context context) {
+    public CustomGroupListAdapter(List<CustomListItem> items, Context context) {
         this.items = new ArrayList<>(items);
         this.context = context;
     }
@@ -43,11 +44,11 @@ public class CustomGroupListAdapter extends RecyclerView.Adapter<CustomGroupList
 
         Log.e("CustomGroupListAdapter", "Items groups size :" + items.size());
 
-        viewHolder.txtViewTitle.setText(items.get(position).getGroupeName());
+        viewHolder.txtViewTitle.setText(items.get(position).getItemName());
 
-        CustomGroupListItem item = items.get(position);
-        final String groupId = item.getGroupId();
-        final String groupName = item.getGroupeName();
+        CustomListItem item = items.get(position);
+        final String groupId = item.getItemId();
+        final String groupName = item.getItemName();
         final String convId = item.getConvId();
         CustomGroupListListeners customListener = new CustomGroupListListeners(groupId,groupName,convId);
         customListener.setCustomOnClick(viewHolder.txtViewTitle, context);
@@ -73,7 +74,7 @@ public class CustomGroupListAdapter extends RecyclerView.Adapter<CustomGroupList
         return items.size();
     }
 
-    public void setItems(List<CustomGroupListItem> items){
+    public void setItems(List<CustomListItem> items){
         this.items = new ArrayList<>(items);
     }
 }
