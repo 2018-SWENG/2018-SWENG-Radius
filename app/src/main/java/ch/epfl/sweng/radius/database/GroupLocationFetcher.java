@@ -64,7 +64,7 @@ public class GroupLocationFetcher implements CallBackDatabase {
             System.out.println("currentUserLoc.getLatitude() + \" \" + currentUserLoc.getLongitude()" + currentUserLoc.getLatitude() + " " + currentUserLoc.getLongitude());
             System.out.println("location.getID()" + location.getID());
             System.out.println("MapUtility mapUtility = new MapUtility(location.getRadius());"+ location.getRadius());
-            System.out.println("isGroupLocation " + location.isGroupLocation());
+            System.out.println("isGroupLocation " + location.getIsGroupLocation());
             System.out.println("isVisible " + location.isVisible());
             MapUtility mapUtility = new MapUtility(location.getRadius());
             mapUtility.setMyPos(location);
@@ -90,7 +90,7 @@ public class GroupLocationFetcher implements CallBackDatabase {
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
-                        if (((MLocation) value).isGroupLocation()) {
+                        if (((MLocation) value).getIsGroupLocation() == 1) {
                             groupLocations.add(((MLocation) value).getID());
                             Log.e("value.getID()", ((MLocation) value).getID());
                         }
