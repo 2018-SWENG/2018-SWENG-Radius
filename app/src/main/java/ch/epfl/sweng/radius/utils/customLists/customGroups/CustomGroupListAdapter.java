@@ -13,17 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class CustomGroupListAdapter extends RecyclerView.Adapter<CustomGroupListAdapter.ViewHolder>{
+public class CustomGroupListAdapter extends CustomListAdapter{
 
-    private List<CustomListItem> items;
-    Context context;
 
     public CustomGroupListAdapter(List<CustomListItem> items, Context context) {
-        this.items = new ArrayList<>(items);
-        this.context = context;
+        super(items,context);
     }
 
     // Create new views (invoked by the layout manager)
@@ -54,27 +52,5 @@ public class CustomGroupListAdapter extends RecyclerView.Adapter<CustomGroupList
         customListener.setCustomOnClick(viewHolder.txtViewTitle, context);
     }
 
-    // inner class to hold a reference to each item of RecyclerView
-    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView txtViewTitle;
-        public ImageView imgViewIcon;
-
-        public ViewHolder(View itemLayoutView) {
-            super(itemLayoutView);
-            txtViewTitle = itemLayoutView.findViewById(R.id.username);
-            imgViewIcon = (CircleImageView) itemLayoutView.findViewById(R.id.profile_picture);
-        }
-    }
-
-
-    // Return the size of your itemsData (invoked by the layout manager)
-    @Override
-    public int getItemCount() {
-        return items.size();
-    }
-
-    public void setItems(List<CustomListItem> items){
-        this.items = new ArrayList<>(items);
-    }
 }
