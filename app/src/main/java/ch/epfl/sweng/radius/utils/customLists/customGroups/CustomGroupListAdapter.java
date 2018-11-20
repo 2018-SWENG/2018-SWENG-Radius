@@ -24,18 +24,6 @@ public class CustomGroupListAdapter extends CustomListAdapter{
         super(items,context);
     }
 
-    // Create new views (invoked by the layout manager)
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // create a new view
-        View itemLayoutView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.custom_list_item_layout, null);
-
-        // create ViewHolder
-        CustomGroupListAdapter.ViewHolder viewHolder = new CustomGroupListAdapter.ViewHolder(itemLayoutView);
-        return viewHolder;
-    }
-
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
