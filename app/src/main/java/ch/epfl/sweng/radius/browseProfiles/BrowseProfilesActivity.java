@@ -45,6 +45,20 @@ public class BrowseProfilesActivity extends AppCompatActivity {
     private TextView textViewInterests;
     private TextView textViewLanguages;
 
+    private final CallBackDatabase userCallback =  new CallBackDatabase() {
+        @Override
+        public void onFinish(Object value) {
+            User current_user = (User) value;
+            setUpAddFriendButton(current_user);
+            setUpUIComponents(current_user);
+        }
+
+        @Override
+        public void onError(DatabaseError error) {
+            Log.e("Firebase", error.getMessage());
+        }
+    };
+
     //THIS ACTIVITY HAS TO STORE THE ID OF THE USER WE ARE BROWSING THE PROFILE OF.
 
     @Override
@@ -67,19 +81,7 @@ public class BrowseProfilesActivity extends AppCompatActivity {
 
         // Get the current user profile from the DB
         database.readObjOnce(new User(userUID),
-                Database.Tables.USERS, new CallBackDatabase() {
-                    @Override
-                    public void onFinish(Object value) {
-                        User current_user = (User) value;
-                        setUpAddFriendButton(current_user);
-                        setUpUIComponents(current_user);
-                    }
-
-                    @Override
-                    public void onError(DatabaseError error) {
-                        Log.e("Firebase", error.getMessage());
-                    }
-                });
+                Database.Tables.USERS, userCallback);
 
         // ToolBar initialization
         toolbar = findViewById(R.id.toolbar); // Attaching the layout to the toolbar object
