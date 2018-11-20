@@ -74,7 +74,7 @@ public class GroupLocationFetcher implements CallBackDatabase {
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
-                        if (((MLocation) value).getIsGroupLocation() == 1) {
+                        if (((MLocation) value).getIsGroupLocation()) {
                             groupLocations.add((MLocation) value);
                             Log.e("value.getID()", ((MLocation) value).getID());
                         }
