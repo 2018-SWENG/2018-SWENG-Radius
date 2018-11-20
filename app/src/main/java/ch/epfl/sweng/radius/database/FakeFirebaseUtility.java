@@ -82,6 +82,20 @@ public class FakeFirebaseUtility extends Database {
                 objsRead.add(objRead);
         }
 
+        if(objsRead.isEmpty())
+            if(tableName == Tables.CHATLOGS){
+                ChatLogs chat = new ChatLogs("1");
+                chat.addMembersId("usertTest1");
+                chat.addMembersId("usertTest2");
+                chat.addMembersId("usertTest0");
+                chat.addMessage(new Message("usertTest0", "helo", new Date()));
+                chat.addMessage(new Message("usertTest1", "aaa", new Date()));
+                chat.addMessage(new Message("as", "aaa", new Date()));
+                chatLogsTable.put("1", chat);
+                objsRead.add(chat);
+
+            }
+
         callback.onFinish(objsRead);
     }
 
@@ -152,9 +166,11 @@ public class FakeFirebaseUtility extends Database {
         ChatLogs chat = new ChatLogs("0");
         ArrayList<String> users = new ArrayList<String>();
         chat.addMembersId("usertTest1");
-        chat.addMembersId("usertTest2");
+        chat.addMembersId("testUser3");
         chat.addMessage(new Message("usertTest1", "fff", new Date()));
         chat.addMessage(new Message("usertTest2", "aaa", new Date()));
+        chat.addMessage(new Message("testUser1", "aaa", new Date()));
+        chat.addMessage(new Message("as", "aaa", new Date()));
         chatLogsTable.put("0", chat);
     }
 
