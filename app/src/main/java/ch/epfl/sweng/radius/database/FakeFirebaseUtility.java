@@ -134,7 +134,7 @@ public class FakeFirebaseUtility extends Database {
     public void fillDatabase(){
         if(currentUSer != null) return;
         // Define Current user
-        currentUSer = new User("userTest1");
+        currentUSer = new User("testUser1");
 
         // Fill the users table
         usersTable.put("testUser1", currentUSer);
@@ -156,13 +156,6 @@ public class FakeFirebaseUtility extends Database {
         chat.addMessage(new Message("usertTest1", "fff", new Date()));
         chat.addMessage(new Message("usertTest2", "aaa", new Date()));
         chatLogsTable.put("0", chat);
-
-        chat = new ChatLogs("EPFL");
-        chat.addMembersId("usertTest1");
-        chat.addMembersId("usertTest2");
-        chat.addMessage(new Message("usertTest1", "fff", new Date()));
-        chat.addMessage(new Message("usertTest2", "aaa", new Date()));
-        chatLogsTable.put("EPFL", chat);
     }
 
     private void fillLocationsTable(){

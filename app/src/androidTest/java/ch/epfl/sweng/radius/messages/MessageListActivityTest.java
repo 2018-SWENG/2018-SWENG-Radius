@@ -18,13 +18,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
-import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -73,13 +71,12 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
         intent.putExtra("chatId", "0");
         intent.putExtra("otherId", "userTest1");
         mlActivity = mblActivityTestRule.launchActivity(intent);
-        user1 = new User("userTest0");
-        user2 = new User("userTest1");
+        user1 = new User();
+        user2 = new User();
         ArrayList<String> userIds = new ArrayList<>();
         userIds.add(user1.getID());
         userIds.add(user2.getID());
         chatLogs = new ChatLogs(userIds);
-        chatLogs.addMessage(new Message("userTest1", "Coucou", new Date()));
         databaseMessageUrl = "https://radius-1538126456577.firebaseio.com/messages/";
 
         Firebase.setAndroidContext(mlActivity);
