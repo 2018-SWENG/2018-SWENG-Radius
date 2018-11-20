@@ -2,17 +2,22 @@ package ch.epfl.sweng.radius.messages;
 
 import android.content.Intent;
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.regex.Matcher;
 
 import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.R;
@@ -29,7 +34,8 @@ public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<Accou
             = new ActivityTestRule<AccountActivity>(AccountActivity.class);
 
     private AccountActivity mblAccountActivity;
-    private ListView chats;
+    private RecyclerView chats;
+    private Fragment fragment;
 
     public MessagesFragmentTest() {
         super(AccountActivity.class);
@@ -49,52 +55,60 @@ public class MessagesFragmentTest extends ActivityInstrumentationTestCase2<Accou
     @Test
     public void testLaunch() {
         FrameLayout fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
-        Fragment fragment = new MessagesFragment();
+        fragment = new MessagesFragment();
         mblAccountActivity.getSupportFragmentManager().beginTransaction()
                 .add(fcontainer.getId(), fragment).commitAllowingStateLoss();
         getInstrumentation().waitForIdleSync();
 
-        View view = fragment.getView().findViewById(R.id.listView);
+        View view = fragment.getView().findViewById(R.id.messageLayout);
         assertNotNull(view);
-        /* Those are not present anymore
-        view = fragment.getView().findViewById(R.id.username);
-       assertNotNull(view);
-        view = fragment.getView().findViewById(R.id.profilePic);
-       assertNotNull(view);
-       */
 
-        chats = fragment.getView().findViewById(R.id.listView);
+        chats = fragment.getView().findViewById(R.id.messagesList);
         assertNotNull(chats);
     }
 
     @Test
     public void testBrowseProfilesActivity() {
         Espresso.onView(withId(R.id.navigation_messages)).perform(click());
-/*
-        onData(anything())
-                .inAdapterView(withId(R.id.listView))
-                .atPosition(0)
-                .onChildView(withId(R.id.profilePic))
-                .perform(click());
-        Espresso.onView(withId(R.id.clickedName)).equals("john doe");
-*/
+        Espresso.onView(withId(R.id.messagesList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(0,
+                        MyViewAction.clickChildViewWithId(R.id.profile_picture)));
     }
 
     @Test
     public void testIfChatIsOpening(){
-/*
         Espresso.onView(withId(R.id.navigation_messages)).perform(click());
-        onData(anything())
-                .inAdapterView(withId(R.id.listView))
-                .atPosition(0)
-                .onChildView(withId(R.id.username))
-                .perform(click());
-        Espresso.onView(withId(R.id.clickedName)).equals("john doe");
-*/
+        Espresso.onView(withId(R.id.messagesList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(0,
+                        MyViewAction.clickChildViewWithId(R.id.username)));
     }
 
     @After
     public void tearDown() throws Exception {
         mblAccountActivity = null;
     }
+}
+
+class MyViewAction {
+
+    public static ViewAction clickChildViewWithId(final int id) {
+        return new ViewAction() {
+            @Override
+            public org.hamcrest.Matcher<View> getConstraints() {
+                return null;
+            }
+
+            @Override
+            public String getDescription() {
+                return "Click on a child view with specified id.";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                View v = view.findViewById(id);
+                v.performClick();
+            }
+        };
+    }
+
 }

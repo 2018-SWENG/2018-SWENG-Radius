@@ -156,6 +156,19 @@ dependencies {
     //Messages
     androidTestImplementation 'com.firebase:firebase-client-android:2.5.2'
     androidTestImplementation 'com.android.volley:volley:1.1.0'
+
+    // For recycler  view testing
+    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:2.2.1') {
+        // Necessary to avoid version conflicts
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude module: 'recyclerview-v7'
+    }
+
+    // For pressBack Test
+    androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+
 }
 
 tasks.withType(Test) {

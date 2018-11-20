@@ -25,7 +25,8 @@ import ch.epfl.sweng.radius.database.User;
 public abstract class CustomUserTab extends Fragment {
     protected final Database database = Database.getInstance();
     protected CustomUserListAdapter adapter;
-    protected User myUser;
+    //protected User myUser;
+
 
     private CallBackDatabase adapterCallback = new CallBackDatabase() {
         @Override
@@ -35,7 +36,7 @@ public abstract class CustomUserTab extends Fragment {
             String userId = database.getCurrent_user_id();
             for (User user : (List<User>) value) {
                 convId = user.getConvFromUser(userId);
-
+/*
                 // If the conversation doesn't exist, it has to be created
                 if (convId.isEmpty()) {
                     ArrayList<String> ids = new ArrayList();
@@ -56,6 +57,11 @@ public abstract class CustomUserTab extends Fragment {
             adapter.setItems(usersItems);
             adapter.notifyDataSetChanged();
             database.writeInstanceObj(myUser, Database.Tables.USERS);
+*/
+                usersItems.add(new CustomUserListItem(user.getID(), convId, user.getNickname()));
+            }
+            adapter.setItems(usersItems);
+            adapter.notifyDataSetChanged();
         }
 
         @Override
@@ -103,7 +109,7 @@ public abstract class CustomUserTab extends Fragment {
                 });
     }
 
-    protected void setUpAdapterWithList(List<String> listIds) {
+/*    protected void setUpAdapterWithList(List<String> listIds) {
         myUser = new User(database.getCurrent_user_id());
         database.readObjOnce(myUser, Database.Tables.USERS, new CallBackDatabase() {
             @Override
@@ -117,6 +123,8 @@ public abstract class CustomUserTab extends Fragment {
             }
         });
 
+*/
+    protected void setUpAdapterWithList(List<String> listIds){
         database.readListObjOnce(listIds,
                 Database.Tables.USERS, adapterCallback);
     }
