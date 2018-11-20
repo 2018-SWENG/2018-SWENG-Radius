@@ -26,11 +26,6 @@ public abstract class CustomListAdapter extends RecyclerView.Adapter<CustomListA
         this.context = context;
     }
 
-    public CustomListAdapter(CustomListAdapter customListAdapter) {
-        this.items = new ArrayList<>(customListAdapter.items);
-        this.context = customListAdapter.context;
-    }
-
 
     @NonNull
     @Override

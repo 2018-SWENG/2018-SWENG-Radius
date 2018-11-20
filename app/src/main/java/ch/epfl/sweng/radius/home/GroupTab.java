@@ -20,9 +20,14 @@ public class GroupTab extends CustomGroupTab {
         GroupLocationFetcher groupLocationFetcher = new GroupLocationFetcher();
         database.readAllTableOnce(Database.Tables.LOCATIONS, groupLocationFetcher);
 
-        for(String s :groupLocationFetcher.getGroupLocationsIds()) {
+        /*for(String s :groupLocationFetcher.getGroupLocationsIds()) {
             System.out.println(s);
         }
+
+        System.out.println("--------------------------------------------------------------------");
+        System.out.println("HERE" + groupLocationFetcher.getGroupLocationsIds().size());
+        System.out.println("--------------------------------------------------------------------");*/
+
         return groupLocationFetcher.getGroupLocationsIds();
     }
 }
