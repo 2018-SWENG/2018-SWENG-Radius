@@ -53,7 +53,6 @@ public class CustomUserListListeners {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 database.readListObjOnce(Arrays.asList(database.getCurrent_user_id(), userId),
                         Database.Tables.USERS, new CallBackDatabase() {
                             @Override

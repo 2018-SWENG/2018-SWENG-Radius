@@ -22,8 +22,8 @@ public class GroupTab extends CustomGroupTab {
         database.readAllTableOnce(Database.Tables.LOCATIONS, groupLocationFetcher);
 
         List<String> returnList = new ArrayList<String>();
-        returnList.add("1");
-        returnList.add("2");
+        returnList.add("EPFL");
+        returnList.add("UNIL");
 
         return returnList;//groupLocationFetcher.getGroupLocationsIds();
     }
