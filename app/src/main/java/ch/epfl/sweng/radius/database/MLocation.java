@@ -42,7 +42,6 @@ public class MLocation implements DatabaseObject {
         this.isGroupLocation = false;
         this.radius = 0;
         this.isVisible = true;
-
     }
 
     public MLocation(String userID, LatLng pos){
@@ -102,8 +101,8 @@ public class MLocation implements DatabaseObject {
         return isGroupLocation;
     }
 
-    public void setIsGroupLocation(boolean isGroupLocation) {
-        this.isGroupLocation = isGroupLocation;
+    public void setisGroupLocation(boolean groupLocation) {
+        isGroupLocation = groupLocation;
     }
 
     public double getRadius() {
@@ -111,9 +110,9 @@ public class MLocation implements DatabaseObject {
     }
 
     public void setRadius(double newRadius) {
-        if (isGroupLocation()) {
+        //if (isGroupLocation()) {
             radius = newRadius;
-        }
+        //}
     }
 
     public boolean isVisible() {

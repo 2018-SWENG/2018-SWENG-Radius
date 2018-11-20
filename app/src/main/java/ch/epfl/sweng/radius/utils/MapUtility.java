@@ -41,7 +41,7 @@ public class MapUtility {
     private static boolean mblLocationPermissionGranted;
     private Location currentLocation;
     private static MLocation myPos;//private static MLocation myPos;
-    public static double radius = 5000;
+    public double radius = 5000;
     private static LatLng currCoordinates;
 
     private static HashMap<String, MLocation> otherPos;
@@ -162,7 +162,7 @@ public class MapUtility {
      * */
     public boolean contains(double p2latitude, double p2longtitude) {
         double distance = findDistance(p2latitude, p2longtitude);
-        Log.e("MapUtility", Boolean.toString(radius >= distance));
+        Log.e("MapUtility", Boolean.toString(radius >= distance) + " radius " + radius);
         return radius >= distance;
     }
 
@@ -176,7 +176,7 @@ public class MapUtility {
         float[] distance = new float[3];
         Location.distanceBetween( myPos.getLatitude(), myPos.getLongitude(),
                 p2latitude, p2longtitude, distance);
-        Log.e("Map","Distance is :" + Double.toString(distance[0]) + "currCoordinates.latitude" + currCoordinates.latitude + "currCoordinates.longitude" + currCoordinates.longitude);
+        Log.e("Map","Distance is : " + Double.toString(distance[0]) + " currCoordinates.latitude " + myPos.getLatitude() + " currCoordinates.longitude " + myPos.getLongitude());
         return distance[0];
     }
 

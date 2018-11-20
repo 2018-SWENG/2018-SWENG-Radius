@@ -22,9 +22,9 @@ public class GroupLocationTest {
 
     @Test
     public void testSetIsGroupLocation() {
-        testLocation.setIsGroupLocation(true);
+        testLocation.setisGroupLocation(true);
         assertTrue(testLocation.isGroupLocation());
-        testLocation.setIsGroupLocation(false);
+        testLocation.setisGroupLocation(false);
         assertFalse(testLocation.isGroupLocation());
     }
 

@@ -86,8 +86,8 @@ public class BrowseProfilesActivity extends AppCompatActivity {
         // ToolBar initialization
         toolbar = findViewById(R.id.toolbar); // Attaching the layout to the toolbar object
         setSupportActionBar(toolbar);
+        //REMOVE THIS PART FOR DEMO----------------------------------------
         GroupLocationFetcher glf = new GroupLocationFetcher();
-        glf.setCurrentUserLoc();
         Database.getInstance().readAllTableOnce(Database.Tables.LOCATIONS, glf);
     }
 
