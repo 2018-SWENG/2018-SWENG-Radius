@@ -7,29 +7,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.database.DatabaseError;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
 import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesActivity;
-import ch.epfl.sweng.radius.database.CallBackDatabase;
-import ch.epfl.sweng.radius.database.ChatLogs;
-import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.messages.MessageListActivity;
-
-import ch.epfl.sweng.radius.database.User;
 
 public class CustomUserListListeners {
     private int clickedPic;
     private String clickedName;
-    private String userUID;
+    private String userId;
 
 
-    public CustomUserListListeners(int clickedPic, User itemUser){
+    public CustomUserListListeners(int clickedPic, String userId , String userName){
         this.clickedPic = clickedPic;
-        this.clickedName = itemUser.getNickname();
-        this.userUID = itemUser.getID();
+        this.clickedName = userName;
+        this.userId = userId;
     }
 
     public void setCustomOnClick(ImageView imageView, final Context context) {
@@ -39,7 +29,7 @@ public class CustomUserListListeners {
                 Intent intent = new Intent(context, BrowseProfilesActivity.class);
                 intent.putExtra("Clicked Picture", clickedPic);
                 intent.putExtra("Clicked Name", clickedName);
-                intent.putExtra("UID", userUID);
+                intent.putExtra("UID", userId);
                 context.startActivity(intent);
             }
         });

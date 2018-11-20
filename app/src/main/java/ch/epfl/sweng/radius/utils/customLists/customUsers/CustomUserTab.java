@@ -33,11 +33,11 @@ public abstract class CustomUserTab extends Fragment {
             ArrayList<CustomUserListItem> usersItems = new ArrayList<>();
             String convId;
             String userId = database.getCurrent_user_id();
-            for (User user: (List<User>)value) {
+            for (User user : (List<User>) value) {
                 convId = user.getConvFromUser(userId);
 
                 // If the conversation doesn't exist, it has to be created
-                if(convId.isEmpty()){
+                if (convId.isEmpty()) {
                     ArrayList<String> ids = new ArrayList();
                     ids.add(userId);
                     ids.add(user.getID());
@@ -46,24 +46,26 @@ public abstract class CustomUserTab extends Fragment {
                     // Update database entry for temp user with new chatLof
                     database.writeInstanceObj(user, Database.Tables.USERS);
 
-
-
                 }
-                if(!myUser.getChatList().containsKey(user.getID()))
+                if (!myUser.getChatList().containsKey(user.getID()))
                     myUser.addChat(user.getID(), convId);
 
-                usersItems.add(new CustomUserListItem(user, convId));
+
+                usersItems.add(new CustomUserListItem(user.getID(), convId, user.getNickname()));
             }
-            adapter.setItems(usersItems); adapter.notifyDataSetChanged();
+            adapter.setItems(usersItems);
+            adapter.notifyDataSetChanged();
             database.writeInstanceObj(myUser, Database.Tables.USERS);
         }
+
         @Override
         public void onError(DatabaseError error) {
             Log.e("Firebase", error.getMessage());
         }
     };
 
-    public CustomUserTab() {}
+    public CustomUserTab() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,21 +88,22 @@ public abstract class CustomUserTab extends Fragment {
         return view;
     }
 
-    private void setUpAdapter(){
+    private void setUpAdapter() {
         database.readObjOnce(new User(database.getCurrent_user_id()),
                 Database.Tables.USERS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                setUpAdapterWithList(getIds((User)value));
-            }
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("Firebase Error", error.getMessage());
-            }
-        });
+                    @Override
+                    public void onFinish(Object value) {
+                        setUpAdapterWithList(getIds((User) value));
+                    }
+
+                    @Override
+                    public void onError(DatabaseError error) {
+                        Log.e("Firebase Error", error.getMessage());
+                    }
+                });
     }
 
-    protected void setUpAdapterWithList(List<String> listIds){
+    protected void setUpAdapterWithList(List<String> listIds) {
         myUser = new User(database.getCurrent_user_id());
         database.readObjOnce(myUser, Database.Tables.USERS, new CallBackDatabase() {
             @Override
