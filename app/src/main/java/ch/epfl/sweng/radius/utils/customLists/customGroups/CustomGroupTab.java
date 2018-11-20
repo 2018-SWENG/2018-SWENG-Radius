@@ -56,7 +56,7 @@ public abstract class CustomGroupTab extends CustomTab {
             }
         };
     }
-    
+
     public CustomGroupTab() { }
 
     @Override
