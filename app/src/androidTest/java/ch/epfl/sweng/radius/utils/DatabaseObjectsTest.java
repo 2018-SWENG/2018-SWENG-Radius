@@ -69,6 +69,7 @@ public class DatabaseObjectsTest {
         assert(allmessages.contains(m));
         assert(Nmessages.contains(m));
 
+        assertFalse(m.equals(new User()));
         chatLogs.removeMessage(m);
         chatLogs.addMessage(m);
         chatLogs.removeMessage(0);
