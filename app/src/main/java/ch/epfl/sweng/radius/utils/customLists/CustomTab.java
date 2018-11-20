@@ -19,16 +19,23 @@ import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserListAdapter;
 
 public abstract class CustomTab extends Fragment {
     protected final Database database = Database.getInstance();
-    private CustomUserListAdapter adapter;
+    private CustomListAdapter adapter;
 
     public CustomTab() {
     }
 
     public abstract CustomListAdapter getAdapter(List<CustomListItem> items);
+
+    public CustomListAdapter getAdapter(){
+        if(adapter == null){
+            return getAdapter(new ArrayList<CustomListItem>());
+        }else{
+            return adapter;
+        }
+    }
 
     public abstract CallBackDatabase getAdapterCallback();
 

@@ -25,9 +25,6 @@ import ch.epfl.sweng.radius.utils.customLists.CustomTab;
 
 
 public abstract class CustomUserTab extends CustomTab {
-    protected final Database database = Database.getInstance();
-    protected CustomUserListAdapter adapter;
-    //protected User myUser;
 
     public CustomListAdapter getAdapter(List<CustomListItem> items) {
         return new CustomUserListAdapter(items, getContext());
@@ -47,8 +44,8 @@ public abstract class CustomUserTab extends CustomTab {
                         usersItems.add(new CustomListItem(user.getID(), convId, user.getNickname()));
                     }
                 }
-                adapter.setItems(usersItems);
-                adapter.notifyDataSetChanged();
+                getAdapter().setItems(usersItems);
+                getAdapter().notifyDataSetChanged();
             }
 
             @Override

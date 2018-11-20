@@ -25,9 +25,6 @@ import ch.epfl.sweng.radius.utils.customLists.CustomTab;
 
 
 public abstract class CustomGroupTab extends CustomTab {
-    protected final Database database = Database.getInstance();
-    protected CustomGroupListAdapter adapter;
-    protected User myUser;
 
     public CustomListAdapter getAdapter(List<CustomListItem> items){
         return new CustomGroupListAdapter(items, getContext());
@@ -41,8 +38,8 @@ public abstract class CustomGroupTab extends CustomTab {
                 String convId;
                 String userId = database.getCurrent_user_id();
 
-                adapter.setItems(usersItems); adapter.notifyDataSetChanged();
-                database.writeInstanceObj(myUser, Database.Tables.USERS);
+                getAdapter().setItems(usersItems);
+                getAdapter().notifyDataSetChanged();
             }
             @Override
             public void onError(DatabaseError error) {
@@ -50,6 +47,7 @@ public abstract class CustomGroupTab extends CustomTab {
             }
         };
     }
+
 
     public CustomGroupTab() {}
 
