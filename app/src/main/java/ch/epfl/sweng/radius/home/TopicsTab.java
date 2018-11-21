@@ -20,6 +20,6 @@ public class TopicsTab extends CustomUserTab implements DBObserver {
 
     @Override
     public void onDataChange(String id) {
-        
+
     }
 }
