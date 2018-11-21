@@ -9,10 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.DBObserver;
 import ch.epfl.sweng.radius.utils.TabAdapter;
 
 
-public class FriendsFragment extends Fragment {
+public class FriendsFragment extends Fragment{
     private TabAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -34,4 +35,5 @@ public class FriendsFragment extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
         return view;
     }
+
 }
