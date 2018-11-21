@@ -19,6 +19,7 @@ import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.UserInfo;
 import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserListAdapter;
 
 public abstract class CustomTab extends Fragment {
@@ -55,18 +56,8 @@ public abstract class CustomTab extends Fragment {
 
 
     private void setUpAdapter() {
-        database.readObjOnce(new User(database.getCurrent_user_id()),
-                Database.Tables.USERS, new CallBackDatabase() {
-                    @Override
-                    public void onFinish(Object value) {
-                        setUpAdapterWithList(getIds((User) value));
-                    }
-
-                    @Override
-                    public void onError(DatabaseError error) {
-                        Log.e("Firebase Error", error.getMessage());
-                    }
-                });
+        setUpAdapterWithList(getIds(UserInfo.getInstance().getCurrentUser()));
+       
     }
 
     protected abstract void setUpAdapterWithList(List<String> listIds);

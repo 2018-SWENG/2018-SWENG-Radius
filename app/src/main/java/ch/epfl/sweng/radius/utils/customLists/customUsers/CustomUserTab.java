@@ -19,6 +19,7 @@ import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.UserInfo;
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 import ch.epfl.sweng.radius.utils.customLists.CustomTab;
@@ -37,11 +38,11 @@ public abstract class CustomUserTab extends CustomTab {
                 ArrayList<CustomListItem> usersItems = new ArrayList<>();
                // adapter = getAdapter(usersItems);
                 String convId;
-                String userId = database.getCurrent_user_id();
+                String userId = UserInfo.getInstance().getCurrentUser().getID();
 
                 for (User user : (List<User>) value) {
                     convId = user.getConvFromUser(userId);
-                    if (!user.getID().equals(database.getCurrent_user_id())) {
+                    if (!user.getID().equals(userId)) {
                         usersItems.add(new CustomListItem(user.getID(), convId, user.getNickname()));
                     }
                 }

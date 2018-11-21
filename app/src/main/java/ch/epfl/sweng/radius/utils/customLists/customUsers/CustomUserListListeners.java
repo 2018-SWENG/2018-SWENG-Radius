@@ -22,6 +22,7 @@ import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.messages.MessageListActivity;
 
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.UserInfo;
 
 public class CustomUserListListeners {
     private final Database database = Database.getInstance();
@@ -54,7 +55,7 @@ public class CustomUserListListeners {
             @Override
             public void onClick(View view) {
 
-                database.readListObjOnce(Arrays.asList(database.getCurrent_user_id(), userId),
+                database.readListObjOnce(Arrays.asList(UserInfo.getInstance().getCurrentUser().getID(), userId),
                         Database.Tables.USERS, new CallBackDatabase() {
                             @Override
                             public void onFinish(Object value) {
