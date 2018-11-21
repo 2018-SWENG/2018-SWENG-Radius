@@ -8,7 +8,7 @@ import ch.epfl.sweng.radius.database.User;
 public  class UserInfo {
     private static UserInfo userInfo = null;
     private static final Database database = Database.getInstance();
-    public static User current_user = new User(Database.getInstance().getCurrent_user_id(),
+    private User current_user = new User(Database.getInstance().getCurrent_user_id(),
             "", "");
 
     public static UserInfo getInstance(){
@@ -19,6 +19,10 @@ public  class UserInfo {
 
     private UserInfo(){
         fetchCurrentUser();
+    }
+
+    public User getCurrentUser(){
+        return current_user;
     }
 
     private void fetchCurrentUser(){

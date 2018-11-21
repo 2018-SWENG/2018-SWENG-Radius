@@ -29,6 +29,7 @@ import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.GroupLocationFetcher;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.BrowseProfilesUtility;
+import ch.epfl.sweng.radius.utils.UserInfo;
 
 
 public class BrowseProfilesActivity extends AppCompatActivity {
@@ -45,19 +46,9 @@ public class BrowseProfilesActivity extends AppCompatActivity {
     private TextView textViewInterests;
     private TextView textViewLanguages;
 
-    private final CallBackDatabase userCallback =  new CallBackDatabase() {
-        @Override
-        public void onFinish(Object value) {
-            User current_user = (User) value;
-            setUpAddFriendButton(current_user);
-            setUpUIComponents(current_user);
-        }
 
-        @Override
-        public void onError(DatabaseError error) {
-            Log.e("Firebase", error.getMessage());
-        }
-    };
+
+
 
     //THIS ACTIVITY HAS TO STORE THE ID OF THE USER WE ARE BROWSING THE PROFILE OF.
 
@@ -80,8 +71,8 @@ public class BrowseProfilesActivity extends AppCompatActivity {
 
 
         // Get the current user profile from the DB
-        database.readObjOnce(new User(userUID),
-                Database.Tables.USERS, userCallback);
+        setUpAddFriendButton(UserInfo.current_user);
+        setUpUIComponents(current_user);
 
         // ToolBar initialization
         toolbar = findViewById(R.id.toolbar); // Attaching the layout to the toolbar object
