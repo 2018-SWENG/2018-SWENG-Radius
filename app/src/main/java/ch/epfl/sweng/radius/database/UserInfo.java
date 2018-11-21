@@ -1,18 +1,12 @@
-package ch.epfl.sweng.radius.utils;
+package ch.epfl.sweng.radius.database;
 
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseError;
 
-import ch.epfl.sweng.radius.database.CallBackDatabase;
-import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.MLocation;
-import ch.epfl.sweng.radius.database.User;
-
-public  class UserInfo {
+public  class UserInfo extends DBObservable{
     private static UserInfo userInfo = null;
     private static final Database database = Database.getInstance();
-
 
     private User current_user = new User(Database.getInstance().getCurrent_user_id(),
             "", "");
