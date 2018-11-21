@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.utils.UserInfo;
 
 public class PreferencesActivity extends PreferenceActivity {
 
@@ -50,29 +51,15 @@ public class PreferencesActivity extends PreferenceActivity {
         }
 
         private void initializeIncognitoPreference() {
-
-            Database.getInstance().readObjOnce(new MLocation(Database.getInstance().getCurrent_user_id()),
-                    Database.Tables.LOCATIONS, new CallBackDatabase() {
-                @Override
-                public void onFinish(Object value) {
-                    isVisible = ((MLocation) value).isVisible();
-                    SwitchPreference incognitoPref = (android.preference.SwitchPreference) findPreference(INCOGNITO);
-                    if (isVisible) {
-                        findPreference(INCOGNITO).setDefaultValue("false");
-                        incognitoPref.setSummaryOff(VISIBLE);
-                    } else {
-                        findPreference(INCOGNITO).setDefaultValue("true");
-                        incognitoPref.setSummaryOn(INVISIBLE);
-                    }
-                }
-
-                @Override
-                public void onError(DatabaseError error) {
-
-                }
-            });
-
-
+            isVisible = UserInfo.getInstance().getCurrentPosition().isVisible();
+            SwitchPreference incognitoPref = (android.preference.SwitchPreference) findPreference(INCOGNITO);
+            if (isVisible) {
+                findPreference(INCOGNITO).setDefaultValue("false");
+                incognitoPref.setSummaryOff(VISIBLE);
+            } else {
+                findPreference(INCOGNITO).setDefaultValue("true");
+                incognitoPref.setSummaryOn(INVISIBLE);
+            }
         }
 
         @Override
@@ -114,26 +101,15 @@ public class PreferencesActivity extends PreferenceActivity {
 
         private void changeInvisibility() {
             isVisible = !isVisible;
-            MLocation loc = new MLocation(Database.getInstance().getCurrent_user_id());
-            Database.getInstance().readObjOnce(loc, Database.Tables.LOCATIONS, new CallBackDatabase() {
-                @Override
-                public void onFinish(Object value) {
-                    MLocation readLoc = (MLocation) value;
-                    readLoc.setVisibility(isVisible);
-                    Database.getInstance().writeInstanceObj(readLoc, Database.Tables.LOCATIONS);
-                    SwitchPreference incognitoPref = (android.preference.SwitchPreference) findPreference(INCOGNITO);
-                    if (isVisible) {
-                        incognitoPref.setSummaryOff(VISIBLE);
-                    } else {
-                        incognitoPref.setSummaryOn(INVISIBLE);
-                    }
-                }
-
-                @Override
-                public void onError(DatabaseError error) {
-
-                }
-            });
+            MLocation readLoc = UserInfo.getInstance().getCurrentPosition();
+            readLoc.setVisibility(isVisible);
+            Database.getInstance().writeInstanceObj(readLoc, Database.Tables.LOCATIONS);
+            SwitchPreference incognitoPref = (android.preference.SwitchPreference) findPreference(INCOGNITO);
+            if (isVisible) {
+                incognitoPref.setSummaryOff(VISIBLE);
+            } else {
+                incognitoPref.setSummaryOn(INVISIBLE);
+            }
         }
 
         private void logOut() {

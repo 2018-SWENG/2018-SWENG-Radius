@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.radius.utils.MapUtility;
+import ch.epfl.sweng.radius.utils.UserInfo;
 
 public class GroupLocationFetcher implements CallBackDatabase {
 
@@ -17,24 +18,7 @@ public class GroupLocationFetcher implements CallBackDatabase {
 
     public GroupLocationFetcher() {
         groupLocationsIds = new ArrayList<>();
-        currentUserLoc = new MLocation(database.getCurrent_user_id());
-
-
-
-        database.readObjOnce(currentUserLoc, Database.Tables.LOCATIONS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                currentUserLoc = (MLocation) value;
-                Log.e("GroupLocationFetcher: ", "currentUser latitude" + currentUserLoc.getLatitude() +
-                        "currentUser longitude" + currentUserLoc.getLongitude());
-            }
-
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("Firebase Error", error.getMessage());
-            }
-        });
-
+        currentUserLoc = UserInfo.getInstance().getCurrentPosition();
     }
 
     @Override

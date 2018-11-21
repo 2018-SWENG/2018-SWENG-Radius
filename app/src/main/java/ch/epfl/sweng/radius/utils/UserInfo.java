@@ -16,7 +16,6 @@ public  class UserInfo {
 
     private User current_user = new User(Database.getInstance().getCurrent_user_id(),
             "", "");
-
     private MLocation current_position = new MLocation(Database.getInstance().getCurrent_user_id());
 
     public static UserInfo getInstance(){
