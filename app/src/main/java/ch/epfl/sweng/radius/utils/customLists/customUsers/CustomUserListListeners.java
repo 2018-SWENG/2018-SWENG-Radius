@@ -63,7 +63,7 @@ public class CustomUserListListeners {
                                 String chatId = convId;
                                 if(convId.isEmpty()){ // If the conversation doesn't exist, it has to be created
                                     ArrayList<String> ids = new ArrayList();
-                                    ids.add(userId); ids.add(database.getCurrent_user_id());
+                                    ids.add(userId); ids.add(UserInfo.getInstance().getCurrentUser().getID());
                                     chatId = new ChatLogs(ids).getID();
                                     users.get(0).addChat(users.get(1).getID(), chatId);
                                     users.get(1).addChat(users.get(0).getID(), chatId);

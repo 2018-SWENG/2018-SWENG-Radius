@@ -178,7 +178,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
                 }
             });
-            myPos = new MLocation(Database.getInstance().getCurrent_user_id(), lng, lat);
+            myPos = new MLocation(UserInfo.getInstance().getCurrentUser().getID(), lng, lat);
             Database.getInstance().writeInstanceObj(myPos, Database.Tables.LOCATIONS);
           //  mapListener.setMyPos(myPos);
 

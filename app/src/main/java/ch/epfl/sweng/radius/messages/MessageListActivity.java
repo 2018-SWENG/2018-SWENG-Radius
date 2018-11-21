@@ -39,7 +39,7 @@ public class MessageListActivity extends AppCompatActivity {
     private EditText messageZone;
     private Button sendButton;
     private ChatLogs chatLogs;
-    private String chatId, otherUserId, myID = Database.getInstance().getCurrent_user_id();
+    private String chatId, otherUserId, myID = UserInfo.getInstance().getCurrentUser().getID();
     private ValueEventListener listener;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
 
@@ -79,7 +79,7 @@ public class MessageListActivity extends AppCompatActivity {
         if(chatLogs.getMembersId().size() == 2){
             String tempID =  chatLogs.getMembersId().get(0);
             String tempID2 =  chatLogs.getMembersId().get(1);
-             otherId = tempID.equals(database.getCurrent_user_id()) ?
+             otherId = tempID.equals(myID) ?
                     tempID : tempID2;
         }
 
@@ -100,8 +100,8 @@ public class MessageListActivity extends AppCompatActivity {
             if(chatLogs.getMembersId().size() < 2 && otherUserId != null){
                 chatLogs.addMembersId(otherUserId);
             }
-            if(!chatLogs.getMembersId().contains(database.getCurrent_user_id()))
-                chatLogs.addMembersId(database.getCurrent_user_id());
+            if(!chatLogs.getMembersId().contains(myID))
+                chatLogs.addMembersId(myID);
 
             database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
             Log.e("message", "Calllback Messages size" + Integer.toString(chatLogs.getMessages().size()));
