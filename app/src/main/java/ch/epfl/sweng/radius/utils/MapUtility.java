@@ -90,11 +90,8 @@ public class MapUtility {
                     public void onComplete(@NonNull Task task) {
                         if ( task.isSuccessful() && task.getResult() != null) {
                             currentLocation = (Location) task.getResult();
-                            try {
-                                LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(), currentLocation.getLongitude());
-                                setCurrCoordinates(currentCoordinates);
-
-                            } catch(NullPointerException e) {}
+                            LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(), currentLocation.getLongitude());
+                            setCurrCoordinates(currentCoordinates);
                         }
                         else {
                             Toast.makeText( activity.getApplicationContext(), "Unable to get current location",
@@ -165,7 +162,7 @@ public class MapUtility {
      * */
     public boolean contains(double p2latitude, double p2longtitude) {
         double distance = findDistance(p2latitude, p2longtitude);
-        Log.e("MapUtility", Boolean.toString(radius >= distance));
+        Log.e("MapUtility", Boolean.toString(radius >= distance) + " radius " + radius);
         return radius >= distance;
     }
 
@@ -179,7 +176,14 @@ public class MapUtility {
         float[] distance = new float[3];
         Location.distanceBetween( myPos.getLatitude(), myPos.getLongitude(),
                 p2latitude, p2longtitude, distance);
-        Log.e("Map","Distance is :" + Double.toString(distance[0]) + "currCoordinates.latitude" + currCoordinates.latitude + "currCoordinates.longitude" + currCoordinates.longitude);
+        Log.e("Map","Distance is : " + Double.toString(distance[0]) + " currCoordinates.latitude " + myPos.getLatitude() + " currCoordinates.longitude " + myPos.getLongitude());
+        return distance[0];
+    }
+
+    public static double findDistance(MLocation loc1, MLocation loc2) {
+        float[] distance = new float[3];
+        Location.distanceBetween( loc1.getLatitude(), loc1.getLongitude(),
+                loc2.getLatitude(), loc2.getLongitude(), distance);
         return distance[0];
     }
 

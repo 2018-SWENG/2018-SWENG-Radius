@@ -6,13 +6,13 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
-public class UserVisibilityTest {
+public class LocationVisibilityTest {
 
-    private User testUser;
+    private MLocation testUser;
 
     @Before
     public void setUp() {
-        testUser = new User();
+        testUser = new MLocation();
     }
 
     @Test

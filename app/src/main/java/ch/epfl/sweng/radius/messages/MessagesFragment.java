@@ -9,27 +9,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
+import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserListAdapter;
+
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.CustomLists.CustomListAdapter;
-import ch.epfl.sweng.radius.utils.CustomLists.CustomListItem;
 
 
 public class MessagesFragment extends Fragment {
     private final Database database = Database.getInstance();
-    private CustomListAdapter adapter;
+    private CustomUserListAdapter adapter;
     private User current_user;
-
 
     public MessagesFragment() {
         // Required empty public constructor
@@ -61,7 +59,7 @@ public class MessagesFragment extends Fragment {
 
         ArrayList<CustomListItem> items = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        adapter = new CustomListAdapter(items, getContext());
+        adapter = new CustomUserListAdapter(items, getContext());
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -79,8 +77,10 @@ public class MessagesFragment extends Fragment {
             final ArrayList <CustomListItem> conversations = new ArrayList<>();
 
             for (User user:users) {
-                conversations.add(new CustomListItem(user,
-                        current_user.getChatList().get(user.getID())));
+                if(!user.getID().equals(database.getCurrent_user_id())) {
+                    conversations.add(new CustomListItem(user.getID(),
+                            current_user.getChatList().get(user.getID()), user.getNickname()));
+                }
             }
             adapter.setItems(conversations);
             adapter.notifyDataSetChanged();

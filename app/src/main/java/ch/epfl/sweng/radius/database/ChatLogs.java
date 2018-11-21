@@ -3,6 +3,7 @@ package ch.epfl.sweng.radius.database;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import static java.lang.Math.min;
 
@@ -17,14 +18,19 @@ public class ChatLogs implements DatabaseObject{
     private List<Message> messages; // List LIFO of all the message in the chat
     private String chatLogsId;
     private int numberOfMessages;
+    private String id;
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public ChatLogs(List<String> membersId){
     //    if(membersId.size() < 2) { throw new IllegalArgumentException("Chat must be between 2 users"); }
         this.membersId = new ArrayList<>(membersId);
         this.messages = new LinkedList<>();
         this.numberOfMessages=0;
-        this.chatLogsId = Long.toString(idGenerator++);
+        this.chatLogsId = UUID.randomUUID().toString();
+        this.id = this.chatLogsId;
     }
 
 
@@ -33,13 +39,14 @@ public class ChatLogs implements DatabaseObject{
         this.messages = new LinkedList<>();
         this.chatLogsId = chatLogsId;
         numberOfMessages=0;
+        this.id = chatLogsId;
     }
 
     public ChatLogs() {
         this.membersId = new ArrayList<>();
         this.messages = new LinkedList<>();
-        this.chatLogsId = Long.toString(idGenerator++);
-        this.chatLogsId = "NULL";
+        this.chatLogsId = UUID.randomUUID().toString();
+        this.id = this.chatLogsId;
     }
 
     // Getters
@@ -84,7 +91,7 @@ public class ChatLogs implements DatabaseObject{
     public void removeMessage(int index){ messages.remove(index);}
 
     public String getID() {
-        return this.chatLogsId;
+        return this.id;
     }
 
     public String getChatLogsId() {
@@ -93,6 +100,7 @@ public class ChatLogs implements DatabaseObject{
 
     public void setChatLogsId(String chatLogsId) {
         this.chatLogsId = chatLogsId;
+        this.id = chatLogsId;
     }
 
     public int getNumberOfMessages() {

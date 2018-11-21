@@ -4,6 +4,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class MLocation implements DatabaseObject {
 
+    public final double DEFAULT_GROUP_LOCATION_RADIUS = 2000;
+
     private static int locIDCounter = 0;
 
     private String userID;
@@ -11,8 +13,10 @@ public class MLocation implements DatabaseObject {
     private String message;
     private double longitude;
     private double latitude;
+    private boolean isVisible; // added for invisibility feature
 
-    private int isGroupLocation; // if 1, it means that the location belongs to a group not a user
+    private int isGroupLocation;
+    private double radius; // Use it only if the mLocation is a group.
 
     public MLocation(String userID){
         this.userID = userID;
@@ -25,6 +29,8 @@ public class MLocation implements DatabaseObject {
         this.title = "New MLocation";
         this.message = "Here I am";
         this.isGroupLocation = 0;
+        this.radius = 0;
+        this.isVisible = true;
     }
 
     public MLocation(String userID, double longitude, double latitude){
@@ -34,6 +40,8 @@ public class MLocation implements DatabaseObject {
         this.title = "New MLocation";
         this.message = "Here I am";
         this.isGroupLocation = 0;
+        this.radius = 0;
+        this.isVisible = true;
     }
 
     public MLocation(String userID, LatLng pos){
@@ -43,6 +51,9 @@ public class MLocation implements DatabaseObject {
         this.title = "New MLocation";
         this.message = "Here I am";
         this.isGroupLocation = 0;
+        this.radius = 0;
+        this.isVisible = true;
+
     }
 
     public double getLatitude() {
@@ -90,18 +101,26 @@ public class MLocation implements DatabaseObject {
         return isGroupLocation;
     }
 
-    public void setIsGroupLocation(int isGroupLocation) {
-        this.isGroupLocation = isGroupLocation;
+    public void setIsGroupLocation(int groupLocation) {
+        isGroupLocation = groupLocation;
     }
 
-    // isGroupLocation property is an int for database storage reasons, use this to think of it
-    // as a boolean variable
-    public boolean isGroupLocation() {
-        if (isGroupLocation == 1) {
-            return true;
-        } else {
-            return false;
-        }
+    public double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(double newRadius) {
+        //if (isGroupLocation() == 1) {
+            radius = newRadius;
+        //}
+    }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public void setVisibility(boolean isVisible) {
+        this.isVisible = isVisible;
     }
 
 }

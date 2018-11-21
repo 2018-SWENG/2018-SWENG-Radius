@@ -1,7 +1,6 @@
-package ch.epfl.sweng.radius.utils.CustomLists;
+package ch.epfl.sweng.radius.utils.customLists;
 
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,34 +17,20 @@ import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
-import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
-
+import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserListAdapter;
 
 public abstract class CustomTab extends Fragment {
     protected final Database database = Database.getInstance();
-    protected  CustomListAdapter adapter;
+    protected CustomListAdapter adapter;
 
-    private CallBackDatabase adapterCallback = new CallBackDatabase() {
-        @Override
-        public void onFinish(Object value) {
-            ArrayList<CustomListItem> usersItems = new ArrayList<>();
-            String convId;
-            String userId = database.getCurrent_user_id();
-            for (User user: (List<User>)value) {
-                convId = user.getConvFromUser(userId);
-                usersItems.add(new CustomListItem(user, convId));
-            }
-            adapter.setItems(usersItems); adapter.notifyDataSetChanged();
-        }
-        @Override
-        public void onError(DatabaseError error) {
-            Log.e("Firebase", error.getMessage());
-        }
-    };
+    public CustomTab() {
+    }
 
-    public CustomTab() {}
+    public abstract CustomListAdapter getAdapter(List<CustomListItem> items);
+
+    public abstract CallBackDatabase getAdapterCallback();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,7 +42,7 @@ public abstract class CustomTab extends Fragment {
 
         ArrayList<CustomListItem> items = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        adapter = new CustomListAdapter(items, getContext());
+        adapter = getAdapter(items);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -68,24 +53,23 @@ public abstract class CustomTab extends Fragment {
         return view;
     }
 
-    private void setUpAdapter(){
+
+    private void setUpAdapter() {
         database.readObjOnce(new User(database.getCurrent_user_id()),
                 Database.Tables.USERS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                setUpAdapterWithList(getUsersIds((User)value));
-            }
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("Firebase Error", error.getMessage());
-            }
-        });
+                    @Override
+                    public void onFinish(Object value) {
+                        setUpAdapterWithList(getIds((User) value));
+                    }
+
+                    @Override
+                    public void onError(DatabaseError error) {
+                        Log.e("Firebase Error", error.getMessage());
+                    }
+                });
     }
 
-    protected void setUpAdapterWithList(List<String> listIds){
-        database.readListObjOnce(listIds,
-                Database.Tables.USERS, adapterCallback);
-    }
+    protected abstract void setUpAdapterWithList(List<String> listIds);
 
-    protected abstract List<String> getUsersIds(User current_user);
+    protected abstract List<String> getIds(User current_user);
 }

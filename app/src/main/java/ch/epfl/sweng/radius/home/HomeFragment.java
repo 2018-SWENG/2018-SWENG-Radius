@@ -31,6 +31,7 @@ import java.util.List;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.GroupLocationFetcher;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.MapUtility;
@@ -108,6 +109,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         tabLayout = view.findViewById(R.id.tabLayout);
         adapter = new TabAdapter(this.getChildFragmentManager());
         adapter.addFragment(new PeopleTab(), "People");
+        adapter.addFragment(new GroupTab(), "Groups");
         adapter.addFragment(new TopicsTab(), "Topics");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -152,13 +154,29 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void initMap() {
+
         if (mapListener.getCurrCoordinates() != null) {
+
             initCircle(mapListener.getCurrCoordinates());
             moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM *(float) 0.7);
             // Push current location to DB
             double lat = mapListener.getCurrCoordinates().latitude;
             double lng = mapListener.getCurrCoordinates().longitude;
             // Write the location of the current user to the database
+            Database.getInstance().readObjOnce(new MLocation("EPFL"), Database.Tables.LOCATIONS, new CallBackDatabase() {
+                @Override
+                public void onFinish(Object value) {
+                    MLocation epfl2 = (MLocation) value;
+                    epfl2.setIsGroupLocation(1);
+                    epfl2.setRadius(2000);
+                    Database.getInstance().writeInstanceObj(epfl2, Database.Tables.LOCATIONS);
+                }
+
+                @Override
+                public void onError(DatabaseError error) {
+
+                }
+            });
             myPos = new MLocation(Database.getInstance().getCurrent_user_id(), lng, lat);
             Database.getInstance().writeInstanceObj(myPos, Database.Tables.LOCATIONS);
           //  mapListener.setMyPos(myPos);
@@ -249,7 +267,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         MarkerOptions marker = new MarkerOptions().position(newPos)
                 .title(userName + ": " + status)
                 .icon(BitmapDescriptorFactory.defaultMarker(color));
-
         mapMarkers.add(marker);
         mobileMap.addMarker(marker);
 

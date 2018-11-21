@@ -167,6 +167,7 @@ public class FirebaseUtility extends Database{
     public void readListObjOnce(final List<String> ids,
                             final Tables tableName,
                             final CallBackDatabase callback) {
+
         FirebaseDatabase.getInstance()
                 .getReference(tableName.toString())
                 .addListenerForSingleValueEvent( new ValueEventListener() {
@@ -180,9 +181,8 @@ public class FirebaseUtility extends Database{
                         allItems.add((DatabaseObject)postSnapshot
                                 .getValue(tableName.getTableClass()));
                     }
-                    Log.e("PeopleTab", "allItems users size :" + allItems.size());
-
                 }
+
                 callback.onFinish(allItems);
             }
 

@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.utils.CustomLists;
+package ch.epfl.sweng.radius.utils.customLists.customUsers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,17 +23,17 @@ import ch.epfl.sweng.radius.messages.MessageListActivity;
 
 import ch.epfl.sweng.radius.database.User;
 
-public class CustomListListeners {
+public class CustomUserListListeners {
     private final Database database = Database.getInstance();
     private int clickedPic;
     private String clickedName;
-    private String userUID;
+    private String userId;
 
 
-    public CustomListListeners(int clickedPic, User itemUser){
+    public CustomUserListListeners(int clickedPic, String userId , String userName){
         this.clickedPic = clickedPic;
-        this.clickedName = itemUser.getNickname();
-        this.userUID = itemUser.getID();
+        this.clickedName = userName;
+        this.userId = userId;
     }
 
     public void setCustomOnClick(ImageView imageView, final Context context) {
@@ -43,7 +43,7 @@ public class CustomListListeners {
                 Intent intent = new Intent(context, BrowseProfilesActivity.class);
                 intent.putExtra("Clicked Picture", clickedPic);
                 intent.putExtra("Clicked Name", clickedName);
-                intent.putExtra("UID", userUID);
+                intent.putExtra("UID", userId);
                 context.startActivity(intent);
             }
         });
@@ -53,11 +53,13 @@ public class CustomListListeners {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 database.readListObjOnce(Arrays.asList(database.getCurrent_user_id(), userId),
                         Database.Tables.USERS, new CallBackDatabase() {
                             @Override
                             public void onFinish(Object value) {
-                                ArrayList<User> users = (ArrayList<User>)value; String chatId = convId;
+                                ArrayList<User> users = (ArrayList<User>)value;
+                                String chatId = convId;
                                 if(convId.isEmpty()){ // If the conversation doesn't exist, it has to be created
                                     ArrayList<String> ids = new ArrayList();
                                     ids.add(userId); ids.add(database.getCurrent_user_id());

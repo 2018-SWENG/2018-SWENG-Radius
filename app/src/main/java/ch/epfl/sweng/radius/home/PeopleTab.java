@@ -6,20 +6,19 @@ import android.util.Log;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.CustomLists.CustomTab;
 import ch.epfl.sweng.radius.utils.MapUtility;
+import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserTab;
 
 // TODO : On activity end, clear myUser empty Chaltogs (no message) and repush do
     // TODO     the same for userIDs
 
-public class PeopleTab extends CustomTab {
+public class PeopleTab extends CustomUserTab {
     private MLocation myLocation;
     private double myRadius = -1;
     private String radiusListener;
@@ -29,6 +28,7 @@ public class PeopleTab extends CustomTab {
         @Override
         public void onFinish(Object value) {
             myRadius = ((User) value).getRadius();
+            // Call method to refresh userList
         }
 
         @Override
@@ -56,7 +56,7 @@ public class PeopleTab extends CustomTab {
             ArrayList<MLocation> locations = (ArrayList<MLocation>) value;
             for(MLocation loc : locations){
                 // TODO Fix for non-user locations by checking TBD location type
-                if(isInRadius(loc)){
+                if(isInRadius(loc) && loc.isVisible() && (loc.getIsGroupLocation() != 1)){
                     userIDs.add(loc.getID());
                 }
 
@@ -71,7 +71,7 @@ public class PeopleTab extends CustomTab {
 
     public PeopleTab() {
     }
-    protected  List<String> getUsersIds(User current_user){
+    protected  List<String> getIds(User current_user){
         final String userId = current_user.getID();
         final Database database = Database.getInstance();
         radiusListener = userId + "_radiusListener";
@@ -88,23 +88,13 @@ public class PeopleTab extends CustomTab {
         // Get all other locations in Radius and add corresponding user to List
         // TODO Setup a Listener instead of reading once
         database.readAllTableOnce(Database.Tables.LOCATIONS, locationsCallback);
+
         return userIDs;
     }
 
     private boolean isInRadius(MLocation loc) {
 
-        return findDistance(loc.getLatitude(), loc.getLongitude()) < myRadius*1000;
+        return MapUtility.findDistance(myLocation, loc) < myRadius*1000;
     }
 
-    public double findDistance(double p2latitude, double p2longtitude) {
-        float[] distance = new float[3];
-        Location.distanceBetween( myLocation.getLatitude(), myLocation.getLongitude(),
-                p2latitude, p2longtitude, distance);
-       /*
-        Log.e("Map","Distance is :" + Double.toString(distance[0])
-                + "currCoordinates.latitude" + myLocation.getLatitude()
-                + "currCoordinates.longitude" + myLocation.getLongitude());
-                */
-        return distance[0];
-    }
 }

@@ -22,6 +22,7 @@ import ch.epfl.sweng.radius.database.User;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 
 public class DatabaseObjectsTest {
@@ -68,6 +69,7 @@ public class DatabaseObjectsTest {
         assert(allmessages.contains(m));
         assert(Nmessages.contains(m));
 
+        assertFalse(m.equals(new User()));
         chatLogs.removeMessage(m);
         chatLogs.addMessage(m);
         chatLogs.removeMessage(0);
@@ -149,6 +151,10 @@ public class DatabaseObjectsTest {
         mLocation.setLongitude(4.0);
         assert(mLocation2.getLatitude() == 1.0);
         assert(mLocation2.getLongitude() == 4.0);
+
+        assertTrue(mLocation.isVisible());
+        mLocation.setVisibility(false);
+        assertFalse(mLocation.isVisible());
 
     }
 
