@@ -40,8 +40,8 @@ public  class UserInfo {
     private void fetchCurrentUser(){
         database.readObjOnce(current_user, Database.Tables.USERS, new CallBackDatabase() {
             @Override
-            public void onFinish(Object value) {
-                current_user = (User) value;
+            public void onFinish(Object user) {
+                current_user = (User) user;
             }
 
             @Override
@@ -54,8 +54,8 @@ public  class UserInfo {
     private void fetchUserPosition(){
         database.readObjOnce(current_position, Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
-            public void onFinish(Object value) {
-                current_position = (MLocation) value;
+            public void onFinish(Object loc) {
+                current_position = (MLocation) loc;
             }
 
             @Override
