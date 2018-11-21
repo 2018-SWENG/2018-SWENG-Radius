@@ -78,7 +78,7 @@ public class ChatLogs implements DatabaseObject{
 
     public void addMessage(Message message){
         messages.add(message);
-        if(!(Database.getInstance().getClass() == FakeFirebaseUtility.class))
+        if(!Database.DEBUG_MODE)
             Database.getInstance().writeToInstanceChild(this, Database.Tables.CHATLOGS, "numberOfMessages",++numberOfMessages);
     }
 
