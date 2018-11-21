@@ -29,7 +29,7 @@ import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.home.HomeFragment;
-import ch.epfl.sweng.radius.utils.UserInfos;
+import ch.epfl.sweng.radius.utils.UserInfo;
 import ch.epfl.sweng.radius.utils.profileFragmentUtils.TextFileReader;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -100,7 +100,7 @@ public class ProfileFragment extends Fragment {
 
 
         //Get the instance of current user & attributes
-        User currentUser = UserInfos.getCurrentUser();
+        User currentUser = UserInfo.getInstance().getCurrentUser();
 
         //Decode UrlProfilePhoto from Base64
         byte[] decodedString = Base64.decode(currentUser.getUrlProfilePhoto(), Base64.DEFAULT);
@@ -281,7 +281,7 @@ public class ProfileFragment extends Fragment {
         String statusString = getDataFromTextInput(statusInput);
         String interestsString = getDataFromTextInput(interestsInput);
 
-        User currentUser = UserInfos.getCurrentUser();
+        User currentUser = UserInfo.getInstance().getCurrentUser();
 
         if (!nicknameString.isEmpty()) {
             userNicknameString = nicknameString;
@@ -346,8 +346,8 @@ public class ProfileFragment extends Fragment {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos); //"bitmap" is the bitmap object
                 String encodedImage = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
 
-                UserInfos.getCurrentUser().setUrlProfilePhoto(encodedImage);
-                Database.getInstance().writeInstanceObj(UserInfos.getCurrentUser(), Database.Tables.USERS);
+                UserInfo.getInstance().getCurrentUser().setUrlProfilePhoto(encodedImage);
+                Database.getInstance().writeInstanceObj(UserInfo.getInstance().getCurrentUser(), Database.Tables.USERS);
 
             } catch (IOException e) {
             }
