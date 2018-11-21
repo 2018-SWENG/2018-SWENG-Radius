@@ -13,7 +13,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.utils.UserInfo;
 

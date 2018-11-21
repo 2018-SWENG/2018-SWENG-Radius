@@ -16,7 +16,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;

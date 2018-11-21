@@ -1,21 +1,12 @@
 package ch.epfl.sweng.radius.utils.customLists.customUsers;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CustomUserListAdapter extends CustomListAdapter {
 

@@ -23,12 +23,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DatabaseError;
-
-import ch.epfl.sweng.radius.database.CallBackDatabase;
-import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.UserInfo;
 
 public class MainActivity extends AppCompatActivity {
 

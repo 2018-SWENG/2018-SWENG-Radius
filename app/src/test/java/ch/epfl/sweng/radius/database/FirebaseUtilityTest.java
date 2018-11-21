@@ -27,7 +27,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;

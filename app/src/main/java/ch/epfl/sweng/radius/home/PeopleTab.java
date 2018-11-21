@@ -1,6 +1,5 @@
 package ch.epfl.sweng.radius.home;
 
-import android.location.Location;
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseError;

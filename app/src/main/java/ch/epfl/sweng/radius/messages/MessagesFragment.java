@@ -16,13 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.utils.UserInfo;
-import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
-import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserListAdapter;
-
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.UserInfo;
+import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
+import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserListAdapter;
 
 
 public class MessagesFragment extends Fragment {

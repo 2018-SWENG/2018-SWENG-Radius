@@ -6,7 +6,6 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import ch.epfl.sweng.radius.utils.MapUtility;
 

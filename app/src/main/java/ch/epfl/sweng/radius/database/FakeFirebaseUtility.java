@@ -3,11 +3,11 @@ package ch.epfl.sweng.radius.database;
 import android.util.Log;
 import android.util.Pair;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.lang.reflect.Field;
 
 public class FakeFirebaseUtility extends Database {
     private User currentUSer;

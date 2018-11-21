@@ -11,8 +11,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.util.Pair;
 
-import com.google.common.collect.Table;
-import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -23,7 +21,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 class ChildListener implements ChildEventListener {
 

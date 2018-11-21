@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {

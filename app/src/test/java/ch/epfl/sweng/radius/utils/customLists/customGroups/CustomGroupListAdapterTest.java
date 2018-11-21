@@ -7,17 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.nio.MappedByteBuffer;
 import java.util.ArrayList;
-import java.util.List;
 
 import ch.epfl.sweng.radius.utils.MapUtilityTest;
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
-import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserListAdapter;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
 
 public class CustomGroupListAdapterTest {
 

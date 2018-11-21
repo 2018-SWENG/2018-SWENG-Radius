@@ -10,18 +10,15 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseError;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesActivity;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.messages.MessageListActivity;
-
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.messages.MessageListActivity;
 import ch.epfl.sweng.radius.utils.UserInfo;
 
 public class CustomUserListListeners {
