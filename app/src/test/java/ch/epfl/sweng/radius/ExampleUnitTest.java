@@ -2,6 +2,7 @@ package ch.epfl.sweng.radius;
 
 import org.junit.Test;
 
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.friends.FriendsTab;
 import ch.epfl.sweng.radius.friends.RequestsTab;
 import ch.epfl.sweng.radius.home.GroupTab;
@@ -26,6 +27,7 @@ public class ExampleUnitTest {
 
     @Test
     public void testOnDataChange(){
+        Database.activateDebugMode();
         FriendsTab tab = new FriendsTab();
         tab.onDataChange("HELLO");
 
