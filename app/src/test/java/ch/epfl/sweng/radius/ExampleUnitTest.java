@@ -24,6 +24,7 @@ public class ExampleUnitTest {
         assertEquals(4, 2 + 2);
     }
 
+    @Test
     public void testOnDataChange(){
         FriendsTab tab = new FriendsTab();
         tab.onDataChange("HELLO");
