@@ -10,18 +10,16 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseError;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesActivity;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.messages.MessageListActivity;
-
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.messages.MessageListActivity;
+import ch.epfl.sweng.radius.utils.UserInfo;
 
 public class CustomUserListListeners {
     private final Database database = Database.getInstance();
@@ -54,7 +52,7 @@ public class CustomUserListListeners {
             @Override
             public void onClick(View view) {
 
-                database.readListObjOnce(Arrays.asList(database.getCurrent_user_id(), userId),
+                database.readListObjOnce(Arrays.asList(UserInfo.getInstance().getCurrentUser().getID(), userId),
                         Database.Tables.USERS, new CallBackDatabase() {
                             @Override
                             public void onFinish(Object value) {
@@ -62,7 +60,7 @@ public class CustomUserListListeners {
                                 String chatId = convId;
                                 if(convId.isEmpty()){ // If the conversation doesn't exist, it has to be created
                                     ArrayList<String> ids = new ArrayList();
-                                    ids.add(userId); ids.add(database.getCurrent_user_id());
+                                    ids.add(userId); ids.add(UserInfo.getInstance().getCurrentUser().getID());
                                     chatId = new ChatLogs(ids).getID();
                                     users.get(0).addChat(users.get(1).getID(), chatId);
                                     users.get(1).addChat(users.get(0).getID(), chatId);

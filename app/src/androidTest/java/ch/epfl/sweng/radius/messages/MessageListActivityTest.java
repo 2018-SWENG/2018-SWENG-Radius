@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 import ch.epfl.sweng.radius.database.User;
 
 import static android.support.test.espresso.Espresso.onView;

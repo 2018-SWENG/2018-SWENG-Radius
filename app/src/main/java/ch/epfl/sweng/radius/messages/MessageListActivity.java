@@ -26,6 +26,7 @@ import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.MapUtility;
+import ch.epfl.sweng.radius.utils.UserInfo;
 
 
 /**
@@ -38,7 +39,7 @@ public class MessageListActivity extends AppCompatActivity {
     private EditText messageZone;
     private Button sendButton;
     private ChatLogs chatLogs;
-    private String chatId, otherUserId, myID = Database.getInstance().getCurrent_user_id();
+    private String chatId, otherUserId, myID = UserInfo.getInstance().getCurrentUser().getID();
     private ValueEventListener listener;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
 
@@ -78,7 +79,7 @@ public class MessageListActivity extends AppCompatActivity {
         if(chatLogs.getMembersId().size() == 2){
             String tempID =  chatLogs.getMembersId().get(0);
             String tempID2 =  chatLogs.getMembersId().get(1);
-             otherId = tempID.equals(database.getCurrent_user_id()) ?
+             otherId = tempID.equals(myID) ?
                     tempID : tempID2;
         }
 
@@ -99,8 +100,8 @@ public class MessageListActivity extends AppCompatActivity {
             if(chatLogs.getMembersId().size() < 2 && otherUserId != null){
                 chatLogs.addMembersId(otherUserId);
             }
-            if(!chatLogs.getMembersId().contains(database.getCurrent_user_id()))
-                chatLogs.addMembersId(database.getCurrent_user_id());
+            if(!chatLogs.getMembersId().contains(myID))
+                chatLogs.addMembersId(myID);
 
             database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
             Log.e("message", "Calllback Messages size" + Integer.toString(chatLogs.getMessages().size()));
@@ -199,7 +200,7 @@ public class MessageListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.e("message", "Message Sent ");
                 String message = messageZone.getText().toString();
-                sendMessage(database.getCurrent_user_id(), message, new Date());
+                sendMessage(myID, message, new Date());
             }
         });
     }
@@ -254,7 +255,7 @@ public class MessageListActivity extends AppCompatActivity {
     public void usersInRadius() { //this method needs to go through severe change - currently we are not saving the radius or the locations of users properly.
         ArrayList<String> participants = (ArrayList) chatLogs.getMembersId();
         otherUser = new User(otherUserId);
-        myUser = new User(database.getCurrent_user_id());
+        myUser = UserInfo.getInstance().getCurrentUser();
 
         myLoc = new MLocation(myUser.getID());
         otherLoc = new MLocation(otherUser.getID());

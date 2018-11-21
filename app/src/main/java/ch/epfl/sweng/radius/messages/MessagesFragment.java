@@ -16,12 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
-import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserListAdapter;
-
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.utils.UserInfo;
+import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
+import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserListAdapter;
 
 
 public class MessagesFragment extends Fragment {
@@ -77,7 +77,7 @@ public class MessagesFragment extends Fragment {
             final ArrayList <CustomListItem> conversations = new ArrayList<>();
 
             for (User user:users) {
-                if(!user.getID().equals(database.getCurrent_user_id())) {
+                if(!user.getID().equals(current_user.getID())) {
                     conversations.add(new CustomListItem(user.getID(),
                             current_user.getChatList().get(user.getID()), user.getNickname()));
                 }
@@ -93,21 +93,9 @@ public class MessagesFragment extends Fragment {
     };
 
     private void setUpAdapter(){
-        database.readObjOnce(new User(database.getCurrent_user_id()),
-                Database.Tables.USERS, new CallBackDatabase() {
-                    @Override
-                    public void onFinish(Object value) {
-                        current_user = (User) value;
-                        List<String> usersConv = new ArrayList<String>();
-                        usersConv.addAll(current_user.getChatList().keySet());
+        current_user = UserInfo.getInstance().getCurrentUser();
+        List<String> usersConv = new ArrayList<>(current_user.getChatList().keySet());
 
-                        database.readListObjOnce(usersConv, Database.Tables.USERS, readListConv);
-                    }
-
-                    @Override
-                    public void onError(DatabaseError error) {
-                        Log.e("Firebase Error", error.getMessage());
-                    }
-        });
+        database.readListObjOnce(usersConv, Database.Tables.USERS, readListConv);
     }
 }

@@ -24,7 +24,7 @@ public class BrowseProfilesUtility {
             @Override
             public void onFinish(Object value) {
                 user = (User) value;
-                user.addReport(database.getCurrent_user_id(), reportReason);
+                user.addReport(UserInfo.getInstance().getCurrentUser().getID(), reportReason);
                 database.writeInstanceObj(user, Database.Tables.USERS);
             }
 

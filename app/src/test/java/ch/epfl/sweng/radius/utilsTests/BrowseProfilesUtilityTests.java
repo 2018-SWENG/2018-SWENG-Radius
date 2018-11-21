@@ -2,8 +2,6 @@ package ch.epfl.sweng.radius.utilsTests;
 
 import android.support.v4.content.ContextCompat;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 

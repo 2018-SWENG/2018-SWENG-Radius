@@ -23,12 +23,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DatabaseError;
-
-import ch.epfl.sweng.radius.database.CallBackDatabase;
-import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.UserInfos;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,23 +53,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {
-
                     googleSignInClient = GoogleSignIn.getClient(MainActivity.this, gso);
-
-                    Database database = Database.getInstance();
-                    database.readObjOnce(new User(database.getCurrent_user_id()),
-                            Database.Tables.USERS, new CallBackDatabase() {
-                                @Override
-                                public void onFinish(Object value) {
-                                    UserInfos.setCurrentUser((User) value);
-                                }
-
-                                @Override
-                                public void onError(DatabaseError error) {
-                                    Log.e("Firebase Error", error.getMessage());
-                                }
-                            });
-
                     startActivity(new Intent(MainActivity.this, AccountActivity.class));
                 }
             }

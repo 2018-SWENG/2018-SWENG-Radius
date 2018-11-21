@@ -1,15 +1,9 @@
 package ch.epfl.sweng.radius.browseProfiles;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
-
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,17 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseError;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.GroupLocationFetcher;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.BrowseProfilesUtility;
+import ch.epfl.sweng.radius.utils.UserInfo;
 
 
 public class BrowseProfilesActivity extends AppCompatActivity {
@@ -45,19 +34,9 @@ public class BrowseProfilesActivity extends AppCompatActivity {
     private TextView textViewInterests;
     private TextView textViewLanguages;
 
-    private final CallBackDatabase userCallback =  new CallBackDatabase() {
-        @Override
-        public void onFinish(Object value) {
-            User current_user = (User) value;
-            setUpAddFriendButton(current_user);
-            setUpUIComponents(current_user);
-        }
 
-        @Override
-        public void onError(DatabaseError error) {
-            Log.e("Firebase", error.getMessage());
-        }
-    };
+
+
 
     //THIS ACTIVITY HAS TO STORE THE ID OF THE USER WE ARE BROWSING THE PROFILE OF.
 
@@ -80,8 +59,8 @@ public class BrowseProfilesActivity extends AppCompatActivity {
 
 
         // Get the current user profile from the DB
-        database.readObjOnce(new User(userUID),
-                Database.Tables.USERS, userCallback);
+        setUpAddFriendButton(UserInfo.getInstance().getCurrentUser());
+        setUpUIComponents(UserInfo.getInstance().getCurrentUser());
 
         // ToolBar initialization
         toolbar = findViewById(R.id.toolbar); // Attaching the layout to the toolbar object
@@ -135,40 +114,26 @@ public class BrowseProfilesActivity extends AppCompatActivity {
 
     private void setUpAddFriendButton(final User profileUser){
         final Button addFriendButton = findViewById(R.id.add_user);
+        final User currentUser = UserInfo.getInstance().getCurrentUser();
 
-        // Disable the button if the current user is friend with this user
-        database.readObjOnce(new User(database.getCurrent_user_id()),
-                Database.Tables.USERS, new CallBackDatabase() {
-                    @Override
-                    public void onFinish(Object value) {
-                        final User currentUser = (User)value;
+        if (currentUser.getFriends().contains(profileUser.getID())) {
+            addFriendButton.setText("Already friends");
+            addFriendButton.setEnabled(false);
+        }
+        if (currentUser.getFriendsRequests().contains(profileUser.getID())) {
+            addFriendButton.setText("Request sent");
+            addFriendButton.setEnabled(false);
+        }
 
-                        if (currentUser.getFriends().contains(profileUser.getID())) {
-                            addFriendButton.setText("Already friends");
-                            addFriendButton.setEnabled(false);
-                        }
-                        if (currentUser.getFriendsRequests().contains(profileUser.getID())) {
-                            addFriendButton.setText("Request sent");
-                            addFriendButton.setEnabled(false);
-                        }
-
-                        addFriendButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                currentUser.addFriendRequest(profileUser);
-                                database.writeInstanceObj(currentUser, Database.Tables.USERS);
-                                database.writeInstanceObj(profileUser, Database.Tables.USERS);
-                                addFriendButton.setText("Request sent");
-                                addFriendButton.setEnabled(false);
-                            }
-                        });
-                    }
-
-
-                    @Override
-                    public void onError(DatabaseError error) {
-                        Log.e("Firebase", error.getMessage());
-                    }
-                });
+        addFriendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentUser.addFriendRequest(profileUser);
+                database.writeInstanceObj(currentUser, Database.Tables.USERS);
+                database.writeInstanceObj(profileUser, Database.Tables.USERS);
+                addFriendButton.setText("Request sent");
+                addFriendButton.setEnabled(false);
+            }
+        });
     }
 }

@@ -13,9 +13,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.Message;
-import ch.epfl.sweng.radius.utils.UserInfos;
+import ch.epfl.sweng.radius.utils.UserInfo;
 
 /**
  * Adapter for the RecyclerView that will store a list of message,
@@ -87,7 +86,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         Message message = messages.get(position);
-        if (message.getSenderId().equals(Database.getInstance().getCurrent_user_id())) {
+        if (message.getSenderId().equals(UserInfo.getInstance().getCurrentUser().getID())) {
             // If the current user is the sender of the message
             return VIEW_TYPE_MESSAGE_SENT;
         } else {

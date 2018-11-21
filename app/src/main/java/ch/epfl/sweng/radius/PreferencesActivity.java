@@ -7,7 +7,6 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,7 +17,6 @@ import com.google.firebase.database.DatabaseError;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
-import ch.epfl.sweng.radius.utils.UserInfos;
 
 public class PreferencesActivity extends PreferenceActivity {
 

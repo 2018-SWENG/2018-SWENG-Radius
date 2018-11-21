@@ -21,7 +21,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DatabaseError;
 
@@ -31,11 +30,11 @@ import java.util.List;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.GroupLocationFetcher;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.TabAdapter;
+import ch.epfl.sweng.radius.utils.UserInfo;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
@@ -177,7 +176,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
                 }
             });
-            myPos = new MLocation(Database.getInstance().getCurrent_user_id(), lng, lat);
+            myPos = new MLocation(UserInfo.getInstance().getCurrentUser().getID(), lng, lat);
             Database.getInstance().writeInstanceObj(myPos, Database.Tables.LOCATIONS);
           //  mapListener.setMyPos(myPos);
 
@@ -239,21 +238,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     public void getFriendsID() {
 
-        final Database database = Database.getInstance();
-        User user = new User(myPos.getID());
-        database.readObjOnce(user,
-                Database.Tables.USERS, new CallBackDatabase() {
-                                    @Override
-                                    public void onFinish(Object value) {
-                                        friendsID = ((User) value).getFriends();
-
-                                        }
-                                    @Override
-                                    public void onError(DatabaseError error) {
-                                        Log.e("Firebase", error.getMessage());
-                                    }
-
-                });
+        friendsID = UserInfo.getInstance().getCurrentUser().getFriends();
 
     }
 

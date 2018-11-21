@@ -1,7 +1,5 @@
 package ch.epfl.sweng.radius.utils.customLists;
 
-import android.util.Log;
-
 import ch.epfl.sweng.radius.R;
 
 public class CustomListItem {

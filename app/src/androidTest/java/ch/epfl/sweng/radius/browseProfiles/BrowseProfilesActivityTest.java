@@ -15,7 +15,6 @@ import org.junit.Test;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;

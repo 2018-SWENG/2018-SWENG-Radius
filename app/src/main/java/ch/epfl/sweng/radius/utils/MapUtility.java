@@ -17,12 +17,10 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
@@ -50,7 +48,7 @@ public class MapUtility {
     public MapUtility(double rradius) {
         radius = rradius;
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
-        myPos = new MLocation(Database.getInstance().getCurrent_user_id(),
+        myPos = new MLocation(UserInfo.getInstance().getCurrentUser().getID(),
                 DEFAULT_LONGITUDE,
                 DEFAULT_LATITUDE);
         if(otherPos == null)

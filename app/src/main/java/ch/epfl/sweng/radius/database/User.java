@@ -28,7 +28,6 @@ public class User implements DatabaseObject {
     private String spokenLanguages;
     private String interests;
 
-
     public User(String userID) {
         this.userID = userID;
         this.nickname = "New User " + userID;
@@ -48,6 +47,13 @@ public class User implements DatabaseObject {
     // Debugging purpose only
     public User(){
         this(Long.toString(idGenerator++));
+    }
+
+    // Debugging purpose only
+    public User(String userID, String nickname, String status){
+        this(userID);
+        this.nickname = nickname;
+        this.status = status;
     }
 
     // Getter

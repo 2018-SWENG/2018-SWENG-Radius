@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.utils.MapUtility;
 

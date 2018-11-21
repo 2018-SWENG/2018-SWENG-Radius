@@ -1,21 +1,12 @@
 package ch.epfl.sweng.radius.utils.customLists.customGroups;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
@@ -37,7 +28,6 @@ public abstract class CustomGroupTab extends CustomTab {
             public void onFinish(Object value) {
 
                 ArrayList<CustomListItem> groupsItems = new ArrayList<>();
-                String userId = database.getCurrent_user_id();
                 String groupId;
                 String convId;
                 for (ChatLogs groups : (List<ChatLogs>) value) {
