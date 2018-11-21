@@ -18,7 +18,6 @@ import com.google.firebase.database.DatabaseError;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
-import ch.epfl.sweng.radius.utils.UserInfos;
 
 public class PreferencesActivity extends PreferenceActivity {
 
