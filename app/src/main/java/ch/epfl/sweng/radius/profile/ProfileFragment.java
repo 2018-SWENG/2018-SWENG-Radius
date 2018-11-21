@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.DBObservable;
+import ch.epfl.sweng.radius.database.DBObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.home.HomeFragment;
@@ -35,16 +37,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ProfileFragment extends Fragment {
-
-    private static Bitmap profilePictureUri;
-    private static String userNicknameString;
-    private static String userStatusString;
-    private static String userInterestsString;
+public class ProfileFragment extends Fragment implements DBObserver {
     private static int userRadius;
 
     CircleImageView userPhoto;
-    ImageButton changeProfilePictureButton;
     TextView userNickname;
     TextView userStatus;
     TextInputEditText statusInput;
@@ -91,39 +87,28 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        // set a change listener on the SeekBar
+
+        // Get the UI elements
         radiusBar = view.findViewById(R.id.radiusBar);
-        radiusBar.setOnSeekBarChangeListener(seekBarChangeListener);
         radiusValue = view.findViewById(R.id.radiusValue);
         selectedLanguages =  view.findViewById(R.id.spokenLanguages);
         selectLanguagesButton = view.findViewById(R.id.languagesButton);
+        userStatus = view.findViewById(R.id.userStatus);
+        userNickname = view.findViewById(R.id.userNickname);
+        userInterests = view.findViewById(R.id.userInterests);
+        nicknameInput = view.findViewById(R.id.nicknameInput);
+        statusInput = view.findViewById(R.id.statusInput);
+        interestsInput = view.findViewById(R.id.interestsInput);
+        saveButton = view.findViewById(R.id.saveButton);
+        userPhoto = view.findViewById(R.id.userPhoto);
 
+        // set a change listener on the SeekBar
+        radiusBar.setOnSeekBarChangeListener(seekBarChangeListener);
 
-        //Get the instance of current user & attributes
-        User currentUser = UserInfo.getInstance().getCurrentUser();
+        // Load the selectableLanguages
+        selectableLanguages = TextFileReader.readLanguagesFromFile(getActivity());
 
-        //Decode UrlProfilePhoto from Base64
-        byte[] decodedString = Base64.decode(currentUser.getUrlProfilePhoto(), Base64.DEFAULT);
-        profilePictureUri = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-        userNicknameString = currentUser.getNickname();
-        userStatusString = currentUser.getStatus();
-        languagesText = currentUser.getSpokenLanguages();
-        userRadius = currentUser.getRadius();
-        userInterestsString = currentUser.getInterests();
-
-        //int progress = radiusBar.getProgress();
-        radiusBar.setProgress(userRadius);
-        radiusValue.setText(userRadius + "Km");
-
-        selectableLanguages = TextFileReader.readLanguagesFromFile(getActivity());//selectableLanguages = readLanguagesFromFile();
-        //spokenLanguages = new ArrayList<Integer>();
-      
-        if (languagesText == null) {
-            languagesText = "";
-        }
-        selectedLanguages.setText(languagesText);
-
+        // Languages selection button
         checkedLanguages = new boolean[selectableLanguages.size()];
         selectLanguagesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,18 +117,33 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        HomeFragment.newInstance(radiusBar.getProgress());
-        radiusValue = view.findViewById(R.id.radiusValue);
-        radiusValue.setText(userRadius + " Km");
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickSaveButton();
+            }
+        });
 
-        setUpProfilePhoto(view);
-        setUpUserNickname(view);
-        setUpUserStatus(view);
-        setUpUserInterests(view);
-        setUpDataInput(view);
+        // Load the users info and display
+        setUpInfos();
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    public void setUpInfos(){
+        //Get the current user
+        User current_user = UserInfo.getInstance().getCurrentUser();
+
+        // Fill the labels with the user info
+        userNickname.setText(current_user.getNickname());
+        userStatus.setText(current_user.getStatus());
+        userInterests.setText(current_user.getInterests());
+        selectedLanguages.setText(current_user.getSpokenLanguages());
+        radiusValue.setText(current_user.getRadius() + "Km");
+        radiusBar.setProgress(current_user.getRadius());
+
+        setUpProfilePhoto();
     }
 
     private void createBuilder() {
@@ -177,8 +177,10 @@ public class ProfileFragment extends Fragment {
                 });
     }
 
-    private void setUpProfilePhoto(View view) {
-        userPhoto = view.findViewById(R.id.userPhoto);
+    private void setUpProfilePhoto() {
+        User current_user = UserInfo.getInstance().getCurrentUser();
+        byte[] decodedString = Base64.decode(current_user.getUrlProfilePhoto(), Base64.DEFAULT);
+        Bitmap profilePictureUri = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
         if (profilePictureUri != null) {
             userPhoto.setImageBitmap(profilePictureUri);
@@ -201,7 +203,7 @@ public class ProfileFragment extends Fragment {
         builder.setPositiveButton(R.string.ok_label, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                String languagesText = UserInfo.getInstance().getCurrentUser().getSpokenLanguages();
                 for (int i = 0; i < spokenLanguages.size() ; i++) {
                     if (!languagesText.contains(selectableLanguages.get(spokenLanguages.get(i)))) {
                         languagesText = languagesText + " " +selectableLanguages.get(spokenLanguages.get(i));
@@ -210,7 +212,6 @@ public class ProfileFragment extends Fragment {
                         }
                     }
                 }
-
                 selectedLanguages.setText(languagesText);
             }
         });
@@ -239,44 +240,8 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void setUpUserNickname(View view) {
-        userNickname = view.findViewById(R.id.userNickname);
 
-        if (userNicknameString != null) {
-            userNickname.setText(userNicknameString);
-        }
-    }
-
-    private void setUpUserStatus(View view) {
-        userStatus = view.findViewById(R.id.userStatus);
-
-        if (userStatusString != null) {
-            userStatus.setText(userStatusString);
-        }
-    }
-
-    private void setUpUserInterests(View view) {
-        userInterests = view.findViewById(R.id.userInterests);
-        if (userInterestsString != null) {
-            userInterests.setText("Interests: " + userInterestsString);
-        }
-    }
-
-    private void setUpDataInput(final View mainView) {
-        nicknameInput = mainView.findViewById(R.id.nicknameInput);
-        statusInput = mainView.findViewById(R.id.statusInput);
-        interestsInput = mainView.findViewById(R.id.interestsInput);
-        saveButton = mainView.findViewById(R.id.saveButton);
-
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickSaveButton(mainView);
-            }
-        });
-    }
-
-    private void onClickSaveButton(View mainView) {
+    private void onClickSaveButton() {
         String nicknameString = getDataFromTextInput(nicknameInput);
         String statusString = getDataFromTextInput(statusInput);
         String interestsString = getDataFromTextInput(interestsInput);
@@ -284,20 +249,17 @@ public class ProfileFragment extends Fragment {
         User currentUser = UserInfo.getInstance().getCurrentUser();
 
         if (!nicknameString.isEmpty()) {
-            userNicknameString = nicknameString;
             currentUser.setNickname(nicknameString);
-            setUpUserNickname(mainView);
+            userNickname.setText(nicknameString);
         }
         if (!statusString.isEmpty()) {
-            userStatusString = statusString;
             currentUser.setStatus(statusString);
-            setUpUserStatus(mainView);
+            userStatus.setText(statusString);
         }
 
         if (!interestsString.isEmpty()) {
-            userInterestsString = interestsString;
             currentUser.setInterests(interestsString);
-            setUpUserInterests(mainView);
+            userInterests.setText("Interests: " + interestsString);
         }
 
         currentUser.setRadius(userRadius);
@@ -305,25 +267,6 @@ public class ProfileFragment extends Fragment {
         //Write to DB
         Database.getInstance().writeInstanceObj(currentUser, Database.Tables.USERS);
     }
-
-    /*private ArrayList<String> readLanguagesFromFile() {
-        try {
-
-            InputStream inputStream = getActivity().getResources().openRawResource(R.raw.languages);
-            ArrayList<String> languages = new ArrayList<String>();
-
-            Scanner scan = new Scanner(inputStream);
-
-            while (scan.hasNext()) {
-                languages.add(scan.nextLine().trim());
-            }
-
-            return languages;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
-    }*/
 
     private String getDataFromTextInput(TextInputEditText input) {
         if (input != null) {
@@ -379,5 +322,9 @@ public class ProfileFragment extends Fragment {
 
     public String getLanguagesText() {
         return languagesText;
+    }
+
+    public void onDataChange(String id){
+        setUpInfos();
     }
 }
