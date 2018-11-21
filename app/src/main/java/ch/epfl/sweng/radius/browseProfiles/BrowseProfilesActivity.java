@@ -71,8 +71,8 @@ public class BrowseProfilesActivity extends AppCompatActivity {
 
 
         // Get the current user profile from the DB
-        setUpAddFriendButton(UserInfo.current_user);
-        setUpUIComponents(current_user);
+        setUpAddFriendButton(UserInfo.getInstance().getCurrentUser());
+        setUpUIComponents(UserInfo.getInstance().getCurrentUser());
 
         // ToolBar initialization
         toolbar = findViewById(R.id.toolbar); // Attaching the layout to the toolbar object
@@ -126,40 +126,26 @@ public class BrowseProfilesActivity extends AppCompatActivity {
 
     private void setUpAddFriendButton(final User profileUser){
         final Button addFriendButton = findViewById(R.id.add_user);
+        final User currentUser = UserInfo.getInstance().getCurrentUser();
 
-        // Disable the button if the current user is friend with this user
-        database.readObjOnce(new User(database.getCurrent_user_id()),
-                Database.Tables.USERS, new CallBackDatabase() {
-                    @Override
-                    public void onFinish(Object value) {
-                        final User currentUser = (User)value;
+        if (currentUser.getFriends().contains(profileUser.getID())) {
+            addFriendButton.setText("Already friends");
+            addFriendButton.setEnabled(false);
+        }
+        if (currentUser.getFriendsRequests().contains(profileUser.getID())) {
+            addFriendButton.setText("Request sent");
+            addFriendButton.setEnabled(false);
+        }
 
-                        if (currentUser.getFriends().contains(profileUser.getID())) {
-                            addFriendButton.setText("Already friends");
-                            addFriendButton.setEnabled(false);
-                        }
-                        if (currentUser.getFriendsRequests().contains(profileUser.getID())) {
-                            addFriendButton.setText("Request sent");
-                            addFriendButton.setEnabled(false);
-                        }
-
-                        addFriendButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                currentUser.addFriendRequest(profileUser);
-                                database.writeInstanceObj(currentUser, Database.Tables.USERS);
-                                database.writeInstanceObj(profileUser, Database.Tables.USERS);
-                                addFriendButton.setText("Request sent");
-                                addFriendButton.setEnabled(false);
-                            }
-                        });
-                    }
-
-
-                    @Override
-                    public void onError(DatabaseError error) {
-                        Log.e("Firebase", error.getMessage());
-                    }
-                });
+        addFriendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentUser.addFriendRequest(profileUser);
+                database.writeInstanceObj(currentUser, Database.Tables.USERS);
+                database.writeInstanceObj(profileUser, Database.Tables.USERS);
+                addFriendButton.setText("Request sent");
+                addFriendButton.setEnabled(false);
+            }
+        });
     }
 }
