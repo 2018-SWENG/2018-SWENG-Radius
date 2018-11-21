@@ -78,7 +78,7 @@ public class MessagesFragment extends Fragment {
             final ArrayList <CustomListItem> conversations = new ArrayList<>();
 
             for (User user:users) {
-                if(!user.getID().equals(database.getCurrent_user_id())) {
+                if(!user.getID().equals(current_user.getID())) {
                     conversations.add(new CustomListItem(user.getID(),
                             current_user.getChatList().get(user.getID()), user.getNickname()));
                 }

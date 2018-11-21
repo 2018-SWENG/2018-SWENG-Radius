@@ -200,7 +200,7 @@ public class MessageListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.e("message", "Message Sent ");
                 String message = messageZone.getText().toString();
-                sendMessage(database.getCurrent_user_id(), message, new Date());
+                sendMessage(myID, message, new Date());
             }
         });
     }

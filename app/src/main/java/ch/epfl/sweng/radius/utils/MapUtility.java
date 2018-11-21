@@ -50,7 +50,7 @@ public class MapUtility {
     public MapUtility(double rradius) {
         radius = rradius;
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
-        myPos = new MLocation(Database.getInstance().getCurrent_user_id(),
+        myPos = new MLocation(UserInfo.getInstance().getCurrentUser().getID(),
                 DEFAULT_LONGITUDE,
                 DEFAULT_LATITUDE);
         if(otherPos == null)
