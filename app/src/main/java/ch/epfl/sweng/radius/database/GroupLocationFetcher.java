@@ -20,6 +20,7 @@ public class GroupLocationFetcher implements CallBackDatabase {
         currentUserLoc = new MLocation(database.getCurrent_user_id());
 
 
+
         database.readObjOnce(currentUserLoc, Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
