@@ -287,6 +287,6 @@ public class MessageListActivity extends AppCompatActivity implements DBObserver
 
     @Override
     public void onDataChange(String id) {
-        
+
     }
 }
