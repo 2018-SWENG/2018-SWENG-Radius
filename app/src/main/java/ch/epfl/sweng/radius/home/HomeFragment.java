@@ -154,7 +154,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void initMap() {
+
         if (mapListener.getCurrCoordinates() != null) {
+
             initCircle(mapListener.getCurrCoordinates());
             moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM *(float) 0.7);
             // Push current location to DB
@@ -265,7 +267,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         MarkerOptions marker = new MarkerOptions().position(newPos)
                 .title(userName + ": " + status)
                 .icon(BitmapDescriptorFactory.defaultMarker(color));
-
         mapMarkers.add(marker);
         mobileMap.addMarker(marker);
 

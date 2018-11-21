@@ -167,7 +167,6 @@ public class FirebaseUtility extends Database{
     public void readListObjOnce(final List<String> ids,
                             final Tables tableName,
                             final CallBackDatabase callback) {
-        Log.e("MessageLists", "Firebase Size of "+ tableName.toString() + " is :" + Integer.toString(ids.size()));
 
         FirebaseDatabase.getInstance()
                 .getReference(tableName.toString())
@@ -181,11 +180,8 @@ public class FirebaseUtility extends Database{
                     if (ids.contains(snap.getID())) {
                         allItems.add((DatabaseObject)postSnapshot
                                 .getValue(tableName.getTableClass()));
-                        Log.e("MessageLists", "Firebase and match " + snap.getID());
-                        Log.e("MessageLists", "Firebase and ids " + Integer.toString(ids.size()));
                     }
                 }
-                Log.e("MessageLists", "Firebase Size of allItems "+ tableName.toString() + " is :" + Integer.toString(ids.size()));
 
                 callback.onFinish(allItems);
             }

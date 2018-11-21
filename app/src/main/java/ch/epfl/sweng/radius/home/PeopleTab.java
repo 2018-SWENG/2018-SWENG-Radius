@@ -88,7 +88,6 @@ public class PeopleTab extends CustomUserTab {
         // Get all other locations in Radius and add corresponding user to List
         // TODO Setup a Listener instead of reading once
         database.readAllTableOnce(Database.Tables.LOCATIONS, locationsCallback);
-        Log.e("MessageList", "Size of Users is :" + Integer.toString(userIDs.size()));
 
         return userIDs;
     }

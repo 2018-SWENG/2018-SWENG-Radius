@@ -40,8 +40,6 @@ public abstract class CustomGroupTab extends CustomTab {
                 String userId = database.getCurrent_user_id();
                 String groupId;
                 String convId;
-                Log.e("MessageList", "Size of Chats is :" + Integer.toString(((List<ChatLogs>) value).size()));
-
                 for (ChatLogs groups : (List<ChatLogs>) value) {
                     groupId = groups.getID();
                     convId = groups.getChatLogsId();
@@ -63,8 +61,6 @@ public abstract class CustomGroupTab extends CustomTab {
 
     @Override
     protected void setUpAdapterWithList(List<String> listIds){
-        Log.e("MessageList", "Size of Group listIds is :" + Integer.toString(listIds.size()));
-
         database.readListObjOnce(listIds,
                 Database.Tables.CHATLOGS, getAdapterCallback());
     }

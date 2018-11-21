@@ -38,7 +38,6 @@ public abstract class CustomUserTab extends CustomTab {
                // adapter = getAdapter(usersItems);
                 String convId;
                 String userId = database.getCurrent_user_id();
-                Log.e("MessageList", "Size of User is :" + Integer.toString(((List<User>) value).size()));
 
                 for (User user : (List<User>) value) {
                     convId = user.getConvFromUser(userId);

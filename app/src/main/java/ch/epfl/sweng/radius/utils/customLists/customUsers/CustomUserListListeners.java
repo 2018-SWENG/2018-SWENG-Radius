@@ -54,7 +54,6 @@ public class CustomUserListListeners {
             @Override
             public void onClick(View view) {
 
-                Log.e("MessageList", "Conv ID is :" + convId);
                 database.readListObjOnce(Arrays.asList(database.getCurrent_user_id(), userId),
                         Database.Tables.USERS, new CallBackDatabase() {
                             @Override
