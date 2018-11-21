@@ -20,7 +20,7 @@ public class GroupTab extends CustomGroupTab {
 
         GroupLocationFetcher groupLocationFetcher = new GroupLocationFetcher();
         database.readAllTableOnce(Database.Tables.LOCATIONS, groupLocationFetcher);
-        
+
         List<String> returnList = new ArrayList<String>();
         returnList.add("1");
         returnList.add("2");
