@@ -26,6 +26,7 @@ import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.MapUtility;
+import ch.epfl.sweng.radius.utils.UserInfo;
 
 
 /**
@@ -254,7 +255,7 @@ public class MessageListActivity extends AppCompatActivity {
     public void usersInRadius() { //this method needs to go through severe change - currently we are not saving the radius or the locations of users properly.
         ArrayList<String> participants = (ArrayList) chatLogs.getMembersId();
         otherUser = new User(otherUserId);
-        myUser = new User(database.getCurrent_user_id());
+        myUser = UserInfo.getInstance().getCurrentUser();
 
         myLoc = new MLocation(myUser.getID());
         otherLoc = new MLocation(otherUser.getID());
