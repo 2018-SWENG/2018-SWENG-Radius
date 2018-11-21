@@ -36,6 +36,7 @@ import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.TabAdapter;
+import ch.epfl.sweng.radius.utils.UserInfo;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
@@ -239,21 +240,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     public void getFriendsID() {
 
-        final Database database = Database.getInstance();
-        User user = new User(myPos.getID());
-        database.readObjOnce(user,
-                Database.Tables.USERS, new CallBackDatabase() {
-                                    @Override
-                                    public void onFinish(Object value) {
-                                        friendsID = ((User) value).getFriends();
-
-                                        }
-                                    @Override
-                                    public void onError(DatabaseError error) {
-                                        Log.e("Firebase", error.getMessage());
-                                    }
-
-                });
+        friendsID = UserInfo.getInstance().getCurrentUser().getFriends();
 
     }
 
