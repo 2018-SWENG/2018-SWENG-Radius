@@ -48,7 +48,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static MapView mapView;
     private static CircleOptions radiusOptions;
     private static double radius;
-    private MLocation myPos;
 
     private TabAdapter adapter;
     private TabLayout tabLayout;
@@ -75,10 +74,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         return fragment;
     }
 
-    public void setMyPos(MLocation myPos) {
-        this.myPos = myPos;
-    }
-
     // For debug purpose only
     public static HomeFragment newInstance(MapUtility mapUtility, GoogleMap googleMap,
                                            int radiusValue) {
@@ -94,9 +89,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         radius = DEFAULT_RADIUS;
-        users = new ArrayList<User>();
+        users = new ArrayList<>();
         friendsID = new ArrayList<>();
-        usersLoc = new ArrayList<MLocation>();
+        usersLoc = new ArrayList<>();
     }
 
     @Override
@@ -176,8 +171,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
                 }
             });
-            myPos = new MLocation(UserInfo.getInstance().getCurrentUser().getID(), lng, lat);
-            Database.getInstance().writeInstanceObj(myPos, Database.Tables.LOCATIONS);
           //  mapListener.setMyPos(myPos);
 
             // Do locations here

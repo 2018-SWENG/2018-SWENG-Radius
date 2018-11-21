@@ -19,36 +19,11 @@ import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserTab;
     // TODO     the same for userIDs
 
 public class PeopleTab extends CustomUserTab {
-    private MLocation myLocation;
+    private MLocation myLocation = UserInfo.getInstance().getCurrentPosition();
     private double myRadius = UserInfo.getInstance().getCurrentUser().getRadius();
     private String radiusListener;
     List<String> userIDs = new ArrayList<>();
 
-    private final CallBackDatabase radiusCallback = new CallBackDatabase() {
-        @Override
-        public void onFinish(Object value) {
-            myRadius = ((User) value).getRadius();
-            // Call method to refresh userList
-        }
-
-        @Override
-        public void onError(DatabaseError error) {
-
-        }
-    };
-
-    private final CallBackDatabase locationCallback = new CallBackDatabase() {
-        @Override
-        public void onFinish(Object value) {
-            myLocation = (MLocation) value;
-
-        }
-
-        @Override
-        public void onError(DatabaseError error) {
-            Log.e("PeopleTab", "Database read error on my Location");
-        }
-    };
 
     private CallBackDatabase locationsCallback = new CallBackDatabase() {
         @Override
@@ -77,11 +52,6 @@ public class PeopleTab extends CustomUserTab {
         radiusListener = userId + "_radiusListener";
         //  Get user Radius value and set listener for updates
         //  If it was already fetched, no need to read again, there is a listener
-
-        // Get my Location
-        // TODO Add listener like for radius
-        database.readObjOnce(new MLocation(userId), Database.Tables.LOCATIONS, locationCallback);
-
         // Get all other locations in Radius and add corresponding user to List
         // TODO Setup a Listener instead of reading once
         database.readAllTableOnce(Database.Tables.LOCATIONS, locationsCallback);

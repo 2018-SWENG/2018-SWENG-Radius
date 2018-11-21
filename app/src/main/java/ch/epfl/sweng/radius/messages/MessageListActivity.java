@@ -41,26 +41,13 @@ public class MessageListActivity extends AppCompatActivity {
     private ChatLogs chatLogs;
     private String chatId, otherUserId, myID = UserInfo.getInstance().getCurrentUser().getID();
     private ValueEventListener listener;
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
 
     //these might cause problems when we switch to multiple users and multiple different chats
     //This field will be used to enable chat with FRIENDS not in radius
-    private static User myUser, otherUser;
-    private MLocation myLoc, otherLoc;
+    private static User myUser = UserInfo.getInstance().getCurrentUser(), otherUser;
+    private MLocation myLoc = UserInfo.getInstance().getCurrentPosition(), otherLoc;
     private final Database database = Database.getInstance();
 
-    private final CallBackDatabase locationCallback = new CallBackDatabase() {
-        @Override
-        public void onFinish(Object value) {
-            myLoc = (MLocation) value;
-        }
-
-        @Override
-        public void onError(DatabaseError error) {
-            Log.e("Firebase", "Error reading Database");
-
-        }
-    };
 
     private final CallBackDatabase otherLocationCallback = new CallBackDatabase() {
         @Override
@@ -91,8 +78,6 @@ public class MessageListActivity extends AppCompatActivity {
         public void onFinish(Object value) {
             chatLogs = (ChatLogs) value;
             if(chatLogs.getMembersId().size() == 2){
-                myLoc = new MLocation(myID);
-                database.readObjOnce(myLoc, Database.Tables.LOCATIONS, locationCallback);
                 String otherId = getOtherID();
                 otherLoc = new MLocation(otherId);
                 database.readObjOnce(otherLoc, Database.Tables.LOCATIONS, otherLocationCallback);
@@ -255,9 +240,6 @@ public class MessageListActivity extends AppCompatActivity {
     public void usersInRadius() { //this method needs to go through severe change - currently we are not saving the radius or the locations of users properly.
         ArrayList<String> participants = (ArrayList) chatLogs.getMembersId();
         otherUser = new User(otherUserId);
-        myUser = UserInfo.getInstance().getCurrentUser();
-
-        myLoc = new MLocation(myUser.getID());
         otherLoc = new MLocation(otherUser.getID());
         //read the users from the database in order to be able to access their radius in the compareLocation method.
         prepareUsers(participants);
