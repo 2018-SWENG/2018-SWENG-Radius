@@ -64,4 +64,7 @@ public class PeopleTab extends CustomUserTab {
         return MapUtility.findDistance(myLocation, loc) < myRadius*1000;
     }
 
+    public void onDataChange(){
+        UserInfo.getInstance().
+    }
 }
