@@ -22,7 +22,6 @@ public class FakeFirebaseUtility extends Database {
 
     public FakeFirebaseUtility(){
         fillDatabase();
-
     }
 
     @Override

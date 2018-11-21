@@ -12,7 +12,8 @@ import java.util.List;
  */
 public abstract class Database {
     // The database singleton instance
-    static Database database = null;
+    private static Database database = null;
+    public static boolean DEBUG_MODE = false;
 
     // The tables we can access in the db
     public enum Tables{
@@ -42,6 +43,7 @@ public abstract class Database {
      * Call this method only for testing purpose.
      */
     public static void activateDebugMode(){
+        DEBUG_MODE = true;
         database = new FakeFirebaseUtility();
     }
 
@@ -51,9 +53,9 @@ public abstract class Database {
      */
     public static Database getInstance(){
         if(database == null)
-            return new FirebaseUtility();
-        else
-            return database;
+            database = new FirebaseUtility();
+
+        return database;
     }
 
     /**

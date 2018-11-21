@@ -78,8 +78,6 @@ public class MapUtilityTest {
         testUser = new User("testId");
         testUser.setSpokenLanguages("English");
 
-        UserInfos.setCurrentUser(testUser);
-
         homeFragment = new HomeFragment();
         mapListener = new MapUtility(radius);
     }
