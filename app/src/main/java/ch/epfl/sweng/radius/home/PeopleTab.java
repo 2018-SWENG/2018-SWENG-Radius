@@ -56,7 +56,7 @@ public class PeopleTab extends CustomUserTab {
             ArrayList<MLocation> locations = (ArrayList<MLocation>) value;
             for(MLocation loc : locations){
                 // TODO Fix for non-user locations by checking TBD location type
-                if(isInRadius(loc) && loc.isVisible()){
+                if(isInRadius(loc) && loc.isVisible() && (loc.getIsGroupLocation() != 1)){
                     userIDs.add(loc.getID());
                 }
 
@@ -88,6 +88,8 @@ public class PeopleTab extends CustomUserTab {
         // Get all other locations in Radius and add corresponding user to List
         // TODO Setup a Listener instead of reading once
         database.readAllTableOnce(Database.Tables.LOCATIONS, locationsCallback);
+        Log.e("MessageList", "Size of Users is :" + Integer.toString(userIDs.size()));
+
         return userIDs;
     }
 

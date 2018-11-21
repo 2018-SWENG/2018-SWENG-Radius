@@ -12,7 +12,7 @@ import ch.epfl.sweng.radius.utils.MapUtility;
 public class GroupLocationFetcher implements CallBackDatabase {
 
     private final Database database = Database.getInstance();
-    private List<String> groupLocationsIds;
+    public List<String> groupLocationsIds;
     private MLocation currentUserLoc;
 
     public GroupLocationFetcher() {
@@ -42,9 +42,11 @@ public class GroupLocationFetcher implements CallBackDatabase {
         for(MLocation location : (ArrayList<MLocation>) value) {
             MapUtility mapUtility = new MapUtility(location.getRadius());
             mapUtility.setMyPos(location);
-            if(mapUtility.contains(currentUserLoc.getLatitude(), currentUserLoc.getLongitude()) && location.getIsGroupLocation() == 1) {
+            if(MapUtility.findDistance(currentUserLoc, location) < 50000
+                    && location.getIsGroupLocation() == 1){
+         //   if(mapUtility.contains(currentUserLoc.getLatitude(), currentUserLoc.getLongitude()) && location.getIsGroupLocation() == 1) {
                 groupLocationsIds.add(location.getID());
-                Log.e("value.getID()", location.getID());
+                Log.e("MessageList", "Group ID is " + location.getID());
                 //recordLocationIfGroup(location);
             }
         }

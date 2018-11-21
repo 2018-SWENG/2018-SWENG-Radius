@@ -1,5 +1,7 @@
 package ch.epfl.sweng.radius.home;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class GroupTab extends CustomGroupTab {
         List<String> returnList = new ArrayList<String>();
         returnList.add("1");
         returnList.add("2");
-
-        return returnList;//groupLocationFetcher.getGroupLocationsIds();
-    }
+        Log.e("MessageList", "Size of groupLoc is :" + Integer.toString(groupLocationFetcher.getGroupLocationsIds().size()));
+        return groupLocationFetcher.groupLocationsIds;
+}
 }
