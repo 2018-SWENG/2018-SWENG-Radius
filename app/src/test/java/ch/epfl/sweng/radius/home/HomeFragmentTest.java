@@ -86,8 +86,6 @@ public class HomeFragmentTest {
 
         }).when(mapUtility).getOtherLocations();
 
-        fragment.setMyPos(new MLocation());
-
         fragment.getUsersInRadius();
 
     }
@@ -115,7 +113,6 @@ public class HomeFragmentTest {
 
         }).when(mapUtility).getOtherPos();
 
-        fragment.setMyPos(new MLocation());
 
         fragment.markNearbyUsers();
     }

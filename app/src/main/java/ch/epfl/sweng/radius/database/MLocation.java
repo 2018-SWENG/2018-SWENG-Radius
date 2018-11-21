@@ -18,10 +18,6 @@ public class MLocation implements DatabaseObject {
     private int isGroupLocation;
     private double radius; // Use it only if the mLocation is a group.
 
-    public MLocation(String userID){
-        this.userID = userID;
-    }
-
     public MLocation(){
         this.userID = "NewLoc" + Integer.toString(locIDCounter++);
         this.latitude = 46.5360698;
@@ -31,6 +27,17 @@ public class MLocation implements DatabaseObject {
         this.isGroupLocation = 0;
         this.radius = 0;
         this.isVisible = true;
+    }
+
+    public MLocation(String userID){
+        this.userID = userID;
+        this.latitude = 0;
+        this.longitude = 0;
+        this.title = "";
+        this.message = "";
+        this.isGroupLocation = 0;
+        this.radius = 0;
+        this.isVisible = false;
     }
 
     public MLocation(String userID, double longitude, double latitude){
