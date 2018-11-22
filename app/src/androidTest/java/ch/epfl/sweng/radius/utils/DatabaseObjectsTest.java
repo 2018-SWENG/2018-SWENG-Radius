@@ -85,8 +85,8 @@ public class DatabaseObjectsTest {
 
     @Test
     public void testInterface(){
-        OthersInfo othersInfo;
-        ChatInfo chatinfo;
+        OthersInfo othersInfo = OthersInfo.getInstance();
+        ChatInfo chatinfo  = ChatInfo.getInstance();
         UserInfo userInfo = UserInfo.getInstance();
         PeopleTab pep = new PeopleTab();
         userInfo.addObserver(pep);
