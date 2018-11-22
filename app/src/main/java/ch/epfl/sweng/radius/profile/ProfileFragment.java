@@ -270,7 +270,7 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         Database.getInstance().writeInstanceObj(currentUser, Database.Tables.USERS);
         Database.getInstance().writeInstanceObj(UserInfo.getInstance().getCurrentPosition(),
                 Database.Tables.LOCATIONS);
-    }
+        }
 
     private String getDataFromTextInput(TextInputEditText input) {
         if (input != null) {

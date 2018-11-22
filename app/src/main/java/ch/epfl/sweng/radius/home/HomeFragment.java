@@ -67,11 +67,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param radiusValue Parameter 1.
      * @return A new instance of fragment SettingsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(int radiusValue) {
+    public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         radius = UserInfo.getInstance().getCurrentPosition().getRadius(); // converting to meters.
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
@@ -184,7 +183,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
             MLocation curPos = UserInfo.getInstance().getCurrentPosition();
             coord = new LatLng(curPos.getLatitude(), curPos.getLongitude());
             initCircle(coord);
-
             moveCamera(coord, ZOOM);
             // Push current location to DB
             // Write the location of the current user to the database
@@ -226,7 +224,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
         if (radiusOptions != null){
             double radius = radiusOptions.getRadius();
-            double scale = radius / 500;
+            double scale = radius / 300;
             ZOOM =(int) (16 - Math.log(scale) / Math.log(2));
         }
     }
@@ -312,7 +310,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
     @Override
     public void onLocationChange(String id) {
+
         radius = UserInfo.getInstance().getCurrentPosition().getRadius();
+        Log.e("OnLocationChange", "radius : " + radius);
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
                 UserInfo.getInstance().getCurrentPosition().getLongitude());
         if (getActivity() != null && !Database.DEBUG_MODE) {

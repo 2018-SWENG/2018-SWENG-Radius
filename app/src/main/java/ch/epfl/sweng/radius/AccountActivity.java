@@ -43,7 +43,7 @@ public class AccountActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.app_preferences, false);
 
         // To load the current user infos
-        UserInfo.getInstance();
+        UserInfo.getInstance().fetchDataFromDB();
 
         // Set the layout
         setContentView(R.layout.activity_account);

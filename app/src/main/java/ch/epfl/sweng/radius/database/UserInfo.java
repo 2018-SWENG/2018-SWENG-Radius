@@ -30,9 +30,11 @@ public  class UserInfo extends DBObservable implements Serializable{
     }
 
     private UserInfo(){
+    }
+
+    public void fetchDataFromDB(){
         fetchCurrentUser();
         fetchUserPosition();
-
     }
 
     public User getCurrentUser(){
