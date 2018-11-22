@@ -31,6 +31,7 @@ import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.MapUtility;
@@ -194,12 +195,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void getUsersInRadius(){
-
-        mapListener.fetchUsersInRadius();
-        usersLoc.clear();
-        usersLoc = mapListener.getOtherLocations();
-
-
+        usersLoc = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().values());
     }
 
     /**

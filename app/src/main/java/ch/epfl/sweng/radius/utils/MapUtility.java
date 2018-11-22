@@ -24,6 +24,7 @@ import java.util.HashMap;
 import ch.epfl.sweng.radius.database.DBLocationObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserFetchCallback;
 import ch.epfl.sweng.radius.database.UserInfo;
@@ -59,12 +60,6 @@ public class MapUtility implements DBLocationObserver {
         myPos = UserInfo.getInstance().getCurrentPosition();
         if(otherPos == null)
             otherPos = new HashMap<>();
-    }
-
-    public void fetchUsersInRadius() {
-        Log.e("Firebase", "My Radius is " + Double.toString(myPos.getRadius()));
-        final Database database = Database.getInstance();
-        database.readAllTableOnce(Database.Tables.LOCATIONS, new UserFetchCallback(myPos.getRadius()));
     }
 
     public static boolean isInRadius(MLocation loc){
@@ -218,7 +213,7 @@ public class MapUtility implements DBLocationObserver {
         if(id.equals(Database.Tables.LOCATIONS.toString())) {
             myPos = UserInfo.getInstance().getCurrentPosition();
             otherPos.clear();
-            fetchUsersInRadius();
+            otherPos = OthersInfo.getInstance().getUsersInRadius();
         }
     }
 }
