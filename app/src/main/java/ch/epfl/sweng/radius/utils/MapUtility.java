@@ -208,6 +208,7 @@ public class MapUtility implements DBObserver {
 
     @Override
     public void onDataChange(String id) {
-        myPos = UserInfo.getInstance().getCurrentPosition();
+        if(id.equals(Database.Tables.LOCATIONS.toString()))
+            myPos = UserInfo.getInstance().getCurrentPosition();
     }
 }
