@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import ch.epfl.sweng.radius.database.ChatInfo;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
@@ -86,7 +85,6 @@ public class DatabaseObjectsTest {
     @Test
     public void testInterface(){
         OthersInfo othersInfo = OthersInfo.getInstance();
-        ChatInfo chatinfo  = ChatInfo.getInstance();
         UserInfo userInfo = UserInfo.getInstance();
         PeopleTab pep = new PeopleTab();
         userInfo.addLocationObserver(pep);

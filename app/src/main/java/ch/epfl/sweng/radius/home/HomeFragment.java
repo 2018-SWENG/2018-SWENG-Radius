@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
     //constants
     private static final String TAG = "HomeFragment";
-    private static final float DEFAULT_ZOOM = 13f/2;
+    private static float ZOOM = 13f/2;
     private static final double DEFAULT_RADIUS = 50000; //In meters
 
     //properties
@@ -168,7 +168,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
             MLocation curPos = UserInfo.getInstance().getCurrentPosition();
             coord = new LatLng(curPos.getLatitude(), curPos.getLongitude());
             initCircle(coord);
-            moveCamera(coord, DEFAULT_ZOOM *(float) 0.7);
+            if (radiusOptions != null){
+                double radius = radiusOptions.getRadius();
+                double scale = radius / 500;
+                ZOOM =(int) (16 - Math.log(scale) / Math.log(2));
+            }
+            moveCamera(coord, ZOOM);
             // Push current location to DB
             // Write the location of the current user to the database
             Database.getInstance().readObjOnce(new MLocation("EPFL"), Database.Tables.LOCATIONS, new CallBackDatabase() {
@@ -273,7 +278,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         radius = UserInfo.getInstance().getCurrentPosition().getRadius();
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
                 UserInfo.getInstance().getCurrentPosition().getLongitude());
-        if (MapUtility.getMapInstance() != null && getActivity() != null)
+        if (getActivity() != null)
             initMap();
     }
 }

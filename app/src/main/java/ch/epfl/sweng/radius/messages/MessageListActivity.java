@@ -19,7 +19,6 @@ import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
-import ch.epfl.sweng.radius.database.ChatInfo;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.DBUserObserver;
 import ch.epfl.sweng.radius.database.Database;
