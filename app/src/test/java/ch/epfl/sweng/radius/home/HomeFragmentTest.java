@@ -1,5 +1,7 @@
 package ch.epfl.sweng.radius.home;
 
+import android.content.Context;
+import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -20,6 +22,9 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,11 +69,23 @@ public class HomeFragmentTest {
         this.fragment = HomeFragment.newInstance(mapUtility, mockMap, 50000);
         if(fragment == null)
             System.out.print("ISNULL");
+        File out = new File(Environment.getExternalStorageDirectory(), "current_user_info.data");
+        try {
+            out.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     public void getFriendsID() {
         fragment.getFriendsID();
+    }
+
+    @Test
+    public void testNewInstance(){
+
+        HomeFragment test = HomeFragment.newInstance();
     }
 
     @Test
@@ -78,5 +95,12 @@ public class HomeFragmentTest {
     }catch(NullPointerException e){/* Only happens in Unit Test*/}
 
 
+    }
+
+    @Test
+    public void testOnMapReady(){
+    try {
+        fragment.onMapReady(mockMap);
+    }catch (Exception e){};
     }
 }
