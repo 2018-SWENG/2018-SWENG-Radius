@@ -11,6 +11,7 @@ import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.DBObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.database.UserInfo;
@@ -46,6 +47,8 @@ public class PeopleTab extends CustomUserTab implements DBObserver {
     };
 
     public PeopleTab() {
+        OthersInfo.getInstance().addObserver(this);
+
     }
     protected  List<String> getIds(User current_user){
         final String userId = UserInfo.getInstance().getCurrentUser().getID();

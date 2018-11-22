@@ -8,11 +8,14 @@ import java.util.List;
 import ch.epfl.sweng.radius.database.DBObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.GroupLocationFetcher;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.customLists.customGroups.CustomGroupTab;
 
 public class GroupTab extends CustomGroupTab implements DBObserver {
-    public GroupTab(){}
+    public GroupTab(){
+        OthersInfo.getInstance().addObserver(this);
+    }
 
     @Override
     protected List<String> getIds(User current_user) {

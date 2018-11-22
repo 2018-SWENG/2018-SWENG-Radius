@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import ch.epfl.sweng.radius.database.DBObservable;
 import ch.epfl.sweng.radius.database.DBObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
@@ -46,7 +47,8 @@ public class MapUtility implements DBObserver {
     private static HashMap<String, MLocation> otherPos;
 
 
-    public MapUtility(double radius) {
+    public MapUtility(double rradius) {
+        UserInfo.getInstance().addObserver(this);
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
         myPos = UserInfo.getInstance().getCurrentPosition();
         if(otherPos == null)

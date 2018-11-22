@@ -19,11 +19,13 @@ import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.ChatInfo;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.DBObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.database.UserInfo;
@@ -259,6 +261,7 @@ public class MessageListActivity extends AppCompatActivity implements DBObserver
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.w("MessageActivity" , "Just got onCreated");
+        ChatInfo.getInstance().addObserver(this);
 
         super.onCreate(savedInstanceState);
 
