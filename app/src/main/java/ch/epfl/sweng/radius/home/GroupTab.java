@@ -34,6 +34,7 @@ public class GroupTab extends CustomGroupTab implements DBLocationObserver {
 
     @Override
     public void onLocationChange(String id) {
-
+        if(this.adapter != null && !Database.DEBUG_MODE)
+            super.setUpAdapter();
     }
 }

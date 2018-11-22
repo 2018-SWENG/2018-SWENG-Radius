@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.radius.database.DBLocationObserver;
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
@@ -24,6 +25,7 @@ public class TopicsTab extends CustomUserTab implements DBLocationObserver {
 
     @Override
     public void onLocationChange(String id) {
-
+        if(this.adapter != null && !Database.DEBUG_MODE)
+            super.setUpAdapter();
     }
 }
