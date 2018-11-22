@@ -60,7 +60,6 @@ public class ProfileFragment extends Fragment implements DBObserver {
 
     public ProfileFragment() {
         spokenLanguages = new ArrayList<Integer>();
-        UserInfo.getInstance().addObserver(this);
     }
 
     /**
@@ -127,6 +126,9 @@ public class ProfileFragment extends Fragment implements DBObserver {
 
         // Load the users info and display
         setUpInfos();
+
+        // Listen to changes in the DB
+        UserInfo.getInstance().addObserver(this);
 
         // Inflate the layout for this fragment
         return view;
