@@ -283,7 +283,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         radius = UserInfo.getInstance().getCurrentPosition().getRadius();
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
                 UserInfo.getInstance().getCurrentPosition().getLongitude());
-        if (getActivity() != null) {
+        if (getActivity() != null && !Database.DEBUG_MODE) {
             initCircle(coord);
             markNearbyUsers();
         }
