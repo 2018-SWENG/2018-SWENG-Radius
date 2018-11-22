@@ -1,4 +1,4 @@
 package ch.epfl.sweng.radius.database;
 
-public class ChatInfo {
+public class ChatInfo extends DBObservable{
 }

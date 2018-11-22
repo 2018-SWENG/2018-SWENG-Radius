@@ -15,10 +15,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import ch.epfl.sweng.radius.database.ChatInfo;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.home.PeopleTab;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -77,6 +81,17 @@ public class DatabaseObjectsTest {
         String id = chatLogs.getChatLogsId();
         chatLogs.setChatLogsId(id);
 
+    }
+
+    @Test
+    public void testInterface(){
+        OthersInfo othersInfo;
+        ChatInfo chatinfo;
+        UserInfo userInfo = UserInfo.getInstance();
+        PeopleTab pep = new PeopleTab();
+        userInfo.addObserver(pep);
+        userInfo.notifyObservers("HELO");
+        userInfo.removeObserver(pep);
     }
 
     @Test
