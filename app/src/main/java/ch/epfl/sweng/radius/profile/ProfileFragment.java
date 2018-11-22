@@ -142,7 +142,7 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         userInterests.setText(current_user.getInterests());
         selectedLanguages.setText(current_user.getSpokenLanguages());
         radiusValue.setText(current_user.getRadius() + "Km");
-        radiusBar.setProgress(current_user.getRadius());
+        radiusBar.setProgress((int) UserInfo.getInstance().getCurrentPosition().getRadius() / 1000);
 
         setUpProfilePhoto();
     }
@@ -263,10 +263,12 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
             userInterests.setText("Interests: " + interestsString);
         }
 
-        currentUser.setRadius(userRadius);
+        UserInfo.getInstance().getCurrentPosition().setRadius(userRadius);
         currentUser.setSpokenLanguages(languagesText);
         //Write to DB
         Database.getInstance().writeInstanceObj(currentUser, Database.Tables.USERS);
+        Database.getInstance().writeInstanceObj(UserInfo.getInstance().getCurrentPosition(),
+                Database.Tables.LOCATIONS);
     }
 
     private String getDataFromTextInput(TextInputEditText input) {
@@ -305,7 +307,7 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             // updated continuously as the user slides the thumb
             radiusValue.setText(progress + " Km");
-            userRadius = progress;
+            userRadius = progress*1000;
 
             HomeFragment.newInstance(radiusBar.getProgress());
         }
