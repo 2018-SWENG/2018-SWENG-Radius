@@ -19,8 +19,6 @@ public class GroupTab extends CustomGroupTab implements DBLocationObserver {
 
     @Override
     protected List<String> getIds(User current_user) {
-        final String userId = current_user.getID();
-        final Database database = Database.getInstance();
         //  Get user Radius value and set listener for updates
         //  If it was already fetched, no need to read again, there is a listener
 
@@ -31,7 +29,7 @@ public class GroupTab extends CustomGroupTab implements DBLocationObserver {
         returnList.add("1");
         returnList.add("2");
         Log.e("MessageList", "Size of groupLoc is :" + Integer.toString(groupLocationFetcher.getGroupLocationsIds().size()));
-        return groupLocationFetcher.groupLocationsIds;
+        return new ArrayList<String>(OthersInfo.getInstance().getGroupsPos().keySet());
 }
 
     @Override

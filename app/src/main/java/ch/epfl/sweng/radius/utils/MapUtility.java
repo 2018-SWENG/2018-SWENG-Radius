@@ -210,6 +210,7 @@ public class MapUtility implements DBLocationObserver {
 
     @Override
     public void onLocationChange(String id){
+        otherPos.clear();
         myPos = UserInfo.getInstance().getCurrentPosition();
         otherPos = OthersInfo.getInstance().getUsersInRadius();
     }
