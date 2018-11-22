@@ -46,7 +46,7 @@ import static org.mockito.Matchers.eq;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ContextCompat.class, LocationServices.class,
+@PrepareForTest({ContextCompat.class, LocationServices.class, Environment.class,
         Toast.class, GoogleMap.class, BitmapDescriptorFactory.class, FirebaseDatabase.class, ContextCompat.class})
 public class HomeFragmentTest {
 
@@ -54,6 +54,7 @@ public class HomeFragmentTest {
     private BitmapDescriptorFactory moc = PowerMockito.mock(BitmapDescriptorFactory.class);
     private MapUtility mapUtility;
     private HomeFragment fragment;
+    private File mockedFile = Mockito.mock(File.class);
     DatabaseReference mockedDb   = Mockito.mock(DatabaseReference.class);
     FirebaseDatabase mockedFb   = Mockito.mock(FirebaseDatabase.class);
     FusedLocationProviderClient mockedPos = Mockito.mock(FusedLocationProviderClient.class);
@@ -61,8 +62,10 @@ public class HomeFragmentTest {
     @Before
     public void setUp(){
         PowerMockito.mockStatic(FirebaseDatabase.class);
+        PowerMockito.mockStatic(Environment.class);
         PowerMockito.mockStatic(BitmapDescriptorFactory.class);
         PowerMockito.mockStatic(Toast.class);
+        when(Environment.getExternalStorageDirectory()).thenReturn(mockedFile);
         when(Toast.makeText(any(Context.class), any(String.class), anyInt())).thenReturn(new Toast(MapUtilityTest.context));
         Mockito.when(FirebaseDatabase.getInstance()).thenReturn(mockedFb);
         PowerMockito.mockStatic(ContextCompat.class);
@@ -164,12 +167,7 @@ public class HomeFragmentTest {
         this.fragment = HomeFragment.newInstance(mapUtility, mockMap, 50000);
         if(fragment == null)
             System.out.print("ISNULL");
-        File out = new File(Environment.getExternalStorageDirectory(), "current_user_info.data");
-        try {
-            out.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Test
