@@ -11,9 +11,6 @@ public abstract class DBObservable{
         this.userObservers.add(observer);
     }
 
-    public void removeUserObserver(DBUserObserver observer){
-        this.userObservers.remove(observer);
-    }
     public void notifyUserObservers(String id){
         for (DBUserObserver observer: this.userObservers) {
             observer.onUserChange(id);
