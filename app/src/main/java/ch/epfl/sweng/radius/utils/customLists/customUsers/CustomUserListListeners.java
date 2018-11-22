@@ -18,8 +18,8 @@ import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.messages.MessageListActivity;
 import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.messages.MessageListActivity;
 
 public class CustomUserListListeners {
     private final Database database = Database.getInstance();

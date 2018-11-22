@@ -17,7 +17,7 @@ import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
-import ch.epfl.sweng.radius.database.DBObserver;
+import ch.epfl.sweng.radius.database.DBUserObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
@@ -25,7 +25,7 @@ import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserListAdapter;
 
 
-public class MessagesFragment extends Fragment implements DBObserver {
+public class MessagesFragment extends Fragment implements DBUserObserver {
     private final Database database = Database.getInstance();
     private CustomUserListAdapter adapter;
     private User current_user;
@@ -101,7 +101,7 @@ public class MessagesFragment extends Fragment implements DBObserver {
     }
 
     @Override
-    public void onDataChange(String id) {
+    public void onUserChange(String id) {
 
     }
 }

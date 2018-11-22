@@ -21,21 +21,20 @@ import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatInfo;
 import ch.epfl.sweng.radius.database.ChatLogs;
-import ch.epfl.sweng.radius.database.DBObserver;
+import ch.epfl.sweng.radius.database.DBUserObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
-import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.utils.MapUtility;
 
 
 /**
  * Activity that hosts messages between two users
  * MessageListActivity and MessageListAdapter and some layout files are inspired from https://blog.sendbird.com/android-chat-tutorial-building-a-messaging-ui
  */
-public class MessageListActivity extends AppCompatActivity implements DBObserver {
+public class MessageListActivity extends AppCompatActivity implements DBUserObserver {
     private RecyclerView myMessageRecycler;
     private MessageListAdapter myMessageAdapter;
     private EditText messageZone;
@@ -261,7 +260,7 @@ public class MessageListActivity extends AppCompatActivity implements DBObserver
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.w("MessageActivity" , "Just got onCreated");
-        ChatInfo.getInstance().addObserver(this);
+        ChatInfo.getInstance().addUserObserver(this);
 
         super.onCreate(savedInstanceState);
 
@@ -289,7 +288,7 @@ public class MessageListActivity extends AppCompatActivity implements DBObserver
     }
 
     @Override
-    public void onDataChange(String id) {
+    public void onUserChange(String id) {
 
     }
 }

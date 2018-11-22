@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -26,18 +25,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.database.DBObservable;
-import ch.epfl.sweng.radius.database.DBObserver;
+import ch.epfl.sweng.radius.database.DBUserObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.home.HomeFragment;
 import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.home.HomeFragment;
 import ch.epfl.sweng.radius.utils.profileFragmentUtils.TextFileReader;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ProfileFragment extends Fragment implements DBObserver {
+public class ProfileFragment extends Fragment implements DBUserObserver {
     private static int userRadius;
 
     CircleImageView userPhoto;
@@ -128,7 +126,7 @@ public class ProfileFragment extends Fragment implements DBObserver {
         setUpInfos();
 
         // Listen to changes in the DB
-        UserInfo.getInstance().addObserver(this);
+        UserInfo.getInstance().addUserObserver(this);
 
         // Inflate the layout for this fragment
         return view;
@@ -327,7 +325,7 @@ public class ProfileFragment extends Fragment implements DBObserver {
         return languagesText;
     }
 
-    public void onDataChange(String id){
+    public void onUserChange(String id){
         setUpInfos();
     }
 }

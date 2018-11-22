@@ -36,7 +36,7 @@ public  class UserInfo extends DBObservable{
             @Override
             public void onFinish(Object user) {
                 current_user = (User) user;
-                notifyObservers(Database.Tables.USERS.toString());
+                notifyUserObservers(Database.Tables.USERS.toString());
             }
 
             @Override
@@ -51,7 +51,7 @@ public  class UserInfo extends DBObservable{
             @Override
             public void onFinish(Object loc) {
                 current_position = (MLocation) loc;
-                notifyObservers(Database.Tables.LOCATIONS.toString());
+                notifyLocactionObservers(Database.Tables.LOCATIONS.toString());
             }
 
             @Override
