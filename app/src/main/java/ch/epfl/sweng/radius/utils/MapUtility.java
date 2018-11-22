@@ -153,6 +153,8 @@ public class MapUtility implements DBLocationObserver {
 
     }
 
+
+
     /**
      * Checks if the other users in the list of users are within the specified distance of the user.
      * @param p2latitude - double - latitude of the user that is being checked

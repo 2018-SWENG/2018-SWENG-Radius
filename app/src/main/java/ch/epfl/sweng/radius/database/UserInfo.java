@@ -1,11 +1,22 @@
 package ch.epfl.sweng.radius.database;
 
+import android.os.Environment;
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseError;
 
-public  class UserInfo extends DBObservable{
-    private static UserInfo userInfo = null;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+public  class UserInfo extends DBObservable implements Serializable{
+    private static final String SAVE_PATH = "current_user_info.data";
+    private static UserInfo userInfo = loadState();
     private static final Database database = Database.getInstance();
 
     private User current_user = new User(Database.getInstance().getCurrent_user_id(),
@@ -21,6 +32,7 @@ public  class UserInfo extends DBObservable{
     private UserInfo(){
         fetchCurrentUser();
         fetchUserPosition();
+
     }
 
     public User getCurrentUser(){
@@ -59,6 +71,30 @@ public  class UserInfo extends DBObservable{
                 Log.e("FetchMLocFromFirebase", error.getMessage());
             }
         });
+    }
+
+
+    public void saveState(){
+        ObjectOutput out;
+        try {
+            File outFile = new File(Environment.getExternalStorageDirectory(), SAVE_PATH);
+            out = new ObjectOutputStream(new FileOutputStream(outFile));
+            out.writeObject(this);
+            out.close();
+        } catch (Exception e) {e.printStackTrace();}
+    }
+
+    private static UserInfo loadState(){
+        ObjectInput in;
+        UserInfo savedUserInfo=null;
+        try {
+            File inFile = new File(Environment.getExternalStorageDirectory(), SAVE_PATH);
+            in = new ObjectInputStream(new FileInputStream(inFile));
+            savedUserInfo = (UserInfo) in.readObject();
+            in.close();
+        } catch (Exception e) {e.printStackTrace();}
+        Log.e("SAVE STATE", "Loading the state");
+        return savedUserInfo;
     }
 
 }
