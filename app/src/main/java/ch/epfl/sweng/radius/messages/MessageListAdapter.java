@@ -14,7 +14,7 @@ import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Message;
-import ch.epfl.sweng.radius.utils.UserInfo;
+import ch.epfl.sweng.radius.database.UserInfo;
 
 /**
  * Adapter for the RecyclerView that will store a list of message,

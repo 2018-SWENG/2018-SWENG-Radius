@@ -16,7 +16,7 @@ import ch.epfl.sweng.radius.friends.FriendsFragment;
 import ch.epfl.sweng.radius.home.HomeFragment;
 import ch.epfl.sweng.radius.messages.MessagesFragment;
 import ch.epfl.sweng.radius.profile.ProfileFragment;
-import ch.epfl.sweng.radius.utils.UserInfo;
+import ch.epfl.sweng.radius.database.UserInfo;
 
 public class AccountActivity extends AppCompatActivity {
 

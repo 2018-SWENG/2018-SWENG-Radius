@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.UiController;
@@ -34,7 +33,6 @@ import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.UserInfo;
 
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;

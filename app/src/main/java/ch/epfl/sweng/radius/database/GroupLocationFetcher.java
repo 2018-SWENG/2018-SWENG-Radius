@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.radius.utils.MapUtility;
-import ch.epfl.sweng.radius.utils.UserInfo;
 
 public class GroupLocationFetcher implements CallBackDatabase {
 

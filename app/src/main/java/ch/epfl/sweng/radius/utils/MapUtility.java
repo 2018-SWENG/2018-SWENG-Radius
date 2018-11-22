@@ -21,13 +21,15 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import ch.epfl.sweng.radius.database.DBObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserFetchCallback;
+import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.profile.ProfileFragment;
 
-public class MapUtility {
+public class MapUtility implements DBObserver {
     private static final String TAG = "MapUtility";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -204,4 +206,8 @@ public class MapUtility {
         mblLocationPermissionGranted = permission;
     }
 
+    @Override
+    public void onDataChange(String id) {
+        myPos = UserInfo.getInstance().getCurrentPosition();
+    }
 }

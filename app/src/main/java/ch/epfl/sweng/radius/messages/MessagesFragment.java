@@ -17,14 +17,15 @@ import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.DBObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.UserInfo;
+import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserListAdapter;
 
 
-public class MessagesFragment extends Fragment {
+public class MessagesFragment extends Fragment implements DBObserver {
     private final Database database = Database.getInstance();
     private CustomUserListAdapter adapter;
     private User current_user;
@@ -97,5 +98,10 @@ public class MessagesFragment extends Fragment {
         List<String> usersConv = new ArrayList<>(current_user.getChatList().keySet());
 
         database.readListObjOnce(usersConv, Database.Tables.USERS, readListConv);
+    }
+
+    @Override
+    public void onDataChange(String id) {
+
     }
 }

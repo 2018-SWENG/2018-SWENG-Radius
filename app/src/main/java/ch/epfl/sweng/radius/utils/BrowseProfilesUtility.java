@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseError;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.database.UserInfo;
 
 public class BrowseProfilesUtility {
 

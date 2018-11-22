@@ -10,7 +10,7 @@ import java.util.List;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.UserInfo;
+import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 import ch.epfl.sweng.radius.utils.customLists.CustomTab;
