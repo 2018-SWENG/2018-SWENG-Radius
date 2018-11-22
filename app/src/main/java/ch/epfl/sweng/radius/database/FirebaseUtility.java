@@ -64,8 +64,6 @@ class ChildListener implements ChildEventListener {
 
 public class FirebaseUtility extends Database{
 
-    private static HashMap<String, ValueEventListener> listeners = new HashMap<>();
-
     public FirebaseUtility(){}
 
     @Override
@@ -130,8 +128,7 @@ public class FirebaseUtility extends Database{
     @Override
     public void readObj(final DatabaseObject obj,
                         final Tables tableName,
-                        final CallBackDatabase callback,
-                        String listenerID) {
+                        final CallBackDatabase callback) {
 
   //      Log.w("Firebase Message", "Read " + obj.getClass() + "Called by "+ getLogTagWithMethod());
 
@@ -151,8 +148,6 @@ public class FirebaseUtility extends Database{
                 callback.onError(databaseError);
             }
         };
-
-        listeners.put(listenerID, listener);
 
         FirebaseDatabase.getInstance()
                 .getReference(tableName.toString())
@@ -231,14 +226,6 @@ public class FirebaseUtility extends Database{
     }
 
 
-    @Override
-    public void stopListening(String listenerID, final Tables tableName){
-            FirebaseDatabase.getInstance()
-                    .getReference(tableName.toString())
-                    .removeEventListener(listeners.get(listenerID));
-
-            listeners.remove(listenerID);
-    }
 
     /*
     private String getLogTagWithMethod() {

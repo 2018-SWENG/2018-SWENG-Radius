@@ -32,10 +32,11 @@ public  class UserInfo extends DBObservable{
     }
 
     private void fetchCurrentUser(){
-        database.readObjOnce(current_user, Database.Tables.USERS, new CallBackDatabase() {
+        database.readObj(current_user, Database.Tables.USERS, new CallBackDatabase() {
             @Override
             public void onFinish(Object user) {
                 current_user = (User) user;
+                notifyObservers(Database.Tables.USERS.toString());
             }
 
             @Override
@@ -46,10 +47,11 @@ public  class UserInfo extends DBObservable{
     }
 
     private void fetchUserPosition(){
-        database.readObjOnce(current_position, Database.Tables.LOCATIONS, new CallBackDatabase() {
+        database.readObj(current_position, Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object loc) {
                 current_position = (MLocation) loc;
+                notifyObservers(Database.Tables.LOCATIONS.toString());
             }
 
             @Override
