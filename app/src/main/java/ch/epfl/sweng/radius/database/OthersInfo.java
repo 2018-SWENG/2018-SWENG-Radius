@@ -56,21 +56,10 @@ public class OthersInfo extends DBObservable{
                 usersPos.clear();groupsPos.clear();topicsPos.clear();
                 for (MLocation loc : (ArrayList<MLocation>) value) {
                     if(mapUtility.contains(loc.getLatitude(), loc.getLongitude())) {
-                        switch (loc.getIsGroupLocation()){
-                            case 0:
-                                usersPos.put(loc.getID(), loc);
-                                break;
-                            case 1:
-                                groupsPos.put(loc.getID(), loc);
-                                break;
-                            case 2:
-                                topicsPos.put(loc.getID(), loc);
-                                break;
-                        }
+                        putInTable(loc);
                     }
                 }
                 notifyLocactionObservers(Database.Tables.LOCATIONS.toString());
-
             }
 
             @Override
@@ -78,6 +67,20 @@ public class OthersInfo extends DBObservable{
                 Log.e("FetchUserRadius", error.getMessage());
             }
         });
+    }
+
+    public void putInTable(MLocation loc){
+        switch (loc.getIsGroupLocation()){
+            case 0:
+                usersPos.put(loc.getID(), loc);
+                break;
+            case 1:
+                groupsPos.put(loc.getID(), loc);
+                break;
+            case 2:
+                topicsPos.put(loc.getID(), loc);
+                break;
+        }
     }
 
 }

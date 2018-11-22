@@ -214,10 +214,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         });
     }
 
-    public void getUsersInRadius(){
-        usersLoc = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().values());
-    }
-
     /**
      * Marks the other users that are within the distance specified by the users.
      * */
@@ -232,9 +228,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
                 mobileMap.addCircle(radiusOptions);
             }
         });
-
-
-
         usersLoc = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().values());
 
         if(usersLoc.size() > 3)
@@ -260,8 +253,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
                                     usersLoc.get(indexOfUser).getLongitude()    );
         float color = friendsID.contains(locID) ? BitmapDescriptorFactory.HUE_BLUE :
                                                         BitmapDescriptorFactory.HUE_RED;
-    // For testing purpose TODO: Find clean way to verify mobileMap is initiated(!instanciated)
-  //  if(mobileMap.getProjection() != null) {
+
         final MarkerOptions marker = new MarkerOptions().position(newPos)
                 .title(userName + ": " + status)
                 .icon(BitmapDescriptorFactory.defaultMarker(color));
@@ -272,8 +264,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
             }
         });
-
-  //  }
 
 
     }
