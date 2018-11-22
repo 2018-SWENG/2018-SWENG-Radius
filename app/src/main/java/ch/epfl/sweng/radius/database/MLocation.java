@@ -130,4 +130,9 @@ public class MLocation implements DatabaseObject {
         this.isVisible = isVisible;
     }
 
+    public void setVisible(boolean visible) {
+        isVisible = visible;
+    }
+
+
 }

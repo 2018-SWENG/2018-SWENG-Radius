@@ -34,7 +34,7 @@ import ch.epfl.sweng.radius.utils.MapUtility;
  * Activity that hosts messages between two users
  * MessageListActivity and MessageListAdapter and some layout files are inspired from https://blog.sendbird.com/android-chat-tutorial-building-a-messaging-ui
  */
-public class MessageListActivity extends AppCompatActivity implements DBUserObserver {
+public class MessageListActivity extends AppCompatActivity{
     private RecyclerView myMessageRecycler;
     private MessageListAdapter myMessageAdapter;
     private EditText messageZone;
@@ -260,7 +260,7 @@ public class MessageListActivity extends AppCompatActivity implements DBUserObse
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.w("MessageActivity" , "Just got onCreated");
-        ChatInfo.getInstance().addUserObserver(this);
+        //ChatInfo.getInstance().addUserObserver(this);
 
         super.onCreate(savedInstanceState);
 
@@ -284,11 +284,6 @@ public class MessageListActivity extends AppCompatActivity implements DBUserObse
 
         //database.stopListening(chatLogs.getID() + "chatLogListener", Database.Tables.CHATLOGS);
 
-
-    }
-
-    @Override
-    public void onUserChange(String id) {
 
     }
 }

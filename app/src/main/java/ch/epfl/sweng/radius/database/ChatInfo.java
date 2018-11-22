@@ -1,17 +1,10 @@
 package ch.epfl.sweng.radius.database;
 
 public class ChatInfo extends DBObservable{
+    private final Database database = Database.getInstance();
+    private ChatLogs chatLogs = new ChatLogs();
 
-    private static ChatInfo chatInfo = null;
-    private static final Database database = Database.getInstance();
+    private ChatInfo(String chatLogID){
 
-
-    public static ChatInfo getInstance(){
-        if (chatInfo == null)
-            chatInfo = new ChatInfo();
-        return chatInfo;
-    }
-
-    private ChatInfo(){
     }
 }
