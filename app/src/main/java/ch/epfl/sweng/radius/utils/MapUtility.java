@@ -26,7 +26,6 @@ import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.database.UserFetchCallback;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.profile.ProfileFragment;
 
@@ -210,11 +209,8 @@ public class MapUtility implements DBLocationObserver {
 
     @Override
     public void onLocationChange(String id){
-        if(id.equals(Database.Tables.LOCATIONS.toString())) {
-            myPos = UserInfo.getInstance().getCurrentPosition();
-            otherPos.clear();
-            otherPos = OthersInfo.getInstance().getUsersInRadius();
-        }
+        myPos = UserInfo.getInstance().getCurrentPosition();
+        otherPos = OthersInfo.getInstance().getUsersInRadius();
     }
 }
 
