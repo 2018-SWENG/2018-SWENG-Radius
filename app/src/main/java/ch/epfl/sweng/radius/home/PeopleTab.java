@@ -70,7 +70,7 @@ public class PeopleTab extends CustomUserTab implements DBLocationObserver {
 
     @Override
     public void onLocationChange(String id) {
-        if(this.adapter != null)
-            this.setUpAdapter();
+        if(this.adapter != null && !Database.DEBUG_MODE)
+            super.setUpAdapter();
     }
 }

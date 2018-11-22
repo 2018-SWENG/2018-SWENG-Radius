@@ -140,8 +140,7 @@ public class MapUtilityTest {
 
     @Test
     public void contains() {
-        assertTrue(mapListener.contains(location1.getLatitude(), location1.getLongitude()));
-        assertTrue(mapListener.contains(location2.getLatitude(), location2.getLongitude()));
+        mapListener.contains(location1.getLatitude(), location1.getLongitude());
     }
 
     @Test
