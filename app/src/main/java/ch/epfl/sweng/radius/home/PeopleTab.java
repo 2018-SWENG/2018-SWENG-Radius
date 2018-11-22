@@ -59,8 +59,7 @@ public class PeopleTab extends CustomUserTab implements DBLocationObserver {
         // Get all other locations in Radius and add corresponding user to List
         // TODO Setup a Listener instead of reading once
         database.readAllTableOnce(Database.Tables.LOCATIONS, locationsCallback);
-        mapUtility.fetchUsersInRadius();
-        List<String> res = new ArrayList<>(mapUtility.getOtherPos().keySet());
+        List<String> res = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().keySet());
         return res;
     }
 
