@@ -44,10 +44,10 @@ public class HomeFragmentTest {
     @Before
     public void setUp(){
         PowerMockito.mockStatic(FirebaseDatabase.class);
+        PowerMockito.mockStatic(BitmapDescriptorFactory.class);
 
         Mockito.when(FirebaseDatabase.getInstance()).thenReturn(mockedFb);
         Mockito.when(mockedFb.getReference(any(String.class))).thenReturn(mockedDb);
-
         Mockito.when(mockedDb.child((String) Matchers.argThat(new ArgumentMatcher(){
 
             // Update current and print to console path to console
@@ -72,5 +72,9 @@ public class HomeFragmentTest {
 
     @Test
     public void markNearbyUser() {
+
+            fragment.markNearbyUsers();
+
+
     }
 }

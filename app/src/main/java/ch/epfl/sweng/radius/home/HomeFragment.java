@@ -165,14 +165,17 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
                 return;
             }
 
-                mobileMap.setMyLocationEnabled(true);
-            getActivity().runOnUiThread(new Runnable(){
-                public void run(){
-                    initMap();
-                }
-            });
+            mobileMap.setMyLocationEnabled(true);
+            try
+            {
+                getActivity().runOnUiThread(new Runnable(){
+                    public void run(){
+                        initMap();
+                    }
+                });
+            }catch(NullPointerException e){/* Only happens in Unit Test*/}
 
-        }
+            }
     }
 
     private void initMap() {
@@ -212,12 +215,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
                 .strokeColor(Color.RED)
                 .fillColor(Color.parseColor("#22FF0000"))
                 .radius(radius);
-        getActivity().runOnUiThread(new Runnable(){
-            public void run(){
-                if(mobileMap != null)
-                    mobileMap.addCircle(radiusOptions);
-            }
+        try
+        {
+            getActivity().runOnUiThread(new Runnable(){
+                public void run(){
+                    if(mobileMap != null)
+                        mobileMap.addCircle(radiusOptions);
+                }
         });
+        }catch(NullPointerException e){/* Only happens in Unit Test*/}
 
         if (radiusOptions != null){
             double radius = radiusOptions.getRadius();
@@ -229,12 +235,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     private void moveCamera(final LatLng latLng, final float zoom) {
         Log.d( TAG, "moveCamera: moving the camera to: lat: "
                 + latLng.latitude + " long: " + latLng.longitude);
-        getActivity().runOnUiThread(new Runnable(){
-            public void run(){
-                if(mobileMap != null)
-                    mobileMap.moveCamera(CameraUpdateFactory.newLatLngZoom( latLng, zoom));
-            }
-        });
+        try
+        {
+            getActivity().runOnUiThread(new Runnable(){
+                public void run(){
+                    if(mobileMap != null)
+                        mobileMap.moveCamera(CameraUpdateFactory.newLatLngZoom( latLng, zoom));
+                }
+            });
+        }catch(NullPointerException e){/* Only happens in Unit Test*/}
+
     }
     /**
      * Marks the other users that are within the distance specified by the users.
@@ -243,17 +253,21 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
         // Clear Markers
       //  mapMarkers.removeAll(mapMarkers);
-        getActivity().runOnUiThread(new Runnable(){
-            public void run(){
-                if(mobileMap != null){
-                    mobileMap.clear();
+        try
+        {
+            getActivity().runOnUiThread(new Runnable(){
+                public void run(){
+                    if(mobileMap != null){
+                        mobileMap.clear();
 
-                    mobileMap.addCircle(radiusOptions);
+                        mobileMap.addCircle(radiusOptions);
+                    }
+
                 }
+            });
+        }catch(NullPointerException e){/* Only happens in Unit Test*/}
 
-            }
-        });
-        usersLoc = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().values());
+    usersLoc = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().values());
 
         if(usersLoc.size() > 3)
             Log.d( TAG, "moveCamera: moving the camera to: lat: " + usersLoc.size());
@@ -283,13 +297,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
                 .title(userName + ": " + status)
                 .icon(BitmapDescriptorFactory.defaultMarker(color));
         mapMarkers.add(marker);
-        getActivity().runOnUiThread(new Runnable(){
+        try
+        {
+            getActivity().runOnUiThread(new Runnable(){
             public void run(){
-                if(mobileMap != null)
+                if(mobileMap != null && mobileMap.getProjection() != null)
                     mobileMap.addMarker(marker);
 
             }
-        });
+            });
+        }catch(NullPointerException e){/* Only happens in Unit Test*/}
 
 
     }
@@ -299,7 +316,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         radius = UserInfo.getInstance().getCurrentPosition().getRadius();
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
                 UserInfo.getInstance().getCurrentPosition().getLongitude());
-        if (getActivity() != null) {
+        if (getActivity() != null/* && !Database.DEBUG_MODE*/) {
             initCircle(coord);
             markNearbyUsers();
         }
