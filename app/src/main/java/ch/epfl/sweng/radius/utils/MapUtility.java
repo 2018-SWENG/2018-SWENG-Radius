@@ -41,14 +41,12 @@ public class MapUtility implements DBObserver {
     private static boolean mblLocationPermissionGranted;
     private Location currentLocation;
     private static MLocation myPos;//private static MLocation myPos;
-    public static double radius = 5000;
     private static LatLng currCoordinates;
 
     private static HashMap<String, MLocation> otherPos;
 
 
     public MapUtility(double rradius) {
-        radius = rradius;
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
         myPos = UserInfo.getInstance().getCurrentPosition();
         if(otherPos == null)
@@ -160,8 +158,8 @@ public class MapUtility implements DBObserver {
      * */
     public boolean contains(double p2latitude, double p2longtitude) {
         double distance = findDistance(p2latitude, p2longtitude);
-        Log.e("MapUtility", Boolean.toString(radius >= distance) + " radius " + radius);
-        return radius >= distance;
+        Log.e("MapUtility", Boolean.toString(myPos.getRadius() >= distance) + " radius " + myPos.getRadius());
+        return myPos.getRadius() >= distance;
     }
 
     /**
