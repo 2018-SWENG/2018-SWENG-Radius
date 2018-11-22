@@ -29,6 +29,7 @@ import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.DBLocationObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.OthersInfo;
@@ -37,7 +38,7 @@ import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.TabAdapter;
 
-public class HomeFragment extends Fragment implements OnMapReadyCallback {
+public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLocationObserver {
 
     //constants
     private static final String TAG = "HomeFragment";
@@ -49,7 +50,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static MapView mapView;
     private static CircleOptions radiusOptions;
     private static double radius;
-
+    private static LatLng coord;
     private TabAdapter adapter;
     private TabLayout tabLayout;
 
@@ -71,7 +72,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(int radiusValue) {
         HomeFragment fragment = new HomeFragment();
-        radius = radiusValue * 1000; // converting to meters.
+        radius = UserInfo.getInstance().getCurrentPosition().getRadius(); // converting to meters.
+        coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
+                UserInfo.getInstance().getCurrentPosition().getLongitude());
         return fragment;
     }
 
@@ -83,16 +86,22 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mobileMap = googleMap;
         mapListener = mapUtility;
         usersLoc = new ArrayList<>();
+        coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
+                UserInfo.getInstance().getCurrentPosition().getLongitude());
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        UserInfo.getInstance().addLocationObserver(this);
+        OthersInfo.getInstance().addLocationObserver(this);
         super.onCreate(savedInstanceState);
         radius = DEFAULT_RADIUS;
         users = new ArrayList<>();
         friendsID = new ArrayList<>();
         usersLoc = new ArrayList<>();
+        coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
+                UserInfo.getInstance().getCurrentPosition().getLongitude());
     }
 
     @Override
@@ -152,11 +161,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         if (mapListener.getCurrCoordinates() != null) {
 
-            initCircle(mapListener.getCurrCoordinates());
-            moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM *(float) 0.7);
+            MLocation curPos = UserInfo.getInstance().getCurrentPosition();
+            coord = new LatLng(curPos.getLatitude(), curPos.getLongitude());
+            initCircle(coord);
+            moveCamera(coord, DEFAULT_ZOOM *(float) 0.7);
             // Push current location to DB
-            double lat = mapListener.getCurrCoordinates().latitude;
-            double lng = mapListener.getCurrCoordinates().longitude;
             // Write the location of the current user to the database
             Database.getInstance().readObjOnce(new MLocation("EPFL"), Database.Tables.LOCATIONS, new CallBackDatabase() {
                 @Override
@@ -184,7 +193,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 .strokeColor(Color.RED)
                 .fillColor(Color.parseColor("#22FF0000"))
                 .radius(radius);
-
+        Log.e("MapUtility", "Circle size is"+Double.toString(radius));
         mobileMap.addCircle(radiusOptions);
     }
 
@@ -204,14 +213,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void markNearbyUsers() {
 
         // Clear Markers
-        mapMarkers.removeAll(mapMarkers);
+      //  mapMarkers.removeAll(mapMarkers);
         mobileMap.clear();
 
         mobileMap.addCircle(radiusOptions);
-        if(usersLoc.size()==0)
-            getUsersInRadius();
-        else
-            usersLoc = mapListener.getOtherLocations();
+
+
+        usersLoc = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().values());
+        Log.e( "MapUtility", "Home Size of userLoc is " + usersLoc.size());
 
         if(usersLoc.size() > 3)
             Log.d( TAG, "moveCamera: moving the camera to: lat: " + usersLoc.size());
@@ -247,5 +256,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
+    }
+
+    @Override
+    public void onLocationChange(String id) {
+        radius = UserInfo.getInstance().getCurrentPosition().getRadius();
+        coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
+                UserInfo.getInstance().getCurrentPosition().getLongitude());
+        Log.e("MapUtility", "Circle size is"+Double.toString(radius));
+
+        initMap();
     }
 }

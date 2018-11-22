@@ -34,11 +34,8 @@ public class OthersInfo extends DBObservable{
             @Override
             public void run() {
                 fetchUsersInMyRadius();
-                fetchGroupsInMyRadius();
-                fetchTopicsInMyRadius();
             }
-        }, 0, REFRESH_PERIOD*1000);
-    }
+        }, 0, REFRESH_PERIOD*1000);    }
 
     public HashMap<String, MLocation> getUsersInRadius(){
         return usersPos;
@@ -83,11 +80,4 @@ public class OthersInfo extends DBObservable{
         });
     }
 
-    public void fetchGroupsInMyRadius(){
-
-    }
-
-    public void fetchTopicsInMyRadius(){
-
-    }
 }

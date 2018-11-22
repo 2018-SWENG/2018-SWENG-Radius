@@ -54,7 +54,7 @@ public class MapUtility implements DBLocationObserver {
     }
 
     public MapUtility() {
-        UserInfo.getInstance().addLocationObserver(this);
+        OthersInfo.getInstance().addLocationObserver(this);
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
         myPos = UserInfo.getInstance().getCurrentPosition();
         if(otherPos == null)
@@ -76,7 +76,6 @@ public class MapUtility implements DBLocationObserver {
     }
 
     public HashMap<String, MLocation> getOtherPos() {
-        Log.e("MapUtility", "Size of others is " + Integer.toString(otherPos.size()));
         return otherPos;
     }
 
@@ -162,7 +161,7 @@ public class MapUtility implements DBLocationObserver {
      * */
     public boolean contains(double p2latitude, double p2longtitude) {
         double distance = findDistance(p2latitude, p2longtitude);
-        Log.e("MapUtility", Boolean.toString(myPos.getRadius() >= distance) + " radius " + myPos.getRadius());
+
         return myPos.getRadius() >= distance;
     }
 
@@ -176,7 +175,7 @@ public class MapUtility implements DBLocationObserver {
         float[] distance = new float[3];
         Location.distanceBetween( myPos.getLatitude(), myPos.getLongitude(),
                 p2latitude, p2longtitude, distance);
-        Log.e("Map","Distance is : " + Double.toString(distance[0]) + " currCoordinates.latitude " + myPos.getLatitude() + " currCoordinates.longitude " + myPos.getLongitude());
+
         return distance[0];
     }
 
@@ -210,9 +209,9 @@ public class MapUtility implements DBLocationObserver {
 
     @Override
     public void onLocationChange(String id){
-        otherPos.clear();
         myPos = UserInfo.getInstance().getCurrentPosition();
         otherPos = OthersInfo.getInstance().getUsersInRadius();
+
     }
 }
 
