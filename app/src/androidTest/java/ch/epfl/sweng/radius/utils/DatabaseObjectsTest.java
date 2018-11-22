@@ -89,9 +89,9 @@ public class DatabaseObjectsTest {
         ChatInfo chatinfo  = ChatInfo.getInstance();
         UserInfo userInfo = UserInfo.getInstance();
         PeopleTab pep = new PeopleTab();
-        userInfo.addObserver(pep);
-        userInfo.notifyObservers("HELO");
-        userInfo.removeObserver(pep);
+        userInfo.addLocationObserver(pep);
+        userInfo.notifyLocactionObservers("HELO");
+        userInfo.removeLocationObserver(pep);
     }
 
     @Test
