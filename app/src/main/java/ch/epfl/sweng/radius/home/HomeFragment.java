@@ -58,7 +58,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
     //testing
     public static MapUtility mapListener = MapUtility.getMapInstance();
-    private static ArrayList<User> users;
     private static List<String> friendsID;
     private static ArrayList<MLocation> usersLoc;
     private static List<MarkerOptions> mapMarkers = new ArrayList<>();
@@ -97,7 +96,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         OthersInfo.getInstance().addLocationObserver(this);
         super.onCreate(savedInstanceState);
         radius = DEFAULT_RADIUS;
-        users = new ArrayList<>();
         friendsID = new ArrayList<>();
         usersLoc = new ArrayList<>();
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
@@ -168,11 +166,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
             MLocation curPos = UserInfo.getInstance().getCurrentPosition();
             coord = new LatLng(curPos.getLatitude(), curPos.getLongitude());
             initCircle(coord);
-            if (radiusOptions != null){
-                double radius = radiusOptions.getRadius();
-                double scale = radius / 500;
-                ZOOM =(int) (16 - Math.log(scale) / Math.log(2));
-            }
+
             moveCamera(coord, ZOOM);
             // Push current location to DB
             // Write the location of the current user to the database
@@ -208,6 +202,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
                     mobileMap.addCircle(radiusOptions);
             }
         });
+
+        if (radiusOptions != null){
+            double radius = radiusOptions.getRadius();
+            double scale = radius / 500;
+            ZOOM =(int) (16 - Math.log(scale) / Math.log(2));
+        }
     }
 
     private void moveCamera(final LatLng latLng, final float zoom) {
@@ -283,7 +283,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         radius = UserInfo.getInstance().getCurrentPosition().getRadius();
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
                 UserInfo.getInstance().getCurrentPosition().getLongitude());
-        if (getActivity() != null)
-            initMap();
+        if (getActivity() != null) {
+            initCircle(coord);
+            markNearbyUsers();
+        }
     }
 }
