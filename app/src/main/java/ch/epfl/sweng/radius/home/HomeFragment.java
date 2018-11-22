@@ -269,7 +269,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         mapMarkers.add(marker);
         getActivity().runOnUiThread(new Runnable(){
             public void run(){
-                if(mobileMap != null)
+                if(mobileMap != null && mobileMap.getProjection() != null)
                     mobileMap.addMarker(marker);
 
             }
