@@ -204,7 +204,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
                 .radius(radius);
         getActivity().runOnUiThread(new Runnable(){
             public void run(){
-                mobileMap.addCircle(radiusOptions);
+                if(mobileMap != null)
+                    mobileMap.addCircle(radiusOptions);
             }
         });
     }
@@ -214,11 +215,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
                 + latLng.latitude + " long: " + latLng.longitude);
         getActivity().runOnUiThread(new Runnable(){
             public void run(){
-                mobileMap.moveCamera(CameraUpdateFactory.newLatLngZoom( latLng, zoom));
+                if(mobileMap != null)
+                    mobileMap.moveCamera(CameraUpdateFactory.newLatLngZoom( latLng, zoom));
             }
         });
     }
-
     /**
      * Marks the other users that are within the distance specified by the users.
      * */
@@ -228,9 +229,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
       //  mapMarkers.removeAll(mapMarkers);
         getActivity().runOnUiThread(new Runnable(){
             public void run(){
-                mobileMap.clear();
+                if(mobileMap != null){
+                    mobileMap.clear();
 
-                mobileMap.addCircle(radiusOptions);
+                    mobileMap.addCircle(radiusOptions);
+                }
+
             }
         });
         usersLoc = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().values());
@@ -265,7 +269,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         mapMarkers.add(marker);
         getActivity().runOnUiThread(new Runnable(){
             public void run(){
-                mobileMap.addMarker(marker);
+                if(mobileMap != null)
+                    mobileMap.addMarker(marker);
 
             }
         });
