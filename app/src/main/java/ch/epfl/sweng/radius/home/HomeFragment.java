@@ -1,12 +1,15 @@
 package ch.epfl.sweng.radius.home;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -115,7 +118,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         adapter.addFragment(new TopicsTab(), "Topics");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+        getReadWritePermission(getContext(), getActivity());
         return view;
+    }
+
+    public void getReadWritePermission(Context context, FragmentActivity activity){
+        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(context,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, permissions, 123);
+        }
     }
 
     @Override

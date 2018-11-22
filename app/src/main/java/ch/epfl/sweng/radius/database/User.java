@@ -1,5 +1,6 @@
 package ch.epfl.sweng.radius.database;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.Map;
  * This class is design to store all the element we need about a user in the app
  * We can then store/access the states of each user in the database
  */
-public class User implements DatabaseObject {
+public class User implements DatabaseObject, Serializable {
     private static long idGenerator = 0;// Debugging purpose only
 
     private String userID;

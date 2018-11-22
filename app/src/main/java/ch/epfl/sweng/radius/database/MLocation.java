@@ -2,7 +2,9 @@ package ch.epfl.sweng.radius.database;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class MLocation implements DatabaseObject {
+import java.io.Serializable;
+
+public class MLocation implements DatabaseObject, Serializable {
 
     public final double DEFAULT_GROUP_LOCATION_RADIUS = 2000;
 
