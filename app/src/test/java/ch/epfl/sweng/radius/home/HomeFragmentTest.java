@@ -67,7 +67,7 @@ public class HomeFragmentTest {
 
     @Test
     public void getUsersInRadius() {
-        doAnswer(new Answer<Object>() {
+   /*     doAnswer(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
 
@@ -75,6 +75,7 @@ public class HomeFragmentTest {
             }
 
         }).when(mapUtility).fetchUsersInRadius(any(Integer.class));
+        */
         doAnswer(new Answer<List<MLocation>>() {
             @Override
             public List<MLocation> answer(InvocationOnMock invocation) throws Throwable {

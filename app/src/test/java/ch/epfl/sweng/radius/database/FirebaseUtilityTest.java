@@ -237,7 +237,7 @@ public class FirebaseUtilityTest {
 
             }
         };
-        fbUtil.readObj(user, Tables.USERS, callback, "listener");
+        fbUtil.readObj(user, Tables.USERS, callback);
 
         assertEquals(otherUser.getStatus(), "HeyHeyHey");
     }
@@ -286,7 +286,7 @@ public class FirebaseUtilityTest {
 
         System.out.print(user.getID());
 
-        fbUtil.readObj(user, Tables.USERS, callback, "listener");
+        fbUtil.readObj(user, Tables.USERS, callback);
 
         assertEquals(otherUser.getStatus(), "HeyHeyHey");
     }
@@ -471,7 +471,7 @@ public class FirebaseUtilityTest {
 
         }))).thenReturn(mockedDb);
 
-       fbUtil.stopListening("test", Tables.CHATLOGS);
+    //   fbUtil.stopListening("test", Tables.CHATLOGS);
 
     }
 
