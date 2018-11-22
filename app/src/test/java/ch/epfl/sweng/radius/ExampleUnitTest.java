@@ -41,10 +41,6 @@ public class ExampleUnitTest {
 
         TopicsTab tab5 = new TopicsTab();
         tab5.onLocationChange("HELO");
-
-        MessageListActivity a0 = new MessageListActivity();
-        a0.onUserChange("HELO");
-
         MessagesFragment f0 = new MessagesFragment();
         f0.onUserChange("HELO");
 
