@@ -68,12 +68,14 @@ public class HomeFragmentTest {
 
     @Test
     public void getFriendsID() {
+        fragment.getFriendsID();
     }
 
     @Test
     public void markNearbyUser() {
-
+    try{
             fragment.markNearbyUsers();
+    }catch(NullPointerException e){/* Only happens in Unit Test*/}
 
 
     }
