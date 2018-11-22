@@ -89,7 +89,6 @@ public  class UserInfo extends DBObservable implements Serializable{
     private static UserInfo loadState(){
         ObjectInput in;
         UserInfo savedUserInfo=null;
-       // if(Database.DEBUG_MODE) return savedUserInfo;
         try {
             File inFile = new File(Environment.getExternalStorageDirectory(), SAVE_PATH);
             in = new ObjectInputStream(new FileInputStream(inFile));

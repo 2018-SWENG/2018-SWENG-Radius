@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         myAuth.addAuthStateListener(myAuthListener);
     }
 
-    private void signIn() {
+    public void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(myGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()) {
+            if (result != null && result.isSuccess()) {
                 //Google Sign In was successful, authentication with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
@@ -111,7 +111,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+    protected void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        myAuth = FirebaseAuth.getInstance();
+
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(),
                 null);
         myAuth.signInWithCredential(credential)
