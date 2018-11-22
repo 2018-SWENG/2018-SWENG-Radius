@@ -45,6 +45,8 @@ public class MapUtility implements DBLocationObserver {
 
     private static HashMap<String, MLocation> otherPos;
 
+    private static MapUtility mapInstance = null;
+
     public static MapUtility getMapInstance(){
         if(mapInstance == null)
             mapInstance = new MapUtility();
@@ -52,7 +54,7 @@ public class MapUtility implements DBLocationObserver {
     }
 
     public MapUtility() {
-        UserInfo.getInstance().addObserver(this);
+        UserInfo.getInstance().addLocationObserver(this);
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
         myPos = UserInfo.getInstance().getCurrentPosition();
         if(otherPos == null)
@@ -212,11 +214,12 @@ public class MapUtility implements DBLocationObserver {
     }
 
     @Override
-    public void onLocationChange(String id) {
-        if(id.equals(Database.Tables.LOCATIONS.toString()))
+    public void onLocationChange(String id){
+        if(id.equals(Database.Tables.LOCATIONS.toString())) {
             myPos = UserInfo.getInstance().getCurrentPosition();
             otherPos.clear();
             fetchUsersInRadius();
         }
     }
 }
+
