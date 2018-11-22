@@ -21,8 +21,7 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ch.epfl.sweng.radius.database.DBObservable;
-import ch.epfl.sweng.radius.database.DBObserver;
+import ch.epfl.sweng.radius.database.DBLocationObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
@@ -30,8 +29,7 @@ import ch.epfl.sweng.radius.database.UserFetchCallback;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.profile.ProfileFragment;
 
-public class MapUtility implements DBObserver {
-    private static MapUtility mapInstance;
+public class MapUtility implements DBLocationObserver {
     private static final String TAG = "MapUtility";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -214,10 +212,8 @@ public class MapUtility implements DBObserver {
     }
 
     @Override
-    public void onDataChange(String id) {
-        Log.e("Firebase", "My Radius is " + Double.toString(myPos.getRadius()));
-
-        if(id.equals(Database.Tables.LOCATIONS.toString())){
+    public void onLocationChange(String id) {
+        if(id.equals(Database.Tables.LOCATIONS.toString()))
             myPos = UserInfo.getInstance().getCurrentPosition();
             otherPos.clear();
             fetchUsersInRadius();

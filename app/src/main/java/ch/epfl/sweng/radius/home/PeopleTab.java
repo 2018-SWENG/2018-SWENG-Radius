@@ -8,19 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.radius.database.CallBackDatabase;
-import ch.epfl.sweng.radius.database.DBObserver;
+import ch.epfl.sweng.radius.database.DBLocationObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserTab;
 
 // TODO : On activity end, clear myUser empty Chaltogs (no message) and repush do
     // TODO     the same for userIDs
 
-public class PeopleTab extends CustomUserTab implements DBObserver {
+public class PeopleTab extends CustomUserTab implements DBLocationObserver {
     private MLocation myLocation = UserInfo.getInstance().getCurrentPosition();
     private double myRadius = UserInfo.getInstance().getCurrentUser().getRadius();
     private String radiusListener;
@@ -47,7 +47,7 @@ public class PeopleTab extends CustomUserTab implements DBObserver {
     };
 
     public PeopleTab() {
-        OthersInfo.getInstance().addObserver(this);
+        OthersInfo.getInstance().addLocationObserver(this);
 
     }
     protected  List<String> getIds(User current_user){
@@ -70,7 +70,7 @@ public class PeopleTab extends CustomUserTab implements DBObserver {
     }
 
     @Override
-    public void onDataChange(String id) {
+    public void onLocationChange(String id) {
 
     }
 }
