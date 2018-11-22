@@ -46,7 +46,7 @@ public class MapUtility implements DBObserver {
     private static HashMap<String, MLocation> otherPos;
 
 
-    public MapUtility(double rradius) {
+    public MapUtility(double radius) {
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
         myPos = UserInfo.getInstance().getCurrentPosition();
         if(otherPos == null)

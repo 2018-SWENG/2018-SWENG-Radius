@@ -51,7 +51,9 @@ public abstract class CustomUserTab extends CustomTab implements DBObserver {
     }
 
 
-    public CustomUserTab() { }
+    public CustomUserTab() {
+        UserInfo.getInstance().addObserver(this);
+    }
 
 
     @Override
