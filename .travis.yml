@@ -13,11 +13,7 @@ android:
 
 # disable email notifications
 notifications:
-  email:
-    - arthur.passuello@epfl.ch
-  slack:
-    on_success: never
-    on_failure: always
+  email: false 
 
 before_script:
   # Emulator Management: Create, Start and Wait
