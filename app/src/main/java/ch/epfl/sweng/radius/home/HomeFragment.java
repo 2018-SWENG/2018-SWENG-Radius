@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private ViewPager viewPager;
 
     //testing
-    private static MapUtility mapListener;
+    public static MapUtility mapListener;
     private static ArrayList<User> users;
     private static List<String> friendsID;
     private static ArrayList<MLocation> usersLoc;
@@ -112,7 +112,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-       mapListener = new MapUtility(radius);
+       mapListener = MapUtility.getMapInstance();
 
         mapView = view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
@@ -195,7 +195,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     public void getUsersInRadius(){
 
-        mapListener.fetchUsersInRadius((int) radius);
+        mapListener.fetchUsersInRadius();
         usersLoc.clear();
         usersLoc = mapListener.getOtherLocations();
 

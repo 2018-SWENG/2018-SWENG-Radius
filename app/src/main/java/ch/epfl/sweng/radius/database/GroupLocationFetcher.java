@@ -23,7 +23,7 @@ public class GroupLocationFetcher implements CallBackDatabase {
     @Override
     public void onFinish(Object value) {
         for(MLocation location : (ArrayList<MLocation>) value) {
-            MapUtility mapUtility = new MapUtility(location.getRadius());
+            MapUtility mapUtility = MapUtility.getMapInstance();
             mapUtility.setMyPos(location);
             if(MapUtility.findDistance(currentUserLoc, location) < 50000
                     && location.getIsGroupLocation() == 1){

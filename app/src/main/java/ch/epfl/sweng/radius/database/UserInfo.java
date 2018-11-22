@@ -36,7 +36,7 @@ public  class UserInfo extends DBObservable{
             @Override
             public void onFinish(Object user) {
                 current_user = (User) user;
-                notifyObservers(Database.Tables.USERS.toString());
+     //           notifyObservers(Database.Tables.USERS.toString());
             }
 
             @Override

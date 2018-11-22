@@ -15,7 +15,7 @@ public class UserFetchCallback implements CallBackDatabase {
     private int radius;
 
     public UserFetchCallback(double radius) {
-        mapUtility = new MapUtility(radius);
+        mapUtility = MapUtility.getMapInstance();
         this.radius = (int) radius;
 
     }

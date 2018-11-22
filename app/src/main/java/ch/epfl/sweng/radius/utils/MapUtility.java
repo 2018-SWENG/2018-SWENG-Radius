@@ -31,6 +31,7 @@ import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.profile.ProfileFragment;
 
 public class MapUtility implements DBObserver {
+    private static MapUtility mapInstance;
     private static final String TAG = "MapUtility";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -46,8 +47,13 @@ public class MapUtility implements DBObserver {
 
     private static HashMap<String, MLocation> otherPos;
 
+    public static MapUtility getMapInstance(){
+        if(mapInstance == null)
+            mapInstance = new MapUtility();
+        return mapInstance;
+    }
 
-    public MapUtility(double rradius) {
+    public MapUtility() {
         UserInfo.getInstance().addObserver(this);
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
         myPos = UserInfo.getInstance().getCurrentPosition();
@@ -55,15 +61,16 @@ public class MapUtility implements DBObserver {
             otherPos = new HashMap<>();
     }
 
-    public void fetchUsersInRadius(final int radius) {
+    public void fetchUsersInRadius() {
+        Log.e("Firebase", "My Radius is " + Double.toString(myPos.getRadius()));
         final Database database = Database.getInstance();
-        database.readAllTableOnce(Database.Tables.LOCATIONS, new UserFetchCallback(radius));
+        database.readAllTableOnce(Database.Tables.LOCATIONS, new UserFetchCallback(myPos.getRadius()));
     }
 
-    public static boolean isInRadius(MLocation loc, int radius){
+    public static boolean isInRadius(MLocation loc){
         if(loc == null)
             return false;
-        return findDistance(loc.getLatitude(), loc.getLongitude()) <= radius ;
+        return findDistance(loc.getLatitude(), loc.getLongitude()) <= myPos.getRadius() ;
     }
 
     public ArrayList<MLocation> getOtherLocations() {
@@ -208,7 +215,12 @@ public class MapUtility implements DBObserver {
 
     @Override
     public void onDataChange(String id) {
-        if(id.equals(Database.Tables.LOCATIONS.toString()))
+        Log.e("Firebase", "My Radius is " + Double.toString(myPos.getRadius()));
+
+        if(id.equals(Database.Tables.LOCATIONS.toString())){
             myPos = UserInfo.getInstance().getCurrentPosition();
+            otherPos.clear();
+            fetchUsersInRadius();
+        }
     }
 }

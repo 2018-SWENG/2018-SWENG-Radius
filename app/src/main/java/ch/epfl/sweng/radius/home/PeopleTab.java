@@ -25,7 +25,7 @@ public class PeopleTab extends CustomUserTab implements DBObserver {
     private double myRadius = UserInfo.getInstance().getCurrentUser().getRadius();
     private String radiusListener;
     List<String> userIDs = new ArrayList<>();
-
+    MapUtility mapUtility = MapUtility.getMapInstance();
 
     private CallBackDatabase locationsCallback = new CallBackDatabase() {
         @Override
@@ -59,13 +59,14 @@ public class PeopleTab extends CustomUserTab implements DBObserver {
         // Get all other locations in Radius and add corresponding user to List
         // TODO Setup a Listener instead of reading once
         database.readAllTableOnce(Database.Tables.LOCATIONS, locationsCallback);
-
-        return userIDs;
+        mapUtility.fetchUsersInRadius();
+        List<String> res = new ArrayList<>(mapUtility.getOtherPos().keySet());
+        return res;
     }
 
     private boolean isInRadius(MLocation loc) {
 
-        return MapUtility.findDistance(myLocation, loc) < myRadius*1000;
+        return MapUtility.isInRadius(loc);
     }
 
     @Override
