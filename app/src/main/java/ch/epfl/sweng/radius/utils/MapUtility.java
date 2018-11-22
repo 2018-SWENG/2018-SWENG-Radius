@@ -82,6 +82,7 @@ public class MapUtility implements DBLocationObserver {
     }
 
     public HashMap<String, MLocation> getOtherPos() {
+        Log.e("MapUtility", "Size of others is " + Integer.toString(otherPos.size()));
         return otherPos;
     }
 
