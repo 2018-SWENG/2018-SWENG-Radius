@@ -44,7 +44,7 @@ public class UserFetchCallback implements CallBackDatabase {
                 public void onError(DatabaseError error) {
 
                 }
-            }, loc.getID() + "_listener");
+            });
         }
     }
 
