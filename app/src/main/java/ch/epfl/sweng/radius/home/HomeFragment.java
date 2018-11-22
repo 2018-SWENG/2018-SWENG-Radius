@@ -46,7 +46,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     //constants
     private static final String TAG = "HomeFragment";
     private static float ZOOM = 13f/2;
-    private static final double DEFAULT_RADIUS = 50000; //In meters
 
     //properties
     private static GoogleMap mobileMap; //make sure the fragment doesn't crash if the map is null
@@ -84,7 +83,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     public static HomeFragment newInstance(MapUtility mapUtility, GoogleMap googleMap,
                                            int radiusValue) {
         HomeFragment fragment = new HomeFragment();
-        radius = radiusValue*1000;
+        radius = radiusValue;
         mobileMap = googleMap;
     //    mapListener = mapUtility;
         usersLoc = new ArrayList<>();
@@ -98,7 +97,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         UserInfo.getInstance().addLocationObserver(this);
         OthersInfo.getInstance().addLocationObserver(this);
         super.onCreate(savedInstanceState);
-        radius = DEFAULT_RADIUS;
+        radius = UserInfo.getInstance().getCurrentUser().getRadius();
         friendsID = new ArrayList<>();
         usersLoc = new ArrayList<>();
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
