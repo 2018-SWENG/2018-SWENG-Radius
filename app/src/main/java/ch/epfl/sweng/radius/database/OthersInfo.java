@@ -18,10 +18,10 @@ public class OthersInfo extends DBObservable{
     private static OthersInfo othersInfo = null;
     private static final Database database = Database.getInstance();
     private static final MapUtility mapUtility = MapUtility.getMapInstance();
+
     private static final HashMap<String, MLocation> usersPos = new HashMap<>();
     private static final HashMap<String, MLocation> groupsPos = new HashMap<>();
     private static final HashMap<String, MLocation> topicsPos = new HashMap<>();
-
 
     public static OthersInfo getInstance(){
         if (othersInfo == null)
@@ -53,16 +53,27 @@ public class OthersInfo extends DBObservable{
     }
 
     public void fetchUsersInMyRadius(){
-        othersPos.clear();
         database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
+                usersPos.clear();groupsPos.clear();topicsPos.clear();
                 for (MLocation loc : (ArrayList<MLocation>) value) {
                     if(mapUtility.contains(loc.getLatitude(), loc.getLongitude())) {
-                        Log.e("MapUtility", "Adder user " + loc.getID());
-                        othersPos.put(loc.getID(), loc);
+                        switch (loc.getIsGroupLocation()){
+                            case 0:
+                                usersPos.put(loc.getID(), loc);
+                                break;
+                            case 1:
+                                groupsPos.put(loc.getID(), loc);
+                                break;
+                            case 2:
+                                topicsPos.put(loc.getID(), loc);
+                                break;
+                        }
                     }
                 }
+                notifyLocactionObservers(Database.Tables.LOCATIONS.toString());
+
             }
 
             @Override
