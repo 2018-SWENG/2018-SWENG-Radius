@@ -99,4 +99,14 @@ public  class UserInfo extends DBObservable implements Serializable{
         return savedUserInfo;
     }
 
+    public void updateUserInDB(){
+        Database.getInstance().writeInstanceObj(current_user, Database.Tables.USERS);
+    }
+
+    public void updateLocationInDB(){
+        Database.getInstance().writeInstanceObj(current_position, Database.Tables.LOCATIONS);
+    }
+
+
+
 }
