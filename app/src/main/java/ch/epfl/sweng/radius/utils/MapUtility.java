@@ -129,8 +129,7 @@ public class MapUtility implements DBLocationObserver {
     public void setCurrCoordinates(LatLng curCoordinates) {
         UserInfo.getInstance().getCurrentPosition().setLatitude(currCoordinates.latitude);
         UserInfo.getInstance().getCurrentPosition().setLongitude(currCoordinates.longitude);
-        Database.getInstance().writeInstanceObj(UserInfo.getInstance().getCurrentPosition(),
-                Database.Tables.LOCATIONS);
+        UserInfo.getInstance().updateLocationInDB();
         currCoordinates = curCoordinates;
     }
 
