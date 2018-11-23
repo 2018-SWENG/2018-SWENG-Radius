@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.DBUserObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
@@ -16,7 +17,7 @@ import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 import ch.epfl.sweng.radius.utils.customLists.CustomTab;
 
 
-public abstract class CustomUserTab extends CustomTab {
+public abstract class CustomUserTab extends CustomTab implements DBUserObserver {
 
     public CustomListAdapter getAdapter(List<CustomListItem> items) {
         return new CustomUserListAdapter(items, getContext());
@@ -50,7 +51,9 @@ public abstract class CustomUserTab extends CustomTab {
     }
 
 
-    public CustomUserTab() { }
+    public CustomUserTab() {
+        UserInfo.getInstance().addUserObserver(this);
+    }
 
 
     @Override
@@ -62,4 +65,11 @@ public abstract class CustomUserTab extends CustomTab {
     }
 
     protected abstract List<String> getIds(User current_user);
+
+    @Override
+    public void onUserChange(String id) {
+        if (id.equals(Database.Tables.USERS)){
+            super.setUpAdapter();
+        }
+    }
 }

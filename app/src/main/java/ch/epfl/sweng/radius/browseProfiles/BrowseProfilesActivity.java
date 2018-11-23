@@ -12,15 +12,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseError;
+
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.GroupLocationFetcher;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.BrowseProfilesUtility;
 import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.utils.BrowseProfilesUtility;
 
 
-public class BrowseProfilesActivity extends AppCompatActivity {
+public class BrowseProfilesActivity extends AppCompatActivity{
     //Might want to create and get the id of users along with their names.
     private BrowseProfilesUtility profileActivityListener;
     private Toolbar toolbar;
@@ -33,12 +36,6 @@ public class BrowseProfilesActivity extends AppCompatActivity {
     private TextView textViewStatus;
     private TextView textViewInterests;
     private TextView textViewLanguages;
-
-
-
-
-
-    //THIS ACTIVITY HAS TO STORE THE ID OF THE USER WE ARE BROWSING THE PROFILE OF.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,26 +53,35 @@ public class BrowseProfilesActivity extends AppCompatActivity {
         textViewStatus = findViewById(R.id.userStatus);
         textViewInterests = findViewById(R.id.userInterests);
         textViewLanguages = findViewById(R.id.userLanguages);
+        toolbar = findViewById(R.id.toolbar);
 
-
-        // Get the current user profile from the DB
-        setUpAddFriendButton(UserInfo.getInstance().getCurrentUser());
-        setUpUIComponents(UserInfo.getInstance().getCurrentUser());
+        fetchUserInfo(userUID);
 
         // ToolBar initialization
-        toolbar = findViewById(R.id.toolbar); // Attaching the layout to the toolbar object
         setSupportActionBar(toolbar);
         //REMOVE THIS PART FOR DEMO----------------------------------------
         GroupLocationFetcher glf = new GroupLocationFetcher();
         Database.getInstance().readAllTableOnce(Database.Tables.LOCATIONS, glf);
     }
 
+    void fetchUserInfo(String userUID){
+        database.readObjOnce(new User(userUID), Database.Tables.USERS, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                // Get the current user profile from the DB
+                User current_profile = (User) value;
+                setUpAddFriendButton(current_profile);
+                setUpUIComponents(current_profile);
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+
+            }
+        });
+    }
+
     public void setUpUIComponents(User current_user){
-        /*
-        byte[] decodedString = Base64.decode(current_user.getUrlProfilePhoto(), Base64.DEFAULT);
-        Bitmap profilePictureUri = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        userPhoto.setImageBitmap(profilePictureUri);
-        */
         userPhoto.setImageResource(R.drawable.ic_man);
         textViewName.setText(current_user.getNickname());
         textViewStatus.setText(current_user.getStatus());

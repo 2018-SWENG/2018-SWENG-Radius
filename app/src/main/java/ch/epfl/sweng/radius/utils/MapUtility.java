@@ -21,15 +21,14 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ch.epfl.sweng.radius.database.DBObserver;
-import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.DBLocationObserver;
 import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.database.UserFetchCallback;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.profile.ProfileFragment;
 
-public class MapUtility implements DBObserver {
+public class MapUtility implements DBLocationObserver {
     private static final String TAG = "MapUtility";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -41,29 +40,30 @@ public class MapUtility implements DBObserver {
     private static boolean mblLocationPermissionGranted;
     private Location currentLocation;
     private static MLocation myPos;//private static MLocation myPos;
-    public static double radius = 5000;
     private static LatLng currCoordinates;
 
     private static HashMap<String, MLocation> otherPos;
 
+    private static MapUtility mapInstance = null;
 
-    public MapUtility(double rradius) {
-        radius = rradius;
+    public static MapUtility getMapInstance(){
+        if(mapInstance == null)
+            mapInstance = new MapUtility();
+        return mapInstance;
+    }
+
+    public MapUtility() {
+        OthersInfo.getInstance().addLocationObserver(this);
         currCoordinates = new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
         myPos = UserInfo.getInstance().getCurrentPosition();
         if(otherPos == null)
             otherPos = new HashMap<>();
     }
 
-    public void fetchUsersInRadius(final int radius) {
-        final Database database = Database.getInstance();
-        database.readAllTableOnce(Database.Tables.LOCATIONS, new UserFetchCallback(radius));
-    }
-
-    public static boolean isInRadius(MLocation loc, int radius){
+    public static boolean isInRadius(MLocation loc){
         if(loc == null)
             return false;
-        return findDistance(loc.getLatitude(), loc.getLongitude()) <= radius ;
+        return findDistance(loc.getLatitude(), loc.getLongitude()) <= myPos.getRadius() ;
     }
 
     public ArrayList<MLocation> getOtherLocations() {
@@ -153,6 +153,8 @@ public class MapUtility implements DBObserver {
 
     }
 
+
+
     /**
      * Checks if the other users in the list of users are within the specified distance of the user.
      * @param p2latitude - double - latitude of the user that is being checked
@@ -160,8 +162,8 @@ public class MapUtility implements DBObserver {
      * */
     public boolean contains(double p2latitude, double p2longtitude) {
         double distance = findDistance(p2latitude, p2longtitude);
-        Log.e("MapUtility", Boolean.toString(radius >= distance) + " radius " + radius);
-        return radius >= distance;
+
+        return myPos.getRadius() >= distance;
     }
 
     /**
@@ -174,7 +176,7 @@ public class MapUtility implements DBObserver {
         float[] distance = new float[3];
         Location.distanceBetween( myPos.getLatitude(), myPos.getLongitude(),
                 p2latitude, p2longtitude, distance);
-        Log.e("Map","Distance is : " + Double.toString(distance[0]) + " currCoordinates.latitude " + myPos.getLatitude() + " currCoordinates.longitude " + myPos.getLongitude());
+
         return distance[0];
     }
 
@@ -207,7 +209,9 @@ public class MapUtility implements DBObserver {
     }
 
     @Override
-    public void onDataChange(String id) {
+    public void onLocationChange(String id){
         myPos = UserInfo.getInstance().getCurrentPosition();
+        otherPos = OthersInfo.getInstance().getUsersInRadius();
     }
 }
+

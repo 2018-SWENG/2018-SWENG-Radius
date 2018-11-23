@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -26,18 +25,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.database.DBObservable;
-import ch.epfl.sweng.radius.database.DBObserver;
+import ch.epfl.sweng.radius.database.DBUserObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.home.HomeFragment;
 import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.home.HomeFragment;
 import ch.epfl.sweng.radius.utils.profileFragmentUtils.TextFileReader;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ProfileFragment extends Fragment implements DBObserver {
+public class ProfileFragment extends Fragment implements DBUserObserver {
     private static int userRadius;
 
     CircleImageView userPhoto;
@@ -127,6 +125,9 @@ public class ProfileFragment extends Fragment implements DBObserver {
         // Load the users info and display
         setUpInfos();
 
+        // Listen to changes in the DB
+        UserInfo.getInstance().addUserObserver(this);
+
         // Inflate the layout for this fragment
         return view;
     }
@@ -140,8 +141,8 @@ public class ProfileFragment extends Fragment implements DBObserver {
         userStatus.setText(current_user.getStatus());
         userInterests.setText(current_user.getInterests());
         selectedLanguages.setText(current_user.getSpokenLanguages());
-        radiusValue.setText(current_user.getRadius() + "Km");
-        radiusBar.setProgress(current_user.getRadius());
+        radiusValue.setText(current_user.getRadius() + "m");
+        radiusBar.setProgress((int) UserInfo.getInstance().getCurrentPosition().getRadius());
 
         setUpProfilePhoto();
     }
@@ -262,11 +263,14 @@ public class ProfileFragment extends Fragment implements DBObserver {
             userInterests.setText("Interests: " + interestsString);
         }
 
+        UserInfo.getInstance().getCurrentPosition().setRadius(userRadius);
         currentUser.setRadius(userRadius);
         currentUser.setSpokenLanguages(languagesText);
         //Write to DB
         Database.getInstance().writeInstanceObj(currentUser, Database.Tables.USERS);
-    }
+        Database.getInstance().writeInstanceObj(UserInfo.getInstance().getCurrentPosition(),
+                Database.Tables.LOCATIONS);
+        }
 
     private String getDataFromTextInput(TextInputEditText input) {
         if (input != null) {
@@ -303,10 +307,8 @@ public class ProfileFragment extends Fragment implements DBObserver {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             // updated continuously as the user slides the thumb
-            radiusValue.setText(progress + " Km");
+            radiusValue.setText(progress + " m");
             userRadius = progress;
-
-            HomeFragment.newInstance(radiusBar.getProgress());
         }
 
         @Override
@@ -324,7 +326,7 @@ public class ProfileFragment extends Fragment implements DBObserver {
         return languagesText;
     }
 
-    public void onDataChange(String id){
+    public void onUserChange(String id){
         setUpInfos();
     }
 }

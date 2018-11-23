@@ -635,7 +635,7 @@ public class MapUtilityTest {
 
         PowerMockito.mockStatic(Toast.class);
         when(Toast.makeText(any(Context.class), any(CharSequence.class), anyInt())).thenReturn(toast);
-        mapUtility = new MapUtility(2000);
+        mapUtility = new MapUtility();
         mapUtility.getLocationPermission(context, new FragmentActivity());
 
 

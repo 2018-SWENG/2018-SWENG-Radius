@@ -2,21 +2,16 @@ package ch.epfl.sweng.radius.friends;
 
 import java.util.List;
 
-import ch.epfl.sweng.radius.database.DBObserver;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserTab;
 
-public class RequestsTab extends CustomUserTab implements DBObserver {
+public class RequestsTab extends CustomUserTab {
     public RequestsTab() {
         super();
     }
 
     protected List<String> getIds(User current_user) {
-        return current_user.getFriendsInvitations();
-    }
-
-    @Override
-    public void onDataChange(String id) {
-
+        return UserInfo.getInstance().getCurrentUser().getFriendsRequests();
     }
 }

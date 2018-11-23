@@ -8,23 +8,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.radius.database.CallBackDatabase;
-import ch.epfl.sweng.radius.database.DBObserver;
+import ch.epfl.sweng.radius.database.DBLocationObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserTab;
 
 // TODO : On activity end, clear myUser empty Chaltogs (no message) and repush do
     // TODO     the same for userIDs
 
-public class PeopleTab extends CustomUserTab implements DBObserver {
+public class PeopleTab extends CustomUserTab implements DBLocationObserver {
     private MLocation myLocation = UserInfo.getInstance().getCurrentPosition();
     private double myRadius = UserInfo.getInstance().getCurrentUser().getRadius();
     private String radiusListener;
     List<String> userIDs = new ArrayList<>();
-
+    MapUtility mapUtility = MapUtility.getMapInstance();
 
     private CallBackDatabase locationsCallback = new CallBackDatabase() {
         @Override
@@ -46,6 +47,8 @@ public class PeopleTab extends CustomUserTab implements DBObserver {
     };
 
     public PeopleTab() {
+        OthersInfo.getInstance().addLocationObserver(this);
+
     }
     protected  List<String> getIds(User current_user){
         final String userId = UserInfo.getInstance().getCurrentUser().getID();
@@ -56,17 +59,18 @@ public class PeopleTab extends CustomUserTab implements DBObserver {
         // Get all other locations in Radius and add corresponding user to List
         // TODO Setup a Listener instead of reading once
         database.readAllTableOnce(Database.Tables.LOCATIONS, locationsCallback);
-
-        return userIDs;
+        List<String> res = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().keySet());
+        return res;
     }
 
     private boolean isInRadius(MLocation loc) {
 
-        return MapUtility.findDistance(myLocation, loc) < myRadius*1000;
+        return MapUtility.isInRadius(loc);
     }
 
     @Override
-    public void onDataChange(String id) {
-
+    public void onLocationChange(String id) {
+        if(this.adapter != null && !Database.DEBUG_MODE)
+            super.setUpAdapter();
     }
 }

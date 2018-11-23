@@ -1,12 +1,15 @@
 package ch.epfl.sweng.radius.home;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,34 +32,34 @@ import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.DBLocationObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.TabAdapter;
-import ch.epfl.sweng.radius.database.UserInfo;
 
-public class HomeFragment extends Fragment implements OnMapReadyCallback {
+public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLocationObserver {
 
     //constants
     private static final String TAG = "HomeFragment";
-    private static final float DEFAULT_ZOOM = 13f/2;
-    private static final double DEFAULT_RADIUS = 50000; //In meters
+    private static float ZOOM = 13f/2;
 
     //properties
     private static GoogleMap mobileMap; //make sure the fragment doesn't crash if the map is null
     private static MapView mapView;
     private static CircleOptions radiusOptions;
     private static double radius;
-
+    private static LatLng coord;
     private TabAdapter adapter;
     private TabLayout tabLayout;
 
     private ViewPager viewPager;
 
     //testing
-    private static MapUtility mapListener;
-    private static ArrayList<User> users;
+    public static MapUtility mapListener = MapUtility.getMapInstance();
     private static List<String> friendsID;
     private static ArrayList<MLocation> usersLoc;
     private static List<MarkerOptions> mapMarkers = new ArrayList<>();
@@ -64,13 +67,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param radiusValue Parameter 1.
      * @return A new instance of fragment SettingsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(int radiusValue) {
+    public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
-        radius = radiusValue * 1000; // converting to meters.
+        radius = UserInfo.getInstance().getCurrentPosition().getRadius(); // converting to meters.
+        coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
+                UserInfo.getInstance().getCurrentPosition().getLongitude());
         return fragment;
     }
 
@@ -78,20 +82,25 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public static HomeFragment newInstance(MapUtility mapUtility, GoogleMap googleMap,
                                            int radiusValue) {
         HomeFragment fragment = new HomeFragment();
-        radius = radiusValue*1000;
+        radius = radiusValue;
         mobileMap = googleMap;
-        mapListener = mapUtility;
+    //    mapListener = mapUtility;
         usersLoc = new ArrayList<>();
+        coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
+                UserInfo.getInstance().getCurrentPosition().getLongitude());
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        UserInfo.getInstance().addLocationObserver(this);
+        OthersInfo.getInstance().addLocationObserver(this);
         super.onCreate(savedInstanceState);
-        radius = DEFAULT_RADIUS;
-        users = new ArrayList<>();
+        radius = UserInfo.getInstance().getCurrentUser().getRadius();
         friendsID = new ArrayList<>();
         usersLoc = new ArrayList<>();
+        coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
+                UserInfo.getInstance().getCurrentPosition().getLongitude());
     }
 
     @Override
@@ -107,12 +116,25 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         adapter.addFragment(new TopicsTab(), "Topics");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+        getReadWritePermission(getContext(), getActivity());
         return view;
+    }
+
+    public void getReadWritePermission(Context context, FragmentActivity activity){
+        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(context,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, permissions, 123);
+        }
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-       mapListener = new MapUtility(radius);
+       mapListener = MapUtility.getMapInstance();
 
         mapView = view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
@@ -141,21 +163,28 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 return;
             }
 
-                mobileMap.setMyLocationEnabled(true);
-                initMap();
+            mobileMap.setMyLocationEnabled(true);
+            try
+            {
+                getActivity().runOnUiThread(new Runnable(){
+                    public void run(){
+                        initMap();
+                    }
+                });
+            }catch(NullPointerException e){/* Only happens in Unit Test*/}
 
-        }
+            }
     }
 
     private void initMap() {
 
         if (mapListener.getCurrCoordinates() != null) {
 
-            initCircle(mapListener.getCurrCoordinates());
-            moveCamera(mapListener.getCurrCoordinates(), DEFAULT_ZOOM *(float) 0.7);
+            MLocation curPos = UserInfo.getInstance().getCurrentPosition();
+            coord = new LatLng(curPos.getLatitude(), curPos.getLongitude());
+            initCircle(coord);
+            moveCamera(coord, ZOOM);
             // Push current location to DB
-            double lat = mapListener.getCurrCoordinates().latitude;
-            double lng = mapListener.getCurrCoordinates().longitude;
             // Write the location of the current user to the database
             Database.getInstance().readObjOnce(new MLocation("EPFL"), Database.Tables.LOCATIONS, new CallBackDatabase() {
                 @Override
@@ -183,39 +212,59 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 .strokeColor(Color.RED)
                 .fillColor(Color.parseColor("#22FF0000"))
                 .radius(radius);
+        try
+        {
+            getActivity().runOnUiThread(new Runnable(){
+                public void run(){
+                    if(mobileMap != null)
+                        mobileMap.addCircle(radiusOptions);
+                }
+        });
+        }catch(NullPointerException e){/* Only happens in Unit Test*/}
 
-        mobileMap.addCircle(radiusOptions);
+        if (radiusOptions != null){
+            double radius = radiusOptions.getRadius();
+            double scale = radius / 300;
+            ZOOM =(int) (16 - Math.log(scale) / Math.log(2));
+        }
     }
 
-    private void moveCamera(LatLng latLng, float zoom) {
+    private void moveCamera(final LatLng latLng, final float zoom) {
         Log.d( TAG, "moveCamera: moving the camera to: lat: "
                 + latLng.latitude + " long: " + latLng.longitude);
-        mobileMap.moveCamera(CameraUpdateFactory.newLatLngZoom( latLng, zoom));
+        try
+        {
+            getActivity().runOnUiThread(new Runnable(){
+                public void run(){
+                    if(mobileMap != null)
+                        mobileMap.moveCamera(CameraUpdateFactory.newLatLngZoom( latLng, zoom));
+                }
+            });
+        }catch(NullPointerException e){/* Only happens in Unit Test*/}
+
     }
-
-    public void getUsersInRadius(){
-
-        mapListener.fetchUsersInRadius((int) radius);
-        usersLoc.clear();
-        usersLoc = mapListener.getOtherLocations();
-
-
-    }
-
     /**
      * Marks the other users that are within the distance specified by the users.
      * */
     public void markNearbyUsers() {
 
         // Clear Markers
-        mapMarkers.removeAll(mapMarkers);
-        mobileMap.clear();
+      //  mapMarkers.removeAll(mapMarkers);
+        try
+        {
+            getActivity().runOnUiThread(new Runnable(){
+                public void run(){
+                    if(mobileMap != null){
+                        mobileMap.clear();
 
-        mobileMap.addCircle(radiusOptions);
-        if(usersLoc.size()==0)
-            getUsersInRadius();
-        else
-            usersLoc = mapListener.getOtherLocations();
+                        mobileMap.addCircle(radiusOptions);
+                    }
+
+                }
+            });
+        }catch(NullPointerException e){/* Only happens in Unit Test*/}
+
+    usersLoc = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().values());
 
         if(usersLoc.size() > 3)
             Log.d( TAG, "moveCamera: moving the camera to: lat: " + usersLoc.size());
@@ -240,16 +289,35 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                     usersLoc.get(indexOfUser).getLongitude()    );
         float color = friendsID.contains(locID) ? BitmapDescriptorFactory.HUE_BLUE :
                                                         BitmapDescriptorFactory.HUE_RED;
-    // For testing purpose TODO: Find clean way to verify mobileMap is initiated(!instanciated)
-    if(mobileMap.getProjection() != null) {
-        MarkerOptions marker = new MarkerOptions().position(newPos)
+
+        final MarkerOptions marker = new MarkerOptions().position(newPos)
                 .title(userName + ": " + status)
                 .icon(BitmapDescriptorFactory.defaultMarker(color));
         mapMarkers.add(marker);
-        mobileMap.addMarker(marker);
+        try
+        {
+            getActivity().runOnUiThread(new Runnable(){
+            public void run(){
+                if(mobileMap != null && mobileMap.getProjection() != null)
+                    mobileMap.addMarker(marker);
+
+            }
+            });
+        }catch(NullPointerException e){/* Only happens in Unit Test*/}
+
 
     }
 
+    @Override
+    public void onLocationChange(String id) {
 
+        radius = UserInfo.getInstance().getCurrentPosition().getRadius();
+        Log.e("OnLocationChange", "radius : " + radius);
+        coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
+                UserInfo.getInstance().getCurrentPosition().getLongitude());
+        if (getActivity() != null && !Database.DEBUG_MODE) {
+            initCircle(coord);
+            markNearbyUsers();
+        }
     }
 }

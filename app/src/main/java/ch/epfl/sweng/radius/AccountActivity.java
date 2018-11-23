@@ -1,22 +1,31 @@
 package ch.epfl.sweng.radius;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.File;
+
+import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.friends.FriendsFragment;
 import ch.epfl.sweng.radius.home.HomeFragment;
 import ch.epfl.sweng.radius.messages.MessagesFragment;
 import ch.epfl.sweng.radius.profile.ProfileFragment;
-import ch.epfl.sweng.radius.database.UserInfo;
 
 public class AccountActivity extends AppCompatActivity {
 
@@ -34,7 +43,7 @@ public class AccountActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.app_preferences, false);
 
         // To load the current user infos
-        UserInfo.getInstance();
+        UserInfo.getInstance().fetchDataFromDB();
 
         // Set the layout
         setContentView(R.layout.activity_account);
@@ -81,6 +90,14 @@ public class AccountActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e("SAVE SATE", "save UserInfo in external storage");
+        UserInfo.getInstance().saveState();
+    }
+
+
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fcontainer, fragment);
@@ -110,6 +127,5 @@ public class AccountActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
 }

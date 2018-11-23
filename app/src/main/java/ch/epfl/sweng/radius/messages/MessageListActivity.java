@@ -20,20 +20,20 @@ import java.util.List;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
-import ch.epfl.sweng.radius.database.DBObserver;
+import ch.epfl.sweng.radius.database.DBUserObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.utils.MapUtility;
 
 
 /**
  * Activity that hosts messages between two users
  * MessageListActivity and MessageListAdapter and some layout files are inspired from https://blog.sendbird.com/android-chat-tutorial-building-a-messaging-ui
  */
-public class MessageListActivity extends AppCompatActivity implements DBObserver {
+public class MessageListActivity extends AppCompatActivity{
     private RecyclerView myMessageRecycler;
     private MessageListAdapter myMessageAdapter;
     private EditText messageZone;
@@ -232,7 +232,7 @@ public class MessageListActivity extends AppCompatActivity implements DBObserver
            The problem here is, if the other user is in my radius I can send messages to them, however, if current user
            is not in the radius of the other user, they can not reply to those messages.*/
         if(chatLogs.getMembersId().size() == 2)
-            setEnabled(MapUtility.isInRadius(otherLoc, (int) MapUtility.radius));
+            setEnabled(MapUtility.isInRadius(otherLoc));
         else
             setEnabled(true);
     }
@@ -259,6 +259,7 @@ public class MessageListActivity extends AppCompatActivity implements DBObserver
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.w("MessageActivity" , "Just got onCreated");
+        //ChatInfo.getInstance().addUserObserver(this);
 
         super.onCreate(savedInstanceState);
 
@@ -282,11 +283,6 @@ public class MessageListActivity extends AppCompatActivity implements DBObserver
 
         //database.stopListening(chatLogs.getID() + "chatLogListener", Database.Tables.CHATLOGS);
 
-
-    }
-
-    @Override
-    public void onDataChange(String id) {
 
     }
 }

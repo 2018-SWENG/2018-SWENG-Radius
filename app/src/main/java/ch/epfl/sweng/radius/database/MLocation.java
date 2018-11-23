@@ -2,7 +2,9 @@ package ch.epfl.sweng.radius.database;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class MLocation implements DatabaseObject {
+import java.io.Serializable;
+
+public class MLocation implements DatabaseObject, Serializable {
 
     public final double DEFAULT_GROUP_LOCATION_RADIUS = 2000;
 
@@ -20,12 +22,12 @@ public class MLocation implements DatabaseObject {
 
     public MLocation(){
         this.userID = "NewLoc" + Integer.toString(locIDCounter++);
-        this.latitude = 46.5360698;
+        this.latitude = 46.5160698;
         this.longitude = 6.5681216000000004;
         this.title = "New MLocation";
         this.message = "Here I am";
         this.isGroupLocation = 0;
-        this.radius = 0;
+        this.radius = 5000;
         this.isVisible = true;
     }
 
@@ -36,7 +38,7 @@ public class MLocation implements DatabaseObject {
         this.title = "";
         this.message = "";
         this.isGroupLocation = 0;
-        this.radius = 0;
+        this.radius = 5000;
         this.isVisible = false;
     }
 
@@ -47,7 +49,7 @@ public class MLocation implements DatabaseObject {
         this.title = "New MLocation";
         this.message = "Here I am";
         this.isGroupLocation = 0;
-        this.radius = 0;
+        this.radius = 5000;
         this.isVisible = true;
     }
 
@@ -129,5 +131,10 @@ public class MLocation implements DatabaseObject {
     public void setVisibility(boolean isVisible) {
         this.isVisible = isVisible;
     }
+
+    public void setVisible(boolean visible) {
+        isVisible = visible;
+    }
+
 
 }

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.database.DBObserver;
 import ch.epfl.sweng.radius.utils.TabAdapter;
 
 

@@ -29,28 +29,23 @@ public class ExampleUnitTest {
     public void testOnDataChange(){
         Database.activateDebugMode();
         FriendsTab tab = new FriendsTab();
-        tab.onDataChange("HELLO");
-
+        tab.onUserChange("HELLO");
         RequestsTab tab2 = new RequestsTab();
-        tab2.onDataChange("HELLO");
+        tab2.onUserChange("HELLO");
 
         GroupTab tab3 = new GroupTab();
-        tab3.onDataChange("HELO");
+        tab3.onLocationChange("HELO");
 
         PeopleTab tab4 = new PeopleTab();
-        tab4.onDataChange("HELO");
+        tab4.onLocationChange("HELO");
 
         TopicsTab tab5 = new TopicsTab();
-        tab5.onDataChange("HELO");
-
-        MessageListActivity a0 = new MessageListActivity();
-        a0.onDataChange("HELO");
-
+        tab5.onLocationChange("HELO");
         MessagesFragment f0 = new MessagesFragment();
-        f0.onDataChange("HELO");
+        f0.onUserChange("HELO");
 
-        MapUtility m1 = new MapUtility(50000);
-        m1.onDataChange("HELO");
+        MapUtility m1 = MapUtility.getMapInstance();
+        m1.onLocationChange("HELO");
 
     }
 }

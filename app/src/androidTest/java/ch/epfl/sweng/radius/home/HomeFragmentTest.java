@@ -16,9 +16,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.Map;
+
 import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.utils.MapUtility;
 
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -54,6 +57,7 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
 
         Intent intent = new Intent();
         mblAccountActivity = mblActivityTestRule.launchActivity(intent);
+        MapUtility map = MapUtility.getMapInstance();
 
     }
 
