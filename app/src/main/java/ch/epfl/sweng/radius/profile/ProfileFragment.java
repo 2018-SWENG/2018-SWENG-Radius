@@ -277,9 +277,8 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         currentUser.setRadius(userRadius);
         currentUser.setSpokenLanguages(languagesText);
         //Write to DB
-        Database.getInstance().writeInstanceObj(currentUser, Database.Tables.USERS);
-        Database.getInstance().writeInstanceObj(UserInfo.getInstance().getCurrentPosition(),
-                Database.Tables.LOCATIONS);
+        UserInfo.getInstance().updateUserInDB();
+        UserInfo.getInstance().updateLocationInDB();
         }
 
     private String getDataFromTextInput(TextInputEditText input) {
@@ -305,9 +304,8 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos); //"bitmap" is the bitmap object
                 String encodedImage = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
 
-                UserInfo.getInstance().getCurrentUser().setUrlProfilePhoto(encodedImage); // Will probably need this part.
-                Database.getInstance().writeInstanceObj(UserInfo.getInstance().getCurrentUser(), Database.Tables.USERS);
-
+                UserInfo.getInstance().getCurrentUser().setUrlProfilePhoto(encodedImage);
+                UserInfo.getInstance().updateUserInDB();
             } catch (IOException e) {
             }*/
 

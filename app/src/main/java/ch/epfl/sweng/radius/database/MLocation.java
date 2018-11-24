@@ -39,7 +39,7 @@ public class MLocation implements DatabaseObject, Serializable {
         this.message = "";
         this.isGroupLocation = 0;
         this.radius = 5000;
-        this.isVisible = false;
+        this.isVisible = true;
     }
 
     public MLocation(String userID, double longitude, double latitude){

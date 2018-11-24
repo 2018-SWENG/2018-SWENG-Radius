@@ -133,7 +133,7 @@ public class BrowseProfilesActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 currentUser.addFriendRequest(profileUser);
-                database.writeInstanceObj(currentUser, Database.Tables.USERS);
+                UserInfo.getInstance().updateUserInDB();
                 database.writeInstanceObj(profileUser, Database.Tables.USERS);
                 addFriendButton.setText("Request sent");
                 addFriendButton.setEnabled(false);

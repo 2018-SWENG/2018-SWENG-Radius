@@ -21,6 +21,9 @@ import android.view.MenuItem;
 
 import java.io.File;
 
+import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.friends.FriendsFragment;
 import ch.epfl.sweng.radius.home.HomeFragment;
@@ -93,8 +96,22 @@ public class AccountActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
+        leaveApp();
+    }
+
+    private void leaveApp(){
         Log.e("SAVE SATE", "save UserInfo in external storage");
         UserInfo.getInstance().saveState();
+
+        MLocation current_user_location = UserInfo.getInstance().getCurrentPosition();
+        current_user_location.setVisible(false);
+        Database.getInstance().writeInstanceObj(current_user_location, Database.Tables.LOCATIONS);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        leaveApp();
     }
 
 

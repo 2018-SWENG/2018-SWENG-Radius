@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import ch.epfl.sweng.radius.database.DBLocationObserver;
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
@@ -126,7 +127,9 @@ public class MapUtility implements DBLocationObserver {
     }
 
     public void setCurrCoordinates(LatLng curCoordinates) {
-
+        UserInfo.getInstance().getCurrentPosition().setLatitude(currCoordinates.latitude);
+        UserInfo.getInstance().getCurrentPosition().setLongitude(currCoordinates.longitude);
+        UserInfo.getInstance().updateLocationInDB();
         currCoordinates = curCoordinates;
     }
 
