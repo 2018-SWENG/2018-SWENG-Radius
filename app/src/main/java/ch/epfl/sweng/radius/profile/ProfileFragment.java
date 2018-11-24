@@ -185,13 +185,10 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
 
     private void setUpProfilePhoto() {
         User current_user = UserInfo.getInstance().getCurrentUser();
-        //  Log.e("Profile Fragment: ", current_user.getUrlProfilePhoto() + "------------------------------------------");
-        //byte[] decodedString = Base64.decode(current_user.getUrlProfilePhoto(), Base64.DEFAULT); // this part will probably need to change //retrieve the image from the database // this is the download part
-        //Bitmap profilePictureUri = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-        /*if (profilePictureUri != null) { // puts the image from database into the circle
-            userPhoto.setImageBitmap(profilePictureUri);
-        }*/
+        if (current_user.getUrlProfilePhoto() != null || current_user.getUrlProfilePhoto().equals("")) { // puts the image from database into the circle
+            Picasso.get().load(current_user.getUrlProfilePhoto()).into(userPhoto);
+        }
 
         userPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
