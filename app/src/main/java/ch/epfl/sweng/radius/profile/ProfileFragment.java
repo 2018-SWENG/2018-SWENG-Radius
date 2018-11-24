@@ -291,21 +291,8 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (resultCode == RESULT_OK && requestCode == 1) {
             mImageUri = intent.getData();
-            //userPhoto.setImageURI(mImageUri);
 
             Picasso.get().load(mImageUri).into(userPhoto); // this is where we change the image - so use upload file method here
-
-            /*try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), imageUri);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos); //"bitmap" is the bitmap object
-                String encodedImage = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
-
-                UserInfo.getInstance().getCurrentUser().setUrlProfilePhoto(encodedImage);
-                UserInfo.getInstance().updateUserInDB();
-            } catch (IOException e) {
-            }*/
-
         }
     }
 

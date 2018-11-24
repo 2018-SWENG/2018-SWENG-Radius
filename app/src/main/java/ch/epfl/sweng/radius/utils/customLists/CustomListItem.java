@@ -18,7 +18,6 @@ public class CustomListItem {
         this.itemName = itemName;
         this.convId = convId;
         this.profilePic = R.drawable.user_photo_default; // Getting the Profile pictures here.
-
     }
 
     public int getProfilePic() {

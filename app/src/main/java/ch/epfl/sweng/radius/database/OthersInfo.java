@@ -23,6 +23,8 @@ public class OthersInfo extends DBObservable{
     private static final HashMap<String, MLocation> groupsPos = new HashMap<>();
     private static final HashMap<String, MLocation> topicsPos = new HashMap<>();
 
+    private static final HashMap<String, User> users = new HashMap<>();
+
     public static OthersInfo getInstance(){
         if (othersInfo == null)
             othersInfo = new OthersInfo();
@@ -34,6 +36,7 @@ public class OthersInfo extends DBObservable{
             @Override
             public void run() {
                 fetchUsersInMyRadius();
+                fetchUserObjects();
             }
         }, 0, REFRESH_PERIOD*1000);    }
 
@@ -47,6 +50,10 @@ public class OthersInfo extends DBObservable{
 
     public HashMap<String, MLocation> getTopicsPos(){
         return topicsPos;
+    }
+
+    public HashMap<String, User> getUsers(){
+        return users;
     }
 
     public void fetchUsersInMyRadius(){
@@ -66,6 +73,24 @@ public class OthersInfo extends DBObservable{
             @Override
             public void onError(DatabaseError error) {
                 Log.e("FetchUserRadius", error.getMessage());
+            }
+        });
+    }
+
+    public void fetchUserObjects(){
+        database.readAllTableOnce(Database.Tables.USERS, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                users.clear();
+                for (User user : (ArrayList<User>) value) {
+                    users.put(user.getID(), user);
+                }
+                notifyLocactionObservers(Database.Tables.LOCATIONS.toString());
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+                Log.e("FetchUser", error.getMessage());
             }
         });
     }

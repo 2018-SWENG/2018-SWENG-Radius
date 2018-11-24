@@ -3,8 +3,13 @@ package ch.epfl.sweng.radius.utils.customLists.customUsers;
 import android.content.Context;
 import android.util.Log;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
+import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.OthersInfo;
+import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 
@@ -21,12 +26,23 @@ public class CustomUserListAdapter extends CustomListAdapter {
 
         Log.e("CustomUserListAdapter", "Items users size :" + items.size());
 
-        viewHolder.txtViewTitle.setText(items.get(position).getItemName());
-        viewHolder.imgViewIcon.setImageResource(items.get(position).getProfilePic());
-
         CustomListItem item = items.get(position);
+
+        viewHolder.txtViewTitle.setText(items.get(position).getItemName());
+        OthersInfo.getInstance().getUsers().get(item.getItemId()).getID();
+        Log.e("CustomUserListAdapter", "OthersInfo.getInstance().getUsers().get(item.getItemId()).getID() :" + OthersInfo.getInstance().getUsers().get(item.getItemId()).getUrlProfilePhoto());
+        //Picasso.get().load(item.getItemId());//viewHolder.imgViewIcon
+        //Picasso.get().load(OthersInfo.getInstance().getUsers().get(item.getItemId()).getUrlProfilePhoto()).into(viewHolder.imgViewIcon);
+        if (OthersInfo.getInstance().getUsers().get(item.getItemId()).getUrlProfilePhoto() != null && !OthersInfo.getInstance().getUsers().get(item.getItemId()).getUrlProfilePhoto().equals("")) {
+            Picasso.get().load(OthersInfo.getInstance().getUsers().get(item.getItemId()).getUrlProfilePhoto()).into(viewHolder.imgViewIcon);
+        } else {
+            viewHolder.imgViewIcon.setImageResource(items.get(position).getProfilePic());
+        }
+
+        //CustomListItem item = items.get(position);
         final int clickedPic = item.getProfilePic();
         final String clickedId = item.getItemId();
+        //Log.e("CustomUserListAdapter", "item.getItemId() :" + item.getItemId());
         final String clickedConv = item.getConvId();
         CustomUserListListeners customListener = new CustomUserListListeners(clickedPic, clickedId,item.getItemName());
         customListener.setCustomOnClick(viewHolder.imgViewIcon, context);
