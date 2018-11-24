@@ -31,18 +31,24 @@ public class FirebaseStorageUtility extends Storage{
         return mime.getExtensionFromMimeType(cR.getType(uri));
     }
 
+    //I just realized I have to test this :_(
     public void uploadFile(Uri mImageUri, Activity activity) {
         if (mImageUri != null) {
-            StorageReference fileReference = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(mImageUri, activity));
+            final StorageReference fileReference = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(mImageUri, activity));
 
             mUploadTask = fileReference.putFile(mImageUri).
                     addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            String uploadUrl = taskSnapshot.getUploadSessionUri().toString();//getDownloadUrl().toString();
-                            User currentUser = UserInfo.getInstance().getCurrentUser();
-                            currentUser.setUrlProfilePhoto(uploadUrl);
-                            Database.getInstance().writeInstanceObj(currentUser, Database.Tables.USERS);
+                            fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String uploadUrl = uri.toString();
+                                    User currentUser = UserInfo.getInstance().getCurrentUser();
+                                    currentUser.setUrlProfilePhoto(uploadUrl);
+                                    Database.getInstance().writeInstanceObj(currentUser, Database.Tables.USERS);
+                                }
+                            });
                         }
                     });
         }
