@@ -31,11 +31,13 @@ public abstract class Storage {
         return storage;
     }
 
-    public abstract void uploadFile(Uri uri, Activity activity);
-
+    public static void activateDebugMode() {
+        storage = new FakeFirebaseStorageUtility();
+    }
 
     public StorageTask getStorageTask() {
         return mUploadTask;
     }
 
+    public abstract void uploadFile(Uri uri, Activity activity);
 }
