@@ -13,12 +13,15 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -180,6 +183,7 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
 
     private void setUpProfilePhoto() {
         User current_user = UserInfo.getInstance().getCurrentUser();
+        //  Log.e("Profile Fragment: ", current_user.getUrlProfilePhoto() + "------------------------------------------");
         byte[] decodedString = Base64.decode(current_user.getUrlProfilePhoto(), Base64.DEFAULT);
         Bitmap profilePictureUri = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
@@ -286,6 +290,8 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         if (resultCode == RESULT_OK && requestCode == 1) {
             Uri imageUri = intent.getData();
             userPhoto.setImageURI(imageUri);
+
+            //Picasso.get().load(imageUri).into(userPhoto);
 
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), imageUri);

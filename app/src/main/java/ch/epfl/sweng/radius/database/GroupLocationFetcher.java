@@ -30,7 +30,6 @@ public class GroupLocationFetcher implements CallBackDatabase {
          //   if(mapUtility.contains(currentUserLoc.getLatitude(), currentUserLoc.getLongitude()) && location.getIsGroupLocation() == 1) {
                 groupLocationsIds.add(location.getID());
                 Log.e("MessageList", "Group ID is " + location.getID());
-                //recordLocationIfGroup(location);
             }
         }
     }

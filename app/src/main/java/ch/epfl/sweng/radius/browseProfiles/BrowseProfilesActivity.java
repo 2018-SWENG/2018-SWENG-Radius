@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseError;
+import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
@@ -59,9 +60,6 @@ public class BrowseProfilesActivity extends AppCompatActivity{
 
         // ToolBar initialization
         setSupportActionBar(toolbar);
-        //REMOVE THIS PART FOR DEMO----------------------------------------
-        GroupLocationFetcher glf = new GroupLocationFetcher();
-        Database.getInstance().readAllTableOnce(Database.Tables.LOCATIONS, glf);
     }
 
     void fetchUserInfo(String userUID){
