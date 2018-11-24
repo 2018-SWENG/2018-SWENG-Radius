@@ -52,6 +52,10 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
 
 
+    //Picasso for downloading images from url
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.android.support:exifinterface:28.0.0' // just here to make sure picasso doesn't cause a crash
+
     implementation 'com.android.support:support-media-compat:28.0.0'
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:design:28.0.0'
@@ -153,9 +157,6 @@ dependencies {
     androidTestImplementation 'de.hdodenhof:circleimageview:2.2.0'
     androidTestImplementation 'com.android.support:preference-v7:28.0.0'
     androidTestImplementation 'com.android.support:preference-v14:28.0.0'
-
-    //Picasso for downloading images from url
-    implementation 'com.squareup.picasso:picasso:2.71828'
 
     //Messages
     androidTestImplementation 'com.firebase:firebase-client-android:2.5.2'
