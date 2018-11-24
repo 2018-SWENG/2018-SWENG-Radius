@@ -33,6 +33,7 @@ import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.home.HomeFragment;
+import ch.epfl.sweng.radius.storage.Storage;
 import ch.epfl.sweng.radius.utils.profileFragmentUtils.TextFileReader;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -58,6 +59,7 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
     private static ArrayList<Integer> spokenLanguages;
     private static TextView selectedLanguages;
     private static String languagesText;
+    private static Uri mImageUri;
 
     public ProfileFragment() {
         spokenLanguages = new ArrayList<Integer>();
@@ -184,12 +186,12 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
     private void setUpProfilePhoto() {
         User current_user = UserInfo.getInstance().getCurrentUser();
         //  Log.e("Profile Fragment: ", current_user.getUrlProfilePhoto() + "------------------------------------------");
-        byte[] decodedString = Base64.decode(current_user.getUrlProfilePhoto(), Base64.DEFAULT);
-        Bitmap profilePictureUri = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        //byte[] decodedString = Base64.decode(current_user.getUrlProfilePhoto(), Base64.DEFAULT); // this part will probably need to change //retrieve the image from the database // this is the download part
+        //Bitmap profilePictureUri = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-        if (profilePictureUri != null) {
+        /*if (profilePictureUri != null) { // puts the image from database into the circle
             userPhoto.setImageBitmap(profilePictureUri);
-        }
+        }*/
 
         userPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,7 +248,7 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
     }
 
 
-    private void onClickSaveButton() {
+    private void onClickSaveButton() { // use upload file here
         String nicknameString = getDataFromTextInput(nicknameInput);
         String statusString = getDataFromTextInput(statusInput);
         String interestsString = getDataFromTextInput(interestsInput);
@@ -265,6 +267,10 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         if (!interestsString.isEmpty()) {
             currentUser.setInterests(interestsString);
             userInterests.setText("Interests: " + interestsString);
+        }
+
+        if (Storage.getInstance().getStorageTask() == null || !Storage.getInstance().getStorageTask().isInProgress()) { // Upload the photo and its uri to storage and db
+            Storage.getInstance().uploadFile( mImageUri, this.getActivity());
         }
 
         UserInfo.getInstance().getCurrentPosition().setRadius(userRadius);
@@ -288,22 +294,22 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (resultCode == RESULT_OK && requestCode == 1) {
-            Uri imageUri = intent.getData();
-            userPhoto.setImageURI(imageUri);
+            mImageUri = intent.getData();
+            //userPhoto.setImageURI(mImageUri);
 
-            //Picasso.get().load(imageUri).into(userPhoto);
+            Picasso.get().load(mImageUri).into(userPhoto); // this is where we change the image - so use upload file method here
 
-            try {
+            /*try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), imageUri);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos); //"bitmap" is the bitmap object
                 String encodedImage = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
 
-                UserInfo.getInstance().getCurrentUser().setUrlProfilePhoto(encodedImage);
+                UserInfo.getInstance().getCurrentUser().setUrlProfilePhoto(encodedImage); // Will probably need this part.
                 Database.getInstance().writeInstanceObj(UserInfo.getInstance().getCurrentUser(), Database.Tables.USERS);
 
             } catch (IOException e) {
-            }
+            }*/
 
         }
     }
