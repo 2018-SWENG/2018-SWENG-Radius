@@ -80,7 +80,11 @@ public class BrowseProfilesActivity extends AppCompatActivity{
     }
 
     public void setUpUIComponents(User current_user){
-        userPhoto.setImageResource(R.drawable.ic_man);
+        if (current_user.getUrlProfilePhoto() != null && !current_user.getUrlProfilePhoto().equals("")) {
+            Picasso.get().load(current_user.getUrlProfilePhoto()).into(userPhoto);
+        } else {
+            userPhoto.setImageResource(R.drawable.user_photo_default);
+        }
         textViewName.setText(current_user.getNickname());
         textViewStatus.setText(current_user.getStatus());
         textViewInterests.setText(current_user.getInterests());
