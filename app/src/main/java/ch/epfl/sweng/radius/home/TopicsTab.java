@@ -8,17 +8,18 @@ import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.utils.customLists.customTopics.CustomTopicTab;
 import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserTab;
 
 
-public class TopicsTab extends CustomUserTab implements DBLocationObserver {
+public class TopicsTab extends CustomTopicTab implements DBLocationObserver {
 
     public TopicsTab() {
         OthersInfo.getInstance().addLocationObserver(this);
     }
 
     protected  List<String> getIds(User current_user) {
-        return new ArrayList<>(OthersInfo.getInstance().getTopicsPos().keySet());
+        return new ArrayList<String>(OthersInfo.getInstance().getTopicsPos().keySet());
     }
 
     @Override

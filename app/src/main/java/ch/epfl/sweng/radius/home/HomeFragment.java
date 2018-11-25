@@ -190,7 +190,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
                 @Override
                 public void onFinish(Object value) {
                     MLocation epfl2 = (MLocation) value;
-                    epfl2.setIsGroupLocation(1);
+                    epfl2.setLocationType(1);
                     epfl2.setRadius(2000);
                     Database.getInstance().writeInstanceObj(epfl2, Database.Tables.LOCATIONS);
                 }
