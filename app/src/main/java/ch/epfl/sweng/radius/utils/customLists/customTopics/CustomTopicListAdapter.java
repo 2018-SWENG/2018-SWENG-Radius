@@ -8,6 +8,7 @@ import java.util.List;
 
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
+import ch.epfl.sweng.radius.utils.customLists.customGroups.CustomGroupListListeners;
 
 public class CustomTopicListAdapter extends CustomListAdapter {
 
@@ -19,6 +20,10 @@ public class CustomTopicListAdapter extends CustomListAdapter {
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Log.e("CustomTopicListAdapter", "Items topics size :" + items.size());
         viewHolder.txtViewTitle.setText(items.get(position).getItemName());
+        CustomListItem item = items.get(position);
+        CustomGroupListListeners customListener = new CustomGroupListListeners(item.getItemId(),
+                item.getItemName(), item.getConvId());
+        customListener.setCustomOnClick(viewHolder.txtViewTitle, context);
 
     }
 
