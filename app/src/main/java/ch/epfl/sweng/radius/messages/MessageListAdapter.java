@@ -15,11 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.database.UserUtils;
 
 /**
  * Adapter for the RecyclerView that will store a list of message,
@@ -29,7 +29,7 @@ import ch.epfl.sweng.radius.database.UserInfo;
 public class MessageListAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
-    private static HashMap<String, User> usersList;
+    private static HashMap<String, User> usersHashMap;
 
 
     private Context context;
@@ -39,6 +39,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     public MessageListAdapter(Context context, List<Message> messages) {
         this.context = context;
         this.messages = messages;
+        this.usersHashMap = new HashMap<>();
         flags = DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE;
 
     }
@@ -47,13 +48,24 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         this.messages = messages;
     }
 
+    public List<String> extractSenderId(List<Message> messages) {
+        List<String> result = new ArrayList<>();
+        for(Message m : messages){
+            if(!result.contains(m.getSenderId())){
+                result.add(m.getSenderId());
+            }
+        }
+        return result;
+    }
     // Inflates the appropriate layout according to the ViewType.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         Log.e("message", "Updates view and message size is " + messages.size());
 
-        usersList = new HashMap<>(OthersInfo.getInstance().getUsersList());
+        for(String id: extractSenderId(messages)){
+            usersHashMap.put(id, UserUtils.getInstance().getUsers().get(id));
+        }
 
         if (viewType == VIEW_TYPE_MESSAGE_SENT) {
             view = LayoutInflater.from(parent.getContext())
@@ -124,7 +136,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags));
-            nameText.setText(usersList.get(message.getSenderId()).getNickname());
+            nameText.setText(usersHashMap.get(message.getSenderId()).getNickname());
 
             // Insert the profile image from the URL into the ImageView.
             //Utils.displayRoundImageFromUrl(
