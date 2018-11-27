@@ -3,7 +3,11 @@ package ch.epfl.sweng.radius.home;
 import android.Manifest;
 import android.content.Intent;
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.ViewAssertion;
 import android.support.test.espresso.assertion.ViewAssertions;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.v4.app.Fragment;
@@ -11,6 +15,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,10 +26,16 @@ import java.util.Map;
 import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.MapUtility;
 
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withResourceName;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 
@@ -58,7 +69,6 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
         Intent intent = new Intent();
         mblAccountActivity = mblActivityTestRule.launchActivity(intent);
         MapUtility map = MapUtility.getMapInstance();
-
     }
 
     @Test
@@ -99,6 +109,40 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
                 .perform(click());
         Espresso.onView(withText("TOPICS"))
                 .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+    }
+
+    @Test
+    public void testTopicTabFunctionality() {
+        Espresso.onView(withText("TOPICS"))
+                .check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+        Espresso.onView(withId(R.id.topicsTab)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(
+                        0,
+                        new ViewAction() {
+                            @Override
+                            public Matcher<View> getConstraints() {
+                                return null;
+                            }
+
+                            @Override
+                            public String getDescription() {
+                                return "Click on specific button";
+                            }
+
+                            @Override
+                            public void perform(UiController uiController, View view) {
+                                View button = view.findViewById(R.id.create_topic_button);
+                                button.performClick();
+                            }
+                        })
+        );
+        Espresso.onView(withId(R.id.editTextDialogUserInput))
+                .perform(typeText("testTopic"))
+                .perform(closeSoftKeyboard());
+        Espresso.onView(withText("OK")).
+                check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
     }
 
