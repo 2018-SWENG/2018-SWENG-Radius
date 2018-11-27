@@ -45,7 +45,7 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
     public ActivityTestRule<MessageListActivity> mblActivityTestRule
             = new ActivityTestRule<MessageListActivity>(MessageListActivity.class);
 
-    private MessageListActivity mlActivity;
+    private MessageListActivity mlActivity = mblActivityTestRule.getActivity;
     private User user1, user2;
     private ChatLogs chatLogs;
     private String databaseMessageUrl;

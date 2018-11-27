@@ -136,7 +136,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags));
-            nameText.setText(usersHashMap.get(message.getSenderId()).getNickname());
+            if(usersHashMap.get(message.getSenderId()) != null) {
+                nameText.setText(usersHashMap.get(message.getSenderId()).getNickname());
+            }
 
             // Insert the profile image from the URL into the ImageView.
             //Utils.displayRoundImageFromUrl(
