@@ -185,9 +185,11 @@ public class FakeFirebaseUtility extends Database {
         chat.addMessage(new Message("as", "aaa", new Date()));
         chatLogsTable.put("0", chat);
 
+        /**
         chatLogsTable.put("EPFL", new ChatLogs("EPFL"));
         chatLogsTable.put("UNIL", new ChatLogs("EPFL"));
         chatLogsTable.put("topicTest", new ChatLogs("topicTest"));
+         */
     }
 
     private void fillLocationsTable(){
@@ -211,11 +213,13 @@ public class FakeFirebaseUtility extends Database {
         UNIL.setLocationType(1); // set UNIL as group location
         locationsTable.put(UNIL.getID(), UNIL);
 
+        /**
         // Fill the topic locations
         MLocation topicTest = new MLocation("topicTest",
                 defaultLng + 0.5,
                 defaultLat - 0.5);
         EPFL.setLocationType(2); // set as topic location
+         */
     }
 
     private HashMap<String,DatabaseObject> getTable(Tables tableName){
