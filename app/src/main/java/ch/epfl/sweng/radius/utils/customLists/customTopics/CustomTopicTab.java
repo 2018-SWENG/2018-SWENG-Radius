@@ -28,6 +28,10 @@ public abstract class CustomTopicTab extends CustomTab {
             @Override
             public void onFinish(Object value) {
                 ArrayList<CustomListItem> topicItems = new ArrayList<>();
+
+                //Add dummy first item
+                topicItems.add(0, new CustomListItem("Dummy","Dummy","Dummy"));
+
                 String topicId;
                 String convId;
                 for (ChatLogs topics : (List<ChatLogs>) value) {

@@ -23,6 +23,7 @@ public class CustomTopicListAdapter extends CustomListAdapter {
 
     public CustomTopicListAdapter(List<CustomListItem> items, Context context) {
         super(items, context);
+        items.add(0, new CustomListItem("Dummy","Dummy","Dummy"));
     }
 
     @Override
