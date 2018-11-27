@@ -62,7 +62,7 @@ public class CustomTopicListAdapter extends CustomListAdapter {
                 Log.e("CustomTopicListAdapter", "Items topics size :" + items.size());
                 topicItemHolder.textViewTitle.setText(items.get(position).getItemName());
                 CustomListItem item = items.get(position);
-                CustomGroupListListeners customListener = new CustomGroupListListeners(item.getItemId(),
+                CustomTopicListListeners customListener = new CustomTopicListListeners(item.getItemId(),
                         item.getItemName(), item.getConvId());
                 customListener.setCustomOnClick(topicItemHolder.textViewTitle, context);
                 break;
