@@ -114,12 +114,10 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
 
     @Test
     public void testTopicTabFunctionality() {
-        Espresso.onView(withText("TOPICS"))
-                .check(ViewAssertions.matches(isDisplayed()))
+        Espresso.onView(withText("TOPICS")).check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
         Espresso.onView(withId(R.id.topicsTab)).perform(
-                RecyclerViewActions.actionOnItemAtPosition(
-                        0,
+                RecyclerViewActions.actionOnItemAtPosition(0,
                         new ViewAction() {
                             @Override
                             public Matcher<View> getConstraints() {
@@ -138,11 +136,9 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
                             }
                         })
         );
-        Espresso.onView(withId(R.id.editTextDialogUserInput))
-                .perform(typeText("testTopic"))
+        Espresso.onView(withId(R.id.editTextDialogUserInput)).perform(typeText("testTopic"))
                 .perform(closeSoftKeyboard());
-        Espresso.onView(withText("OK")).
-                check(ViewAssertions.matches(isDisplayed()))
+        Espresso.onView(withText("OK")).check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
     }
 
