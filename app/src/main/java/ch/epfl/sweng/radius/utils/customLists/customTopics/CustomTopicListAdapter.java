@@ -84,6 +84,13 @@ public class CustomTopicListAdapter extends CustomListAdapter {
             super(itemLayoutView);
             textViewTitle = itemLayoutView.findViewById(R.id.create_topic);
             createTopicButton = itemLayoutView.findViewById(R.id.create_topic_button);
+
+            createTopicButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
         }
     }
 
