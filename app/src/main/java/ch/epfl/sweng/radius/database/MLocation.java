@@ -20,7 +20,7 @@ public class MLocation implements DatabaseObject, Serializable {
     private int locationType; // 0: user location, 1: group location, 2: topic location
     private double radius; // Use it only if the mLocation is a group.
 
-    public MLocation(){
+    public MLocation() {
         this.userID = "NewLoc" + Integer.toString(locIDCounter++);
         this.latitude = 46.5160698;
         this.longitude = 6.5681216000000004;

@@ -16,6 +16,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 import ch.epfl.sweng.radius.utils.customLists.customGroups.CustomGroupListListeners;
@@ -106,8 +108,13 @@ public class CustomTopicListAdapter extends CustomListAdapter {
                             .setPositiveButton("OK",
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
-                                            // get user input and set it to result
-                                            // edit text
+                                            String topicName = userInput.getText().toString();
+                                            if (!topicName.isEmpty()) {
+                                                MLocation newTopic = new MLocation(topicName);
+                                                newTopic.setLocationType(2); // topic type
+                                                Database.getInstance().writeInstanceObj(newTopic, Database.Tables.LOCATIONS);
+                                            }
+
                                         }
                                     })
                             .setNegativeButton("Cancel",
