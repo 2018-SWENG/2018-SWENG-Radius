@@ -62,7 +62,7 @@ public class CustomTopicListAdapter extends CustomListAdapter {
                 Log.e("CustomTopicListAdapter", "Items topics size :" + items.size());
                 topicItemHolder.textViewTitle.setText(items.get(position).getItemName());
                 CustomListItem item = items.get(position);
-                CustomGroupListListeners customListener = new CustomGroupListListeners(item.getItemId(),
+                CustomTopicListListeners customListener = new CustomTopicListListeners(item.getItemId(),
                         item.getItemName(), item.getConvId());
                 customListener.setCustomOnClick(topicItemHolder.textViewTitle, context);
                 break;
@@ -133,11 +133,14 @@ public class CustomTopicListAdapter extends CustomListAdapter {
     private static void pushTopicToDatabase(String topicName) {
         if (!topicName.isEmpty()) {
             MLocation newTopic = new MLocation(topicName);
+
+            // new topic is set by user location values
             newTopic.setLocationType(2); // topic type
             newTopic.setLatitude(UserInfo.getInstance().getCurrentPosition().getLatitude());
             newTopic.setLongitude(UserInfo.getInstance().getCurrentPosition().getLongitude());
             newTopic.setRadius(UserInfo.getInstance().getCurrentPosition().getRadius());
             Database.getInstance().writeInstanceObj(newTopic, Database.Tables.LOCATIONS);
+
             ChatLogs topicChatLog = new ChatLogs(topicName);
             topicChatLog.addMembersId(UserInfo.getInstance().getCurrentUser().getID()); // creator is a member
             Database.getInstance().writeInstanceObj(topicChatLog, Database.Tables.CHATLOGS);
