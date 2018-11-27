@@ -88,7 +88,7 @@ public class DatabaseObjectsTest {
         UserInfo userInfo = UserInfo.getInstance();
         PeopleTab pep = new PeopleTab();
         userInfo.addLocationObserver(pep);
-        userInfo.notifyLocactionObservers("HELO");
+        userInfo.notifyLocationObservers("HELO");
         userInfo.removeLocationObserver(pep);
     }
 

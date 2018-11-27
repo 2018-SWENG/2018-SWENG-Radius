@@ -23,6 +23,8 @@ public class OthersInfo extends DBObservable{
     private static final HashMap<String, MLocation> groupsPos = new HashMap<>();
     private static final HashMap<String, MLocation> topicsPos = new HashMap<>();
 
+    private static final HashMap<String, User> usersList= new HashMap<>();
+
     public static OthersInfo getInstance(){
         if (othersInfo == null)
             othersInfo = new OthersInfo();
@@ -34,6 +36,7 @@ public class OthersInfo extends DBObservable{
             @Override
             public void run() {
                 fetchUsersInMyRadius();
+                fetchAllOtherUsers();
             }
         }, 0, REFRESH_PERIOD*1000);    }
 
@@ -49,6 +52,10 @@ public class OthersInfo extends DBObservable{
         return topicsPos;
     }
 
+    public HashMap<String, User> getUsersList(){
+        return usersList;
+    }
+
     public void fetchUsersInMyRadius(){
         database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
@@ -60,7 +67,29 @@ public class OthersInfo extends DBObservable{
                         putInTable(loc);
                     }
                 }
-                notifyLocactionObservers(Database.Tables.LOCATIONS.toString());
+                notifyLocationObservers(Database.Tables.LOCATIONS.toString());
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+                Log.e("FetchUserRadius", error.getMessage());
+            }
+        });
+    }
+
+    public void fetchAllOtherUsers(){
+        database.readAllTableOnce(Database.Tables.USERS, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                usersList.clear();
+                String currentUserId = UserInfo.getInstance().getCurrentUser().getID();
+                for (User user : (ArrayList<User>) value) {
+                    if(!currentUserId.equals(user.getID())) {
+                        usersList.put(user.getID(), user);
+                    }
+                }
+
+                notifyUserObservers(Database.Tables.USERS.toString());
             }
 
             @Override

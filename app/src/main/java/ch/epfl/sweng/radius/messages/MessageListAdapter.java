@@ -10,10 +10,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.database.OthersInfo;
+import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 
 /**
@@ -24,6 +29,8 @@ import ch.epfl.sweng.radius.database.UserInfo;
 public class MessageListAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
+    private static HashMap<String, User> usersList;
+
 
     private Context context;
     private List<Message> messages;
@@ -45,6 +52,8 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         Log.e("message", "Updates view and message size is " + messages.size());
+
+        usersList = new HashMap<>(OthersInfo.getInstance().getUsersList());
 
         if (viewType == VIEW_TYPE_MESSAGE_SENT) {
             view = LayoutInflater.from(parent.getContext())
@@ -115,7 +124,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags));
-        //    nameText.setText(message.getOwner().getNickname());
+            nameText.setText(usersList.get(message.getSenderId()).getNickname());
 
             // Insert the profile image from the URL into the ImageView.
             //Utils.displayRoundImageFromUrl(
