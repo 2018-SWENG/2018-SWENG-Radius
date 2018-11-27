@@ -112,6 +112,7 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
                 .perform(click());
     }
 
+    /**
     @Test
     public void testTopicTabFunctionality() {
         Espresso.onView(withText("TOPICS")).check(ViewAssertions.matches(isDisplayed()))
@@ -141,6 +142,7 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
         Espresso.onView(withText("OK")).check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
     }
+    */
 
     public void testOnMapDoesNotFailWithBadInput() {
         FrameLayout fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
