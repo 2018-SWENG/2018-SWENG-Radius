@@ -16,6 +16,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
@@ -113,8 +114,9 @@ public class CustomTopicListAdapter extends CustomListAdapter {
                                                 MLocation newTopic = new MLocation(topicName);
                                                 newTopic.setLocationType(2); // topic type
                                                 Database.getInstance().writeInstanceObj(newTopic, Database.Tables.LOCATIONS);
+                                                ChatLogs topicChatLog = new ChatLogs(topicName);
+                                                Database.getInstance().writeInstanceObj(topicChatLog, Database.Tables.CHATLOGS);
                                             }
-
                                         }
                                     })
                             .setNegativeButton("Cancel",
