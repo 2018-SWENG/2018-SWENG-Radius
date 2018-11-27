@@ -21,6 +21,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CustomTopicListAdapter extends CustomListAdapter {
 
+    private static final int TOPIC_ITEM = 1;
+    private static final int TOPIC_CREATE_BUTTON = 2;
+
     public CustomTopicListAdapter(List<CustomListItem> items, Context context) {
         super(items, context);
         items.add(0, new CustomListItem("Dummy","Dummy","Dummy"));
@@ -29,45 +32,44 @@ public class CustomTopicListAdapter extends CustomListAdapter {
     @Override
     public int getItemViewType(int position) {
         if (position == 0) {
-            return 2;
+            return TOPIC_CREATE_BUTTON;
         }
-        return 1;
+        return TOPIC_ITEM;
     }
 
     @NonNull
     @Override
     public CustomListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == 2) {
-            return new ViewHolder2(LayoutInflater.from(parent.getContext())
+        if (viewType == TOPIC_CREATE_BUTTON) {
+            return new TopicCreateButtonHolder(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.create_topic, null));
         }
-        return new ViewHolder1(LayoutInflater.from(parent.getContext())
+        return new TopicItemHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.custom_list_item_layout, null));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         switch (viewHolder.getItemViewType()) {
-            case 1:
-                ViewHolder1 viewHolder1 = (ViewHolder1) viewHolder;
+            case TOPIC_ITEM:
+                TopicItemHolder topicItemHolder = (TopicItemHolder) viewHolder;
                 Log.e("CustomTopicListAdapter", "Items topics size :" + items.size());
-                viewHolder1.textViewTitle.setText(items.get(position).getItemName());
+                topicItemHolder.textViewTitle.setText(items.get(position).getItemName());
                 CustomListItem item = items.get(position);
                 CustomGroupListListeners customListener = new CustomGroupListListeners(item.getItemId(),
                         item.getItemName(), item.getConvId());
-                customListener.setCustomOnClick(viewHolder1.textViewTitle, context);
+                customListener.setCustomOnClick(topicItemHolder.textViewTitle, context);
                 break;
-            case 2:
+            case TOPIC_CREATE_BUTTON:
         }
     }
 
     // inner class to hold a reference to each item of RecyclerView
-    public static class ViewHolder1 extends ViewHolder {
-
+    public static class TopicItemHolder extends ViewHolder {
         TextView textViewTitle;
         ImageView imgViewIcon;
 
-        ViewHolder1(View itemLayoutView) {
+        TopicItemHolder(View itemLayoutView) {
             super(itemLayoutView);
             textViewTitle = itemLayoutView.findViewById(R.id.username);
             imgViewIcon = (CircleImageView) itemLayoutView.findViewById(R.id.profile_picture);
@@ -75,12 +77,11 @@ public class CustomTopicListAdapter extends CustomListAdapter {
     }
 
     // inner class to hold a reference to each item of RecyclerView
-    public static class ViewHolder2 extends ViewHolder {
-
+    public static class TopicCreateButtonHolder extends ViewHolder {
         TextView textViewTitle;
         Button createTopicButton;
 
-        ViewHolder2(View itemLayoutView) {
+        TopicCreateButtonHolder(View itemLayoutView) {
             super(itemLayoutView);
             textViewTitle = itemLayoutView.findViewById(R.id.create_topic);
             createTopicButton = itemLayoutView.findViewById(R.id.create_topic_button);
