@@ -34,7 +34,7 @@ public abstract class CustomTopicTab extends CustomTab {
 
                 String topicId;
                 String convId;
-                for (ChatLogs topics : (List<ChatLogs>) value) {
+                for (ChatLogs topics: (List<ChatLogs>) value) {
                     topicId = topics.getID();
                     convId = topics.getChatLogsId();
                     topicItems.add(new CustomListItem(topicId, convId, topicId));

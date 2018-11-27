@@ -31,4 +31,7 @@
     <string name="deleteAccountTitle">Delete your account</string>
     <string name="deleteAccountSumary">All your conversations and friends will be deleted</string>
 
+    <!-- create_topic.xml strings -->
+    <string name="new_topic">New Topic</string>
+    <string name="create_new_topic">Create new topic.</string>
 </resources>
