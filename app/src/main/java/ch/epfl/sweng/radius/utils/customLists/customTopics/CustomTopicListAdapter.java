@@ -89,50 +89,53 @@ public class CustomTopicListAdapter extends CustomListAdapter {
         TopicCreateButtonHolder(View itemLayoutView) {
             super(itemLayoutView);
             textViewTitle = itemLayoutView.findViewById(R.id.create_topic);
-            createTopicButton = itemLayoutView.findViewById(R.id.create_topic_button);
 
+            createTopicButton = itemLayoutView.findViewById(R.id.create_topic_button);
             createTopicButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // get prompts.xml view
-                    LayoutInflater inflater = LayoutInflater.from(view.getContext());
-                    View promptsView = inflater.inflate(R.layout.topic_prompt, null);
-
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
-                    alertDialogBuilder.setView(promptsView);
-
-                    final EditText userInput = (EditText) promptsView.findViewById(R.id.editTextDialogUserInput);
-
-                    // set dialog message
-                    alertDialogBuilder
-                            .setCancelable(false)
-                            .setPositiveButton("OK",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            String topicName = userInput.getText().toString();
-                                            if (!topicName.isEmpty()) {
-                                                MLocation newTopic = new MLocation(topicName);
-                                                newTopic.setLocationType(2); // topic type
-                                                Database.getInstance().writeInstanceObj(newTopic, Database.Tables.LOCATIONS);
-                                                ChatLogs topicChatLog = new ChatLogs(topicName);
-                                                Database.getInstance().writeInstanceObj(topicChatLog, Database.Tables.CHATLOGS);
-                                            }
-                                        }
-                                    })
-                            .setNegativeButton("Cancel",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
-
-                    // create alert dialog
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-
-                    // show it
-                    alertDialog.show();
+                    createPrompt(view);
                 }
             });
+        }
+    }
+
+    private static void createPrompt(View view) {
+        // get prompts.xml view
+        LayoutInflater inflater = LayoutInflater.from(view.getContext());
+        View promptsView = inflater.inflate(R.layout.topic_prompt, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(view.getContext());
+        alertDialogBuilder.setView(promptsView);
+        final EditText userInput = (EditText) promptsView.findViewById(R.id.editTextDialogUserInput);
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                String topicName = userInput.getText().toString();
+                                pushTopicToDatabase(topicName);
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        // show it
+        alertDialog.show();
+    }
+
+    private static void pushTopicToDatabase(String topicName) {
+        if (!topicName.isEmpty()) {
+            MLocation newTopic = new MLocation(topicName);
+            newTopic.setLocationType(2); // topic type
+            Database.getInstance().writeInstanceObj(newTopic, Database.Tables.LOCATIONS);
+            ChatLogs topicChatLog = new ChatLogs(topicName);
+            Database.getInstance().writeInstanceObj(topicChatLog, Database.Tables.CHATLOGS);
         }
     }
 
