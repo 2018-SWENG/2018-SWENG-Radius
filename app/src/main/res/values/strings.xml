@@ -35,4 +35,5 @@
     <string name="new_topic">New Topic</string>
     <string name="create_new_topic">Create new topic.</string>
     <string name="new_topic_prompt">Enter a name for yout topic:</string>
+    <string name="my_topic">My Topic</string>
 </resources>

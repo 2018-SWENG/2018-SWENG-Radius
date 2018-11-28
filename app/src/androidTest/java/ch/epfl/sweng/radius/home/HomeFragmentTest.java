@@ -112,36 +112,14 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
                 .perform(click());
     }
 
-    /**
-    public void testTopicTabFunctionality() {
+    public void testTopicTabFunctionalityValid() {
         Espresso.onView(withText("TOPICS")).check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
-        Espresso.onView(withId(R.id.topicsTab)).perform(
-                RecyclerViewActions.actionOnItemAtPosition(0,
-                        new ViewAction() {
-                            @Override
-                            public Matcher<View> getConstraints() {
-                                return null;
-                            }
-
-                            @Override
-                            public String getDescription() {
-                                return "Click on specific button";
-                            }
-
-                            @Override
-                            public void perform(UiController uiController, View view) {
-                                View button = view.findViewById(R.id.create_topic_button);
-                                button.performClick();
-                            }
-                        })
-        );
-        Espresso.onView(withId(R.id.editTextDialogUserInput)).perform(typeText("testTopic"))
-                .perform(closeSoftKeyboard());
+        Espresso.onView(withText("NEW TOPIC")).check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
         Espresso.onView(withText("OK")).check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
     }
-     */
 
     public void testOnMapDoesNotFailWithBadInput() {
         FrameLayout fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
