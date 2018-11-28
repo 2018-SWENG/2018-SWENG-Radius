@@ -62,7 +62,7 @@ public class GroupLocationFetcherTest {
         groupLocation = new MLocation();
 
         fetcher = new GroupLocationFetcher();
-        groupLocation.setIsGroupLocation(1);
+        groupLocation.setLocationType(1);
 //        fetcher = new GroupLocationFetcher(RADIUS);
 
     }

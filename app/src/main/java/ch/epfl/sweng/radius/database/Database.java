@@ -51,7 +51,6 @@ public abstract class Database {
     public static Database getInstance(){
         if(database == null)
             database = new FirebaseUtility();
-
         return database;
     }
 
