@@ -16,7 +16,6 @@ import java.util.List;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Message;
-import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.database.UserUtils;
@@ -35,17 +34,24 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private Context context;
     private List<Message> messages;
     private int flags;
+    private List<String> membersIds;
 
-    public MessageListAdapter(Context context, List<Message> messages) {
+    public MessageListAdapter(Context context, List<Message> messages,List<String> membersIds) {
         this.context = context;
         this.messages = messages;
         this.usersHashMap = new HashMap<>();
+        this.membersIds = new ArrayList<>();
         flags = DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE;
 
     }
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
+    }
+
+    public void setMembersIds(List<String> membersIds) {
+        this.membersIds = membersIds;
+        this.usersHashMap = userUtils.getSpecificsUsers(membersIds);
     }
 
     public List<String> extractSenderId(List<Message> messages) {
@@ -62,10 +68,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         Log.e("message", "Updates view and message size is " + messages.size());
-
-        for(String id: extractSenderId(messages)){
-            this.usersHashMap.put(id, userUtils.getUsers().get(id));
-        }
 
         if (viewType == VIEW_TYPE_MESSAGE_SENT) {
             view = LayoutInflater.from(parent.getContext())

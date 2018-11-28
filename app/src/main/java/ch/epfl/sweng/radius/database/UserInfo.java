@@ -19,9 +19,9 @@ public  class UserInfo extends DBObservable implements Serializable{
     private static UserInfo userInfo = loadState();
     private static final Database database = Database.getInstance();
 
-    private User current_user = new User(Database.getInstance().getCurrent_user_id(),
+    private static User current_user = new User(Database.getInstance().getCurrent_user_id(),
             "", "");
-    private MLocation current_position = new MLocation(Database.getInstance().getCurrent_user_id());
+    private static MLocation current_position = new MLocation(Database.getInstance().getCurrent_user_id());
 
     public static UserInfo getInstance(){
         if (userInfo == null)

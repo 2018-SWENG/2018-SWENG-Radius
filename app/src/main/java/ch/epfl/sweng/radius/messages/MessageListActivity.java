@@ -128,7 +128,7 @@ public class MessageListActivity extends AppCompatActivity {
     private void setUpUI() {
         setContentView(R.layout.activity_message_list);
         messageZone = (EditText) findViewById(R.id.edittext_chatbox);
-        myMessageAdapter = new MessageListAdapter(this, chatLogs.getMessages());
+        myMessageAdapter = new MessageListAdapter(this, chatLogs.getMessages(),chatLogs.getMembersId());
         myMessageRecycler = findViewById(R.id.reyclerview_message_list);
         myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         myMessageRecycler.setAdapter(myMessageAdapter);
@@ -151,6 +151,17 @@ public class MessageListActivity extends AppCompatActivity {
         myMessageRecycler.smoothScrollToPosition(chatLogs.getNumberOfMessages());
         myMessageAdapter.notifyDataSetChanged();
     }
+
+
+    private void addMembersInfo(String membersId){
+        if(!chatLogs.getMembersId().contains(membersId)){
+            chatLogs.addMembersId(membersId);
+        }
+        myMessageAdapter.setMembersIds(chatLogs.getMembersId());
+        myMessageRecycler.smoothScrollToPosition(chatLogs.getNumberOfMessages());
+        myMessageAdapter.notifyDataSetChanged();
+    }
+
 
 
     /**
@@ -202,6 +213,19 @@ public class MessageListActivity extends AppCompatActivity {
             public void onFinish(Object value) {
                 Log.e("message", "message received " + ((Message) value).getContentMessage());
                 receiveMessage((Message) value);
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+
+            }
+        });
+
+        Pair<String, Class> child_members = new Pair<String, Class>("membersId", String.class);
+        database.listenObjChild(chatLogs, Database.Tables.CHATLOGS, child_members, new CallBackDatabase() {
+            public void onFinish(Object value) {
+                Log.e("membersId", "members list update");
+                addMembersInfo((String) value);
             }
 
             @Override

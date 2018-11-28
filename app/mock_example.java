@@ -434,7 +434,7 @@ class UserDB {
         }
     }
 
-    public List<User> getUsers(){
+    public List<User> getSpecificsUsers(){
         return database;
     }
 

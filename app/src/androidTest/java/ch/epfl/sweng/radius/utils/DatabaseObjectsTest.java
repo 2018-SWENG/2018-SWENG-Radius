@@ -21,6 +21,7 @@ import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.database.UserUtils;
 import ch.epfl.sweng.radius.home.PeopleTab;
 
 import static junit.framework.TestCase.assertTrue;
@@ -85,6 +86,7 @@ public class DatabaseObjectsTest {
     @Test
     public void testInterface(){
         OthersInfo othersInfo = OthersInfo.getInstance();
+        UserUtils userUtils = UserUtils.getInstance();
         UserInfo userInfo = UserInfo.getInstance();
         PeopleTab pep = new PeopleTab();
         userInfo.addLocationObserver(pep);

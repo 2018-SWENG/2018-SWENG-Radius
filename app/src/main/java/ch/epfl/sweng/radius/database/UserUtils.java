@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,18 +25,18 @@ public class UserUtils extends DBObservable{
         return userUtils;
     }
 
-    private UserUtils(){
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                fetchAllOtherUsers();
-                }
-        }, 0, REFRESH_PERIOD*1000);    }
+    private UserUtils(){ }
+
+    public HashMap<String, User> getSpecificsUsers(List<String> membersId){
+        fetchSpeficitsOtherUsers(membersId);
+        return users;
+    }
 
     public HashMap<String, User> getUsers(){
         return users;
     }
 
+    /*
     public void fetchAllOtherUsers(){
         database.readAllTableOnce(Database.Tables.USERS, new CallBackDatabase() {
             @Override
@@ -56,5 +57,29 @@ public class UserUtils extends DBObservable{
             }
         });
     }
+
+    */
+    public void fetchSpeficitsOtherUsers(List<String> membersId){
+        database.readListObjOnce(membersId,Database.Tables.USERS, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                users.clear();
+                String currentUserId = UserInfo.getInstance().getCurrentUser().getID();
+                for (User user : (ArrayList<User>) value) {
+                    if(!currentUserId.equals(user.getID())) {
+                        users.put(user.getID(), user);
+                    }
+                }
+                notifyUserObservers(Database.Tables.USERS.toString());
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+                Log.e("FetchUserRadius", error.getMessage());
+            }
+        });
+    }
+
+
 
 }
