@@ -13,7 +13,7 @@
         android:layout_marginEnd="8dp"
         android:layout_toEndOf="@+id/profilePic"
         android:layout_toRightOf="@+id/profilePic"
-        android:text="john doe"
+        android:text="Anon"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profilePic" />

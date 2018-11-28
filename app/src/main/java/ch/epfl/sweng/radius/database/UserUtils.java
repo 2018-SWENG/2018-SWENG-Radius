@@ -25,7 +25,6 @@ public class UserUtils extends DBObservable{
     }
 
     private UserUtils(){
-        fetchAllOtherUsers();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -48,8 +47,7 @@ public class UserUtils extends DBObservable{
                         users.put(user.getID(), user);
                     }
                 }
-
-                //notifyUserObservers(Database.Tables.USERS.toString());
+                notifyUserObservers(Database.Tables.USERS.toString());
             }
 
             @Override
