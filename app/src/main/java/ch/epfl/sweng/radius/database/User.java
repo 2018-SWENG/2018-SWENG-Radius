@@ -138,6 +138,14 @@ public class User implements DatabaseObject, Serializable {
         }
     }
 
+    public void removeFriend(User friend) {
+        friends.remove(friend.getID());
+        friend.friends.remove(getID());
+        Database.getInstance().writeInstanceObj(this, Database.Tables.USERS);
+        Database.getInstance().writeInstanceObj(friend, Database.Tables.USERS);
+    }
+
+
     public String getSpokenLanguages() {
         return this.spokenLanguages;
     }
