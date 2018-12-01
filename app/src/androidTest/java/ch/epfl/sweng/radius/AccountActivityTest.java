@@ -13,6 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 
 import static android.support.test.espresso.action.ViewActions.click;
@@ -43,8 +44,9 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
+        OthersInfo.getInstance();
 
-        User testUser = new User("testId");
+        User testUser = new User("userTest0");
         testUser.setNickname("testNickname");
         testUser.setStatus("testStatus");
         testUser.setInterests("testInterests");
