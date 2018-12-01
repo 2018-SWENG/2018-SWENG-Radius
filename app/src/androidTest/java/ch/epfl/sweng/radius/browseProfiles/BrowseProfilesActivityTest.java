@@ -70,6 +70,8 @@ public class BrowseProfilesActivityTest extends ActivityInstrumentationTestCase2
     public void testBlock() {
         onView(withText("Options")).perform(click());
         onView(withText("Block User")).perform(click());
+        onView(withText("Options")).perform(click());
+        onView(withText("Unblock user")).perform(click());
     }
 
     @Test
