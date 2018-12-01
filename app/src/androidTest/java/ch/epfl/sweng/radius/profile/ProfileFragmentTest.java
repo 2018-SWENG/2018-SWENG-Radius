@@ -256,6 +256,7 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
 
         Intent intent = new Intent();
         intent.putExtra("uri", "test");
+        fragment = new ProfileFragment();
         fragment.onActivityResult(1, -1, intent);
 
     }
