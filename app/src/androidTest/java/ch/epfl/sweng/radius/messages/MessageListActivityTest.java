@@ -8,6 +8,7 @@ import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.Fragment;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.widget.EditText;
@@ -146,7 +147,6 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
 
 
     @Test
-    @Ignore
     public void setUpSendButton() {
 
         onView(withId(R.id.edittext_chatbox)).perform(typeText("Coucou"));
@@ -155,7 +155,6 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
 
         assert (mlActivity.findViewById(R.id.edittext_chatbox).toString().isEmpty());
 
-        MessagesFragment.newInstance("A", "B");
 
     }
 
@@ -171,6 +170,8 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
 
     @Test
     public void testSetEnabledFalse() {
+        Fragment frag = MessagesFragment.newInstance("A", "B");
+
         mlActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {

@@ -68,8 +68,6 @@ public class FirebaseUtility extends Database{
 
     @Override
     public String getCurrent_user_id() {
-        if(FirebaseAuth.getInstance().getCurrentUser() == null)
-            Log.e("DEBUGG","DEBUG VALUE IS" + Database.DEBUG_MODE);
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 

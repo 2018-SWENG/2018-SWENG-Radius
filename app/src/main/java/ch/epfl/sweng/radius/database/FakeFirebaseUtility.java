@@ -149,7 +149,7 @@ public class FakeFirebaseUtility extends Database {
         Object ret = null;
 
         if(child.first.equals("messages"))
-            ret = new Message();
+            ret = new Message("userTest3", "Helo", new Date());
         else if(child.first.equals("membersId")){
             ChatLogs curChat = (ChatLogs) curobj;
             if((curChat.getMembersId().size() > 0))

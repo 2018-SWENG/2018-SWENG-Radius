@@ -33,8 +33,8 @@ public class MLocation implements DatabaseObject, Serializable {
 
     public MLocation(String userID){
         this.userID = userID;
-        this.latitude = 0;
-        this.longitude = 0;
+        this.latitude = 46.5160698;
+        this.longitude = 6.5681216000000004;
         this.title = "";
         this.message = "";
         this.locationType = 0;

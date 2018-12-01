@@ -54,15 +54,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         this.usersHashMap = userUtils.getSpecificsUsers(membersIds);
     }
 
-    public List<String> extractSenderId(List<Message> messages) {
-        List<String> result = new ArrayList<>();
-        for(Message m : messages){
-            if(!result.contains(m.getSenderId())){
-                result.add(m.getSenderId());
-            }
-        }
-        return result;
-    }
     // Inflates the appropriate layout according to the ViewType.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
