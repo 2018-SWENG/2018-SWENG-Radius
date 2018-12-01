@@ -98,7 +98,9 @@ public class BrowseProfilesActivity extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.profile_menu, menu);
-        System.out.println("---------------------------------------------" + menu.getItem(0).getSubMenu().getItem(0) + ".setTitle(\"Unblock User\")"  + "---------------------------------------------");
+        if (UserInfo.getInstance().getCurrentUser().getBlockedUsers().contains(userUID)) {
+            menu.getItem(0).getSubMenu().getItem(0).setTitle("Unblock User");
+        }
         return true;
     }
 
@@ -106,8 +108,18 @@ public class BrowseProfilesActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.block_user:
-                Toast.makeText(this, "User: " + userNickname +
-                        " is blocked.", Toast.LENGTH_SHORT).show();
+                if (item.getTitle().toString().trim().equals("Block User")) {
+                    profileActivityListener.blockUser();
+                    item.setTitle("Unblock user");
+                    Toast.makeText(this, "User: " + userNickname +
+                            " is blocked.", Toast.LENGTH_SHORT).show();
+                } else if (item.getTitle().toString().trim().equals("Unblock User")) {
+                    profileActivityListener.unblockUser();
+                    item.setTitle("Block User");
+                    Toast.makeText(this, "User: " + userNickname +
+                            " is unblocked.", Toast.LENGTH_SHORT).show();
+                }
+
                 return true;
             case R.id.spam:
                 Toast.makeText(this, "User: " + userNickname +
