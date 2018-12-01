@@ -22,18 +22,18 @@ public class CustomUserListAdapter extends CustomListAdapter {
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        Log.e("CustomUserListAdapter", "Items users size :" + items.size());
+//        Log.e("CustomUserListAdapter", "Items users size :" + items.size());
 
         CustomListItem item = items.get(position);
-        Log.e("CustomUserListAdapter", "Item users ID :" + item.getItemId());
-        Log.e("CustomUserListAdapter", "Item position :" + position);
+ //       Log.e("CustomUserListAdapter", "Item users ID :" + item.getItemId());
+//        Log.e("CustomUserListAdapter", "Item position :" + position);
 
-        viewHolder.txtViewTitle.setText(items.get(position).getItemName());
+        viewHolder.txtViewTitle.setText(item.getItemName());
 
         User itemUser = OthersInfo.getInstance().getUsers().get(item.getItemId());
 
         if(itemUser != null){
-            if (itemUser.getUrlProfilePhoto() != null && !itemUser.getUrlProfilePhoto().equals("")) {
+            if (!itemUser.getUrlProfilePhoto().isEmpty()) {
                 Picasso.get().load(itemUser.getUrlProfilePhoto()).into(viewHolder.imgViewIcon);
             } else {
                 viewHolder.imgViewIcon.setImageResource(items.get(position).getProfilePic());
@@ -42,17 +42,11 @@ public class CustomUserListAdapter extends CustomListAdapter {
         else{
             Log.e("CustomUserListAdapter", "Item ID not found in Users");
         }
-
-
-
-        //CustomListItem item = items.get(position);
-        final int clickedPic = item.getProfilePic();
         final String clickedId = item.getItemId();
         //Log.e("CustomUserListAdapter", "item.getItemId() :" + item.getItemId());
-        final String clickedConv = item.getConvId();
-        CustomUserListListeners customListener = new CustomUserListListeners(clickedPic, clickedId,item.getItemName());
+        CustomUserListListeners customListener = new CustomUserListListeners(item.getProfilePic(), clickedId,item.getItemName());
         customListener.setCustomOnClick(viewHolder.imgViewIcon, context);
-        customListener.setCustomOnClick(viewHolder.txtViewTitle, context,clickedId,clickedConv);
+        customListener.setCustomOnClick(viewHolder.txtViewTitle, context,clickedId,item.getConvId());
     }
 
 

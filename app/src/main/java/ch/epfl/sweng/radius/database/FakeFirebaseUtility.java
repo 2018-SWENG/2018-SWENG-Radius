@@ -182,7 +182,6 @@ public class FakeFirebaseUtility extends Database {
         fillLocationsTable();
 
         ChatLogs chat = new ChatLogs("0");
-        ArrayList<String> users = new ArrayList<String>();
         chat.addMembersId("usertTest1");
         chat.addMembersId("testUser3");
         chat.addMessage(new Message("usertTest1", "fff", new Date()));
