@@ -145,15 +145,18 @@ public class FakeFirebaseUtility extends Database {
     @Override
     public void listenObjChild(DatabaseObject obj, Tables tableName, Pair<String, Class> child, CallBackDatabase callback) {
         HashMap<String, DatabaseObject> table = getTable(tableName);
+        DatabaseObject curobj = table.get(obj.getID());
         Object ret = null;
 
         if(child.first.equals("messages"))
             ret = new Message();
         else if(child.first.equals("membersId")){
-            ret = "userTest2";
+            ChatLogs curChat = (ChatLogs) curobj;
+            if((curChat.getMembersId().size() > 0))
+                ret = ((ChatLogs) curobj).getMembersId().get(((ChatLogs) curobj).getMembersId().size()-1);
+            else
+                ret = "userTest2";
         }
-
-        // To fix if used elsewhere
         callback.onFinish(ret);
     }
 
