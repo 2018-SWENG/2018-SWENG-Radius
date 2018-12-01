@@ -65,7 +65,7 @@ public  class UserInfo extends DBObservable implements Serializable{
             @Override
             public void onFinish(Object loc) {
                 current_position = (MLocation) loc;
-                notifyLocactionObservers(Database.Tables.LOCATIONS.toString());
+                notifyLocationObservers(Database.Tables.LOCATIONS.toString());
             }
 
             @Override

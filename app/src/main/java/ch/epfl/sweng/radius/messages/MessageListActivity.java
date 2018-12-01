@@ -33,26 +33,27 @@ import ch.epfl.sweng.radius.utils.MapUtility;
  * Activity that hosts messages between two users
  * MessageListActivity and MessageListAdapter and some layout files are inspired from https://blog.sendbird.com/android-chat-tutorial-building-a-messaging-ui
  */
-public class MessageListActivity extends AppCompatActivity{
+public class MessageListActivity extends AppCompatActivity {
     private RecyclerView myMessageRecycler;
     private MessageListAdapter myMessageAdapter;
     private EditText messageZone;
     private Button sendButton;
     private ChatLogs chatLogs;
-    private String chatId, otherUserId, myID = UserInfo.getInstance().getCurrentUser().getID();
+    private String chatId, otherUserId, myID;
     private ValueEventListener listener;
 
     //these might cause problems when we switch to multiple users and multiple different chats
     //This field will be used to enable chat with FRIENDS not in radius
-    private static User myUser = UserInfo.getInstance().getCurrentUser(), otherUser;
-    private MLocation myLoc = UserInfo.getInstance().getCurrentPosition(), otherLoc;
-    private final Database database = Database.getInstance();
+    private static User myUser, otherUser;
+    private MLocation otherLoc;
+    private Database database;
 
 
     private final CallBackDatabase otherLocationCallback = new CallBackDatabase() {
         @Override
         public void onFinish(Object value) {
             otherLoc = (MLocation) value;
+
         }
 
         @Override
@@ -61,15 +62,14 @@ public class MessageListActivity extends AppCompatActivity{
         }
     };
 
-    private String getOtherID(){
+    private String getOtherID() {
         String otherId = this.otherUserId;
-        if(chatLogs.getMembersId().size() == 2){
-            String tempID =  chatLogs.getMembersId().get(0);
-            String tempID2 =  chatLogs.getMembersId().get(1);
-             otherId = tempID.equals(myID) ?
+        if (chatLogs.getMembersId().size() == 2) {
+            String tempID = chatLogs.getMembersId().get(0);
+            String tempID2 = chatLogs.getMembersId().get(1);
+            otherId = tempID.equals(myID) ?
                     tempID : tempID2;
         }
-
         return otherId;
     }
 
@@ -77,19 +77,20 @@ public class MessageListActivity extends AppCompatActivity{
         @Override
         public void onFinish(Object value) {
             chatLogs = (ChatLogs) value;
-            if(chatLogs.getMembersId().size() == 2){
+            if (chatLogs.getMembersId().size() == 2) {
                 String otherId = getOtherID();
                 otherLoc = new MLocation(otherId);
                 database.readObjOnce(otherLoc, Database.Tables.LOCATIONS, otherLocationCallback);
             }
-            if(chatLogs.getMembersId().size() < 2 && otherUserId != null){
+            if (chatLogs.getMembersId().size() < 2 && otherUserId != null) {
                 chatLogs.addMembersId(otherUserId);
             }
-            if(!chatLogs.getMembersId().contains(myID))
+            if (!chatLogs.getMembersId().contains(myID))
                 chatLogs.addMembersId(myID);
 
             database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
             Log.e("message", "Calllback Messages size" + Integer.toString(chatLogs.getMessages().size()));
+
 
         }
 
@@ -102,7 +103,6 @@ public class MessageListActivity extends AppCompatActivity{
     /**
      * Get all infos needed to create the activity
      * We get the chatId and otherUserId from the parent fragment
-     *
      */
     private void setInfo() {
         Bundle b = getIntent().getExtras();
@@ -111,13 +111,15 @@ public class MessageListActivity extends AppCompatActivity{
         otherUserId = "";
 
         if (b != null) {
-            chatId      = b.getString("chatId");
+            chatId = b.getString("chatId");
             Log.w("Message", "ChatId is " + chatId);
             otherUserId = b.getString("otherId");
+            chatLogs = new ChatLogs(chatId);
+            database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, chatLogCallBack);
+            Log.e("message", "Setup Messages size" + Integer.toString(chatLogs.getMessages().size()));
+        } else {
+            throw new RuntimeException("MessagListActivity Intent created without bundle");
         }
-        chatLogs = new ChatLogs(chatId);
-        database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, chatLogCallBack);
-        Log.e("message", "Setup Messages size" + Integer.toString(chatLogs.getMessages().size()));
 
     }
 
@@ -127,10 +129,11 @@ public class MessageListActivity extends AppCompatActivity{
     private void setUpUI() {
         setContentView(R.layout.activity_message_list);
         messageZone = (EditText) findViewById(R.id.edittext_chatbox);
-        myMessageAdapter = new MessageListAdapter(this, chatLogs.getMessages());
+        myMessageAdapter = new MessageListAdapter(this, chatLogs.getMessages(),chatLogs.getMembersId());
         myMessageRecycler = findViewById(R.id.reyclerview_message_list);
         myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         myMessageRecycler.setAdapter(myMessageAdapter);
+
     }
 
 
@@ -141,7 +144,7 @@ public class MessageListActivity extends AppCompatActivity{
      */
     private void receiveMessage(Message message) {
 
-        if(!chatLogs.getMessages().contains(message))
+        if (!chatLogs.getMessages().contains(message))
             chatLogs.addMessage(message);
         Log.e("message", "Messages size" + Integer.toString(chatLogs.getMessages().size()));
         Log.e("message", "Messages size" + Integer.toString(chatLogs.getNumberOfMessages()));
@@ -152,18 +155,30 @@ public class MessageListActivity extends AppCompatActivity{
     }
 
 
+    private void addMembersInfo(String membersId){
+        if(!chatLogs.getMembersId().contains(membersId)){
+            chatLogs.addMembersId(membersId);
+        }
+        myMessageAdapter.setMembersIds(chatLogs.getMembersId());
+        myMessageRecycler.smoothScrollToPosition(chatLogs.getNumberOfMessages());
+        myMessageAdapter.notifyDataSetChanged();
+    }
+
+
+
     /**
      * push a message in the table
+     *
      * @param senderId the senderId
-     * @param message the message
-     * @param date the date
+     * @param message  the message
+     * @param date     the date
      */
-    private void sendMessage(String senderId,String message,Date date) {
+    private void sendMessage(String senderId, String message, Date date) {
         if (!message.isEmpty()) {
             Message msg = new Message(senderId, message, date);
 
             chatLogs.addMessage(msg);
-          //  database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
+            //  database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
             List<Message> newList = chatLogs.getMessages();
             Log.e("message", "NewList size is " + newList.size());
             database.writeToInstanceChild(chatLogs, Database.Tables.CHATLOGS, "messages",
@@ -188,6 +203,7 @@ public class MessageListActivity extends AppCompatActivity{
                 sendMessage(myID, message, new Date());
             }
         });
+
     }
 
     /**
@@ -198,8 +214,23 @@ public class MessageListActivity extends AppCompatActivity{
         Pair<String, Class> child = new Pair<String, Class>("messages", Message.class);
         database.listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
             public void onFinish(Object value) {
-                Log.e("message", "message received " + ((Message)value).getContentMessage());
+                Log.e("message", "message received " + ((Message) value).getContentMessage());
                 receiveMessage((Message) value);
+
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+
+            }
+        });
+
+        Pair<String, Class> child_members = new Pair<String, Class>("membersId", String.class);
+        database.listenObjChild(chatLogs, Database.Tables.CHATLOGS, child_members, new CallBackDatabase() {
+            public void onFinish(Object value) {
+                Log.e("membersId", "members list update");
+                addMembersInfo((String) value);
+
             }
 
             @Override
@@ -218,10 +249,12 @@ public class MessageListActivity extends AppCompatActivity{
                     myUser.setRadius(((User) (((ArrayList) value).get(0))).getRadius());
                     otherUser.setRadius(((User) (((ArrayList) value).get(1))).getRadius());
                 }
+
             }
 
             @Override
             public void onError(DatabaseError error) {
+
                 Log.e("Firebase Error", error.getMessage());
             }
         });
@@ -231,7 +264,7 @@ public class MessageListActivity extends AppCompatActivity{
         /*TODO check if other users radius contains current user.
            The problem here is, if the other user is in my radius I can send messages to them, however, if current user
            is not in the radius of the other user, they can not reply to those messages.*/
-        if(chatLogs.getMembersId().size() == 2)
+        if (chatLogs.getMembersId().size() == 2)
             setEnabled(MapUtility.isInRadius(otherLoc));
         else
             setEnabled(true);
@@ -246,6 +279,7 @@ public class MessageListActivity extends AppCompatActivity{
 
         //compare the locations of the users and whether they are able to talk to each other or not.
         compareLocataion();
+
     }
 
     public void setEnabled(boolean enableChat) {
@@ -257,12 +291,14 @@ public class MessageListActivity extends AppCompatActivity{
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        Log.w("MessageActivity" , "Just got onCreated");
+    public void onCreate(Bundle savedInstanceState) {
+        Log.w("MessageActivity", "Just got onCreated");
         //ChatInfo.getInstance().addUserObserver(this);
 
         super.onCreate(savedInstanceState);
-
+        myUser  = UserInfo.getInstance().getCurrentUser();
+        myID = UserInfo.getInstance().getCurrentUser().getID();
+        database = Database.getInstance();
         setContentView(R.layout.activity_message_list);
         messageZone = findViewById(R.id.edittext_chatbox);
 
@@ -273,7 +309,8 @@ public class MessageListActivity extends AppCompatActivity{
         setUpListener();
         setEnabled(true);
 
-        usersInRadius();// This part enables or disables the chat
+       usersInRadius();// This part enables or disables the chat
+
     }
 
     @Override
