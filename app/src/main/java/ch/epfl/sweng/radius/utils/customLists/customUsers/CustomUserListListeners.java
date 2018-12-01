@@ -14,9 +14,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesActivity;
+import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesBlockedActivity;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.messages.MessageListActivity;
@@ -38,7 +40,12 @@ public class CustomUserListListeners {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, BrowseProfilesActivity.class);
+                Intent intent;
+                if (OthersInfo.getInstance().getUsers().get(userId).getBlockedUsers().contains(UserInfo.getInstance().getCurrentUser().getID())) {
+                    intent = new Intent(context, BrowseProfilesBlockedActivity.class);
+                } else {
+                    intent = new Intent(context, BrowseProfilesActivity.class);
+                }
                 intent.putExtra("Clicked Picture", clickedPic);
                 intent.putExtra("Clicked Name", clickedName);
                 intent.putExtra("UID", userId);
