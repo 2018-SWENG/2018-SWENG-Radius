@@ -161,14 +161,19 @@ public class FakeFirebaseUtility extends Database {
         if(currentUSer != null) return;
         // Define Current user
         currentUSer = new User("testUser1");
+        currentUSer.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
 
         // Fill the users table
         usersTable.put("testUser1", currentUSer);
-        usersTable.put("testUser2", new User("testUser2"));
-        usersTable.put("testUser3", new User("testUser3"));
-        usersTable.put("testUser4", new User("testUser4"));
-        usersTable.put("0", new User("0"));
-
+        User temp = new User("testUser2");
+        temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
+        usersTable.put("testUser2", temp);
+        temp = new User("testUser3");
+        temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
+        usersTable.put("testUser3",temp);
+        temp = new User("testUser4");
+        temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
+        usersTable.put("testUser4",temp);
         usersTable.get("testUser1").addChat("testUser2", "chatid1234");
         usersTable.get("testUser1").addChat("testUser3", "chatid1234");
 

@@ -2,10 +2,12 @@ package ch.epfl.sweng.radius.storage;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.util.Log;
 
 import com.google.firebase.storage.StorageTask;
 
 public abstract class Storage {
+    protected static boolean DEBUG_MODE = false;
     private static Storage storage = null;
     protected StorageTask mUploadTask;
 
@@ -25,6 +27,7 @@ public abstract class Storage {
     }
 
     public static Storage getInstance() {
+        Log.e("DEBUG", "Value of debug is " + DEBUG_MODE);
         if (storage == null)
             return new FirebaseStorageUtility();
 
@@ -32,7 +35,7 @@ public abstract class Storage {
     }
 
     public static void activateDebugMode() {
-        storage = new FakeFirebaseStorageUtility();
+        storage = new FakeFirebaseStorageUtility(); DEBUG_MODE = true;
     }
 
     public StorageTask getStorageTask() {
