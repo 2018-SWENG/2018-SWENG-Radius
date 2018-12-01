@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.google.firebase.database.DatabaseError;
 
+import java.util.ArrayList;
+
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.User;
@@ -36,6 +38,26 @@ public class BrowseProfilesUtility {
         };
 
         database.readObjOnce(user, Database.Tables.USERS, cb);
+    }
+
+    public void blockUser() {
+        User currentUser = UserInfo.getInstance().getCurrentUser();
+        ArrayList<String> blockedUsers = (ArrayList<String>) currentUser.getBlockedUsers(); //.add(profileOwner);
+
+        if (!blockedUsers.contains(profileOwner)) {
+            blockedUsers.add(profileOwner);
+            UserInfo.getInstance().updateUserInDB();
+        }
+    }
+
+    public void unblockUser() {
+        User currentUser = UserInfo.getInstance().getCurrentUser();
+        ArrayList<String> blockedUsers = (ArrayList<String>) currentUser.getBlockedUsers(); //.add(profileOwner);
+
+        if (blockedUsers.contains(profileOwner)) {
+            blockedUsers.remove(profileOwner);
+            UserInfo.getInstance().updateUserInDB();
+        }
     }
 
     public String getProfileOwner() {

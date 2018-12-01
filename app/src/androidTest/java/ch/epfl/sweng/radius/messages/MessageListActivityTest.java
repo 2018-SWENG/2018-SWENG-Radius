@@ -107,7 +107,7 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
         Intent intent = new Intent(targetContext, MessageListActivity.class);
         intent.putExtra("chatId", chatLogs.getChatLogsId());
         intent.putExtra("otherId", user2.getID());
-       mlActivity = mblActivityTestRule.getActivity();
+        mlActivity = mblActivityTestRule.getActivity();
 
     }
 

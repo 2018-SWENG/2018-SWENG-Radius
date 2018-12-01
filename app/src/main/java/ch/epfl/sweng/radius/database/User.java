@@ -109,6 +109,8 @@ public class User implements DatabaseObject, Serializable {
         return blockedUsers;
     }
 
+    public void setBlockedUsers(List<String> blockedUsers) { this.blockedUsers = blockedUsers; }
+
     public Map<String, String> getChatList() {
         return chatList;
     }
@@ -190,10 +192,6 @@ public class User implements DatabaseObject, Serializable {
 
     public Map<String, String> getReportList() {
         return reportList;
-    }
-
-    public String getReportFromUser(String userID) {
-        return reportList.get(userID);
     }
 
 

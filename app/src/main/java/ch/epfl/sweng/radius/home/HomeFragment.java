@@ -102,6 +102,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         usersLoc = new ArrayList<>();
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
                 UserInfo.getInstance().getCurrentPosition().getLongitude());
+
+        /*User pınar = new User("BxbE0zC7RBRkbO5JjUiSBeHJYfX2");
+        pınar.getBlockedUsers().add("lU0EUkJKF0guvnxW10XrirLHLd13");
+        Database.getInstance().writeInstanceObj(pınar, Database.Tables.USERS);*/
     }
 
     @Override

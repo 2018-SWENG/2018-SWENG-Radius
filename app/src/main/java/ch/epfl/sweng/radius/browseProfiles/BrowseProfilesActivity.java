@@ -30,6 +30,7 @@ public class BrowseProfilesActivity extends AppCompatActivity{
     private Toolbar toolbar;
     private final Database database = Database.getInstance();
     private String userUID;
+    private String userNickname;
 
     // UI elements
     private ImageView userPhoto;
@@ -44,11 +45,13 @@ public class BrowseProfilesActivity extends AppCompatActivity{
         setContentView(R.layout.activity_browse_profiles);
         Intent intent = getIntent();
 
-        profileActivityListener = new BrowseProfilesUtility(intent.getStringExtra("Clicked Name")); // WHEN THE CLASS STORES THE ID OF THE USER WE
+        //profileActivityListener = new BrowseProfilesUtility(intent.getStringExtra("Clicked Name")); // WHEN THE CLASS STORES THE ID OF THE USER WE
         // CLICKED ON CHANGE CLICKED NAME WITH THE ID
 
         // Initialize UI Components
+        userNickname = intent.getStringExtra("Clicked Name");
         userUID = intent.getStringExtra("UID");
+        profileActivityListener = new BrowseProfilesUtility(userUID);
         userPhoto = findViewById(R.id.userPhoto);
         textViewName = findViewById(R.id.userNickname);
         textViewStatus = findViewById(R.id.userStatus);
@@ -95,6 +98,9 @@ public class BrowseProfilesActivity extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.profile_menu, menu);
+        if (UserInfo.getInstance().getCurrentUser().getBlockedUsers().contains(userUID)) {
+            menu.getItem(0).getSubMenu().getItem(0).setTitle("Unblock User");
+        }
         return true;
     }
 
@@ -102,17 +108,18 @@ public class BrowseProfilesActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.block_user:
-                Toast.makeText(this, "User:" + profileActivityListener.getProfileOwner() +
-                        " is blocked.", Toast.LENGTH_SHORT).show();
+                if (item.getTitle().toString().trim().equals("Block User")) {
+                    profileActivityListener.blockUser();
+                    item.setTitle("Unblock user");
+                } else if (item.getTitle().toString().trim().equals("Unblock User")) {
+                    profileActivityListener.unblockUser();
+                    item.setTitle("Block User");
+                }
                 return true;
             case R.id.spam:
-                Toast.makeText(this, "User:" + profileActivityListener.getProfileOwner() +
-                        " is reported for spam.", Toast.LENGTH_SHORT).show();
                 profileActivityListener.reportUser("spam");
                 return true;
             case R.id.language:
-                Toast.makeText(this, "User:" + profileActivityListener.getProfileOwner() +
-                        " is reported for language.", Toast.LENGTH_SHORT).show();
                 profileActivityListener.reportUser("language");
                 return true;
             default:

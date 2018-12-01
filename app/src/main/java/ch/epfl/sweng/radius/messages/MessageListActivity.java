@@ -24,6 +24,7 @@ import ch.epfl.sweng.radius.database.DBUserObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.MapUtility;
@@ -89,8 +90,9 @@ public class MessageListActivity extends AppCompatActivity {
                 chatLogs.addMembersId(myID);
 
             database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
-            Log.e("message", "Calllback Messages size" + Integer.toString(chatLogs.getMessages().size()));
-
+            usersInRadius();
+            Log.e("message", "Callback Messages size" + Integer.toString(chatLogs.getMessages().size()));
+            Log.e("message", "Chatlogs size" + chatLogs.getMembersId().size());
 
         }
 
@@ -264,10 +266,15 @@ public class MessageListActivity extends AppCompatActivity {
         /*TODO check if other users radius contains current user.
            The problem here is, if the other user is in my radius I can send messages to them, however, if current user
            is not in the radius of the other user, they can not reply to those messages.*/
-        if (chatLogs.getMembersId().size() == 2)
-            setEnabled(MapUtility.isInRadius(otherLoc));
-        else
+        if(chatLogs.getMembersId().size() == 2) {
+            //System.out.println("ABCCD " + otherUserId);
+            //System.out.println(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId));//get(otherUserId);//.getLatitude();
+            //System.out.println("ABCCD " + OthersInfo.getInstance().getUsersInRadius().get(otherUserId).getLatitude() + " " + OthersInfo.getInstance().getUsersInRadius().get(otherUserId).getLongitude());
+            setEnabled(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId) && !OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().contains(UserInfo.getInstance().getCurrentUser().getID()));
+        }
+        else {
             setEnabled(true);
+        }
     }
 
     public void usersInRadius() { //this method needs to go through severe change - currently we are not saving the radius or the locations of users properly.
@@ -308,18 +315,10 @@ public class MessageListActivity extends AppCompatActivity {
         setUpSendButton();
         setUpListener();
         setEnabled(true);
-
-       usersInRadius();// This part enables or disables the chat
-
     }
 
     @Override
     protected void onStop() {
-
         super.onStop();
-
-        //database.stopListening(chatLogs.getID() + "chatLogListener", Database.Tables.CHATLOGS);
-
-
     }
 }

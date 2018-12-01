@@ -178,7 +178,7 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
     private void setUpProfilePhoto() {
         User current_user = UserInfo.getInstance().getCurrentUser();
 
-        if (current_user.getUrlProfilePhoto() != null || current_user.getUrlProfilePhoto().equals("")) { // puts the image from database into the circle
+        if (current_user.getUrlProfilePhoto() != null && !current_user.getUrlProfilePhoto().equals("")) { // puts the image from database into the circle
             Picasso.get().load(current_user.getUrlProfilePhoto()).into(userPhoto);
         }
 

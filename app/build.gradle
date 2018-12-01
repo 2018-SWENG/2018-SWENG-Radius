@@ -51,10 +51,10 @@ dependencies {
     implementation 'com.android.support:customtabs:28.0.0'
     implementation 'com.android.support:design:28.0.0'
 
-
     //Picasso for downloading images from url
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.android.support:exifinterface:28.0.0' // just here to make sure picasso doesn't cause a crash
+    implementation 'com.android.support:exifinterface:28.0.0'
+    // just here to make sure picasso doesn't cause a crash
 
     implementation 'com.android.support:support-media-compat:28.0.0'
     implementation 'com.android.support:support-v4:28.0.0'
