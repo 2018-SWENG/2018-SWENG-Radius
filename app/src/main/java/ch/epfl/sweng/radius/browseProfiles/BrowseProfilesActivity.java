@@ -44,11 +44,12 @@ public class BrowseProfilesActivity extends AppCompatActivity{
         setContentView(R.layout.activity_browse_profiles);
         Intent intent = getIntent();
 
-        profileActivityListener = new BrowseProfilesUtility(intent.getStringExtra("Clicked Name")); // WHEN THE CLASS STORES THE ID OF THE USER WE
+        //profileActivityListener = new BrowseProfilesUtility(intent.getStringExtra("Clicked Name")); // WHEN THE CLASS STORES THE ID OF THE USER WE
         // CLICKED ON CHANGE CLICKED NAME WITH THE ID
 
         // Initialize UI Components
         userUID = intent.getStringExtra("UID");
+        profileActivityListener = new BrowseProfilesUtility(userUID);
         userPhoto = findViewById(R.id.userPhoto);
         textViewName = findViewById(R.id.userNickname);
         textViewStatus = findViewById(R.id.userStatus);
@@ -95,6 +96,7 @@ public class BrowseProfilesActivity extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.profile_menu, menu);
+        System.out.println("---------------------------------------------" + menu.getItem(0).getSubMenu().getItem(0) + ".setTitle(\"Unblock User\")"  + "---------------------------------------------");
         return true;
     }
 
