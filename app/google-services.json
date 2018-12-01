@@ -23,6 +23,62 @@
           }
         },
         {
+          "client_id": "862473371396-75830n09nnf4fs1cr1hprdnrg7anpmko.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.radius",
+            "certificate_hash": "aadc5a4cc16a85a09c0da03941dd15c73649d303"
+          }
+        },
+        {
+          "client_id": "862473371396-236nl4f2pvpb570r4oatqu87j49foglt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.radius",
+            "certificate_hash": "cab218b7ee170e4b6458ce8a3d48601d06242f88"
+          }
+        },
+        {
+          "client_id": "862473371396-umtcbj46ldnebvbnagq1psvfjcfladur.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.radius",
+            "certificate_hash": "6a0bdf20a5053b7e34b70c55b59dabb5fe62aa32"
+          }
+        },
+        {
+          "client_id": "862473371396-s8ghppo8me9u4ids53hhtntvmst9s2p0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.radius",
+            "certificate_hash": "d1108f2e941d987d3323a4177d5bea00b6fc1d3b"
+          }
+        },
+        {
+          "client_id": "862473371396-lrvmkrhtdbcvja22ch7gvn2p7hk2eml1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.radius",
+            "certificate_hash": "5aadda28a5eb0bd19b52c9a7b20d12daaa8683ed"
+          }
+        },
+        {
+          "client_id": "862473371396-d0rd40f5unpij1qikfcg78oikjn45mcg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.radius",
+            "certificate_hash": "430b8de9362cfd5e4675964f9ab724f403a346d3"
+          }
+        },
+        {
+          "client_id": "862473371396-n6bad285dm5n4pl2j2hn10se9bn6435m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.radius",
+            "certificate_hash": "504037d0181b19f28bbeb2305411bf38d999488d"
+          }
+        },
+        {
           "client_id": "862473371396-nl6ffe7ep6non6rjcn9ol7se09u6a0be.apps.googleusercontent.com",
           "client_type": 3
         }

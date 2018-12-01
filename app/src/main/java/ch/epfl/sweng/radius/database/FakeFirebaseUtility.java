@@ -122,7 +122,7 @@ public class FakeFirebaseUtility extends Database {
         HashMap<String, DatabaseObject> table = getTable(tableName);
         ArrayList<DatabaseObject> objsRead = new ArrayList<DatabaseObject>(table.values());
 
-        Log.w("Map Test", "Size of objReads " + objsRead.size());
+        Log.w("Map TTest", "Size of objReads " + objsRead.size());
 
         callback.onFinish(objsRead);
     }
@@ -165,13 +165,19 @@ public class FakeFirebaseUtility extends Database {
         if(currentUSer != null) return;
         // Define Current user
         currentUSer = new User("testUser1");
+        currentUSer.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
 
         // Fill the users table
         usersTable.put("testUser1", currentUSer);
-        usersTable.put("testUser2", new User("testUser2"));
-        usersTable.put("testUser3", new User("testUser3"));
-        usersTable.put("testUser4", new User("testUser4"));
-
+        User temp = new User("testUser2");
+        temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
+        usersTable.put("testUser2", temp);
+        temp = new User("testUser3");
+        temp.setUrlProfilePhoto("");
+        usersTable.put("testUser3",temp);
+        temp = new User("testUser4");
+        temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
+        usersTable.put("testUser4",temp);
         usersTable.get("testUser1").addChat("testUser2", "chatid1234");
         usersTable.get("testUser1").addChat("testUser3", "chatid1234");
 
@@ -180,7 +186,6 @@ public class FakeFirebaseUtility extends Database {
         fillLocationsTable();
 
         ChatLogs chat = new ChatLogs("0");
-        ArrayList<String> users = new ArrayList<String>();
         chat.addMembersId("usertTest1");
         chat.addMembersId("testUser3");
         chat.addMessage(new Message("usertTest1", "fff", new Date()));
@@ -203,12 +208,12 @@ public class FakeFirebaseUtility extends Database {
         MLocation EPFL = new MLocation("EPFL",
                 defaultLng + 0.5,
                 defaultLat - 0.5);
-        EPFL.setIsGroupLocation(1); // set EPFL as group location
+        EPFL.setLocationType(1); // set EPFL as group location
         locationsTable.put(EPFL.getID(), EPFL);
         MLocation UNIL = new MLocation("UNIL",
                 defaultLng + 1.5,
                 defaultLat - 1.5);
-        UNIL.setIsGroupLocation(1); // set UNIL as group location
+        UNIL.setLocationType(1); // set UNIL as group location
         locationsTable.put(UNIL.getID(), UNIL);
     }
 

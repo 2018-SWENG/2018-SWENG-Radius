@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseError;
+import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
@@ -59,9 +60,6 @@ public class BrowseProfilesActivity extends AppCompatActivity{
 
         // ToolBar initialization
         setSupportActionBar(toolbar);
-        //REMOVE THIS PART FOR DEMO----------------------------------------
-        GroupLocationFetcher glf = new GroupLocationFetcher();
-        Database.getInstance().readAllTableOnce(Database.Tables.LOCATIONS, glf);
     }
 
     void fetchUserInfo(String userUID){
@@ -82,7 +80,11 @@ public class BrowseProfilesActivity extends AppCompatActivity{
     }
 
     public void setUpUIComponents(User current_user){
-        userPhoto.setImageResource(R.drawable.ic_man);
+        if (current_user.getUrlProfilePhoto() != null && !current_user.getUrlProfilePhoto().equals("")) {
+            Picasso.get().load(current_user.getUrlProfilePhoto()).into(userPhoto);
+        } else {
+            userPhoto.setImageResource(R.drawable.user_photo_default);
+        }
         textViewName.setText(current_user.getNickname());
         textViewStatus.setText(current_user.getStatus());
         textViewInterests.setText(current_user.getInterests());

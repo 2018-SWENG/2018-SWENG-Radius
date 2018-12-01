@@ -31,10 +31,12 @@ public class OthersInfo extends DBObservable{
     }
 
     private OthersInfo(){
+        Log.e("DEBUGG", "Initiate timer");
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 fetchUsersInMyRadius();
+                fetchUserObjects();
             }
         }, 0, REFRESH_PERIOD*1000);    }
 
@@ -72,8 +74,29 @@ public class OthersInfo extends DBObservable{
         });
     }
 
+    public void fetchUserObjects(){
+        Log.e("DEBUGG0", "Fetching the users");
+        database.readAllTableOnce(Database.Tables.USERS, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                users.clear();
+                for (User user : (ArrayList<User>) value) {
+                    users.put(user.getID(), user);
+                }
+                Log.e("DEBUGG0", "Fetching the users " + users.size());
+
+                notifyLocactionObservers(Database.Tables.LOCATIONS.toString());
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+                Log.e("FetchUser", error.getMessage());
+            }
+        });
+    }
+
     public void putInTable(MLocation loc){
-        switch (loc.getIsGroupLocation()){
+        switch (loc.getLocationType()){
             case 0:
                 usersPos.put(loc.getID(), loc);
                 break;
