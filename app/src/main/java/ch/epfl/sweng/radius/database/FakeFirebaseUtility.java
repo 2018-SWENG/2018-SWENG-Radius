@@ -205,12 +205,12 @@ public class FakeFirebaseUtility extends Database {
         MLocation EPFL = new MLocation("EPFL",
                 defaultLng + 0.5,
                 defaultLat - 0.5);
-        EPFL.setIsGroupLocation(1); // set EPFL as group location
+        EPFL.setLocationType(1); // set EPFL as group location
         locationsTable.put(EPFL.getID(), EPFL);
         MLocation UNIL = new MLocation("UNIL",
                 defaultLng + 1.5,
                 defaultLat - 1.5);
-        UNIL.setIsGroupLocation(1); // set UNIL as group location
+        UNIL.setLocationType(1); // set UNIL as group location
         locationsTable.put(UNIL.getID(), UNIL);
     }
 

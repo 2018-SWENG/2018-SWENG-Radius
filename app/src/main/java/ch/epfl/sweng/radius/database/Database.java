@@ -53,7 +53,6 @@ public abstract class Database {
         Log.e("DEBUGG", "Valu of debug is " + DEBUG_MODE);
         if(database == null)
             database = new FirebaseUtility();
-
         return database;
     }
 

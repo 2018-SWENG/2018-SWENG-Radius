@@ -102,7 +102,7 @@ public class OthersInfo extends DBObservable{
     }
 
     public void putInTable(MLocation loc){
-        switch (loc.getIsGroupLocation()){
+        switch (loc.getLocationType()){
             case 0:
                 usersPos.put(loc.getID(), loc);
                 break;

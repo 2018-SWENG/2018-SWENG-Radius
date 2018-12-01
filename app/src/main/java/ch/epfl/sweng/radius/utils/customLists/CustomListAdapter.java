@@ -16,7 +16,7 @@ import ch.epfl.sweng.radius.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public abstract class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.ViewHolder>{
+public abstract class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.ViewHolder> {
 
     protected List<CustomListItem> items;
     protected Context context;

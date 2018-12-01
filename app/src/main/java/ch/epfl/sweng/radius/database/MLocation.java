@@ -17,16 +17,16 @@ public class MLocation implements DatabaseObject, Serializable {
     private double latitude;
     private boolean isVisible; // added for invisibility feature
 
-    private int isGroupLocation;
+    private int locationType; // 0: user location, 1: group location, 2: topic location
     private double radius; // Use it only if the mLocation is a group.
 
-    public MLocation(){
+    public MLocation() {
         this.userID = "NewLoc" + Integer.toString(locIDCounter++);
         this.latitude = 46.5160698;
         this.longitude = 6.5681216000000004;
         this.title = "New MLocation";
         this.message = "Here I am";
-        this.isGroupLocation = 0;
+        this.locationType = 0;
         this.radius = 5000;
         this.isVisible = true;
     }
@@ -37,7 +37,7 @@ public class MLocation implements DatabaseObject, Serializable {
         this.longitude = 0;
         this.title = "";
         this.message = "";
-        this.isGroupLocation = 0;
+        this.locationType = 0;
         this.radius = 5000;
         this.isVisible = true;
     }
@@ -48,7 +48,7 @@ public class MLocation implements DatabaseObject, Serializable {
         this.longitude = longitude;
         this.title = "New MLocation";
         this.message = "Here I am";
-        this.isGroupLocation = 0;
+        this.locationType = 0;
         this.radius = 5000;
         this.isVisible = true;
     }
@@ -59,7 +59,7 @@ public class MLocation implements DatabaseObject, Serializable {
         this.longitude = pos.longitude;
         this.title = "New MLocation";
         this.message = "Here I am";
-        this.isGroupLocation = 0;
+        this.locationType = 0;
         this.radius = 0;
         this.isVisible = true;
 
@@ -106,12 +106,12 @@ public class MLocation implements DatabaseObject, Serializable {
         this.userID = userID;
     }
 
-    public int getIsGroupLocation() {
-        return isGroupLocation;
+    public int getLocationType() {
+        return locationType;
     }
 
-    public void setIsGroupLocation(int groupLocation) {
-        isGroupLocation = groupLocation;
+    public void setLocationType(int locationType) {
+        this.locationType = locationType;
     }
 
     public double getRadius() {
@@ -119,7 +119,7 @@ public class MLocation implements DatabaseObject, Serializable {
     }
 
     public void setRadius(double newRadius) {
-        //if (isGroupLocation() == 1) {
+        //if (getLocationType() == 1) {
             radius = newRadius;
         //}
     }

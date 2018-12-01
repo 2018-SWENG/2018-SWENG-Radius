@@ -26,8 +26,7 @@ public class GroupLocationFetcher implements CallBackDatabase {
             MapUtility mapUtility = MapUtility.getMapInstance();
             mapUtility.setMyPos(location);
             if(MapUtility.findDistance(currentUserLoc, location) < 50000
-                    && location.getIsGroupLocation() == 1){
-         //   if(mapUtility.contains(currentUserLoc.getLatitude(), currentUserLoc.getLongitude()) && location.getIsGroupLocation() == 1) {
+                    && location.getLocationType() == 1) {
                 groupLocationsIds.add(location.getID());
                 Log.e("MessageList", "Group ID is " + location.getID());
             }
