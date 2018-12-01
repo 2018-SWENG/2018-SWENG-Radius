@@ -32,6 +32,7 @@ public class OthersInfo extends DBObservable{
     }
 
     private OthersInfo(){
+        Log.e("DEBUGG", "Initiate timer");
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -67,6 +68,8 @@ public class OthersInfo extends DBObservable{
                         putInTable(loc);
                     }
                 }
+                Log.e("DEBUGG0", "Fetching the users " + usersPos.size());
+
                 notifyLocactionObservers(Database.Tables.LOCATIONS.toString());
             }
 
@@ -78,6 +81,7 @@ public class OthersInfo extends DBObservable{
     }
 
     public void fetchUserObjects(){
+        Log.e("DEBUGG0", "Fetching the users");
         database.readAllTableOnce(Database.Tables.USERS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
@@ -85,6 +89,8 @@ public class OthersInfo extends DBObservable{
                 for (User user : (ArrayList<User>) value) {
                     users.put(user.getID(), user);
                 }
+                Log.e("DEBUGG0", "Fetching the users " + users.size());
+
                 notifyLocactionObservers(Database.Tables.LOCATIONS.toString());
             }
 

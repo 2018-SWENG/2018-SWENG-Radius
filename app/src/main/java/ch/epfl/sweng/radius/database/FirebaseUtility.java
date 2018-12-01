@@ -203,6 +203,7 @@ public class FirebaseUtility extends Database{
                                 allItems.add((DatabaseObject)postSnapshot
                                         .getValue(tableName.getTableClass()));
                         }
+                        Log.e("DEBUGG0", "Real Firebase my man");
                         callback.onFinish(allItems);
                     }
 

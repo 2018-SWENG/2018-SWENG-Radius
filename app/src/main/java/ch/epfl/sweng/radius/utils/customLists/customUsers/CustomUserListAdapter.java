@@ -23,18 +23,28 @@ public class CustomUserListAdapter extends CustomListAdapter {
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-
         Log.e("CustomUserListAdapter", "Items users size :" + items.size());
 
         CustomListItem item = items.get(position);
+        Log.e("CustomUserListAdapter", "Item users ID :" + item.getItemId());
+        Log.e("CustomUserListAdapter", "Item position :" + position);
 
         viewHolder.txtViewTitle.setText(items.get(position).getItemName());
 
-        if (OthersInfo.getInstance().getUsers().get(item.getItemId()).getUrlProfilePhoto() != null && !OthersInfo.getInstance().getUsers().get(item.getItemId()).getUrlProfilePhoto().equals("")) {
-            Picasso.get().load(OthersInfo.getInstance().getUsers().get(item.getItemId()).getUrlProfilePhoto()).into(viewHolder.imgViewIcon);
-        } else {
-            viewHolder.imgViewIcon.setImageResource(items.get(position).getProfilePic());
+        User itemUser = OthersInfo.getInstance().getUsers().get(item.getItemId());
+
+        if(itemUser != null){
+            if (itemUser.getUrlProfilePhoto() != null && !itemUser.getUrlProfilePhoto().equals("")) {
+                Picasso.get().load(itemUser.getUrlProfilePhoto()).into(viewHolder.imgViewIcon);
+            } else {
+                viewHolder.imgViewIcon.setImageResource(items.get(position).getProfilePic());
+            }
         }
+        else{
+            Log.e("CustomUserListAdapter", "Item ID not found in Users");
+        }
+
+
 
         //CustomListItem item = items.get(position);
         final int clickedPic = item.getProfilePic();

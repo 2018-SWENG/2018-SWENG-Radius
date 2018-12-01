@@ -122,7 +122,7 @@ public class FakeFirebaseUtility extends Database {
         HashMap<String, DatabaseObject> table = getTable(tableName);
         ArrayList<DatabaseObject> objsRead = new ArrayList<DatabaseObject>(table.values());
 
-        Log.w("Map Test", "Size of objReads " + objsRead.size());
+        Log.w("Map TTest", "Size of objReads " + objsRead.size());
 
         callback.onFinish(objsRead);
     }
@@ -167,6 +167,7 @@ public class FakeFirebaseUtility extends Database {
         usersTable.put("testUser2", new User("testUser2"));
         usersTable.put("testUser3", new User("testUser3"));
         usersTable.put("testUser4", new User("testUser4"));
+        usersTable.put("0", new User("0"));
 
         usersTable.get("testUser1").addChat("testUser2", "chatid1234");
         usersTable.get("testUser1").addChat("testUser3", "chatid1234");
