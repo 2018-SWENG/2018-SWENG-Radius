@@ -33,7 +33,8 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
 
     @Rule
     public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
-            Manifest.permission.ACCESS_FINE_LOCATION);
+            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
 
     public AccountActivityTest(Class<AccountActivity> activityClass) {
         super(activityClass);
