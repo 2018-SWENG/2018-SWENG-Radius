@@ -53,6 +53,7 @@ public class MessageListActivity extends AppCompatActivity {
         @Override
         public void onFinish(Object value) {
             otherLoc = (MLocation) value;
+
         }
 
         @Override
@@ -69,7 +70,6 @@ public class MessageListActivity extends AppCompatActivity {
             otherId = tempID.equals(myID) ?
                     tempID : tempID2;
         }
-
         return otherId;
     }
 
@@ -90,6 +90,7 @@ public class MessageListActivity extends AppCompatActivity {
 
             database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
             Log.e("message", "Calllback Messages size" + Integer.toString(chatLogs.getMessages().size()));
+
 
         }
 
@@ -132,6 +133,7 @@ public class MessageListActivity extends AppCompatActivity {
         myMessageRecycler = findViewById(R.id.reyclerview_message_list);
         myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         myMessageRecycler.setAdapter(myMessageAdapter);
+
     }
 
 
@@ -201,6 +203,7 @@ public class MessageListActivity extends AppCompatActivity {
                 sendMessage(myID, message, new Date());
             }
         });
+
     }
 
     /**
@@ -213,6 +216,7 @@ public class MessageListActivity extends AppCompatActivity {
             public void onFinish(Object value) {
                 Log.e("message", "message received " + ((Message) value).getContentMessage());
                 receiveMessage((Message) value);
+
             }
 
             @Override
@@ -226,6 +230,7 @@ public class MessageListActivity extends AppCompatActivity {
             public void onFinish(Object value) {
                 Log.e("membersId", "members list update");
                 addMembersInfo((String) value);
+
             }
 
             @Override
@@ -244,10 +249,12 @@ public class MessageListActivity extends AppCompatActivity {
                     myUser.setRadius(((User) (((ArrayList) value).get(0))).getRadius());
                     otherUser.setRadius(((User) (((ArrayList) value).get(1))).getRadius());
                 }
+
             }
 
             @Override
             public void onError(DatabaseError error) {
+
                 Log.e("Firebase Error", error.getMessage());
             }
         });
@@ -272,6 +279,7 @@ public class MessageListActivity extends AppCompatActivity {
 
         //compare the locations of the users and whether they are able to talk to each other or not.
         compareLocataion();
+
     }
 
     public void setEnabled(boolean enableChat) {
@@ -301,7 +309,8 @@ public class MessageListActivity extends AppCompatActivity {
         setUpListener();
         setEnabled(true);
 
-        usersInRadius();// This part enables or disables the chat
+       usersInRadius();// This part enables or disables the chat
+
     }
 
     @Override
