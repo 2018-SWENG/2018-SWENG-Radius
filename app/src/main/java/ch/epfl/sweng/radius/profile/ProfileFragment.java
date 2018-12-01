@@ -283,11 +283,13 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (resultCode == RESULT_OK && requestCode == 1) {
             mImageUri = intent.getData();
-            if(intent.getData().toString().isEmpty())
-                mImageUri = new Uri.Builder().build();
-            else
-                Log.e("DEBUG", mImageUri.toString());
-            Picasso.get().load(mImageUri).into(userPhoto); // this is where we change the image - so use upload file method here
+           
+            try {
+                Picasso.get().load(mImageUri).into(userPhoto);
+            }// this is where we change the image - so use upload file method here
+            catch (IllegalArgumentException e){
+                Log.e("FirebaseStorage", " Image not found !");
+            }
         }
     }
 
