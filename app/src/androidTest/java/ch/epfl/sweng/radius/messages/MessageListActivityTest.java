@@ -91,6 +91,7 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
     }
 
     @Test
+    @Ignore
     public void setUpSendButton() {
 
         onView(withId(R.id.edittext_chatbox)).perform(typeText("Coucou"));

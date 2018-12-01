@@ -111,24 +111,15 @@ public class BrowseProfilesActivity extends AppCompatActivity{
                 if (item.getTitle().toString().trim().equals("Block User")) {
                     profileActivityListener.blockUser();
                     item.setTitle("Unblock user");
-                    Toast.makeText(this, "User: " + userNickname +
-                            " is blocked.", Toast.LENGTH_SHORT).show();
                 } else if (item.getTitle().toString().trim().equals("Unblock User")) {
                     profileActivityListener.unblockUser();
                     item.setTitle("Block User");
-                    Toast.makeText(this, "User: " + userNickname +
-                            " is unblocked.", Toast.LENGTH_SHORT).show();
                 }
-
                 return true;
             case R.id.spam:
-                Toast.makeText(this, "User: " + userNickname +
-                        " is reported for spam.", Toast.LENGTH_SHORT).show();
                 profileActivityListener.reportUser("spam");
                 return true;
             case R.id.language:
-                Toast.makeText(this, "User: " + userNickname +
-                        " is reported for language.", Toast.LENGTH_SHORT).show();
                 profileActivityListener.reportUser("language");
                 return true;
             default:
