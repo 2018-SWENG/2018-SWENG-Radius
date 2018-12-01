@@ -164,8 +164,11 @@ public class FirebaseUtility extends Database{
                 .addListenerForSingleValueEvent( new ValueEventListener() {
             @Override
             public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            //    Log.e("DEBUG", getLogTagWithMethod());
+
                 List<DatabaseObject> allItems = new ArrayList<>();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+            //        Log.e("DEBUG", postSnapshot.getKey());
                     DatabaseObject snap = (DatabaseObject)postSnapshot
                             .getValue(tableName.getTableClass());
                     if (ids.contains(snap.getID())) {
@@ -192,6 +195,7 @@ public class FirebaseUtility extends Database{
                 .addListenerForSingleValueEvent( new ValueEventListener() {
                     @Override
                     public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Log.d("DEBUG", getLogTagWithMethod());
                         List<DatabaseObject> allItems = new ArrayList<>();
                         for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                             DatabaseObject snap = (DatabaseObject)postSnapshot
@@ -213,12 +217,12 @@ public class FirebaseUtility extends Database{
     @Override
     public void writeInstanceObj(final DatabaseObject obj, final Tables tableName){
 
-   //     Log.w("Firebase Message", "Called for " + obj.getID());
+        Log.d("Firebase Message", "Called for " + obj.getID());
         if(obj.getClass() == ChatLogs.class) {
             ChatLogs test = (ChatLogs) obj;
-  //          Log.w("Firebase Message", "Called for " + ((ChatLogs) obj).getMessages().size() +getLogTagWithMethod());
+            Log.d("Firebase Message", "Called for " + ((ChatLogs) obj).getMessages().size() +getLogTagWithMethod());
         }
-        Log.e( "writeInstance", "moveCamerafetchh: ");
+        Log.d( "writeInstance", "moveCamerafetchh: ");
         FirebaseDatabase.getInstance()
                 .getReference(tableName.toString())
                 .child(obj.getID()).setValue(obj);
@@ -226,13 +230,14 @@ public class FirebaseUtility extends Database{
 
 
 
-    /*
+
     private String getLogTagWithMethod() {
 
         StackTraceElement[] trace = Thread.currentThread().getStackTrace();
-        return trace[3].getClassName() + "." + trace[3].getMethodName() + ":" + trace[3].getLineNumber() + "\n" +
-                trace[4].getClassName() + "." + trace[4].getMethodName() + ":" + trace[4].getLineNumber() + "\n" +
-                trace[5].getClassName() + "." + trace[5].getMethodName() + ":" + trace[5].getLineNumber() + "\n" ;
+        String res = "";
+        for (int i = 0; i < trace.length  && i < 30; i++)
+            res +=  trace[i].getClassName() + "." + trace[i].getMethodName() + ":" + trace[i].getLineNumber() + "\n";
+        return res;
     }
-*/
+
 }
