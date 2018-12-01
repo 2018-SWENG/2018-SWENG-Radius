@@ -29,8 +29,12 @@ public class CustomUserListAdapter extends CustomListAdapter {
 
         viewHolder.txtViewTitle.setText(items.get(position).getItemName());
 
-        if (OthersInfo.getInstance().getUsers().get(item.getItemId()).getUrlProfilePhoto() != null && !OthersInfo.getInstance().getUsers().get(item.getItemId()).getUrlProfilePhoto().equals("")) {
-            Picasso.get().load(OthersInfo.getInstance().getUsers().get(item.getItemId()).getUrlProfilePhoto()).into(viewHolder.imgViewIcon);
+        if (OthersInfo.getInstance().getUsers().get(item.getItemId()).getUrlProfilePhoto() != null &&
+                !OthersInfo.getInstance().getUsers().get(item.getItemId()).getUrlProfilePhoto().equals("")) {
+            Picasso.get().load
+                    (OthersInfo.getInstance().
+                            getUsers().get(item.getItemId()).getUrlProfilePhoto()).
+                    into(viewHolder.imgViewIcon);
         } else {
             viewHolder.imgViewIcon.setImageResource(items.get(position).getProfilePic());
         }
