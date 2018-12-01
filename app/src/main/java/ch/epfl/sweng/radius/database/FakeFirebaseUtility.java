@@ -145,15 +145,16 @@ public class FakeFirebaseUtility extends Database {
     @Override
     public void listenObjChild(DatabaseObject obj, Tables tableName, Pair<String, Class> child, CallBackDatabase callback) {
         HashMap<String, DatabaseObject> table = getTable(tableName);
-        Field f1 = null;
-        DatabaseObject ret = table.get(obj.getID());
-        try {
-            f1 = ret.getClass().getField(child.first);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+        Object ret = null;
+
+        if(child.first.equals("messages"))
+            ret = new Message();
+        else if(child.first.equals("membersId")){
+            ret = "userTest2";
         }
+
         // To fix if used elsewhere
-        callback.onFinish(new Message());
+        callback.onFinish(ret);
     }
 
 

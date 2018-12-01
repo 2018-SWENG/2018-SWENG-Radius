@@ -33,7 +33,6 @@ class ChildListener implements ChildEventListener {
 
     @Override
     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        Log.e("message", "New child !");
         callback.onFinish(dataSnapshot.getValue(child.second));
     }
 
