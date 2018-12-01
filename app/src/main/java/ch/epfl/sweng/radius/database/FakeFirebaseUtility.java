@@ -169,7 +169,7 @@ public class FakeFirebaseUtility extends Database {
         temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
         usersTable.put("testUser2", temp);
         temp = new User("testUser3");
-        temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
+        temp.setUrlProfilePhoto("");
         usersTable.put("testUser3",temp);
         temp = new User("testUser4");
         temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
