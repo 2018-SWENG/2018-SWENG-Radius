@@ -30,6 +30,7 @@ public class BrowseProfilesActivity extends AppCompatActivity{
     private Toolbar toolbar;
     private final Database database = Database.getInstance();
     private String userUID;
+    private String userNickname;
 
     // UI elements
     private ImageView userPhoto;
@@ -48,6 +49,7 @@ public class BrowseProfilesActivity extends AppCompatActivity{
         // CLICKED ON CHANGE CLICKED NAME WITH THE ID
 
         // Initialize UI Components
+        userNickname = intent.getStringExtra("Clicked Name");
         userUID = intent.getStringExtra("UID");
         profileActivityListener = new BrowseProfilesUtility(userUID);
         userPhoto = findViewById(R.id.userPhoto);
@@ -104,16 +106,16 @@ public class BrowseProfilesActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.block_user:
-                Toast.makeText(this, "User:" + profileActivityListener.getProfileOwner() +
+                Toast.makeText(this, "User: " + userNickname +
                         " is blocked.", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.spam:
-                Toast.makeText(this, "User:" + profileActivityListener.getProfileOwner() +
+                Toast.makeText(this, "User: " + userNickname +
                         " is reported for spam.", Toast.LENGTH_SHORT).show();
                 profileActivityListener.reportUser("spam");
                 return true;
             case R.id.language:
-                Toast.makeText(this, "User:" + profileActivityListener.getProfileOwner() +
+                Toast.makeText(this, "User: " + userNickname +
                         " is reported for language.", Toast.LENGTH_SHORT).show();
                 profileActivityListener.reportUser("language");
                 return true;
