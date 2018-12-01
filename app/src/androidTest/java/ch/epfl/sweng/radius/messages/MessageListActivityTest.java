@@ -90,23 +90,6 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
         super(MessageListActivity.class);
     }
 
-/*
-    @Before
-    public void setUp() throws Exception {
-        Database.activateDebugMode();
-
-        user1 = new User("userTest2");
-        user2 = new User("userTest3");
-        ArrayList<String> userIds = new ArrayList<>();
-        userIds.add(user1.getID());
-        userIds.add(user2.getID());
-        chatLogs = new ChatLogs(userIds);
-
-        Intent intent = new Intent();
-        intent.putExtra("chatId", chatLogs.getChatLogsId());
-        intent.putExtra("otherId", user2.getID());
-        mlActivity = mblActivityTestRule.launchActivity(intent);
-    }*/
 
     @Before
     public void setUp() throws Exception {

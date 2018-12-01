@@ -117,7 +117,7 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
 
     private AccountActivity mblAccountActivity;
     //private FrameLayout fcontainer;
-    //private ProfileFragment fragment;
+    private ProfileFragment fragment;
     /*
     public ProfileFragmentTest(Class<AccountActivity> activityClass) {
         super(activityClass);
@@ -253,6 +253,10 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
     public void testSeekBar() {
         Espresso.onView(withId(R.id.navigation_profile)).perform(click());
         Espresso.onView(withId(R.id.radiusBar)).perform(setProgress(10));
+
+        Intent intent = new Intent();
+        intent.putExtra("uri", "test");
+        fragment.onActivityResult(1, -1, intent);
 
     }
 
