@@ -15,7 +15,6 @@ import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 
 public class CustomUserListAdapter extends CustomListAdapter {
 
-
     public CustomUserListAdapter(List<CustomListItem> items, Context context) {
         super(items, context);
     }

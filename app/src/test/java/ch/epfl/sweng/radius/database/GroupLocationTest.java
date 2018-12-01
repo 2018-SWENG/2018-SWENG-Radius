@@ -17,15 +17,15 @@ public class GroupLocationTest {
 
     @Test
     public void testInitialState() {
-        assertFalse(testLocation.getIsGroupLocation() == 1);
+        assertFalse(testLocation.getLocationType() == 1);
     }
 
     @Test
     public void testSetIsGroupLocation() {
-        testLocation.setIsGroupLocation(1);
-        assertTrue(testLocation.getIsGroupLocation() == 1);
-        testLocation.setIsGroupLocation(0);
-        assertFalse(testLocation.getIsGroupLocation() == 1);
+        testLocation.setLocationType(1);
+        assertTrue(testLocation.getLocationType() == 1);
+        testLocation.setLocationType(0);
+        assertFalse(testLocation.getLocationType() == 1);
     }
 
 

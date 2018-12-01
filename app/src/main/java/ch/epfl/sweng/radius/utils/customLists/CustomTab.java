@@ -53,7 +53,6 @@ public abstract class CustomTab extends Fragment {
 
     protected void setUpAdapter() {
         setUpAdapterWithList(getIds(UserInfo.getInstance().getCurrentUser()));
-
     }
 
     protected abstract void setUpAdapterWithList(List<String> listIds);
