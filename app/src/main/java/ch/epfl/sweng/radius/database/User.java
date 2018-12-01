@@ -32,7 +32,7 @@ public class User implements DatabaseObject, Serializable {
     public User(String userID) {
         this.userID = userID;
         this.nickname = "New User " + userID;
-        this.urlProfilePhoto = "";
+        this.urlProfilePhoto = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
         this.radius = 50;
         this.status = "Hi, I'm new to radius !";
         this.friendsRequests = new ArrayList<>();
