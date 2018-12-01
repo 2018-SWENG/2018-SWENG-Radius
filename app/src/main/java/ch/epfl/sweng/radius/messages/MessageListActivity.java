@@ -39,14 +39,14 @@ public class MessageListActivity extends AppCompatActivity {
     private EditText messageZone;
     private Button sendButton;
     private ChatLogs chatLogs;
-    private String chatId, otherUserId, myID = UserInfo.getInstance().getCurrentUser().getID();
+    private String chatId, otherUserId, myID;
     private ValueEventListener listener;
 
     //these might cause problems when we switch to multiple users and multiple different chats
     //This field will be used to enable chat with FRIENDS not in radius
-    private static User myUser = UserInfo.getInstance().getCurrentUser(), otherUser;
-    private MLocation myLoc = UserInfo.getInstance().getCurrentPosition(), otherLoc;
-    private final Database database = Database.getInstance();
+    private static User myUser, otherUser;
+    private MLocation otherLoc;
+    private Database database;
 
 
     private final CallBackDatabase otherLocationCallback = new CallBackDatabase() {
@@ -283,12 +283,14 @@ public class MessageListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         Log.w("MessageActivity", "Just got onCreated");
         //ChatInfo.getInstance().addUserObserver(this);
 
         super.onCreate(savedInstanceState);
-
+        myUser  = UserInfo.getInstance().getCurrentUser();
+        myID = UserInfo.getInstance().getCurrentUser().getID();
+        database = Database.getInstance();
         setContentView(R.layout.activity_message_list);
         messageZone = findViewById(R.id.edittext_chatbox);
 

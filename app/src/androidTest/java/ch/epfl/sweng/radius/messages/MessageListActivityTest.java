@@ -1,5 +1,5 @@
 package ch.epfl.sweng.radius.messages;
-/*
+
 import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.EditText;
 
 import com.firebase.client.Firebase;
+import com.firebase.client.ValueEventListener;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -37,41 +38,51 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
  */
 
 
-/*
+
 @RunWith(AndroidJUnit4.class)
 public class MessageListActivityTest extends ActivityInstrumentationTestCase2<MessageListActivity> {
 
     @Rule
     public ActivityTestRule<MessageListActivity> mblActivityTestRule
-            = new ActivityTestRule<MessageListActivity>(MessageListActivity.class);
+            = new ActivityTestRule<MessageListActivity>(MessageListActivity.class){
+        @Override
+        protected Intent getActivityIntent() {
 
-    private MessageListActivity mlActivity = mblActivityTestRule.getActivity;
+            user1 = new User();
+            user2 = new User();
+            ArrayList<String> userIds = new ArrayList<>();
+            userIds.add(user1.getID());
+            userIds.add(user2.getID());
+            chatLogs = new ChatLogs(userIds);
+
+            Context targetContext = InstrumentationRegistry.getInstrumentation()
+                    .getTargetContext();
+            Intent result = new Intent(targetContext, MessageListActivity.class);
+            result.putExtra("chatId", chatLogs.getChatLogsId());
+            result.putExtra("otherId", user2.getID());
+            return result;
+        }
+    };
+
+    private MessageListActivity mlActivity = mblActivityTestRule.getActivity();
     private User user1, user2;
     private ChatLogs chatLogs;
     private String databaseMessageUrl;
     private Firebase chatReference;
+    private boolean vd = Database.activateDebugMode();
 
 
     public MessageListActivityTest() {
         super(MessageListActivity.class);
     }
 
-
-    @Test
-    public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
-
-        assertEquals("ch.epfl.sweng.radius", appContext.getPackageName());
-    }
-
+/*
     @Before
-    public void setUp() throws Exception{
-        super.setUp();
+    public void setUp() throws Exception {
         Database.activateDebugMode();
 
-        user1 = new User();
-        user2 = new User();
+        user1 = new User("userTest2");
+        user2 = new User("userTest3");
         ArrayList<String> userIds = new ArrayList<>();
         userIds.add(user1.getID());
         userIds.add(user2.getID());
@@ -81,8 +92,8 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
         intent.putExtra("chatId", chatLogs.getChatLogsId());
         intent.putExtra("otherId", user2.getID());
         mlActivity = mblActivityTestRule.launchActivity(intent);
-    }
-/*
+    }*/
+
     @Before
     public void setUp() throws Exception {
 
@@ -101,6 +112,7 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
         intent.putExtra("chatId", chatLogs.getChatLogsId());
         intent.putExtra("otherId", user2.getID());
         mlActivity = mblActivityTestRule.launchActivity(intent);
+        mlActivity.onCreate(intent.getExtras());
 
         databaseMessageUrl = "https://radius-1538126456577.firebaseio.com/messages/";
 
@@ -115,6 +127,15 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
         assertNotNull(mlActivity.findViewById(R.id.button_chatbox_send));
 
     }
+
+    @Test
+    public void useAppContext() {
+        // Context of the app under test.
+        Context appContext = InstrumentationRegistry.getTargetContext();
+
+        assertEquals("ch.epfl.sweng.radius", appContext.getPackageName());
+    }
+
 
     @Test
     public void setUpSendButton() {
@@ -151,7 +172,7 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
         onView(withId(R.id.edittext_chatbox)).perform(typeText("Test"));
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_chatbox_send)).perform(click());
-        assertEquals("You can't text this user.",((EditText) mlActivity.findViewById(R.id.edittext_chatbox)).getText().toString());
+        assertEquals("You can't text this user.", ((EditText) mlActivity.findViewById(R.id.edittext_chatbox)).getText().toString());
     }
 
     @Ignore
@@ -163,5 +184,6 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
     @Test
     public void receiveMessage() {
         //Methode a tester dans ChatLogDbUtility lorsque cette derniere sera disponible
-    }*/
+    }
 
+}

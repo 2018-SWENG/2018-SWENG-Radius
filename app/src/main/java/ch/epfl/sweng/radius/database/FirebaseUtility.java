@@ -21,6 +21,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.radius.storage.FirebaseStorageUtility;
+
 class ChildListener implements ChildEventListener {
 
     CallBackDatabase callback;
@@ -66,6 +68,8 @@ public class FirebaseUtility extends Database{
 
     @Override
     public String getCurrent_user_id() {
+        if(FirebaseAuth.getInstance().getCurrentUser() == null)
+            Log.e("DEBUGG","DEBUG VALUE IS" + Database.DEBUG_MODE);
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 

@@ -22,7 +22,7 @@ public class OthersInfo extends DBObservable{
     private static final HashMap<String, MLocation> usersPos = new HashMap<>();
     private static final HashMap<String, MLocation> groupsPos = new HashMap<>();
     private static final HashMap<String, MLocation> topicsPos = new HashMap<>();
-
+    private static final HashMap<String, User> users = new HashMap<>();
 
     public static OthersInfo getInstance(){
         if (othersInfo == null)
@@ -52,6 +52,9 @@ public class OthersInfo extends DBObservable{
         return topicsPos;
     }
 
+    public HashMap<String, User> getUsers(){
+        return users;
+    }
 
     public void fetchUsersInMyRadius(){
         database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
@@ -85,7 +88,7 @@ public class OthersInfo extends DBObservable{
                 }
                 Log.e("DEBUGG0", "Fetching the users " + users.size());
 
-                notifyLocactionObservers(Database.Tables.LOCATIONS.toString());
+                notifyLocationObservers(Database.Tables.LOCATIONS.toString());
             }
 
             @Override
