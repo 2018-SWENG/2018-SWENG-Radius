@@ -237,7 +237,7 @@ public class MessageListActivity extends AppCompatActivity{
             //System.out.println("ABCCD " + otherUserId);
             //System.out.println(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId));//get(otherUserId);//.getLatitude();
             //System.out.println("ABCCD " + OthersInfo.getInstance().getUsersInRadius().get(otherUserId).getLatitude() + " " + OthersInfo.getInstance().getUsersInRadius().get(otherUserId).getLongitude());
-            setEnabled(!OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().contains(UserInfo.getInstance().getCurrentUser().getID()));
+            setEnabled(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId) && !OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().contains(UserInfo.getInstance().getCurrentUser().getID()));
         }
         else {
             setEnabled(true);
