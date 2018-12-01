@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
@@ -15,6 +16,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.v4.app.Fragment;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -27,6 +29,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mockito;
+
+import java.io.File;
 
 import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.R;
@@ -40,6 +45,7 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.mockito.Mockito.when;
 
 class RelaunchActivityRule<T extends Activity> extends ActivityTestRule<T> {
 
@@ -117,7 +123,7 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
 
     private AccountActivity mblAccountActivity;
     //private FrameLayout fcontainer;
-    //private ProfileFragment fragment;
+    private ProfileFragment fragment;
     /*
     public ProfileFragmentTest(Class<AccountActivity> activityClass) {
         super(activityClass);
@@ -253,6 +259,17 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
     public void testSeekBar() {
         Espresso.onView(withId(R.id.navigation_profile)).perform(click());
         Espresso.onView(withId(R.id.radiusBar)).perform(setProgress(10));
+
+        final Intent intent = new Intent();
+        Uri uri = new Uri.Builder().appendEncodedPath("test").build();
+        intent.setData(uri);
+
+        fragment = new ProfileFragment();
+        getActivity().runOnUiThread(new Runnable(){
+            public void run(){
+                fragment.onActivityResult(1, -1, intent);
+            }
+        });
 
     }
 

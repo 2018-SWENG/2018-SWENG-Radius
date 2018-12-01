@@ -145,15 +145,19 @@ public class FakeFirebaseUtility extends Database {
     @Override
     public void listenObjChild(DatabaseObject obj, Tables tableName, Pair<String, Class> child, CallBackDatabase callback) {
         HashMap<String, DatabaseObject> table = getTable(tableName);
-        Field f1 = null;
-        DatabaseObject ret = table.get(obj.getID());
-        try {
-            f1 = ret.getClass().getField(child.first);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+        DatabaseObject curobj = table.get(obj.getID());
+        Object ret = null;
+
+        if(child.first.equals("messages"))
+            ret = new Message("userTest3", "Helo", new Date());
+        else if(child.first.equals("membersId")){
+            ChatLogs curChat = (ChatLogs) curobj;
+            if((curChat.getMembersId().size() > 0))
+                ret = ((ChatLogs) curobj).getMembersId().get(((ChatLogs) curobj).getMembersId().size()-1);
+            else
+                ret = "userTest2";
         }
-        // To fix if used elsewhere
-        callback.onFinish(new Message());
+        callback.onFinish(ret);
     }
 
 
@@ -182,10 +186,10 @@ public class FakeFirebaseUtility extends Database {
         fillLocationsTable();
 
         ChatLogs chat = new ChatLogs("0");
-        chat.addMembersId("usertTest1");
+        chat.addMembersId("testUser1");
         chat.addMembersId("testUser3");
-        chat.addMessage(new Message("usertTest1", "fff", new Date()));
-        chat.addMessage(new Message("usertTest2", "aaa", new Date()));
+        chat.addMessage(new Message("testUser1", "fff", new Date()));
+        chat.addMessage(new Message("testUser2", "aaa", new Date()));
         chat.addMessage(new Message("testUser1", "aaa", new Date()));
         chat.addMessage(new Message("as", "aaa", new Date()));
         chatLogsTable.put("0", chat);

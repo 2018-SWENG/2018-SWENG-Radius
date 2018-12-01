@@ -22,7 +22,6 @@ public class OthersInfo extends DBObservable{
     private static final HashMap<String, MLocation> usersPos = new HashMap<>();
     private static final HashMap<String, MLocation> groupsPos = new HashMap<>();
     private static final HashMap<String, MLocation> topicsPos = new HashMap<>();
-
     private static final HashMap<String, User> users = new HashMap<>();
 
     public static OthersInfo getInstance(){
@@ -68,9 +67,7 @@ public class OthersInfo extends DBObservable{
                         putInTable(loc);
                     }
                 }
-                Log.e("DEBUGG0", "Fetching the users " + usersPos.size());
-
-                notifyLocactionObservers(Database.Tables.LOCATIONS.toString());
+                notifyLocationObservers(Database.Tables.LOCATIONS.toString());
             }
 
             @Override
@@ -91,7 +88,7 @@ public class OthersInfo extends DBObservable{
                 }
                 Log.e("DEBUGG0", "Fetching the users " + users.size());
 
-                notifyLocactionObservers(Database.Tables.LOCATIONS.toString());
+                notifyLocationObservers(Database.Tables.LOCATIONS.toString());
             }
 
             @Override

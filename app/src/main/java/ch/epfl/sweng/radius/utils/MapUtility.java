@@ -64,7 +64,7 @@ public class MapUtility implements DBLocationObserver {
     public static boolean isInRadius(MLocation loc){
         if(loc == null)
             return false;
-        return findDistance(loc.getLatitude(), loc.getLongitude()) <= myPos.getRadius() ;
+        return findDistance(loc.getLatitude(), loc.getLongitude()) <= UserInfo.getInstance().getCurrentPosition().getRadius() ;
     }
 
     public ArrayList<MLocation> getOtherLocations() {
@@ -177,7 +177,8 @@ public class MapUtility implements DBLocationObserver {
      * */
     public static double findDistance(double p2latitude, double p2longtitude) {
         float[] distance = new float[3];
-        Location.distanceBetween( myPos.getLatitude(), myPos.getLongitude(),
+        Location.distanceBetween(UserInfo.getInstance().getCurrentPosition().getLatitude(),
+                UserInfo.getInstance().getCurrentPosition().getLongitude(),
                 p2latitude, p2longtitude, distance);
 
         return distance[0];
