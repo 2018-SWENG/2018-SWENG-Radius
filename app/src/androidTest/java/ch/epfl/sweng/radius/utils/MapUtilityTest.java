@@ -90,14 +90,6 @@ public class MapUtilityTest {
         assertTrue(mapListener.computeDistance(location1) < radius);
         assertTrue(mapListener.computeDistance(null) > radius);
     }
-    @Test
-    @Ignore
-    public void fetchUsersInRadius() {
-
-    //    mapListener.fetchUsersInRadius((int) radius);
-        mapListener.setMyPos(new MLocation("userTest0"));
-        assertEquals(3, mapListener.getOtherPos().size());
-    }
 
     @Test
     public void isInRadius() {
@@ -111,15 +103,6 @@ public class MapUtilityTest {
     //    mapListener.fetchUsersInRadius((int) radius);
         ArrayList<MLocation> otherPos = mapListener.getOtherLocations();
         assertEquals(2, otherPos.size());
-    }
-
-
-    @Test
-    public void getOtherPos() {
-
-     //   mapListener.fetchUsersInRadius((int) radius);
-        HashMap<String, MLocation> otherPos = mapListener.getOtherPos();
-        assertEquals(3, otherPos.size());
     }
 
     @Test
