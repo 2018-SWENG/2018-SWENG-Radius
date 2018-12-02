@@ -8,8 +8,6 @@ public class MLocation implements DatabaseObject, Serializable {
 
     public final double DEFAULT_GROUP_LOCATION_RADIUS = 2000;
 
-    private static int locIDCounter = 0;
-
     private String userID;
     private String title;
     private String message;

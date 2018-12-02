@@ -151,7 +151,7 @@ public class DatabaseObjectsTest {
         MLocation mLocation2 = new MLocation("locTest", 2.0, 3.0);
 
         assertTrue(mLocation1.getID().equals("locTest"));
-        assertTrue(mLocation2.getLatitude() == 2.0);
+        assertTrue(mLocation2.getLatitude() == 3.0);
 
         mLocation.setMessage("Msg");
         mLocation.setTitle("Title");

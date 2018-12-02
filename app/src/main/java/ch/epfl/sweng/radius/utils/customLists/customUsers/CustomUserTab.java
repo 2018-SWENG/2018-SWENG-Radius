@@ -25,6 +25,28 @@ public abstract class CustomUserTab extends CustomTab implements DBUserObserver 
         return new CustomUserListAdapter(items, getContext());
     }
 
+    private ArrayList<CustomListItem> getItems (List<User> values, String userId){
+
+        ArrayList<CustomListItem> ret = new ArrayList<>();
+        for (User user :  values) {
+            Log.e("Refactor CustomUserTab", "Current feëtched userID is " + user.getID());
+            String convId = user.getConvFromUser(userId);
+            MLocation userLoc = OthersInfo.getInstance().getUsersInRadius().containsKey(userId) ?
+                    OthersInfo.getInstance().getUsersInRadius().get(userId) :
+                    OthersInfo.getInstance().getConvUsers().get(userId);
+
+            if(userLoc == null){
+                Log.e("CustomUserTab", "User " + userId + " not found!");
+                continue;
+            }
+            if (!user.getID().equals(userId)) {
+                ret.add(new CustomListItem(user.getID(), convId, userLoc.getTitle()));
+            }
+        }
+
+        return ret;
+    }
+
     public CallBackDatabase getAdapterCallback() {
         return new CallBackDatabase() {
             @Override
@@ -34,21 +56,7 @@ public abstract class CustomUserTab extends CustomTab implements DBUserObserver 
                 String convId;
                 String userId = UserInfo.getInstance().getCurrentUser().getID();
 
-                for (User user : (List<User>) value) {
-                    Log.e("Refactor CustomUserTab", "Current feëtched userID is " + user.getID());
-                    convId = user.getConvFromUser(userId);
-                    MLocation userLoc = OthersInfo.getInstance().getUsersInRadius().containsKey(userId) ?
-                            OthersInfo.getInstance().getUsersInRadius().get(userId) :
-                            OthersInfo.getInstance().getConvUsers().get(userId);
-
-                    if(userLoc == null){
-                        Log.e("CustomUserTab", "User " + userId + " not found!");
-                        continue;
-                    }
-                    if (!user.getID().equals(userId)) {
-                        usersItems.add(new CustomListItem(user.getID(), convId, userLoc.getTitle()));
-                    }
-                }
+                usersItems = getItems((List<User>) value, userId);
                 adapter.setItems(usersItems);
                 adapter.notifyDataSetChanged();
             }
