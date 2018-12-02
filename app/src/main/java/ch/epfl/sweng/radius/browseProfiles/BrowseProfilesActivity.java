@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -68,19 +69,7 @@ public class BrowseProfilesActivity extends AppCompatActivity{
     }
 
     void fetchUserInfo(String userUID){
-        database.readObjOnce(new User(userUID), Database.Tables.USERS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                // Get the current user profile from the DB
-                User current_profile = (User) value;
-                setUpAddFriendButton(current_profile);
-            }
 
-            @Override
-            public void onError(DatabaseError error) {
-
-            }
-        });
         MLocation targetUser = OthersInfo.getInstance().getUsersInRadius().get(userUID);
 
         if(targetUser == null)

@@ -40,6 +40,7 @@ public abstract class CustomUserTab extends CustomTab implements DBLocationObser
      //       Log.e("Refactor CustomUserTab", "Current fetched userID is " + user.getID());
             MLocation userLoc = getLoc(userId);
             if (userLoc != null && !user.getID().equals(userId)) {
+                Log.e("User added " , userLoc.getID());
                 ret.add(new CustomListItem(user.getID(), user.getConvFromUser(userId), userLoc.getTitle()));
             }
         }
@@ -77,10 +78,17 @@ public abstract class CustomUserTab extends CustomTab implements DBLocationObser
 
     @Override
     protected void setUpAdapterWithList(List<String> listIds){
-        Log.e("MessageList", "Size of User listIds is :" + Integer.toString(listIds.size()));
-
-        database.readListObjOnce(listIds,
-                Database.Tables.USERS, getAdapterCallback());
+        ArrayList<CustomListItem> usersItems = new ArrayList<>();
+        List<MLocation> locs = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().values());
+        for(MLocation loc : locs)
+            if(loc.isVisible()){
+                usersItems.add(new CustomListItem(loc.getID(), UserInfo.getInstance().getCurrentUser().getConvFromUser(loc.getID())
+                        , loc.getTitle()));
+            }
+      //  database.readListObjOnce(listIds,
+      //          Database.Tables.USERS, getAdapterCallback());
+        adapter.setItems(usersItems);
+        adapter.notifyDataSetChanged();
     }
 
     protected abstract List<String> getIds(User current_user);

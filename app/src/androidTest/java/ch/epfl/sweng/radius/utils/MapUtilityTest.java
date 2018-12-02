@@ -110,7 +110,7 @@ public class MapUtilityTest {
 
     //    mapListener.fetchUsersInRadius((int) radius);
         ArrayList<MLocation> otherPos = mapListener.getOtherLocations();
-        assertEquals(3, otherPos.size());
+        assertEquals(2, otherPos.size());
     }
 
 
