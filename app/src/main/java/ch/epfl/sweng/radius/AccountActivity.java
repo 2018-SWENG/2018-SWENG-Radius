@@ -41,6 +41,28 @@ public class AccountActivity extends AppCompatActivity {
     private Fragment friendsFragment;
     private Fragment profileFragment;
     private Timer timer;
+    private class myTimer extends  TimerTask {
+
+        public myTimer(){
+            isSet = false;
+        }
+        boolean isSet;
+
+        public void setSet(boolean set) {
+            isSet = set;
+        }
+
+        public boolean isSet(){
+            return isSet;
+        }
+
+        @Override
+        public void run() {
+            leaveApp();
+
+        }
+    }
+    final myTimer timerTask = new myTimer();
 
 
     @Override
@@ -85,9 +107,10 @@ public class AccountActivity extends AppCompatActivity {
                         loadFragment(profileFragment);
                         break;
                     default:
-                        System.out.println("Unknown item id selected: " + item.getItemId());
+                            System.out.println("Unknown item id selected: " + item.getItemId());
                 }
                 return true;
+
             }
         });
 
@@ -99,21 +122,18 @@ public class AccountActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
+        if(timerTask.isSet)
+            timer.cancel();
         enterApp();
-        timer.cancel();
-
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                leaveApp();
 
-            }
-        }, 20*60*1000);
+        timerTask.setSet(true);
+
+        timer.schedule(timerTask, 20*60*1000);
     }
 
     private void leaveApp(){
@@ -126,9 +146,10 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private void enterApp(){
-        MLocation current_user_location = UserInfo.getInstance().getCurrentPosition();
-        current_user_location.setVisible(true);
-        Database.getInstance().writeInstanceObj(current_user_location, Database.Tables.LOCATIONS);
+        UserInfo.getInstance().getCurrentPosition().setVisible(true);
+        Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(),
+                Database.Tables.LOCATIONS, "visible",
+                true);
     }
 
     @Override

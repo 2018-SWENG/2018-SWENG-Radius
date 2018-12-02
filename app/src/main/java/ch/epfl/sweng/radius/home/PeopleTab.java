@@ -27,20 +27,6 @@ public class PeopleTab extends CustomUserTab implements DBLocationObserver {
         OthersInfo.getInstance().addLocationObserver(this);
 
     }
-    protected  List<String> getIds(User current_user){
-        final Database database = Database.getInstance();
-        //  Get user Radius value and set listener for updates
-        //  If it was already fetched, no need to read again, there is a listener
-        // Get all other locations in Radius and add corresponding user to List
-        // TODO Setup a Listener instead of reading once
-        List<String> res = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().keySet());
-        return res;
-    }
-
-    private boolean isInRadius(MLocation loc) {
-
-        return MapUtility.isInRadius(loc);
-    }
 
     @Override
     public void onLocationChange(String id) {

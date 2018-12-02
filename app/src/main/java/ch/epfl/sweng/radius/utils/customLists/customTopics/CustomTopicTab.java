@@ -56,6 +56,4 @@ public abstract class CustomTopicTab extends CustomTab {
         database.readListObjOnce(ids, Database.Tables.CHATLOGS, getAdapterCallback());
     }
 
-    protected abstract List<String> getIds(User current_user);
-
 }

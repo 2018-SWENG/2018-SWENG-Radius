@@ -47,8 +47,6 @@ public abstract class CustomUserTab extends CustomTab implements DBLocationObser
         adapter.notifyDataSetChanged();
     }
 
-    protected abstract List<String> getIds(User current_user);
-
     @Override
     public void onLocationChange(String id) {
         if (id.equals(Database.Tables.LOCATIONS.toString())){

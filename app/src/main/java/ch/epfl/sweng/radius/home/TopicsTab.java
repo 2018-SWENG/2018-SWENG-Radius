@@ -24,10 +24,6 @@ public class TopicsTab extends CustomTopicTab implements DBLocationObserver {
         OthersInfo.getInstance().addLocationObserver(this);
     }
 
-    protected  List<String> getIds(User current_user) {
-        return new ArrayList<>(OthersInfo.getInstance().getTopicsPos().keySet());
-    }
-
     @Override
     public void onLocationChange(String id) {
         if(this.adapter != null && !Database.DEBUG_MODE)
