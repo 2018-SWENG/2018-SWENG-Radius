@@ -92,7 +92,8 @@ public class OthersInfo extends DBObservable{
                 convUsers.clear();
                 for(MLocation loc : (ArrayList<MLocation>) value){
                     Log.e("Refactor OthersInfo", "Current userID is" + loc.getID());
-                    convUsers.put(loc.getID(), loc);
+                    if(!usersPos.containsKey(loc.getID()));
+                        convUsers.put(loc.getID(), loc);
                 }
             }
 

@@ -14,6 +14,7 @@ import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.database.UserUtils;
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 import ch.epfl.sweng.radius.utils.customLists.CustomTab;
@@ -69,8 +70,7 @@ public abstract class CustomUserTab extends CustomTab implements DBUserObserver 
 
 
     public CustomUserTab() {
-        UserInfo.getInstance().addUserObserver(this);
-        OthersInfo.getInstance().addUserObserver(this);
+        UserUtils.getInstance().addUserObserver(this);
     }
 
 

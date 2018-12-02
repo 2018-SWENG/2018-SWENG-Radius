@@ -68,7 +68,7 @@ public class FakeFirebaseUtility extends Database {
     private ChatLogs getChat(){
         ChatLogs chat = new ChatLogs("1");
         chat.addMembersId("usertTest1");
-        chat.addMembersId("usertTest2");
+        chat.addMembersId("usertTest4");
         chat.addMembersId("usertTest0");
         chat.addMessage(new Message("usertTest0", "helo", new Date()));
         chat.addMessage(new Message("usertTest1", "aaa", new Date()));
@@ -172,7 +172,7 @@ public class FakeFirebaseUtility extends Database {
         usersTable.put("testUser3",temp);
         temp = new User("testUser4");
         usersTable.put("testUser4",temp);
-        usersTable.get("testUser1").addChat("testUser2", "1");
+        usersTable.get("testUser1").addChat("testUser4", "1");
         usersTable.get("testUser1").addChat("testUser3", "0");
 
         // TODO: Fill the chatLogs table
