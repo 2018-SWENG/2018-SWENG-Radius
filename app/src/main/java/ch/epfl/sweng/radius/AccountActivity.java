@@ -62,7 +62,7 @@ public class AccountActivity extends AppCompatActivity {
 
         }
     }
-    final myTimer timerTask = new myTimer();
+    private myTimer timerTask;
 
 
     @Override
@@ -122,8 +122,13 @@ public class AccountActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-        if(timerTask.isSet)
+        if(timerTask == null)
+            timerTask = new myTimer();
+        else if(timerTask.isSet){
             timer.cancel();
+            timer = new Timer();
+            timerTask = new myTimer();
+        }
         enterApp();
     }
 
@@ -132,7 +137,6 @@ public class AccountActivity extends AppCompatActivity {
         super.onStop();
 
         timerTask.setSet(true);
-
         timer.schedule(timerTask, 20*60*1000);
     }
 
