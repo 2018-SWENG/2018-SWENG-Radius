@@ -47,7 +47,7 @@ public class FirebaseStorageUtility extends Storage{
                                     String uploadUrl = uri.toString();
                                     MLocation currentUser = UserInfo.getInstance().getCurrentPosition();
                                     currentUser.setUrlProfilePhoto(uploadUrl);
-                                    Database.getInstance().writeInstanceObj(currentUser, Database.Tables.USERS);
+                                    Database.getInstance().writeInstanceObj(currentUser, Database.Tables.LOCATIONS);
                                 }
                             });
                         }
