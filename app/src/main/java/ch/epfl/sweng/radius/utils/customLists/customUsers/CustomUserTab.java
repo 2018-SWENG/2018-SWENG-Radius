@@ -85,7 +85,7 @@ public abstract class CustomUserTab extends CustomTab implements DBUserObserver 
 
     @Override
     public void onUserChange(String id) {
-        if (id.equals(Database.Tables.USERS)){
+        if (id.equals(Database.Tables.LOCATIONS.toString())){
             super.setUpAdapter();
         }
     }
