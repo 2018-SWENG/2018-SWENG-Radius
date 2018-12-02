@@ -81,7 +81,12 @@ public class BrowseProfilesActivity extends AppCompatActivity{
 
             }
         });
-        setUpUIComponents(OthersInfo.getInstance().getUsersInRadius().get(userUID));
+        MLocation targetUser = OthersInfo.getInstance().getUsersInRadius().get(userUID);
+
+        if(targetUser == null)
+            targetUser = OthersInfo.getInstance().getConvUsers().get(userUID);
+
+        setUpUIComponents(targetUser);
     }
 
     public void setUpUIComponents(MLocation current_user){
