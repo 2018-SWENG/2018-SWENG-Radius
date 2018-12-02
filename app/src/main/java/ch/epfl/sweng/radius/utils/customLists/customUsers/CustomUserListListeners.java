@@ -41,7 +41,6 @@ public class CustomUserListListeners {
             @Override
             public void onClick(View view) {
                 Intent intent;
-
                 //If we are blocked by the user redirect to the "You are blocked" page.
                 if (OthersInfo.getInstance().getUsers().get(userId).getBlockedUsers().contains(UserInfo.getInstance().getCurrentUser().getID())) {
                     intent = new Intent(context, BrowseProfilesBlockedActivity.class);

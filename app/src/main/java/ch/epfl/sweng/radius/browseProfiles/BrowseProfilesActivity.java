@@ -68,15 +68,28 @@ public class BrowseProfilesActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
     }
 
+
     void fetchUserInfo(String userUID){
 
-        MLocation targetUser = OthersInfo.getInstance().getUsersInRadius().get(userUID);
+        final MLocation targetUser = OthersInfo.getInstance().getUsersInRadius().get(userUID) != null ?
+                OthersInfo.getInstance().getUsersInRadius().get(userUID):
+                OthersInfo.getInstance().getConvUsers().get(userUID);
 
-        if(targetUser == null)
-            targetUser = OthersInfo.getInstance().getConvUsers().get(userUID);
+        database.readObjOnce(new User(userUID), Database.Tables.USERS, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                // Get the current user profile from the DB
+                User current_profile = (User) value;
+                setUpAddFriendButton(current_profile);
+                setUpUIComponents(targetUser);
+            }
 
-        setUpUIComponents(targetUser);
-    }
+            @Override
+            public void onError(DatabaseError error) {
+
+            }
+        });
+        }
 
     public void setUpUIComponents(MLocation current_user){
         if (current_user.getUrlProfilePhoto() != null && !current_user.getUrlProfilePhoto().equals("")) {
