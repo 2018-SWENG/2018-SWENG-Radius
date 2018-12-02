@@ -29,9 +29,9 @@ public class ExampleUnitTest {
     public void testOnDataChange(){
         Database.activateDebugMode();
         FriendsTab tab = new FriendsTab();
-        tab.onUserChange("HELLO");
+        tab.onLocationChange("HELLO");
         RequestsTab tab2 = new RequestsTab();
-        tab2.onUserChange("HELLO");
+        tab2.onLocationChange("HELLO");
 
         GroupTab tab3 = new GroupTab();
         tab3.onLocationChange("HELO");

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.database.DBLocationObserver;
 import ch.epfl.sweng.radius.database.DBUserObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
@@ -20,7 +21,7 @@ import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 import ch.epfl.sweng.radius.utils.customLists.CustomTab;
 
 
-public abstract class CustomUserTab extends CustomTab implements DBUserObserver {
+public abstract class CustomUserTab extends CustomTab implements DBLocationObserver {
 
     public CustomListAdapter getAdapter(List<CustomListItem> items) {
         return new CustomUserListAdapter(items, getContext());
@@ -70,7 +71,7 @@ public abstract class CustomUserTab extends CustomTab implements DBUserObserver 
 
 
     public CustomUserTab() {
-        UserUtils.getInstance().addUserObserver(this);
+        UserUtils.getInstance().addLocationObserver(this);
     }
 
 
@@ -85,7 +86,7 @@ public abstract class CustomUserTab extends CustomTab implements DBUserObserver 
     protected abstract List<String> getIds(User current_user);
 
     @Override
-    public void onUserChange(String id) {
+    public void onLocationChange(String id) {
         if (id.equals(Database.Tables.LOCATIONS.toString())){
             super.setUpAdapter();
         }

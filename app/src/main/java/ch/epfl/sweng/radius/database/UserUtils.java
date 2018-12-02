@@ -48,7 +48,7 @@ public class UserUtils extends DBObservable{
                         users.put(user.getID(), user);
                     }
                 }
-                notifyUserObservers(Database.Tables.LOCATIONS.toString());
+                notifyLocationObservers(Database.Tables.LOCATIONS.toString());
             }
 
             @Override
