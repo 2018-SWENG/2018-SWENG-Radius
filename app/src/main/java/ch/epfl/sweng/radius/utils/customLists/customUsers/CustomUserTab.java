@@ -70,6 +70,7 @@ public abstract class CustomUserTab extends CustomTab implements DBUserObserver 
 
     public CustomUserTab() {
         UserInfo.getInstance().addUserObserver(this);
+        OthersInfo.getInstance().addUserObserver(this);
     }
 
 
