@@ -16,9 +16,12 @@ public class MLocation implements DatabaseObject, Serializable {
     private double longitude;
     private double latitude;
     private boolean isVisible; // added for invisibility feature
+    private String urlProfilePhoto;
 
     private int locationType; // 0: user location, 1: group location, 2: topic location
     private double radius; // Use it only if the mLocation is a group.
+    private String spokenLanguages;
+    private String interests;
 
     public MLocation() {
         this.userID = "NewLoc" + Integer.toString(locIDCounter++);
@@ -29,6 +32,8 @@ public class MLocation implements DatabaseObject, Serializable {
         this.locationType = 0;
         this.radius = 5000;
         this.isVisible = true;
+        this.urlProfilePhoto = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
+
     }
 
     public MLocation(String userID){
@@ -40,6 +45,8 @@ public class MLocation implements DatabaseObject, Serializable {
         this.locationType = 0;
         this.radius = 5000;
         this.isVisible = true;
+        this.urlProfilePhoto = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
+
     }
 
     public MLocation(String userID, double longitude, double latitude){
@@ -51,6 +58,8 @@ public class MLocation implements DatabaseObject, Serializable {
         this.locationType = 0;
         this.radius = 5000;
         this.isVisible = true;
+        this.urlProfilePhoto = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
+
     }
 
     public MLocation(String userID, LatLng pos){
@@ -86,6 +95,32 @@ public class MLocation implements DatabaseObject, Serializable {
         return userID;
     }
 
+    public String getUrlProfilePhoto() {
+        return urlProfilePhoto;
+    }
+
+    public String getSpokenLanguages() {
+        return this.spokenLanguages;
+    }
+
+    public String getInterests() {
+        return interests;
+    }
+
+    public void setInterests(String interests) {
+        if (interests.length() > 100)
+            throw new IllegalArgumentException("Interests input is limited to 100 characters");
+        this.interests = interests;
+    }
+
+    public void setSpokenLanguages(String spokenLanguages) {
+        if (spokenLanguages != null) this.spokenLanguages = spokenLanguages;
+    }
+
+    public void setUrlProfilePhoto(String urlProfilePhoto) {
+        this.urlProfilePhoto = urlProfilePhoto;
+    }
+
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
@@ -95,6 +130,9 @@ public class MLocation implements DatabaseObject, Serializable {
     }
 
     public void setMessage(String message) {
+
+        if (message.length() > 50) // TODO : config file with all the constants
+            throw new IllegalArgumentException("The status is limited to 50 characters");
         this.message = message;
     }
 
@@ -126,10 +164,6 @@ public class MLocation implements DatabaseObject, Serializable {
 
     public boolean isVisible() {
         return isVisible;
-    }
-
-    public void setVisibility(boolean isVisible) {
-        this.isVisible = isVisible;
     }
 
     public void setVisible(boolean visible) {
