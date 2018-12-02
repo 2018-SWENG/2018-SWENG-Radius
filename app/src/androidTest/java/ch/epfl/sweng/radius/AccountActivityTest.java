@@ -101,4 +101,7 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
     }
 
 
+    @Test
+    public void testLeaveApp(){
+    }
 }

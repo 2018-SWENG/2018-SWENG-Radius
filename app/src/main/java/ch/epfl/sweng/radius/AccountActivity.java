@@ -20,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
@@ -38,13 +40,36 @@ public class AccountActivity extends AppCompatActivity {
     private Fragment messageFragment;
     private Fragment friendsFragment;
     private Fragment profileFragment;
+    private Timer timer;
+    private class myTimer extends  TimerTask {
+
+        public myTimer(){
+            isSet = false;
+        }
+        boolean isSet;
+
+        public void setSet(boolean set) {
+            isSet = set;
+        }
+
+        public boolean isSet(){
+            return isSet;
+        }
+
+        @Override
+        public void run() {
+            leaveApp();
+
+        }
+    }
+    private myTimer timerTask;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PreferenceManager.setDefaultValues(this, R.xml.app_preferences, false);
-
+        timer = new Timer();
         // To load the current user infos
         UserInfo.getInstance().fetchDataFromDB();
 
@@ -82,9 +107,10 @@ public class AccountActivity extends AppCompatActivity {
                         loadFragment(profileFragment);
                         break;
                     default:
-                        System.out.println("Unknown item id selected: " + item.getItemId());
+                            System.out.println("Unknown item id selected: " + item.getItemId());
                 }
                 return true;
+
             }
         });
 
@@ -94,9 +120,24 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        leaveApp();
+    public void onStart(){
+        super.onStart();
+        if(timerTask == null)
+            timerTask = new myTimer();
+        else if(timerTask.isSet){
+            timer.cancel();
+            timer = new Timer();
+            timerTask = new myTimer();
+        }
+        enterApp();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        timerTask.setSet(true);
+        timer.schedule(timerTask, 20*60*1000);
     }
 
     private void leaveApp(){
@@ -106,6 +147,13 @@ public class AccountActivity extends AppCompatActivity {
         MLocation current_user_location = UserInfo.getInstance().getCurrentPosition();
         current_user_location.setVisible(false);
         Database.getInstance().writeInstanceObj(current_user_location, Database.Tables.LOCATIONS);
+    }
+
+    private void enterApp(){
+        UserInfo.getInstance().getCurrentPosition().setVisible(true);
+        Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(),
+                Database.Tables.LOCATIONS, "visible",
+                true);
     }
 
     @Override

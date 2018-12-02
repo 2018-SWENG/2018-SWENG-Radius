@@ -23,7 +23,6 @@ public abstract class CustomTopicTab extends CustomTab {
         return new CustomTopicListAdapter(items, getContext());
     }
 
-    @Override
     public CallBackDatabase getAdapterCallback() {
         return new CallBackDatabase() {
             @Override
@@ -56,7 +55,5 @@ public abstract class CustomTopicTab extends CustomTab {
         List<String> ids = new ArrayList<>(OthersInfo.getInstance().getTopicsPos().keySet());
         database.readListObjOnce(ids, Database.Tables.CHATLOGS, getAdapterCallback());
     }
-
-    protected abstract List<String> getIds(User current_user);
 
 }
