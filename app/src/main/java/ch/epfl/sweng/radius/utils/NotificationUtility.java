@@ -46,13 +46,18 @@ public class NotificationUtility{
         return instance;
     }
 
-    public void resetUnseenMsg(){
+    public static void resetUnseenMsg(){
         unseenMsg = 0;
     }
 
-    public void resetUnseenReq(){
+    public static void resetUnseenReq(){
         unseenMsg = 0;
     }
+
+    public static void clearSeenMsg(int num){
+        unseenMsg -= num;
+    }
+
 
     public void notifyNewMessage(String chatID, String senderID, PendingIntent pi) {
 

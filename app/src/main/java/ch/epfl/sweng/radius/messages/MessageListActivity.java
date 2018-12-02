@@ -35,6 +35,7 @@ import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.NotificationUtility;
 
+import static java.lang.Math.min;
 import static java.security.AccessController.getContext;
 
 
@@ -55,6 +56,8 @@ public class MessageListActivity extends AppCompatActivity {
     private static User myUser, otherUser;
     private MLocation otherLoc;
     private Database database;
+    private boolean isRunning = false;
+    private int unreadMsg = 0;
 
     private final CallBackDatabase otherLocationCallback = new CallBackDatabase() {
         @Override
@@ -69,11 +72,11 @@ public class MessageListActivity extends AppCompatActivity {
         }
     };
 
-    public void showNotification() {
+    public void showNotification(String content, String senderId) {
         Log.e("Notification", " Showed");
         PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, MessageListActivity.class), 0);
         Resources r = getResources();
-        NotificationUtility.getInstance(null, null, null).notifyNewMessage(chatId, "Coucou", pi);
+        NotificationUtility.getInstance(null, null, null).notifyNewMessage(senderId, content, pi);
     }
 
 
@@ -168,6 +171,12 @@ public class MessageListActivity extends AppCompatActivity {
         myMessageAdapter.setMessages(chatLogs.getMessages());
         myMessageRecycler.smoothScrollToPosition(chatLogs.getNumberOfMessages());
         myMessageAdapter.notifyDataSetChanged();
+
+        // If thread is running
+        if(!isRunning){
+            unreadMsg++;
+            showNotification(message.getContentMessage().substring(0, min(20, message.getContentMessage().length())), message.getSenderId());
+        }
     }
 
 
@@ -309,6 +318,20 @@ public class MessageListActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        this.isRunning = true;
+        NotificationUtility.clearSeenMsg(unreadMsg);
+        unreadMsg = 0;
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        this.isRunning = false;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.w("MessageActivity", "Just got onCreated");
         //ChatInfo.getInstance().addUserObserver(this);
@@ -326,8 +349,6 @@ public class MessageListActivity extends AppCompatActivity {
         setUpSendButton();
         setUpListener();
         setEnabled(true);
-        showNotification();
-
     }
 
     @Override
