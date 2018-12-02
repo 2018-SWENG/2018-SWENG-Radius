@@ -21,6 +21,20 @@ public class MLocation implements DatabaseObject, Serializable {
     private String spokenLanguages;
     private String interests;
 
+    public MLocation(){
+        this.userID = "";
+        this.latitude = 46.5160698;
+        this.longitude = 6.5681216000000004;
+        this.title = "";
+        this.message = "";
+        this.locationType = 0;
+        this.radius = 5000;
+        this.isVisible = true;
+        this.urlProfilePhoto = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
+        this.spokenLanguages = "";
+        this.interests = "";
+    }
+
     public MLocation(String userID){
         this.userID = userID;
         this.latitude = 46.5160698;
