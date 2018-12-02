@@ -28,8 +28,6 @@ public abstract class CustomTab extends Fragment {
 
     public abstract CustomListAdapter getAdapter(List<CustomListItem> items);
 
-    public abstract CallBackDatabase getAdapterCallback();
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,5 +56,4 @@ public abstract class CustomTab extends Fragment {
 
     protected abstract void setUpAdapterWithList(List<String> listIds);
 
-    protected abstract List<String> getIds(User current_user);
 }

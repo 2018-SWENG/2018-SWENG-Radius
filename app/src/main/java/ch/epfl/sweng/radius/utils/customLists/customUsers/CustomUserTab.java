@@ -27,50 +27,6 @@ public abstract class CustomUserTab extends CustomTab implements DBLocationObser
         return new CustomUserListAdapter(items, getContext());
     }
 
-    private MLocation getLoc(String userId){
-        MLocation userLoc = OthersInfo.getInstance().getUsersInRadius().containsKey(userId) ?
-                OthersInfo.getInstance().getUsersInRadius().get(userId) :
-                OthersInfo.getInstance().getConvUsers().get(userId);
-        return userLoc;
-    }
-
-    private ArrayList<CustomListItem> getItems (List<User> values, String userId){
-        ArrayList<CustomListItem> ret = new ArrayList<>();
-        for (User user :  values) {
-     //       Log.e("Refactor CustomUserTab", "Current fetched userID is " + user.getID());
-            MLocation userLoc = getLoc(userId);
-            if (userLoc != null && !user.getID().equals(userId)) {
-                Log.e("User added " , userLoc.getID());
-                ret.add(new CustomListItem(user.getID(), user.getConvFromUser(userId), userLoc.getTitle()));
-            }
-        }
-
-        return ret;
-    }
-
-    public CallBackDatabase getAdapterCallback() {
-        return new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                ArrayList<CustomListItem> usersItems = new ArrayList<>();
-               // adapter = getAdapter(usersItems);
-                String convId;
-                String userId = UserInfo.getInstance().getCurrentUser().getID();
-
-                usersItems = getItems((List<User>) value, userId);
-                adapter.setItems(usersItems);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("Firebase", error.getMessage());
-            }
-        };
-
-    }
-
-
     public CustomUserTab() {
         UserUtils.getInstance().addLocationObserver(this);
     }

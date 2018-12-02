@@ -17,20 +17,6 @@ public class GroupTab extends CustomGroupTab implements DBLocationObserver {
         OthersInfo.getInstance().addLocationObserver(this);
     }
 
-    @Override
-    protected List<String> getIds(User current_user) {
-        //  Get user Radius value and set listener for updates
-        //  If it was already fetched, no need to read again, there is a listener
-
-        GroupLocationFetcher groupLocationFetcher = new GroupLocationFetcher();
-        database.readAllTableOnce(Database.Tables.LOCATIONS, groupLocationFetcher);
-
-        List<String> returnList = new ArrayList<String>();
-        returnList.add("1");
-        returnList.add("2");
-        Log.e("MessageList", "Size of groupLoc is :" + Integer.toString(groupLocationFetcher.getGroupLocationsIds().size()));
-        return new ArrayList<String>(OthersInfo.getInstance().getGroupsPos().keySet());
-}
 
     @Override
     public void onLocationChange(String id) {

@@ -23,7 +23,6 @@ public abstract class CustomTopicTab extends CustomTab {
         return new CustomTopicListAdapter(items, getContext());
     }
 
-    @Override
     public CallBackDatabase getAdapterCallback() {
         return new CallBackDatabase() {
             @Override
