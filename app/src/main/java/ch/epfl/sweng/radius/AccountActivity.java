@@ -20,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
@@ -38,13 +40,14 @@ public class AccountActivity extends AppCompatActivity {
     private Fragment messageFragment;
     private Fragment friendsFragment;
     private Fragment profileFragment;
+    private Timer timer;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PreferenceManager.setDefaultValues(this, R.xml.app_preferences, false);
-
+        timer = new Timer();
         // To load the current user infos
         UserInfo.getInstance().fetchDataFromDB();
 
@@ -94,9 +97,23 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        leaveApp();
+    public void onStart(){
+        super.onStart();
+        enterApp();
+        timer.cancel();
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                leaveApp();
+
+            }
+        }, 20*60*1000);
     }
 
     private void leaveApp(){
@@ -105,6 +122,12 @@ public class AccountActivity extends AppCompatActivity {
 
         MLocation current_user_location = UserInfo.getInstance().getCurrentPosition();
         current_user_location.setVisible(false);
+        Database.getInstance().writeInstanceObj(current_user_location, Database.Tables.LOCATIONS);
+    }
+
+    private void enterApp(){
+        MLocation current_user_location = UserInfo.getInstance().getCurrentPosition();
+        current_user_location.setVisible(true);
         Database.getInstance().writeInstanceObj(current_user_location, Database.Tables.LOCATIONS);
     }
 
