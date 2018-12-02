@@ -36,6 +36,7 @@ public class MapUtility implements DBLocationObserver {
     private static final int LOC_PERMIT_REQUEST_CODE = 1234;
     private static final double DEFAULT_LATITUDE = 46.5191;
     private static final double DEFAULT_LONGITUDE = 6.5668;
+    private boolean positionChanged = false;
 
     private static FusedLocationProviderClient mblFusedLocationClient;
     private static boolean mblLocationPermissionGranted;
@@ -83,7 +84,7 @@ public class MapUtility implements DBLocationObserver {
         mblFusedLocationClient = LocationServices.getFusedLocationProviderClient( activity);
         try {
             if ( mblLocationPermissionGranted) {
-                Task location = mblFusedLocationClient.getLastLocation();
+                final Task location = mblFusedLocationClient.getLastLocation();
                 location.addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
@@ -91,6 +92,8 @@ public class MapUtility implements DBLocationObserver {
                             currentLocation = (Location) task.getResult();
                             LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(), currentLocation.getLongitude());
                             setCurrCoordinates(currentCoordinates);
+                            positionChanged = true;
+
                         }
                         else {
                             Toast.makeText( activity.getApplicationContext(), "Unable to get current location",
@@ -129,7 +132,16 @@ public class MapUtility implements DBLocationObserver {
     public void setCurrCoordinates(LatLng curCoordinates) {
         UserInfo.getInstance().getCurrentPosition().setLatitude(currCoordinates.latitude);
         UserInfo.getInstance().getCurrentPosition().setLongitude(currCoordinates.longitude);
-        UserInfo.getInstance().updateLocationInDB();
+
+        Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(),
+                Database.Tables.LOCATIONS,
+                "latitude",
+                curCoordinates.latitude);
+
+        Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(),
+                Database.Tables.LOCATIONS,
+                "longitude",
+                curCoordinates.longitude);
         currCoordinates = curCoordinates;
     }
 
@@ -216,6 +228,7 @@ public class MapUtility implements DBLocationObserver {
     public void onLocationChange(String id){
         myPos = UserInfo.getInstance().getCurrentPosition();
         otherPos = OthersInfo.getInstance().getUsersInRadius();
+
     }
 }
 
