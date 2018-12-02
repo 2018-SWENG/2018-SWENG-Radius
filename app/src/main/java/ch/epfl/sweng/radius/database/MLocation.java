@@ -144,6 +144,4 @@ public class MLocation implements DatabaseObject, Serializable {
     public void setVisible(boolean visible) {
         isVisible = visible;
     }
-
-
 }
