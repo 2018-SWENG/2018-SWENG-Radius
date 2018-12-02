@@ -76,10 +76,6 @@ public class MapUtility implements DBLocationObserver {
         myPos = mPos;
     }
 
-    public HashMap<String, MLocation> getOtherPos() {
-        return otherPos;
-    }
-
     public void getDeviceLocation(final FragmentActivity activity) {
         mblFusedLocationClient = LocationServices.getFusedLocationProviderClient( activity);
         try {

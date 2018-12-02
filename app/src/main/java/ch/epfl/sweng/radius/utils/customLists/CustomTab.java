@@ -15,6 +15,7 @@ import java.util.List;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 
@@ -52,7 +53,7 @@ public abstract class CustomTab extends Fragment {
 
 
     protected void setUpAdapter() {
-        setUpAdapterWithList(getIds(UserInfo.getInstance().getCurrentUser()));
+        setUpAdapterWithList(null);
     }
 
     protected abstract void setUpAdapterWithList(List<String> listIds);

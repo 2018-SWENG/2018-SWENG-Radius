@@ -50,8 +50,8 @@ public class BrowseProfilesActivityTest extends ActivityInstrumentationTestCase2
 
         Intent intent = new Intent();
         intent.putExtra("Clicked Picture", R.drawable.image1);
-        intent.putExtra("Clicked Name", "testUser3");
-        intent.putExtra("UID", "testUser3");
+        intent.putExtra("Clicked Name", "testUser2");
+        intent.putExtra("UID", "testUser2");
         mActivity = mActivityRule.launchActivity(intent);
     }
 
