@@ -37,6 +37,7 @@ import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 
 import static android.support.test.espresso.action.ViewActions.click;
@@ -140,9 +141,9 @@ public class ProfileFragmentTest  extends ActivityInstrumentationTestCase2<Accou
         Database.activateDebugMode();
         ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
-        User testUser = new User("testId");
-        testUser.setNickname("testNickname");
-        testUser.setStatus("testStatus");
+        MLocation testUser = new MLocation("testId");
+        testUser.setTitle("testNickname");
+        testUser.setMessage("testStatus");
         testUser.setInterests("testInterests");
         testUser.setSpokenLanguages("English");
         //1 pixel green picture in base 64

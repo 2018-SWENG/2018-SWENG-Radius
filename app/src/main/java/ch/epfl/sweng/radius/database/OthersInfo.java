@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,6 +21,7 @@ public class OthersInfo extends DBObservable{
     private static final MapUtility mapUtility = MapUtility.getMapInstance();
 
     private static final HashMap<String, MLocation> usersPos = new HashMap<>();
+    private static final HashMap<String, MLocation> convUsers = new HashMap<>();
     private static final HashMap<String, MLocation> groupsPos = new HashMap<>();
     private static final HashMap<String, MLocation> topicsPos = new HashMap<>();
     private static final HashMap<String, User> users = new HashMap<>();
@@ -31,12 +33,12 @@ public class OthersInfo extends DBObservable{
     }
 
     private OthersInfo(){
-        Log.e("DEBUGG", "Initiate timer");
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 fetchUsersInMyRadius();
                 fetchUserObjects();
+                fetchConvUsers();
             }
         }, 0, REFRESH_PERIOD*1000);    }
 
@@ -56,6 +58,10 @@ public class OthersInfo extends DBObservable{
         return users;
     }
 
+    public HashMap<String, MLocation> getConvUsers() {
+        return convUsers;
+    }
+
     public void fetchUsersInMyRadius(){
         database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
@@ -64,6 +70,7 @@ public class OthersInfo extends DBObservable{
                 for (MLocation loc : (ArrayList<MLocation>) value) {
                     if(mapUtility.contains(loc.getLatitude(), loc.getLongitude())
                             && loc.isVisible()) {
+
                         putInTable(loc);
                     }
                 }
@@ -77,6 +84,26 @@ public class OthersInfo extends DBObservable{
         });
     }
 
+    private void fetchConvUsers(){
+        List<String> ids = new ArrayList<>(UserInfo.getInstance().getCurrentUser().getChatList().keySet());
+        Log.e("Refactor OthersInfo", "Size of ids is" + ids.size());
+        database.readListObjOnce(ids, Database.Tables.LOCATIONS, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                convUsers.clear();
+                for(MLocation loc : (ArrayList<MLocation>) value){
+                    Log.e("Refactor OthersInfo", "Current userID is" + loc.getID());
+                    if(!usersPos.containsKey(loc.getID()));
+                        convUsers.put(loc.getID(), loc);
+                }
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+
+            }
+        });
+    }
     public void fetchUserObjects(){
         Log.e("DEBUGG0", "Fetching the users");
         database.readAllTableOnce(Database.Tables.USERS, new CallBackDatabase() {

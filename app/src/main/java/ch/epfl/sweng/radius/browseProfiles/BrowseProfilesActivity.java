@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,8 @@ import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.GroupLocationFetcher;
+import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.BrowseProfilesUtility;
@@ -65,14 +68,20 @@ public class BrowseProfilesActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
     }
 
+
     void fetchUserInfo(String userUID){
+
+        final MLocation targetUser = OthersInfo.getInstance().getUsersInRadius().get(userUID) != null ?
+                OthersInfo.getInstance().getUsersInRadius().get(userUID):
+                OthersInfo.getInstance().getConvUsers().get(userUID);
+
         database.readObjOnce(new User(userUID), Database.Tables.USERS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
                 // Get the current user profile from the DB
                 User current_profile = (User) value;
                 setUpAddFriendButton(current_profile);
-                setUpUIComponents(current_profile);
+                setUpUIComponents(targetUser);
             }
 
             @Override
@@ -80,16 +89,16 @@ public class BrowseProfilesActivity extends AppCompatActivity{
 
             }
         });
-    }
+        }
 
-    public void setUpUIComponents(User current_user){
+    public void setUpUIComponents(MLocation current_user){
         if (current_user.getUrlProfilePhoto() != null && !current_user.getUrlProfilePhoto().equals("")) {
             Picasso.get().load(current_user.getUrlProfilePhoto()).into(userPhoto);
         } else {
             userPhoto.setImageResource(R.drawable.user_photo_default);
         }
-        textViewName.setText(current_user.getNickname());
-        textViewStatus.setText(current_user.getStatus());
+        textViewName.setText(current_user.getTitle());
+        textViewStatus.setText(current_user.getMessage());
         textViewInterests.setText(current_user.getInterests());
         textViewLanguages.setText(current_user.getSpokenLanguages());
     }

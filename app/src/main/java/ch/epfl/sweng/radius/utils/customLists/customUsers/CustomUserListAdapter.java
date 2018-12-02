@@ -8,6 +8,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
@@ -41,7 +42,7 @@ public class CustomUserListAdapter extends CustomListAdapter {
             viewHolder.imgViewIcon.setImageResource(items.get(position).getProfilePic());
         }
 =======*/
-        User itemUser = OthersInfo.getInstance().getUsers().get(item.getItemId());
+        MLocation itemUser = OthersInfo.getInstance().getUsersInRadius().get(item.getItemId());
 
         if(itemUser != null){
             if (!itemUser.getUrlProfilePhoto().isEmpty()) {

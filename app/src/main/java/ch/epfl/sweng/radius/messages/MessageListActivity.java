@@ -1,5 +1,7 @@
 package ch.epfl.sweng.radius.messages;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,14 +22,12 @@ import java.util.List;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
-import ch.epfl.sweng.radius.database.DBUserObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
-import ch.epfl.sweng.radius.utils.MapUtility;
 
 
 /**
@@ -48,7 +48,6 @@ public class MessageListActivity extends AppCompatActivity {
     private static User myUser, otherUser;
     private MLocation otherLoc;
     private Database database;
-
 
     private final CallBackDatabase otherLocationCallback = new CallBackDatabase() {
         @Override
@@ -207,12 +206,10 @@ public class MessageListActivity extends AppCompatActivity {
         });
 
     }
-
     /**
      * If a message is added in the db, add the message in the chat
      */
     private void setUpListener() {
-
         Pair<String, Class> child = new Pair<String, Class>("messages", Message.class);
         database.listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
             public void onFinish(Object value) {
@@ -244,12 +241,12 @@ public class MessageListActivity extends AppCompatActivity {
     }
 
     private void prepareUsers(ArrayList<String> participants) {
-        database.readListObjOnce(participants, Database.Tables.USERS, new CallBackDatabase() {
+        database.readListObjOnce(participants, Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
                 if (((ArrayList) value).size() == 2) {
-                    myUser.setRadius(((User) (((ArrayList) value).get(0))).getRadius());
-                    otherUser.setRadius(((User) (((ArrayList) value).get(1))).getRadius());
+                    UserInfo.getInstance().getCurrentPosition().setRadius(((MLocation) (((ArrayList) value).get(0))).getRadius());
+                    otherLoc.setRadius(((MLocation) (((ArrayList) value).get(1))).getRadius());
                 }
 
             }
@@ -279,8 +276,7 @@ public class MessageListActivity extends AppCompatActivity {
 
     public void usersInRadius() { //this method needs to go through severe change - currently we are not saving the radius or the locations of users properly.
         ArrayList<String> participants = (ArrayList) chatLogs.getMembersId();
-        otherUser = new User(otherUserId);
-        otherLoc = new MLocation(otherUser.getID());
+        otherLoc = new MLocation(otherUserId);
         //read the users from the database in order to be able to access their radius in the compareLocation method.
         prepareUsers(participants);
 

@@ -97,7 +97,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         UserInfo.getInstance().addLocationObserver(this);
         OthersInfo.getInstance().addLocationObserver(this);
         super.onCreate(savedInstanceState);
-        radius = UserInfo.getInstance().getCurrentUser().getRadius();
+        radius = UserInfo.getInstance().getCurrentPosition().getRadius();
         friendsID = new ArrayList<>();
         usersLoc = new ArrayList<>();
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -75,10 +76,6 @@ public class MapUtility implements DBLocationObserver {
         myPos = mPos;
     }
 
-    public HashMap<String, MLocation> getOtherPos() {
-        return otherPos;
-    }
-
     public void getDeviceLocation(final FragmentActivity activity) {
         mblFusedLocationClient = LocationServices.getFusedLocationProviderClient( activity);
         try {
@@ -129,7 +126,12 @@ public class MapUtility implements DBLocationObserver {
     public void setCurrCoordinates(LatLng curCoordinates) {
         UserInfo.getInstance().getCurrentPosition().setLatitude(currCoordinates.latitude);
         UserInfo.getInstance().getCurrentPosition().setLongitude(currCoordinates.longitude);
-        UserInfo.getInstance().updateLocationInDB();
+        Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(), Database.Tables.LOCATIONS,
+                "latitude",
+                currCoordinates.latitude);
+        Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(), Database.Tables.LOCATIONS,
+                "longitude",
+                currCoordinates.longitude);
         currCoordinates = curCoordinates;
     }
 
@@ -191,7 +193,7 @@ public class MapUtility implements DBLocationObserver {
         return distance[0];
     }
 
-    public boolean speaksSameLanguage(User user) {
+    public boolean speaksSameLanguage(MLocation user) {
         String[] languagesSpoken = user.getSpokenLanguages().split(" ");
         Fragment profileFragment = ProfileFragment.newInstance();
         String languagesSpokenByCurrUser = ((ProfileFragment)profileFragment).getLanguagesText();

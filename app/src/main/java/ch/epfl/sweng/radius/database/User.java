@@ -14,10 +14,6 @@ public class User implements DatabaseObject, Serializable {
     private static long idGenerator = 0;// Debugging purpose only
 
     private String userID;
-    private String nickname;
-    private String urlProfilePhoto;
-    private int radius; // meters
-    private String status;
     private List<String> friendsRequests;
     private List<String> friendsInvitations;
     private List<String> friends;
@@ -26,22 +22,15 @@ public class User implements DatabaseObject, Serializable {
     private Map<String, String> chatList = new HashMap<>();
     private Map<String, String> reportList;
 
-    private String spokenLanguages;
-    private String interests;
+
 
     public User(String userID) {
         this.userID = userID;
-        this.nickname = "New User " + userID;
-        this.urlProfilePhoto = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
-        this.radius = 50;
-        this.status = "Hi, I'm new to radius !";
         this.friendsRequests = new ArrayList<>();
         this.friendsInvitations = new ArrayList<>();
         this.friends = new ArrayList<>();
         this.blockedUsers = new ArrayList<>();
-        this.spokenLanguages = "";
         this.chatList = new HashMap<>();
-        this.interests = "";
         this.reportList = new HashMap<>();
     }
 
@@ -53,44 +42,9 @@ public class User implements DatabaseObject, Serializable {
     // Debugging purpose only
     public User(String userID, String nickname, String status){
         this(userID);
-        this.nickname = nickname;
-        this.status = status;
     }
 
     // Getter
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public void setUrlProfilePhoto(String urlProfilePhoto) {
-        this.urlProfilePhoto = urlProfilePhoto;
-    }
-
-    public String getUrlProfilePhoto() {
-        return urlProfilePhoto;
-    }
-
-    public int getRadius() {
-        return radius;
-    }
-
-    public void setRadius(int radius) {
-        this.radius = radius;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) throws IllegalArgumentException {
-        if (status.length() > 50) // TODO : config file with all the constants
-            throw new IllegalArgumentException("The status is limited to 50 characters");
-        this.status = status;
-    }
 
     public List<String> getFriendsRequests() {
         return friendsRequests;
@@ -140,13 +94,7 @@ public class User implements DatabaseObject, Serializable {
         }
     }
 
-    public String getSpokenLanguages() {
-        return this.spokenLanguages;
-    }
 
-    public void setSpokenLanguages(String spokenLanguages) {
-        if (spokenLanguages != null) this.spokenLanguages = spokenLanguages;
-    }
 
     /**
      * add a chat to a user
@@ -169,14 +117,7 @@ public class User implements DatabaseObject, Serializable {
 
         return addChat(otherUserId, chatLogs.getID());
     }
-    public String getInterests() {
-        return interests;
-    }
-    public void setInterests(String interests) {
-        if (interests.length() > 100)
-            throw new IllegalArgumentException("Interests input is limited to 100 characters");
-        this.interests = interests;
-    }
+
     @Override
     public String getID() {
         return userID;

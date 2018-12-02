@@ -71,8 +71,8 @@ public class MapTest {
 
     @Test
     public void testSpeaksSameLanguages() {
-        user1.setSpokenLanguages("English");
-        assertTrue(!mapListener.speaksSameLanguage(user1));
+        location1.setSpokenLanguages("English");
+        assertTrue(!mapListener.speaksSameLanguage(location1));
     }
 
     @Test

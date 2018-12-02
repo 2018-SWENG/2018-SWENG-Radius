@@ -19,6 +19,7 @@ import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.DBUserObserver;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
@@ -74,13 +75,13 @@ public class MessagesFragment extends Fragment implements DBUserObserver {
     private final CallBackDatabase readListConv = new CallBackDatabase() {
         @Override
         public void onFinish(Object value) {
-            ArrayList<User> users = (ArrayList<User>)value;
+            ArrayList<MLocation> users = (ArrayList<MLocation>)value;
             final ArrayList <CustomListItem> conversations = new ArrayList<>();
 
-            for (User user:users) {
+            for (MLocation user:users) {
                 if(!user.getID().equals(current_user.getID())) {
                     conversations.add(new CustomListItem(user.getID(),
-                            current_user.getChatList().get(user.getID()), user.getNickname()));
+                            current_user.getChatList().get(user.getID()), user.getTitle()));
                 }
             }
             adapter.setItems(conversations);
@@ -97,7 +98,7 @@ public class MessagesFragment extends Fragment implements DBUserObserver {
         current_user = UserInfo.getInstance().getCurrentUser();
         List<String> usersConv = new ArrayList<>(current_user.getChatList().keySet());
 
-        database.readListObjOnce(usersConv, Database.Tables.USERS, readListConv);
+        database.readListObjOnce(usersConv, Database.Tables.LOCATIONS, readListConv);
     }
 
     @Override
