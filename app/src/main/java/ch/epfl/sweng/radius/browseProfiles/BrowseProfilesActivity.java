@@ -19,6 +19,8 @@ import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.GroupLocationFetcher;
+import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.BrowseProfilesUtility;
@@ -72,7 +74,6 @@ public class BrowseProfilesActivity extends AppCompatActivity{
                 // Get the current user profile from the DB
                 User current_profile = (User) value;
                 setUpAddFriendButton(current_profile);
-                setUpUIComponents(current_profile);
             }
 
             @Override
@@ -80,16 +81,17 @@ public class BrowseProfilesActivity extends AppCompatActivity{
 
             }
         });
+        setUpUIComponents(OthersInfo.getInstance().getUsersInRadius().get(userUID));
     }
 
-    public void setUpUIComponents(User current_user){
+    public void setUpUIComponents(MLocation current_user){
         if (current_user.getUrlProfilePhoto() != null && !current_user.getUrlProfilePhoto().equals("")) {
             Picasso.get().load(current_user.getUrlProfilePhoto()).into(userPhoto);
         } else {
             userPhoto.setImageResource(R.drawable.user_photo_default);
         }
-        textViewName.setText(current_user.getNickname());
-        textViewStatus.setText(current_user.getStatus());
+        textViewName.setText(current_user.getTitle());
+        textViewStatus.setText(current_user.getMessage());
         textViewInterests.setText(current_user.getInterests());
         textViewLanguages.setText(current_user.getSpokenLanguages());
     }

@@ -17,7 +17,7 @@ public class UserUtils extends DBObservable{
     private final int REFRESH_PERIOD = 10; // in seconds
     private static final Database database = Database.getInstance();
 
-    private static final HashMap<String, User> users = new HashMap<>();
+    private static final HashMap<String, MLocation> users = new HashMap<>();
 
     public static UserUtils getInstance(){
         if (userUtils == null)
@@ -27,50 +27,28 @@ public class UserUtils extends DBObservable{
 
     private UserUtils(){ }
 
-    public HashMap<String, User> getSpecificsUsers(List<String> membersId){
+    public HashMap<String, MLocation> getSpecificsUsers(List<String> membersId){
         fetchSpeficitsOtherUsers(membersId);
         return users;
     }
 
-    public HashMap<String, User> getUsers(){
+    public HashMap<String, MLocation> getUsers(){
         return users;
     }
 
-    /*
-    public void fetchAllOtherUsers(){
-        database.readAllTableOnce(Database.Tables.USERS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                users.clear();
-                String currentUserId = UserInfo.getInstance().getCurrentUser().getID();
-                for (User user : (ArrayList<User>) value) {
-                    if(!currentUserId.equals(user.getID())) {
-                        users.put(user.getID(), user);
-                    }
-                }
-                notifyUserObservers(Database.Tables.USERS.toString());
-            }
 
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("FetchUserRadius", error.getMessage());
-            }
-        });
-    }
-
-    */
     public void fetchSpeficitsOtherUsers(List<String> membersId){
-        database.readListObjOnce(membersId,Database.Tables.USERS, new CallBackDatabase() {
+        database.readListObjOnce(membersId,Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
                 users.clear();
                 String currentUserId = UserInfo.getInstance().getCurrentUser().getID();
-                for (User user : (ArrayList<User>) value) {
+                for (MLocation user : (ArrayList<MLocation>) value) {
                     if(!currentUserId.equals(user.getID())) {
                         users.put(user.getID(), user);
                     }
                 }
-                notifyUserObservers(Database.Tables.USERS.toString());
+                notifyUserObservers(Database.Tables.LOCATIONS.toString());
             }
 
             @Override

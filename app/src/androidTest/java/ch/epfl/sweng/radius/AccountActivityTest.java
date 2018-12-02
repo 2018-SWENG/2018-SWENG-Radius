@@ -13,6 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 
@@ -47,9 +48,9 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
         Database.activateDebugMode();
         OthersInfo.getInstance();
 
-        User testUser = new User("userTest0");
-        testUser.setNickname("testNickname");
-        testUser.setStatus("testStatus");
+        MLocation testUser = new MLocation("userTest0");
+        testUser.setTitle("testNickname");
+        testUser.setMessage("testStatus");
         testUser.setInterests("testInterests");
         testUser.setSpokenLanguages("English");
 

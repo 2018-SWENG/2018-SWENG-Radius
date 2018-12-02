@@ -13,6 +13,7 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 
@@ -44,7 +45,7 @@ public class FirebaseStorageUtility extends Storage{
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     String uploadUrl = uri.toString();
-                                    User currentUser = UserInfo.getInstance().getCurrentUser();
+                                    MLocation currentUser = UserInfo.getInstance().getCurrentPosition();
                                     currentUser.setUrlProfilePhoto(uploadUrl);
                                     Database.getInstance().writeInstanceObj(currentUser, Database.Tables.USERS);
                                 }

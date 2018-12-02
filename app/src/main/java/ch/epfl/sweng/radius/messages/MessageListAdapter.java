@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
@@ -28,7 +29,7 @@ import ch.epfl.sweng.radius.database.UserUtils;
 public class MessageListAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
-    private static HashMap<String, User> usersHashMap;
+    private static HashMap<String, MLocation> usersHashMap;
     private static UserUtils userUtils = UserUtils.getInstance();
 
     private Context context;
@@ -130,7 +131,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             // Format the stored timestamp into a readable String using method.
             timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags));
             if(usersHashMap.get(message.getSenderId()) != null) {
-                nameText.setText(usersHashMap.get(message.getSenderId()).getNickname());
+                nameText.setText(usersHashMap.get(message.getSenderId()).getTitle());
             }
 
             // Insert the profile image from the URL into the ImageView.

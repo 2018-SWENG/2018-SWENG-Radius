@@ -191,7 +191,7 @@ public class MapUtility implements DBLocationObserver {
         return distance[0];
     }
 
-    public boolean speaksSameLanguage(User user) {
+    public boolean speaksSameLanguage(MLocation user) {
         String[] languagesSpoken = user.getSpokenLanguages().split(" ");
         Fragment profileFragment = ProfileFragment.newInstance();
         String languagesSpokenByCurrUser = ((ProfileFragment)profileFragment).getLanguagesText();

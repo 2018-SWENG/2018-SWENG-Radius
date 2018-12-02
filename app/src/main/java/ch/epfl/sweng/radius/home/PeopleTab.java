@@ -21,11 +21,7 @@ import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserTab;
     // TODO     the same for userIDs
 
 public class PeopleTab extends CustomUserTab implements DBLocationObserver {
-    private MLocation myLocation = UserInfo.getInstance().getCurrentPosition();
-    private double myRadius = UserInfo.getInstance().getCurrentUser().getRadius();
-    private String radiusListener;
     List<String> userIDs = new ArrayList<>();
-    MapUtility mapUtility = MapUtility.getMapInstance();
 
     private CallBackDatabase locationsCallback = new CallBackDatabase() {
         @Override
@@ -52,7 +48,6 @@ public class PeopleTab extends CustomUserTab implements DBLocationObserver {
     protected  List<String> getIds(User current_user){
         final String userId = UserInfo.getInstance().getCurrentUser().getID();
         final Database database = Database.getInstance();
-        radiusListener = userId + "_radiusListener";
         //  Get user Radius value and set listener for updates
         //  If it was already fetched, no need to read again, there is a listener
         // Get all other locations in Radius and add corresponding user to List

@@ -10,6 +10,7 @@ import java.util.List;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.DBUserObserver;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
@@ -35,7 +36,8 @@ public abstract class CustomUserTab extends CustomTab implements DBUserObserver 
                 for (User user : (List<User>) value) {
                     convId = user.getConvFromUser(userId);
                     if (!user.getID().equals(userId)) {
-                        usersItems.add(new CustomListItem(user.getID(), convId, user.getNickname()));
+                        usersItems.add(new CustomListItem(user.getID(), convId, OthersInfo.getInstance()
+                                .getUsersInRadius().get(user.getID()).getTitle()));
                     }
                 }
                 adapter.setItems(usersItems);

@@ -244,12 +244,12 @@ public class MessageListActivity extends AppCompatActivity {
     }
 
     private void prepareUsers(ArrayList<String> participants) {
-        database.readListObjOnce(participants, Database.Tables.USERS, new CallBackDatabase() {
+        database.readListObjOnce(participants, Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
                 if (((ArrayList) value).size() == 2) {
-                    myUser.setRadius(((User) (((ArrayList) value).get(0))).getRadius());
-                    otherUser.setRadius(((User) (((ArrayList) value).get(1))).getRadius());
+                    UserInfo.getInstance().getCurrentPosition().setRadius(((MLocation) (((ArrayList) value).get(0))).getRadius());
+                    otherLoc.setRadius(((MLocation) (((ArrayList) value).get(1))).getRadius());
                 }
 
             }
@@ -279,8 +279,7 @@ public class MessageListActivity extends AppCompatActivity {
 
     public void usersInRadius() { //this method needs to go through severe change - currently we are not saving the radius or the locations of users properly.
         ArrayList<String> participants = (ArrayList) chatLogs.getMembersId();
-        otherUser = new User(otherUserId);
-        otherLoc = new MLocation(otherUser.getID());
+        otherLoc = new MLocation(otherUserId);
         //read the users from the database in order to be able to access their radius in the compareLocation method.
         prepareUsers(participants);
 

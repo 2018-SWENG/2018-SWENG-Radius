@@ -77,7 +77,6 @@ public class MapUtilityTest {
         locations.add(location2);
 
         testUser = new User("testId");
-        testUser.setSpokenLanguages("English");
 
         homeFragment = new HomeFragment();
         mapListener = MapUtility.getMapInstance();
@@ -154,8 +153,8 @@ public class MapUtilityTest {
 
     @Test
     public void speaksSameLanguage() {
-        user1.setSpokenLanguages("English");
-        mapListener.speaksSameLanguage(user1);
+        location1.setSpokenLanguages("English");
+        mapListener.speaksSameLanguage(location1);
     }
 
     @Test

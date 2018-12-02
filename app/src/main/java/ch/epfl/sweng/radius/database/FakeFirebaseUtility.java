@@ -165,18 +165,14 @@ public class FakeFirebaseUtility extends Database {
         if(currentUSer != null) return;
         // Define Current user
         currentUSer = new User("testUser1");
-        currentUSer.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
 
         // Fill the users table
         usersTable.put("testUser1", currentUSer);
         User temp = new User("testUser2");
-        temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
         usersTable.put("testUser2", temp);
         temp = new User("testUser3");
-        temp.setUrlProfilePhoto("");
         usersTable.put("testUser3",temp);
         temp = new User("testUser4");
-        temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
         usersTable.put("testUser4",temp);
         usersTable.get("testUser1").addChat("testUser2", "chatid1234");
         usersTable.get("testUser1").addChat("testUser3", "chatid1234");
@@ -196,13 +192,24 @@ public class FakeFirebaseUtility extends Database {
     }
 
     private void fillLocationsTable(){
+
+        currentLoc.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
+
         locationsTable.put("testUser1", currentLoc);
-        locationsTable.put("testUser2", new MLocation("testUser2", defaultLng + 0.01,
-                defaultLat + 0.01));
-        locationsTable.put("testUser3", new MLocation("testUser3", defaultLng - 0.02,
-                defaultLat + 0.02));
-        locationsTable.put("testUser4", new MLocation("testUser4",
-                defaultLng - 0.01, defaultLat - 0.01));
+        MLocation temp = new MLocation("testUser2", defaultLng + 0.01,
+                defaultLat + 0.01);
+        temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
+
+        locationsTable.put("testUser2", temp);
+        temp = new MLocation("testUser3", defaultLng - 0.02,
+                defaultLat + 0.02);
+        temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
+
+        locationsTable.put("testUser3", temp);
+        temp = new MLocation("testUser4",
+                defaultLng - 0.01, defaultLat - 0.01);
+        temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
+        locationsTable.put("testUser4", temp);
 
         // Fill the group locations
         MLocation EPFL = new MLocation("EPFL",
