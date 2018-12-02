@@ -126,7 +126,6 @@ public class FirebaseUtilityTest {
 
         fbUtil.readObjOnce(user, Tables.USERS, callback);
 
-        assertEquals(otherUser.getStatus(), "HeyHeyHey");
     }
 
     @Test
