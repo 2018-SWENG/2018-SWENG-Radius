@@ -146,9 +146,9 @@ public class DatabaseObjectsTest {
     @Test
     public void testMLocation(){
 
-        MLocation mLocation = new MLocation();
+        MLocation mLocation = new MLocation("testLoc0");
         MLocation mLocation1 = new MLocation("locTest");
-        MLocation mLocation2 = new MLocation("locTest", new LatLng(2.0, 3.0));
+        MLocation mLocation2 = new MLocation("locTest", 2.0, 3.0);
 
         assertTrue(mLocation1.getID().equals("locTest"));
         assertTrue(mLocation2.getLatitude() == 2.0);

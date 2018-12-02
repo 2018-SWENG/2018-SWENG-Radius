@@ -10,6 +10,7 @@ import java.util.List;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.DBUserObserver;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
@@ -34,10 +35,18 @@ public abstract class CustomUserTab extends CustomTab implements DBUserObserver 
                 String userId = UserInfo.getInstance().getCurrentUser().getID();
 
                 for (User user : (List<User>) value) {
+                    Log.e("Refactor CustomUserTab", "Current feëtched userID is " + user.getID());
                     convId = user.getConvFromUser(userId);
+                    MLocation userLoc = OthersInfo.getInstance().getUsersInRadius().containsKey(userId) ?
+                            OthersInfo.getInstance().getUsersInRadius().get(userId) :
+                            OthersInfo.getInstance().getConvUsers().get(userId);
+
+                    if(userLoc == null){
+                        Log.e("CustomUserTab", "User " + userId + " not found!");
+                        continue;
+                    }
                     if (!user.getID().equals(userId)) {
-                        usersItems.add(new CustomListItem(user.getID(), convId, OthersInfo.getInstance()
-                                .getUsersInRadius().get(user.getID()).getTitle()));
+                        usersItems.add(new CustomListItem(user.getID(), convId, userLoc.getTitle()));
                     }
                 }
                 adapter.setItems(usersItems);

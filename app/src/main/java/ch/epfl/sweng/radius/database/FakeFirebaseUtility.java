@@ -103,7 +103,7 @@ public class FakeFirebaseUtility extends Database {
         DatabaseObject ret = null;
         switch (tableName){
             case LOCATIONS:
-                ret = new MLocation();
+                ret = new MLocation("testUser2");
                 break;
             case CHATLOGS:
                 ret = getChat();
@@ -121,8 +121,6 @@ public class FakeFirebaseUtility extends Database {
 
         HashMap<String, DatabaseObject> table = getTable(tableName);
         ArrayList<DatabaseObject> objsRead = new ArrayList<DatabaseObject>(table.values());
-
-        Log.w("Map TTest", "Size of objReads " + objsRead.size());
 
         callback.onFinish(objsRead);
     }
@@ -174,8 +172,8 @@ public class FakeFirebaseUtility extends Database {
         usersTable.put("testUser3",temp);
         temp = new User("testUser4");
         usersTable.put("testUser4",temp);
-        usersTable.get("testUser1").addChat("testUser2", "chatid1234");
-        usersTable.get("testUser1").addChat("testUser3", "chatid1234");
+        usersTable.get("testUser1").addChat("testUser2", "1");
+        usersTable.get("testUser1").addChat("testUser3", "0");
 
         // TODO: Fill the chatLogs table
         currentLoc = new MLocation("testUser1", defaultLng, defaultLat);

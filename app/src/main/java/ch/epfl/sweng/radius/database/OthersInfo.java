@@ -33,7 +33,6 @@ public class OthersInfo extends DBObservable{
     }
 
     private OthersInfo(){
-        Log.e("DEBUGG", "Initiate timer");
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -86,13 +85,13 @@ public class OthersInfo extends DBObservable{
 
     private void fetchConvUsers(){
         List<String> ids = new ArrayList<>(UserInfo.getInstance().getCurrentUser().getChatList().keySet());
-        Log.e("Refactor", "Size of ids is" + ids.size());
+        Log.e("Refactor OthersInfo", "Size of ids is" + ids.size());
         database.readListObjOnce(ids, Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
                 convUsers.clear();
                 for(MLocation loc : (ArrayList<MLocation>) value){
-                    Log.e("Refactor", "Current userID is" + loc.getID());
+                    Log.e("Refactor OthersInfo", "Current userID is" + loc.getID());
                     convUsers.put(loc.getID(), loc);
                 }
             }

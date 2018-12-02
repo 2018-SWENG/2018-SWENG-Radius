@@ -171,7 +171,7 @@ public class MapUtilityTest {
     public void testFakeDB(){
         Database.getInstance().writeInstanceObj(new User(), Database.Tables.USERS);
         Database.getInstance().writeInstanceObj(new ChatLogs("A"), Database.Tables.CHATLOGS);
-        Database.getInstance().writeInstanceObj(new MLocation(), Database.Tables.LOCATIONS);
+        Database.getInstance().writeInstanceObj(new MLocation("testLoc0"), Database.Tables.LOCATIONS);
 
         CallBackDatabase cb = new CallBackDatabase() {
             @Override

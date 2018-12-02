@@ -48,7 +48,7 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
         Database.activateDebugMode();
         OthersInfo.getInstance();
 
-        MLocation testUser = new MLocation("userTest0");
+        MLocation testUser = new MLocation("userTest1");
         testUser.setTitle("testNickname");
         testUser.setMessage("testStatus");
         testUser.setInterests("testInterests");

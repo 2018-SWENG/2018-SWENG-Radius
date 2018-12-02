@@ -30,6 +30,7 @@ public class PeopleTab extends CustomUserTab implements DBLocationObserver {
             for(MLocation loc : locations){
                 // TODO Fix for non-user locations by checking TBD location type
                 if(isInRadius(loc) && loc.isVisible() && (loc.getLocationType() == 0)){
+                    Log.e("Refactor PeopleTab", "User added in radius" + loc.getID());
                     userIDs.add(loc.getID());
                 }
             }
@@ -46,7 +47,6 @@ public class PeopleTab extends CustomUserTab implements DBLocationObserver {
 
     }
     protected  List<String> getIds(User current_user){
-        final String userId = UserInfo.getInstance().getCurrentUser().getID();
         final Database database = Database.getInstance();
         //  Get user Radius value and set listener for updates
         //  If it was already fetched, no need to read again, there is a listener

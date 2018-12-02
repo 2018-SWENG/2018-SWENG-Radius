@@ -12,7 +12,7 @@ public class LocationVisibilityTest {
 
     @Before
     public void setUp() {
-        testUser = new MLocation();
+        testUser = new MLocation("testLoc0");
     }
 
     @Test
