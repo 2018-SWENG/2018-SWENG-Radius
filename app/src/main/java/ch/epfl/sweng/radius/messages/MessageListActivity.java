@@ -1,8 +1,13 @@
 package ch.epfl.sweng.radius.messages;
 
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +33,9 @@ import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.utils.NotificationUtility;
+
+import static java.security.AccessController.getContext;
 
 
 /**
@@ -42,7 +50,6 @@ public class MessageListActivity extends AppCompatActivity {
     private ChatLogs chatLogs;
     private String chatId, otherUserId, myID;
     private ValueEventListener listener;
-
     //these might cause problems when we switch to multiple users and multiple different chats
     //This field will be used to enable chat with FRIENDS not in radius
     private static User myUser, otherUser;
@@ -61,6 +68,14 @@ public class MessageListActivity extends AppCompatActivity {
 
         }
     };
+
+    public void showNotification() {
+        Log.e("Notification", " Showed");
+        PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, MessageListActivity.class), 0);
+        Resources r = getResources();
+        NotificationUtility.getInstance(null, null, null).notifyNewMessage(chatId, "Coucou", pi);
+    }
+
 
     private String getOtherID() {
         String otherId = this.otherUserId;
@@ -311,6 +326,8 @@ public class MessageListActivity extends AppCompatActivity {
         setUpSendButton();
         setUpListener();
         setEnabled(true);
+        showNotification();
+
     }
 
     @Override
