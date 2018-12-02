@@ -9,8 +9,5 @@ import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserTab;
 public class FriendsTab extends CustomUserTab{
     public FriendsTab(){ super();}
 
-    protected List<String> getIds(User current_user){
-        return UserInfo.getInstance().getCurrentUser().getFriends();
-    }
 }
 

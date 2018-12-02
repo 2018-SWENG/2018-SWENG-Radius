@@ -11,7 +11,4 @@ public class RequestsTab extends CustomUserTab {
         super();
     }
 
-    protected List<String> getIds(User current_user) {
-        return UserInfo.getInstance().getCurrentUser().getFriendsInvitations();
-    }
 }

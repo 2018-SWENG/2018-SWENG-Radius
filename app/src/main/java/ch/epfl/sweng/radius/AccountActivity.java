@@ -1,31 +1,23 @@
 package ch.epfl.sweng.radius;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
-import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.friends.FriendsFragment;
 import ch.epfl.sweng.radius.home.HomeFragment;
@@ -41,11 +33,16 @@ public class AccountActivity extends AppCompatActivity {
     private Fragment friendsFragment;
     private Fragment profileFragment;
     private Timer timer;
-    private class myTimer extends  TimerTask {
+    public static class myTimer extends  TimerTask {
 
         public myTimer(){
             isSet = false;
         }
+
+        public myTimer getInstance(){
+            return new myTimer();
+        }
+
         boolean isSet;
 
         public void setSet(boolean set) {
@@ -140,7 +137,7 @@ public class AccountActivity extends AppCompatActivity {
         timer.schedule(timerTask, 20*60*1000);
     }
 
-    private void leaveApp(){
+    private static void leaveApp(){
         Log.e("SAVE SATE", "save UserInfo in external storage");
         UserInfo.getInstance().saveState();
 

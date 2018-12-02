@@ -103,5 +103,10 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
 
     @Test
     public void testLeaveApp(){
+
+        AccountActivity.myTimer mt = new AccountActivity.myTimer();
+        mt.isSet();
+        mt.run();
+
     }
 }
