@@ -128,6 +128,8 @@ public class OthersInfo extends DBObservable{
     public void putInTable(MLocation loc){
         switch (loc.getLocationType()){
             case 0:
+                if(loc.getID().equals(UserInfo.getInstance().getCurrentPosition().getID()))
+                    break;
                 usersPos.put(loc.getID(), loc);
                 break;
             case 1:

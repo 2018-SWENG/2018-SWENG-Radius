@@ -1,12 +1,20 @@
 package ch.epfl.sweng.radius;
 
+import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -23,6 +31,7 @@ import ch.epfl.sweng.radius.friends.FriendsFragment;
 import ch.epfl.sweng.radius.home.HomeFragment;
 import ch.epfl.sweng.radius.messages.MessagesFragment;
 import ch.epfl.sweng.radius.profile.ProfileFragment;
+import ch.epfl.sweng.radius.utils.NotificationUtility;
 
 public class AccountActivity extends AppCompatActivity {
 
@@ -61,7 +70,26 @@ public class AccountActivity extends AppCompatActivity {
     }
     private myTimer timerTask;
 
+    public void initChannel(String channel_name, String channel_description) {
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+        NotificationChannel mChannel = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            System.out.print("HEELLLO");
+            mChannel = new NotificationChannel(channel_name, channel_name, NotificationManager.IMPORTANCE_HIGH);
+            mChannel.setDescription(channel_description); mChannel.enableLights(true);
+            mChannel.setLightColor(Color.RED);mChannel.enableVibration(true);
+            mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+
+            mNotificationManager.createNotificationChannel(mChannel);
+        }
+
+        NotificationCompat.Builder msgNotif = new NotificationCompat.Builder(this, "radiusNotif");
+        NotificationCompat.Builder reqNotif = new NotificationCompat.Builder(this, "radiusNotif");
+
+        NotificationUtility.getInstance(mNotificationManager, msgNotif, reqNotif);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +106,7 @@ public class AccountActivity extends AppCompatActivity {
         friendsFragment = new FriendsFragment();
         profileFragment = new ProfileFragment();
 
-
+        initChannel("radiusNotif", "radius notifications");
         loadFragment(homeFragment);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigationView);

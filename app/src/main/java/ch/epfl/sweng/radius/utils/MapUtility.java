@@ -80,7 +80,7 @@ public class MapUtility implements DBLocationObserver {
         mblFusedLocationClient = LocationServices.getFusedLocationProviderClient( activity);
         try {
             if ( mblLocationPermissionGranted) {
-                Task location = mblFusedLocationClient.getLastLocation();
+                final Task location = mblFusedLocationClient.getLastLocation();
                 location.addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
@@ -88,6 +88,7 @@ public class MapUtility implements DBLocationObserver {
                             currentLocation = (Location) task.getResult();
                             LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(), currentLocation.getLongitude());
                             setCurrCoordinates(currentCoordinates);
+
                         }
                         else {
                             Toast.makeText( activity.getApplicationContext(), "Unable to get current location",
@@ -218,6 +219,6 @@ public class MapUtility implements DBLocationObserver {
     public void onLocationChange(String id){
         myPos = UserInfo.getInstance().getCurrentPosition();
         otherPos = OthersInfo.getInstance().getUsersInRadius();
+
     }
 }
-

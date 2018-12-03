@@ -1,7 +1,5 @@
 package ch.epfl.sweng.radius.database;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.Serializable;
 
 public class MLocation implements DatabaseObject, Serializable {
@@ -22,7 +20,7 @@ public class MLocation implements DatabaseObject, Serializable {
     private String interests;
 
     public MLocation(){
-        this.userID = "";
+        this.userID = Database.getInstance().getCurrent_user_id();
         this.latitude = 46.5160698;
         this.longitude = 6.5681216000000004;
         this.title = "";

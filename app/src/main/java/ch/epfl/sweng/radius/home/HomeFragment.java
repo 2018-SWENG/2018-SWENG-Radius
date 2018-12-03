@@ -181,7 +181,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
             }
     }
 
-    private void initMap() {
+    public void initMap() {
 
         if (mapListener.getCurrCoordinates() != null) {
 
@@ -191,6 +191,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
             moveCamera(coord, ZOOM);
             // Push current location to DB
             // Write the location of the current user to the database
+            /*
             Database.getInstance().readObjOnce(new MLocation("EPFL"), Database.Tables.LOCATIONS, new CallBackDatabase() {
                 @Override
                 public void onFinish(Object value) {
@@ -204,7 +205,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
                 public void onError(DatabaseError error) {
 
                 }
-            });
+            });*/
           //  mapListener.setMyPos(myPos);
 
             // Do locations here

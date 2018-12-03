@@ -1,7 +1,7 @@
 package ch.epfl.sweng.radius.messages;
 
-import android.app.NotificationManager;
-import android.content.Context;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,11 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
@@ -26,28 +27,28 @@ import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.OthersInfo;
-import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.utils.NotificationUtility;
 
+import static java.lang.Math.min;
 
 /**
  * Activity that hosts messages between two users
  * MessageListActivity and MessageListAdapter and some layout files are inspired from https://blog.sendbird.com/android-chat-tutorial-building-a-messaging-ui
  */
 public class MessageListActivity extends AppCompatActivity {
+
     private RecyclerView myMessageRecycler;
     private MessageListAdapter myMessageAdapter;
     private EditText messageZone;
     private Button sendButton;
     private ChatLogs chatLogs;
     private String chatId, otherUserId, myID;
-    private ValueEventListener listener;
-
     //these might cause problems when we switch to multiple users and multiple different chats
     //This field will be used to enable chat with FRIENDS not in radius
-    private static User myUser, otherUser;
     private MLocation otherLoc;
     private Database database;
+    private static HashMap<String, ChatState> isChatRunning = new HashMap<>();
 
     private final CallBackDatabase otherLocationCallback = new CallBackDatabase() {
         @Override
@@ -62,13 +63,23 @@ public class MessageListActivity extends AppCompatActivity {
         }
     };
 
+    public void showNotification(String content, String senderId) {
+        // Setup Intent to end here in case of click
+        Intent notifIntent = new Intent(this, MessageListActivity.class);
+        notifIntent.putExtra("chatId", this.chatId).putExtra("otherId", this.otherUserId);
+
+        PendingIntent pi = PendingIntent.getActivity(this, 0,notifIntent, 0);
+        // Build and show notification
+        NotificationUtility.getInstance(null, null, null)
+                .notifyNewMessage(senderId, content, pi);
+    }
+
+
     private String getOtherID() {
         String otherId = this.otherUserId;
         if (chatLogs.getMembersId().size() == 2) {
-            String tempID = chatLogs.getMembersId().get(0);
-            String tempID2 = chatLogs.getMembersId().get(1);
-            otherId = tempID.equals(myID) ?
-                    tempID : tempID2;
+            String tempID = chatLogs.getMembersId().get(0), tempID2 = chatLogs.getMembersId().get(1);
+            otherId = tempID.equals(myID) ? tempID : tempID2;
         }
         return otherId;
     }
@@ -78,8 +89,7 @@ public class MessageListActivity extends AppCompatActivity {
         public void onFinish(Object value) {
             chatLogs = (ChatLogs) value;
             if (chatLogs.getMembersId().size() == 2) {
-                String otherId = getOtherID();
-                otherLoc = new MLocation(otherId);
+                otherLoc = new MLocation(getOtherID());
                 database.readObjOnce(otherLoc, Database.Tables.LOCATIONS, otherLocationCallback);
             }
             if (chatLogs.getMembersId().size() < 2 && otherUserId != null) {
@@ -153,6 +163,19 @@ public class MessageListActivity extends AppCompatActivity {
         myMessageAdapter.setMessages(chatLogs.getMessages());
         myMessageRecycler.smoothScrollToPosition(chatLogs.getNumberOfMessages());
         myMessageAdapter.notifyDataSetChanged();
+
+        // If thread is running
+        if(isChatRunning.get(chatId) != null && !isChatRunning.get(chatId).isRunning()){
+            String senderNickname;
+            MLocation sender = OthersInfo.getInstance().getConvUsers().get(message.getSenderId());
+            // TODO: Replace by local data I guess
+            if(sender == null) senderNickname = "Anonymous";
+            else senderNickname = sender.getTitle();
+
+            isChatRunning.get(chatId).msgReceived();
+
+            showNotification(message.getContentMessage(), senderNickname);
+        }
     }
 
 
@@ -294,23 +317,41 @@ public class MessageListActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+
+        String chatId = getIntent().getExtras().getString("chatId");
+
+        if(chatId == null) return;
+
+        if(!isChatRunning.containsKey(chatId)){
+            final ChatState state = new ChatState();
+            isChatRunning.put(chatId, state);
+            return;
+        }
+        NotificationUtility.clearSeenMsg(isChatRunning.get(chatId).getUnreadMsg());
+
+        isChatRunning.get(chatId).clear();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        if(isChatRunning.containsKey(chatId))isChatRunning.get(chatId).leaveActivity();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.w("MessageActivity", "Just got onCreated");
-        //ChatInfo.getInstance().addUserObserver(this);
 
+        //ChatInfo.getInstance().addUserObserver(this)
         super.onCreate(savedInstanceState);
-        myUser  = UserInfo.getInstance().getCurrentUser();
         myID = UserInfo.getInstance().getCurrentUser().getID();
         database = Database.getInstance();
         setContentView(R.layout.activity_message_list);
         messageZone = findViewById(R.id.edittext_chatbox);
 
-        setInfo();
-
-        setUpUI();
-        setUpSendButton();
-        setUpListener();
-        setEnabled(true);
+        setInfo();setUpUI();setUpSendButton();setUpListener();setEnabled(true);
     }
 
     @Override
