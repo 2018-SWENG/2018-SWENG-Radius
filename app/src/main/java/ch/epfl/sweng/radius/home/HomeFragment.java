@@ -181,7 +181,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
             }
     }
 
-    private void initMap() {
+    public void initMap() {
 
         if (mapListener.getCurrCoordinates() != null) {
 
