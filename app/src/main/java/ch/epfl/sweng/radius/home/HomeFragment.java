@@ -1,7 +1,9 @@
 package ch.epfl.sweng.radius.home;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -39,7 +41,9 @@ import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.database.UserUtils;
+import ch.epfl.sweng.radius.messages.MessageListActivity;
 import ch.epfl.sweng.radius.utils.MapUtility;
+import ch.epfl.sweng.radius.utils.NotificationUtility;
 import ch.epfl.sweng.radius.utils.TabAdapter;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLocationObserver {
@@ -296,6 +300,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         float color = friendsID.contains(locID) ? BitmapDescriptorFactory.HUE_BLUE :
                                                         BitmapDescriptorFactory.HUE_RED;
 
+        if(friendsID.contains(locID)){
+            showNearFriendNotification(locID, userName);
+        }
+
         final MarkerOptions marker = new MarkerOptions().position(newPos)
                 .title(userName + ": " + status)
                 .icon(BitmapDescriptorFactory.defaultMarker(color));
@@ -325,5 +333,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
             initCircle(coord);
             markNearbyUsers();
         }
+    }
+
+    public void showNearFriendNotification(String userID, String userNickname) {
+        // Setup Intent to end here in case of click
+        Intent notifIntent = new Intent(this.getActivity(), HomeFragment.class);
+        PendingIntent pi = PendingIntent.getActivity(this.getActivity(), 0, notifIntent, 0);
+        // Build and show notification
+        NotificationUtility.getInstance(null, null, null, null)
+                .notifyFriendIsNear(userID, userNickname, pi);
     }
 }

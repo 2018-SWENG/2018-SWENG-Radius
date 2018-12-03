@@ -70,7 +70,7 @@ public class MessageListActivity extends AppCompatActivity {
 
         PendingIntent pi = PendingIntent.getActivity(this, 0,notifIntent, 0);
         // Build and show notification
-        NotificationUtility.getInstance(null, null, null)
+        NotificationUtility.getInstance(null, null, null, null)
                 .notifyNewMessage(senderId, content, pi);
     }
 
