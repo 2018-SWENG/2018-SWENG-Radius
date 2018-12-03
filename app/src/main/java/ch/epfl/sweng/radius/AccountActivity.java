@@ -87,8 +87,9 @@ public class AccountActivity extends AppCompatActivity {
 
         NotificationCompat.Builder msgNotif = new NotificationCompat.Builder(this, "radiusNotif");
         NotificationCompat.Builder reqNotif = new NotificationCompat.Builder(this, "radiusNotif");
+        NotificationCompat.Builder nearFriendNotif = new NotificationCompat.Builder(this, "radiusNotif");
 
-        NotificationUtility.getInstance(mNotificationManager, msgNotif, reqNotif);
+        NotificationUtility.getInstance(mNotificationManager, msgNotif, reqNotif, nearFriendNotif);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
