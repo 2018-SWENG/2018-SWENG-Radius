@@ -70,28 +70,19 @@ public class AccountActivity extends AppCompatActivity {
     }
     private myTimer timerTask;
 
-    @SuppressLint("NewApi")
     private void initChannel(String channel_name, String channel_description) {
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        String id = channel_name;
-        CharSequence name = channel_name;
-        String description = channel_description;
-        int importance = NotificationManager.IMPORTANCE_HIGH;
-
         NotificationChannel mChannel = null;
-    //    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            mChannel = new NotificationChannel(id, name, importance);
-
-            mChannel.setDescription(description);
-            mChannel.enableLights(true);
-            mChannel.setLightColor(Color.RED);
-            mChannel.enableVibration(true);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            mChannel = new NotificationChannel(channel_name, channel_name, NotificationManager.IMPORTANCE_HIGH);
+            mChannel.setDescription(channel_description); mChannel.enableLights(true);
+            mChannel.setLightColor(Color.RED);mChannel.enableVibration(true);
             mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
 
             mNotificationManager.createNotificationChannel(mChannel);
-      //  }
+        }
 
         NotificationCompat.Builder msgNotif = new NotificationCompat.Builder(this, "radiusNotif");
         NotificationCompat.Builder reqNotif = new NotificationCompat.Builder(this, "radiusNotif");
