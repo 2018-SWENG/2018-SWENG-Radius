@@ -32,43 +32,11 @@ import ch.epfl.sweng.radius.utils.NotificationUtility;
 
 import static java.lang.Math.min;
 
-
 /**
  * Activity that hosts messages between two users
  * MessageListActivity and MessageListAdapter and some layout files are inspired from https://blog.sendbird.com/android-chat-tutorial-building-a-messaging-ui
  */
 public class MessageListActivity extends AppCompatActivity {
-
-    class chatState{
-        private boolean isRunning;
-        private int     unreadMsg;
-
-        public chatState(){
-            this.isRunning = true;
-            this.unreadMsg = 0;
-        }
-
-        public void clear(){
-            isRunning = true;
-            unreadMsg = 0;
-        }
-
-        public void leaveActivity(){
-            isRunning = false;
-        }
-
-        public void msgReceived(){
-            unreadMsg++;
-        }
-
-        public boolean isRunning(){
-            return isRunning;
-        }
-
-        public int getUnreadMsg() {
-            return unreadMsg;
-        }
-    }
 
     private RecyclerView myMessageRecycler;
     private MessageListAdapter myMessageAdapter;
@@ -80,7 +48,7 @@ public class MessageListActivity extends AppCompatActivity {
     //This field will be used to enable chat with FRIENDS not in radius
     private MLocation otherLoc;
     private Database database;
-    private static HashMap<String, chatState> isChatRunning = new HashMap<>();
+    private static HashMap<String, ChatState> isChatRunning = new HashMap<>();
 
     private final CallBackDatabase otherLocationCallback = new CallBackDatabase() {
         @Override
@@ -98,13 +66,10 @@ public class MessageListActivity extends AppCompatActivity {
     public void showNotification(String content, String senderId) {
         // Setup Intent to end here in case of click
         Intent notifIntent = new Intent(this, MessageListActivity.class);
-        notifIntent.putExtra("chatId", this.chatId);
-        notifIntent.putExtra("otherId", this.otherUserId);
+        notifIntent.putExtra("chatId", this.chatId).putExtra("otherId", this.otherUserId);
 
-        PendingIntent pi = PendingIntent.getActivity(this, 0,notifIntent
-                , 0);
+        PendingIntent pi = PendingIntent.getActivity(this, 0,notifIntent, 0);
         // Build and show notification
-        // TODO: Change unique Notification by list or remove ID
         NotificationUtility.getInstance(null, null, null)
                 .notifyNewMessage(senderId, content, pi);
     }
@@ -113,10 +78,8 @@ public class MessageListActivity extends AppCompatActivity {
     private String getOtherID() {
         String otherId = this.otherUserId;
         if (chatLogs.getMembersId().size() == 2) {
-            String tempID = chatLogs.getMembersId().get(0);
-            String tempID2 = chatLogs.getMembersId().get(1);
-            otherId = tempID.equals(myID) ?
-                    tempID : tempID2;
+            String tempID = chatLogs.getMembersId().get(0), tempID2 = chatLogs.getMembersId().get(1);
+            otherId = tempID.equals(myID) ? tempID : tempID2;
         }
         return otherId;
     }
@@ -126,8 +89,7 @@ public class MessageListActivity extends AppCompatActivity {
         public void onFinish(Object value) {
             chatLogs = (ChatLogs) value;
             if (chatLogs.getMembersId().size() == 2) {
-                String otherId = getOtherID();
-                otherLoc = new MLocation(otherId);
+                otherLoc = new MLocation(getOtherID());
                 database.readObjOnce(otherLoc, Database.Tables.LOCATIONS, otherLocationCallback);
             }
             if (chatLogs.getMembersId().size() < 2 && otherUserId != null) {
@@ -363,7 +325,7 @@ public class MessageListActivity extends AppCompatActivity {
         if(chatId == null) return;
 
         if(!isChatRunning.containsKey(chatId)){
-            final chatState state = new chatState();
+            final ChatState state = new ChatState();
             isChatRunning.put(chatId, state);
             return;
         }
