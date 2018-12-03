@@ -31,11 +31,11 @@ public class NotificationUtility{
         this.notificationManager = nm;
 
         this.msgNotifBuilder = msgNotif
-                .setSmallIcon(R.drawable.fui_ic_mail_white_24dp)
+                .setSmallIcon(R.mipmap.ic_launcher_foreground)
                 .setContentTitle("Radius Chat")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
         this.reqNotifBuilder = reqNotif
-                .setSmallIcon(R.drawable.fui_ic_mail_white_24dp)
+                .setSmallIcon(R.mipmap.ic_launcher_foreground)
                 .setContentTitle("Radius")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
     }
@@ -59,16 +59,15 @@ public class NotificationUtility{
     }
 
 
-    public void notifyNewMessage(String chatID, String senderID, PendingIntent pi) {
+    public void notifyNewMessage(String senderId, String content, PendingIntent pi) {
 
-         msgNotifBuilder.setContentText("New Message in "+ chatID + " from " + senderID)
+         msgNotifBuilder.setContentText("New Message from " + senderId + " : " + content + "...")
                 .setTicker("Radius")
                 .setSmallIcon(android.R.drawable.ic_menu_report_image)
                 .setContentTitle("Radius")
                 .setContentIntent(pi)
                 .setAutoCancel(true);
         unseenMsg++;
-        msgNotifBuilder.setContentText("New Message in "+ chatID + " from " + senderID);
         notificationManager.notify(1, msgNotifBuilder.build());
     }
 

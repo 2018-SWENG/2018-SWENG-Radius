@@ -23,7 +23,7 @@ public class MLocation implements DatabaseObject, Serializable {
     private String interests;
 
     public MLocation(){
-        this.userID = UUID.randomUUID().toString().substring(0, 20);
+        this.userID = Database.getInstance().getCurrent_user_id();
         this.latitude = 46.5160698;
         this.longitude = 6.5681216000000004;
         this.title = "";

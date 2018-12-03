@@ -1,13 +1,8 @@
 package ch.epfl.sweng.radius.messages;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,12 +25,10 @@ import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.OthersInfo;
-import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.NotificationUtility;
 
 import static java.lang.Math.min;
-import static java.security.AccessController.getContext;
 
 
 /**
@@ -50,10 +42,8 @@ public class MessageListActivity extends AppCompatActivity {
     private Button sendButton;
     private ChatLogs chatLogs;
     private String chatId, otherUserId, myID;
-    private ValueEventListener listener;
     //these might cause problems when we switch to multiple users and multiple different chats
     //This field will be used to enable chat with FRIENDS not in radius
-    private static User myUser, otherUser;
     private MLocation otherLoc;
     private Database database;
     private boolean isRunning = false;
@@ -73,10 +63,17 @@ public class MessageListActivity extends AppCompatActivity {
     };
 
     public void showNotification(String content, String senderId) {
-        Log.e("Notification", " Showed");
-        PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, MessageListActivity.class), 0);
-        Resources r = getResources();
-        NotificationUtility.getInstance(null, null, null).notifyNewMessage(senderId, content, pi);
+        // Setup Intent to end here in case of click
+        Intent notifIntent = new Intent(this, MessageListActivity.class);
+        notifIntent.putExtra("chatId", this.chatId);
+        notifIntent.putExtra("otherId", this.otherUserId);
+
+        PendingIntent pi = PendingIntent.getActivity(this, 0,notifIntent
+                , 0);
+        // Build and show notification
+        // TODO: Change unique Notification by list or remove ID
+        NotificationUtility.getInstance(null, null, null)
+                .notifyNewMessage(senderId, content, pi);
     }
 
 
@@ -174,8 +171,14 @@ public class MessageListActivity extends AppCompatActivity {
 
         // If thread is running
         if(!isRunning){
+            String senderNickname;
+            MLocation sender = OthersInfo.getInstance().getConvUsers().get(message.getSenderId());
+            // TODO: Replace by local data I guess
+            if(sender == null) senderNickname = "Anonymous";
+            else senderNickname = sender.getTitle();
+
             unreadMsg++;
-            showNotification(message.getContentMessage().substring(0, min(20, message.getContentMessage().length())), message.getSenderId());
+            showNotification(message.getContentMessage().substring(0, min(20, message.getContentMessage().length())), senderNickname);
         }
     }
 
@@ -337,7 +340,6 @@ public class MessageListActivity extends AppCompatActivity {
         //ChatInfo.getInstance().addUserObserver(this);
 
         super.onCreate(savedInstanceState);
-        myUser  = UserInfo.getInstance().getCurrentUser();
         myID = UserInfo.getInstance().getCurrentUser().getID();
         database = Database.getInstance();
         setContentView(R.layout.activity_message_list);
