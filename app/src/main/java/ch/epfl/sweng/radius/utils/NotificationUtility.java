@@ -25,11 +25,13 @@ public class NotificationUtility{
         this.msgNotifBuilder = msgNotif
                 .setSmallIcon(R.mipmap.ic_launcher_foreground)
                 .setContentTitle("Radius Chat")
+                .setTicker("Radius")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
         this.reqNotifBuilder = reqNotif
                 .setSmallIcon(R.mipmap.ic_launcher_foreground)
                 .setContentTitle("Radius")
+                .setTicker("Radius")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
     }
@@ -56,10 +58,9 @@ public class NotificationUtility{
     public void notifyNewMessage(String senderId, String content, PendingIntent pi) {
 
          msgNotifBuilder.setContentText("New Message from " + senderId + " : " + content + "...")
-                .setTicker("Radius")
-                .setSmallIcon(android.R.drawable.ic_menu_report_image)
-                .setContentTitle("Radius")
-                .setContentIntent(pi);
+                 .setContentIntent(pi)
+                .setSmallIcon(android.R.drawable.ic_dialog_email)
+                .setContentTitle("Radius Chat");
         unseenMsg++;
         notificationManager.notify(1, msgNotifBuilder.build());
     }
@@ -67,9 +68,8 @@ public class NotificationUtility{
     public void notifyNewFrienReq(String userID, String userNickname, PendingIntent pi) {
         unseenMsg++;
         reqNotifBuilder.setContentText("New Friend Request from "+ userNickname + " (" + userID+")")
-                .setTicker("Radius")
-                .setSmallIcon(android.R.drawable.ic_menu_report_image)
-                .setContentTitle("Radius")
+                .setSmallIcon(android.R.drawable.alert_dark_frame)
+                .setContentTitle("Radius Friend Request")
                 .setContentIntent(pi);
         notificationManager.notify(2, reqNotifBuilder.build());
     }
