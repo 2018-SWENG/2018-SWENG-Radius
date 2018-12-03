@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.DBUserObserver;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.storage.Storage;
@@ -131,11 +132,11 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
 
     public void setUpInfos(){
         //Get the current user
-        User current_user = UserInfo.getInstance().getCurrentUser();
+        MLocation current_user = UserInfo.getInstance().getCurrentPosition();
 
         // Fill the labels with the user info
-        userNickname.setText(current_user.getNickname());
-        userStatus.setText(current_user.getStatus());
+        userNickname.setText(current_user.getTitle());
+        userStatus.setText(current_user.getMessage());
         userInterests.setText(current_user.getInterests());
         selectedLanguages.setText(current_user.getSpokenLanguages());
         radiusValue.setText(current_user.getRadius() + "m");
@@ -176,9 +177,9 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
     }
 
     private void setUpProfilePhoto() {
-        User current_user = UserInfo.getInstance().getCurrentUser();
+        MLocation current_user = UserInfo.getInstance().getCurrentPosition();
 
-        if (current_user.getUrlProfilePhoto() != null || current_user.getUrlProfilePhoto().equals("")) { // puts the image from database into the circle
+        if (current_user.getUrlProfilePhoto() != null && !current_user.getUrlProfilePhoto().equals("")) { // puts the image from database into the circle
             Picasso.get().load(current_user.getUrlProfilePhoto()).into(userPhoto);
         }
 
@@ -199,7 +200,7 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         builder.setPositiveButton(R.string.ok_label, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String languagesText = UserInfo.getInstance().getCurrentUser().getSpokenLanguages();
+                String languagesText = UserInfo.getInstance().getCurrentPosition().getSpokenLanguages();
                 for (int i = 0; i < spokenLanguages.size() ; i++) {
                     if (!languagesText.contains(selectableLanguages.get(spokenLanguages.get(i)))) {
                         languagesText = languagesText + " " +selectableLanguages.get(spokenLanguages.get(i));
@@ -242,14 +243,14 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         String statusString = getDataFromTextInput(statusInput);
         String interestsString = getDataFromTextInput(interestsInput);
 
-        User currentUser = UserInfo.getInstance().getCurrentUser();
+        MLocation currentUser = UserInfo.getInstance().getCurrentPosition();
 
         if (!nicknameString.isEmpty()) {
-            currentUser.setNickname(nicknameString);
+            currentUser.setTitle(nicknameString);
             userNickname.setText(nicknameString);
         }
         if (!statusString.isEmpty()) {
-            currentUser.setStatus(statusString);
+            currentUser.setMessage(statusString);
             userStatus.setText(statusString);
         }
 
@@ -283,11 +284,13 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (resultCode == RESULT_OK && requestCode == 1) {
             mImageUri = intent.getData();
-            if(intent.getData().toString().isEmpty())
-                mImageUri = new Uri.Builder().build();
-            else
-                Log.e("DEBUG", mImageUri.toString());
-            Picasso.get().load(mImageUri).into(userPhoto); // this is where we change the image - so use upload file method here
+           
+            try {
+                Picasso.get().load(mImageUri).into(userPhoto);
+            }// this is where we change the image - so use upload file method here
+            catch (IllegalArgumentException e){
+                Log.e("FirebaseStorage", " Image not found !");
+            }
         }
     }
 

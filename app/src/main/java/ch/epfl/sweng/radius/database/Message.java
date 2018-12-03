@@ -8,7 +8,7 @@ import java.util.Date;
  * who are the receivers. DO NOT STORE DIRECTLY AN INSTANCE OF MESSAGE
  * IN THE DB.
  */
-public class Message {
+public class Message implements DatabaseObject{
     public final static Integer NUMBER_ELEMENTS_IN_MESSAGE = 3;
 
     private String senderId;
@@ -62,6 +62,11 @@ public class Message {
 
         return date1.equals(date2) && m1.contentMessage.equals(m2.contentMessage)
                 && m1.senderId.equals(m2.senderId);
+    }
+
+    @Override
+    public String getID() {
+        return null;
     }
 }
 

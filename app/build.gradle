@@ -50,11 +50,12 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:customtabs:28.0.0'
     implementation 'com.android.support:design:28.0.0'
-
+    implementation "com.android.support:support-compat:28.0.0"
 
     //Picasso for downloading images from url
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.android.support:exifinterface:28.0.0' // just here to make sure picasso doesn't cause a crash
+    implementation 'com.android.support:exifinterface:28.0.0'
+    // just here to make sure picasso doesn't cause a crash
 
     implementation 'com.android.support:support-media-compat:28.0.0'
     implementation 'com.android.support:support-v4:28.0.0'
@@ -76,6 +77,7 @@ dependencies {
     implementation 'org.powermock:powermock-module-junit4:1.6.5'
 
     testImplementation 'org.powermock:powermock-api-mockito:1.6.5'
+    androidTestImplementation 'org.powermock:powermock-api-mockito:1.6.5'
     implementation 'org.powermock:powermock-api-mockito:1.6.5'
 
     androidTestImplementation 'com.android.support.test:rules:1.0.2'

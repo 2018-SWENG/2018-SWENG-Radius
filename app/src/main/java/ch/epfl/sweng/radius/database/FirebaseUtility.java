@@ -21,6 +21,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.radius.storage.FirebaseStorageUtility;
+
 class ChildListener implements ChildEventListener {
 
     CallBackDatabase callback;
@@ -33,7 +35,7 @@ class ChildListener implements ChildEventListener {
 
     @Override
     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        Log.e("message", "New child !");
+        Log.e("Notification", "CHild added !");
         callback.onFinish(dataSnapshot.getValue(child.second));
     }
 

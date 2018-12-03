@@ -40,9 +40,10 @@ public abstract class Database {
      * Modify the singleton instance of the DBUtility, with a FakeDatabase instance
      * Call this method only for testing purpose.
      */
-    public static void activateDebugMode(){
+    public static boolean activateDebugMode(){
         DEBUG_MODE = true;
         database = new FakeFirebaseUtility();
+        return false;
     }
 
     /**

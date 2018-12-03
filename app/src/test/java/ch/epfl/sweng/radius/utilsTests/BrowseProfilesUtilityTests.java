@@ -18,6 +18,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
+import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.BrowseProfilesUtility;
 
 import static org.junit.Assert.assertTrue;
@@ -68,6 +70,13 @@ public class BrowseProfilesUtilityTests {
         String profileOwnerName;
         profileOwnerName = profileListener.getProfileOwner();
         assertTrue(profileOwnerName.equals(profileOwner));
+    }
+
+    @Test
+    public void testUnblockUser() {
+        User currentUser = UserInfo.getInstance().getCurrentUser();
+        currentUser.getBlockedUsers().add(profileOwner);
+        profileListener.unblockUser();
     }
 
     @After

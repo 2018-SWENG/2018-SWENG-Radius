@@ -191,6 +191,12 @@ public class HomeFragmentTest {
     }
 
     @Test
+    public void initMap(){
+        fragment.initMap();
+    }
+
+
+    @Test
     public void testOnMapReady(){
   //  try {
         fragment.onMapReady(mockMap);
