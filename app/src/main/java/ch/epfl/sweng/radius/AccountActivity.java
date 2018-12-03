@@ -1,5 +1,6 @@
 package ch.epfl.sweng.radius;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -69,6 +70,7 @@ public class AccountActivity extends AppCompatActivity {
     }
     private myTimer timerTask;
 
+    @SuppressLint("NewApi")
     private void initChannel(String channel_name, String channel_description) {
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -79,7 +81,7 @@ public class AccountActivity extends AppCompatActivity {
         int importance = NotificationManager.IMPORTANCE_HIGH;
 
         NotificationChannel mChannel = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+    //    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             mChannel = new NotificationChannel(id, name, importance);
 
             mChannel.setDescription(description);
@@ -89,7 +91,7 @@ public class AccountActivity extends AppCompatActivity {
             mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
 
             mNotificationManager.createNotificationChannel(mChannel);
-        }
+      //  }
 
         NotificationCompat.Builder msgNotif = new NotificationCompat.Builder(this, "radiusNotif");
         NotificationCompat.Builder reqNotif = new NotificationCompat.Builder(this, "radiusNotif");

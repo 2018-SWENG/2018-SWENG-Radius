@@ -337,9 +337,7 @@ public class MessageListActivity extends AppCompatActivity {
     @Override
     public void onPause(){
         super.onPause();
-        if(isChatRunning.containsKey(chatId)){
-            isChatRunning.get(chatId).leaveActivity();
-        }
+        if(isChatRunning.containsKey(chatId))isChatRunning.get(chatId).leaveActivity();
     }
 
     @Override
@@ -353,12 +351,7 @@ public class MessageListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_message_list);
         messageZone = findViewById(R.id.edittext_chatbox);
 
-        setInfo();
-
-        setUpUI();
-        setUpSendButton();
-        setUpListener();
-        setEnabled(true);
+        setInfo();setUpUI();setUpSendButton();setUpListener();setEnabled(true);
     }
 
     @Override
