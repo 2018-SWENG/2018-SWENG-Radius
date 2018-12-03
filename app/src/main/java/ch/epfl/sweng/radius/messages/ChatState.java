@@ -19,7 +19,8 @@ public class ChatState{
     }
 
     public void msgReceived(){
-        unreadMsg++;
+
+        if(!isRunning)unreadMsg++;
     }
 
     public boolean isRunning(){

@@ -1,19 +1,11 @@
 package ch.epfl.sweng.radius.utils;
 
-import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.AppCompatActivity;
 
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.messages.MessageListActivity;
 
 public class NotificationUtility{
 
@@ -33,11 +25,13 @@ public class NotificationUtility{
         this.msgNotifBuilder = msgNotif
                 .setSmallIcon(R.mipmap.ic_launcher_foreground)
                 .setContentTitle("Radius Chat")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
         this.reqNotifBuilder = reqNotif
                 .setSmallIcon(R.mipmap.ic_launcher_foreground)
                 .setContentTitle("Radius")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
     }
 
     public static NotificationUtility getInstance(NotificationManager nm, NotificationCompat.Builder msgNotif, NotificationCompat.Builder reqNotif){
@@ -46,16 +40,16 @@ public class NotificationUtility{
         return instance;
     }
 
-    public static void resetUnseenMsg(){
+    public void resetUnseenMsg(){
         unseenMsg = 0;
     }
 
-    public static void resetUnseenReq(){
+    public void resetUnseenReq(){
         unseenMsg = 0;
     }
 
     public static void clearSeenMsg(int num){
-        unseenMsg -= num;
+        if(unseenMsg >= num) unseenMsg -= num;
     }
 
 
@@ -65,15 +59,18 @@ public class NotificationUtility{
                 .setTicker("Radius")
                 .setSmallIcon(android.R.drawable.ic_menu_report_image)
                 .setContentTitle("Radius")
-                .setContentIntent(pi)
-                .setAutoCancel(true);
+                .setContentIntent(pi);
         unseenMsg++;
         notificationManager.notify(1, msgNotifBuilder.build());
     }
 
-    public void notifyNewFrienReq(String userID, String userNickname) {
+    public void notifyNewFrienReq(String userID, String userNickname, PendingIntent pi) {
         unseenMsg++;
-        reqNotifBuilder.setContentText("New Friend Request from "+ userNickname + " (" + userID+")");
+        reqNotifBuilder.setContentText("New Friend Request from "+ userNickname + " (" + userID+")")
+                .setTicker("Radius")
+                .setSmallIcon(android.R.drawable.ic_menu_report_image)
+                .setContentTitle("Radius")
+                .setContentIntent(pi);
         notificationManager.notify(2, reqNotifBuilder.build());
     }
 }
