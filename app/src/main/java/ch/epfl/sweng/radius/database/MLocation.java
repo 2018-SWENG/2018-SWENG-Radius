@@ -1,9 +1,6 @@
 package ch.epfl.sweng.radius.database;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.Serializable;
-import java.util.UUID;
 
 public class MLocation implements DatabaseObject, Serializable {
 

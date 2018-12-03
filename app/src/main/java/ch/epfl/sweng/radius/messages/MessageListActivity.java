@@ -16,7 +16,9 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
@@ -36,6 +38,38 @@ import static java.lang.Math.min;
  * MessageListActivity and MessageListAdapter and some layout files are inspired from https://blog.sendbird.com/android-chat-tutorial-building-a-messaging-ui
  */
 public class MessageListActivity extends AppCompatActivity {
+
+    class chatState{
+        private boolean isRunning;
+        private int     unreadMsg;
+
+        public chatState(){
+            this.isRunning = true;
+            this.unreadMsg = 0;
+        }
+
+        public void clear(){
+            isRunning = true;
+            unreadMsg = 0;
+        }
+
+        public void leaveActivity(){
+            isRunning = false;
+        }
+
+        public void msgReceived(){
+            unreadMsg++;
+        }
+
+        public boolean isRunning(){
+            return isRunning;
+        }
+
+        public int getUnreadMsg() {
+            return unreadMsg;
+        }
+    }
+
     private RecyclerView myMessageRecycler;
     private MessageListAdapter myMessageAdapter;
     private EditText messageZone;
@@ -46,8 +80,7 @@ public class MessageListActivity extends AppCompatActivity {
     //This field will be used to enable chat with FRIENDS not in radius
     private MLocation otherLoc;
     private Database database;
-    private boolean isRunning = false;
-    private int unreadMsg = 0;
+    private static HashMap<String, chatState> isChatRunning = new HashMap<>();
 
     private final CallBackDatabase otherLocationCallback = new CallBackDatabase() {
         @Override
@@ -170,14 +203,15 @@ public class MessageListActivity extends AppCompatActivity {
         myMessageAdapter.notifyDataSetChanged();
 
         // If thread is running
-        if(!isRunning){
+        if(isChatRunning.get(chatId) != null && !isChatRunning.get(chatId).isRunning()){
             String senderNickname;
             MLocation sender = OthersInfo.getInstance().getConvUsers().get(message.getSenderId());
             // TODO: Replace by local data I guess
             if(sender == null) senderNickname = "Anonymous";
             else senderNickname = sender.getTitle();
 
-            unreadMsg++;
+            isChatRunning.get(chatId).msgReceived();
+
             showNotification(message.getContentMessage().substring(0, min(20, message.getContentMessage().length())), senderNickname);
         }
     }
@@ -323,22 +357,34 @@ public class MessageListActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-        this.isRunning = true;
-        NotificationUtility.clearSeenMsg(unreadMsg);
-        unreadMsg = 0;
+
+        String chatId = getIntent().getExtras().getString("chatId");
+
+        if(chatId == null) return;
+
+        if(!isChatRunning.containsKey(chatId)){
+            final chatState state = new chatState();
+            isChatRunning.put(chatId, state);
+            return;
+        }
+        NotificationUtility.clearSeenMsg(isChatRunning.get(chatId).getUnreadMsg());
+
+        isChatRunning.get(chatId).clear();
     }
 
     @Override
     public void onPause(){
         super.onPause();
-        this.isRunning = false;
+        if(isChatRunning.containsKey(chatId)){
+            isChatRunning.get(chatId).leaveActivity();
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.w("MessageActivity", "Just got onCreated");
-        //ChatInfo.getInstance().addUserObserver(this);
 
+        //ChatInfo.getInstance().addUserObserver(this)
         super.onCreate(savedInstanceState);
         myID = UserInfo.getInstance().getCurrentUser().getID();
         database = Database.getInstance();
