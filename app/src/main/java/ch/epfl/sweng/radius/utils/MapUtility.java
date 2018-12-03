@@ -37,7 +37,6 @@ public class MapUtility implements DBLocationObserver {
     private static final int LOC_PERMIT_REQUEST_CODE = 1234;
     private static final double DEFAULT_LATITUDE = 46.5191;
     private static final double DEFAULT_LONGITUDE = 6.5668;
-    private boolean positionChanged = false;
 
     private static FusedLocationProviderClient mblFusedLocationClient;
     private static boolean mblLocationPermissionGranted;
@@ -89,7 +88,6 @@ public class MapUtility implements DBLocationObserver {
                             currentLocation = (Location) task.getResult();
                             LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(), currentLocation.getLongitude());
                             setCurrCoordinates(currentCoordinates);
-                            positionChanged = true;
 
                         }
                         else {
