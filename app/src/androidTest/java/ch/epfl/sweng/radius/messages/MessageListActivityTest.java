@@ -168,9 +168,9 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
         assertEquals("You can't text this user.", ((EditText) mlActivity.findViewById(R.id.edittext_chatbox)).getText().toString());
     }
 
-    @Ignore
     @Test
     public void sendMessage() {
+        mlActivity.showNotification("Coucou", "Coucou");
     }
 
     @Ignore
