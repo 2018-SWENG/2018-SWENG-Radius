@@ -2,17 +2,15 @@ package ch.epfl.sweng.radius.utils;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 import ch.epfl.sweng.radius.R;
 
-public class NotificationUtility{
+public class NotificationUtility {
 
     private static int unseenMsg = 0;
     private static int unseenReq = 0;
-    private Context context;
-    private String channelID;
     private  NotificationManager notificationManager;
     private  NotificationCompat.Builder msgNotifBuilder;
     private NotificationCompat.Builder reqNotifBuilder;
@@ -24,14 +22,12 @@ public class NotificationUtility{
 
         this.msgNotifBuilder = msgNotif
                 .setSmallIcon(R.mipmap.ic_launcher_foreground)
-                .setContentTitle("Radius Chat")
-                .setTicker("Radius")
+                .setContentTitle("Radius")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
         this.reqNotifBuilder = reqNotif
                 .setSmallIcon(R.mipmap.ic_launcher_foreground)
                 .setContentTitle("Radius")
-                .setTicker("Radius")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
     }
@@ -56,11 +52,10 @@ public class NotificationUtility{
 
 
     public void notifyNewMessage(String senderId, String content, PendingIntent pi) {
-
-         msgNotifBuilder.setContentText("New Message from " + senderId + " : " + content + "...")
+         msgNotifBuilder.setContentText("New Message : " + content)
                  .setContentIntent(pi)
-                .setSmallIcon(android.R.drawable.ic_dialog_email)
-                .setContentTitle("Radius Chat");
+                 .setSmallIcon(android.R.drawable.ic_dialog_email)
+                 .setContentTitle(senderId);
         unseenMsg++;
         notificationManager.notify(1, msgNotifBuilder.build());
     }

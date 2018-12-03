@@ -70,12 +70,13 @@ public class AccountActivity extends AppCompatActivity {
     }
     private myTimer timerTask;
 
-    private void initChannel(String channel_name, String channel_description) {
+    public void initChannel(String channel_name, String channel_description) {
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         NotificationChannel mChannel = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            System.out.print("HEELLLO");
             mChannel = new NotificationChannel(channel_name, channel_name, NotificationManager.IMPORTANCE_HIGH);
             mChannel.setDescription(channel_description); mChannel.enableLights(true);
             mChannel.setLightColor(Color.RED);mChannel.enableVibration(true);

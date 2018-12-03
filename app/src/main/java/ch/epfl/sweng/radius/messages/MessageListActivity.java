@@ -174,7 +174,7 @@ public class MessageListActivity extends AppCompatActivity {
 
             isChatRunning.get(chatId).msgReceived();
 
-            showNotification(message.getContentMessage().substring(0, min(20, message.getContentMessage().length())), senderNickname);
+            showNotification(message.getContentMessage(), senderNickname);
         }
     }
 
