@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
@@ -51,7 +52,7 @@ public class CustomTopicListAdapter extends CustomListAdapter {
                     .inflate(R.layout.create_topic, null));
         }
         return new TopicItemHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.custom_list_item_layout, null));
+                .inflate(R.layout.topic_item_layout, null));
     }
 
     @Override
@@ -73,12 +74,12 @@ public class CustomTopicListAdapter extends CustomListAdapter {
     // inner class to hold a reference to each item of RecyclerView
     public static class TopicItemHolder extends ViewHolder {
         TextView textViewTitle;
-        ImageView imgViewIcon;
+        Button removeTopicButton;
 
         TopicItemHolder(View itemLayoutView) {
             super(itemLayoutView);
-            textViewTitle = itemLayoutView.findViewById(R.id.username);
-            imgViewIcon = (CircleImageView) itemLayoutView.findViewById(R.id.profile_picture);
+            textViewTitle = itemLayoutView.findViewById(R.id.topicName);
+            removeTopicButton = itemLayoutView.findViewById(R.id.removeTopicButton);
         }
     }
 
