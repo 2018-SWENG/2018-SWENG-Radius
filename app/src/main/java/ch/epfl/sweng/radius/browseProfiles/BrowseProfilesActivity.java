@@ -100,10 +100,6 @@ public class BrowseProfilesActivity extends AppCompatActivity{
             textViewLanguages.setText(current_user.getSpokenLanguages());
         } else {
             userPhoto.setImageResource(R.drawable.user_photo_default);
-            textViewName.setText("Default title");
-            textViewStatus.setText("Default Status");
-            textViewInterests.setText("Default Interests");
-            textViewLanguages.setText("Default Language");
         }
     }
 
@@ -161,6 +157,7 @@ public class BrowseProfilesActivity extends AppCompatActivity{
                 database.writeInstanceObj(profileUser, Database.Tables.USERS);
                 addFriendButton.setText("Request sent");
                 addFriendButton.setEnabled(false);
+                //Log.d("AddFriend","AddFriend");
             }
         });
     }
