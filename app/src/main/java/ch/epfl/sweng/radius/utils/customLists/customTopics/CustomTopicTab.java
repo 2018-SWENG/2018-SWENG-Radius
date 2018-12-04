@@ -39,8 +39,10 @@ public abstract class CustomTopicTab extends CustomTab {
                     convId = topics.getChatLogsId();
                     topicItems.add(new CustomListItem(topicId, convId, topicId));
                 }
-                adapter.setItems(topicItems);
-                adapter.notifyDataSetChanged();
+                if(adapter != null){
+                    adapter.setItems(topicItems);
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override

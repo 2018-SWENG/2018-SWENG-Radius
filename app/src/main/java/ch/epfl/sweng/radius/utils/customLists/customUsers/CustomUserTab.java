@@ -43,8 +43,8 @@ public abstract class CustomUserTab extends CustomTab implements DBLocationObser
             }
       //  database.readListObjOnce(listIds,
       //          Database.Tables.USERS, getAdapterCallback());
-        adapter.setItems(usersItems);
-        adapter.notifyDataSetChanged();
+
+
     }
 
     @Override
