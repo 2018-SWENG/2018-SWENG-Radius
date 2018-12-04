@@ -169,7 +169,7 @@ public class MLocation implements DatabaseObject, Serializable {
 
     public boolean isRemovableTopic() { // Is Topic created by the current user?
         return this.locationType == 2 &&
-                this.ownerId == Database.getInstance().getCurrent_user_id();
+                this.getOwnerId().equals(UserInfo.getInstance().getCurrentUser().getID());
     }
 
 }
