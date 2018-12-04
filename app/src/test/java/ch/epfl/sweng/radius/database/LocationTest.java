@@ -6,7 +6,7 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
-public class GroupLocationTest {
+public class LocationTest {
 
     private MLocation testLocation;
     private MLocation testTopic;
@@ -15,7 +15,8 @@ public class GroupLocationTest {
     public void setUp() {
         Database.activateDebugMode();
         testLocation = new MLocation("testLoc0");
-        testTopic = new MLocation(Database.getInstance().getCurrent_user_id());
+        testTopic = new MLocation("testTopic");
+        testTopic.setOwnerId(Database.getInstance().getCurrent_user_id());
     }
 
     @Test

@@ -30,7 +30,7 @@ public class CustomTopicListAdapterTest {
 
     @Test
     public void onBindViewHolder() {
-        test = new CustomTopicListAdapter(list, MapUtilityTest.context);
+        test = new CustomTopicListAdapter(list, MapUtilityTest.context, new ArrayList<Integer>());
         test.onBindViewHolder(mockedView, 0);
     }
 }

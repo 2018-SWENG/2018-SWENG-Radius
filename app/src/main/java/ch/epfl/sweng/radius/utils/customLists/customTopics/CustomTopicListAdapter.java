@@ -28,12 +28,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CustomTopicListAdapter extends CustomListAdapter {
 
+    private ArrayList<Integer> removableTopicPositions;
+
     private static final int TOPIC_ITEM = 1;
     private static final int TOPIC_CREATE_BUTTON = 2;
     private static final int REMOVABLE_TOPIC_ITEM = 3;
 
-    public CustomTopicListAdapter(List<CustomListItem> items, Context context) {
+    public CustomTopicListAdapter(List<CustomListItem> items, Context context,
+                                  ArrayList<Integer> removableTopicPositions) {
         super(items, context);
+        this.removableTopicPositions = removableTopicPositions;
         items.add(0, new CustomListItem("Dummy","Dummy","Dummy"));
     }
 
@@ -41,6 +45,8 @@ public class CustomTopicListAdapter extends CustomListAdapter {
     public int getItemViewType(int position) {
         if (position == 0) {
             return TOPIC_CREATE_BUTTON;
+        } else if (removableTopicPositions.contains(position)) {
+            return REMOVABLE_TOPIC_ITEM;
         }
         return TOPIC_ITEM;
     }
@@ -48,12 +54,15 @@ public class CustomTopicListAdapter extends CustomListAdapter {
     @NonNull
     @Override
     public CustomListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == TOPIC_CREATE_BUTTON) {
+        if (viewType == TOPIC_ITEM) {
+            return new TopicItemHolder(LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.topic_item_layout, null));
+        } else if (viewType == TOPIC_CREATE_BUTTON) {
             return new TopicCreateButtonHolder(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.create_topic, null));
         }
         return new TopicItemHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.topic_item_layout, null));
+                .inflate(R.layout.removable_topic_item_layout, null));
     }
 
     @Override
@@ -150,6 +159,7 @@ public class CustomTopicListAdapter extends CustomListAdapter {
 
             // new topic is set by user location values
             newTopic.setLocationType(2); // topic type
+            newTopic.setOwnerId(UserInfo.getInstance().getCurrentUser().getID());
             newTopic.setLatitude(UserInfo.getInstance().getCurrentPosition().getLatitude());
             newTopic.setLongitude(UserInfo.getInstance().getCurrentPosition().getLongitude());
             newTopic.setRadius(UserInfo.getInstance().getCurrentPosition().getRadius());
