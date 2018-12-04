@@ -30,6 +30,7 @@ public class CustomTopicListAdapter extends CustomListAdapter {
 
     private static final int TOPIC_ITEM = 1;
     private static final int TOPIC_CREATE_BUTTON = 2;
+    private static final int REMOVABLE_TOPIC_ITEM = 3;
 
     public CustomTopicListAdapter(List<CustomListItem> items, Context context) {
         super(items, context);
@@ -68,15 +69,27 @@ public class CustomTopicListAdapter extends CustomListAdapter {
                 customListener.setCustomOnClick(topicItemHolder.textViewTitle, context);
                 break;
             case TOPIC_CREATE_BUTTON:
+                break;
+            case REMOVABLE_TOPIC_ITEM:
         }
     }
 
     // inner class to hold a reference to each item of RecyclerView
     public static class TopicItemHolder extends ViewHolder {
         TextView textViewTitle;
-        Button removeTopicButton;
 
         TopicItemHolder(View itemLayoutView) {
+            super(itemLayoutView);
+            textViewTitle = itemLayoutView.findViewById(R.id.topicName);
+        }
+    }
+
+    // inner class to hold a reference to each item of RecyclerView
+    public static class RemovableTopicItemHolder extends ViewHolder {
+        TextView textViewTitle;
+        Button removeTopicButton;
+
+        RemovableTopicItemHolder(View itemLayoutView) {
             super(itemLayoutView);
             textViewTitle = itemLayoutView.findViewById(R.id.topicName);
             removeTopicButton = itemLayoutView.findViewById(R.id.removeTopicButton);
