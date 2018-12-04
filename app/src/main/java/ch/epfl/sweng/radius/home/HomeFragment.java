@@ -291,7 +291,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
         if(friendsID.contains(locID)){
             showNearFriendNotification(locID, userName);
-            Log.d("NearFriendNotif", "There is friend nearby");
+            //Log.d("NearFriendNotif", "There is friend nearby");
         }
 
         final MarkerOptions marker = new MarkerOptions().position(newPos)
