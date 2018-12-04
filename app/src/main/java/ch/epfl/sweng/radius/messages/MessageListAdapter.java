@@ -2,6 +2,7 @@ package ch.epfl.sweng.radius.messages;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +40,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private int flags;
     private List<String> membersIds;
 
-    public MessageListAdapter(Context context, List<Message> messages,List<String> membersIds) {
+    public MessageListAdapter(Context context, List<Message> messages, List<String> membersIds) {
         this.context = context;
         this.messages = messages;
         this.usersHashMap = new HashMap<>();
@@ -130,13 +133,18 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags));
-            if(usersHashMap.get(message.getSenderId()) != null) {
-                nameText.setText(usersHashMap.get(message.getSenderId()).getTitle());
+            MLocation currentUser = usersHashMap.get(message.getSenderId());
+            if (currentUser != null) {
+                nameText.setText(currentUser.getTitle());
+
+                if (currentUser.getUrlProfilePhoto() != null && !currentUser.getUrlProfilePhoto().isEmpty()) {
+                    Picasso.get().load(currentUser.getUrlProfilePhoto()).into(profileImage);
+                } else {
+                    profileImage.setImageResource(R.drawable.user_photo_default);
+                }
             }
 
-            // Insert the profile image from the URL into the ImageView.
-            //Utils.displayRoundImageFromUrl(
-            // context, message.getSenderId().getProfileUrl(), profileImage);
+
         }
     }
 
