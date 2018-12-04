@@ -54,15 +54,15 @@ public class CustomTopicListAdapter extends CustomListAdapter {
     @NonNull
     @Override
     public CustomListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == TOPIC_ITEM) {
-            return new TopicItemHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.topic_item_layout, null));
-        } else if (viewType == TOPIC_CREATE_BUTTON) {
+        if (viewType == TOPIC_CREATE_BUTTON) {
             return new TopicCreateButtonHolder(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.create_topic, null));
+        } else if (viewType == REMOVABLE_TOPIC_ITEM) {
+            return new RemovableTopicItemHolder(LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.removable_topic_item_layout, null));
         }
         return new TopicItemHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.removable_topic_item_layout, null));
+                .inflate(R.layout.topic_item_layout, null));
     }
 
     @Override
@@ -80,7 +80,18 @@ public class CustomTopicListAdapter extends CustomListAdapter {
             case TOPIC_CREATE_BUTTON:
                 break;
             case REMOVABLE_TOPIC_ITEM:
+                RemovableTopicItemHolder removableTopicItemHolder = (RemovableTopicItemHolder) viewHolder;
+                Log.e("CustomTopicListAdapter", "Items topics size :" + items.size());
+                removableTopicItemHolder.textViewTitle.setText(items.get(position).getItemName());
+                item = items.get(position);
+                customListener =  new CustomTopicListListeners(item.getItemId(),
+                        item.getItemName(), item.getConvId());
+                customListener.setCustomOnClick(removableTopicItemHolder.textViewTitle, context);
         }
+    }
+
+    public void setRemovableTopicPositions(ArrayList<Integer> removableTopicPositions) {
+        this.removableTopicPositions = removableTopicPositions;
     }
 
     // inner class to hold a reference to each item of RecyclerView

@@ -25,8 +25,9 @@ public abstract class CustomTopicTab extends CustomTab {
         HashMap<String, MLocation> topics = OthersInfo.getInstance().getTopicsPos();
         ArrayList<Integer> removableTopicPositions = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
-            if (topics.get(items.get(i).getItemId()).isRemovableTopic()) {
-                removableTopicPositions.add(i + 1); // + 1 is important do not remove!
+            MLocation location = topics.get(items.get(i).getItemId());
+            if (location != null && location.isRemovableTopic()) {
+                removableTopicPositions.add(i);
             }
         }
         return new CustomTopicListAdapter(items, getContext(), removableTopicPositions);
@@ -49,6 +50,15 @@ public abstract class CustomTopicTab extends CustomTab {
                     topicItems.add(new CustomListItem(topicId, convId, topicId));
                 }
                 if(adapter != null){
+                    HashMap<String, MLocation> topics = OthersInfo.getInstance().getTopicsPos();
+                    ArrayList<Integer> removableTopicPositions = new ArrayList<>();
+                    for (int i = 0; i < topicItems.size(); i++) {
+                        MLocation location = topics.get(topicItems.get(i).getItemId());
+                        if (location != null && location.isRemovableTopic()) {
+                            removableTopicPositions.add(i);
+                        }
+                    }
+                    ((CustomTopicListAdapter) adapter).setRemovableTopicPositions(removableTopicPositions);
                     adapter.setItems(topicItems);
                     adapter.notifyDataSetChanged();
                 }
