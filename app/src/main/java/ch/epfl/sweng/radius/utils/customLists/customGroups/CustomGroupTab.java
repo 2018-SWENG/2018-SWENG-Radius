@@ -37,8 +37,10 @@ public abstract class CustomGroupTab extends CustomTab {
                     // The groupId serves also as a name
                     groupsItems.add(new CustomListItem(groupId, convId, groupId));
                 }
-                adapter.setItems(groupsItems);
-                adapter.notifyDataSetChanged();
+                if(adapter != null){
+                    adapter.setItems(groupsItems);
+                    adapter.notifyDataSetChanged();
+                }
 
             }
             @Override
