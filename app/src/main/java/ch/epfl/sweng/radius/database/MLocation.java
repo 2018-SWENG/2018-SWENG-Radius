@@ -156,4 +156,10 @@ public class MLocation implements DatabaseObject, Serializable {
     public void setVisible(boolean visible) {
         isVisible = visible;
     }
+
+    public boolean isRemovableTopic() { // Is Topic created by the current user?
+        return this.locationType == 2 &&
+                this.userID == Database.getInstance().getCurrent_user_id();
+    }
+
 }

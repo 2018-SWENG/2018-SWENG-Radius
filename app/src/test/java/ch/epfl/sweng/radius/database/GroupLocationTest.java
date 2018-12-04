@@ -9,10 +9,13 @@ import static junit.framework.TestCase.assertTrue;
 public class GroupLocationTest {
 
     private MLocation testLocation;
+    private MLocation testTopic;
 
     @Before
     public void setUp() {
+        Database.activateDebugMode();
         testLocation = new MLocation("testLoc0");
+        testTopic = new MLocation(Database.getInstance().getCurrent_user_id());
     }
 
     @Test
@@ -28,5 +31,11 @@ public class GroupLocationTest {
         assertFalse(testLocation.getLocationType() == 1);
     }
 
+    @Test
+    public void testIsRemovableTopic() {
+        assertFalse(testTopic.isRemovableTopic());
+        testTopic.setLocationType(2);
+        assertTrue(testTopic.isRemovableTopic());
+    }
 
 }
