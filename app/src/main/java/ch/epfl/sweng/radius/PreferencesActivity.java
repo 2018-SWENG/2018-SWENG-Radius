@@ -99,7 +99,7 @@ public class PreferencesActivity extends PreferenceActivity {
 
         private void changeInvisibility() {
             isVisible = !isVisible;
-            UserInfo.getInstance().getCurrentPosition().setVisibility(isVisible);
+            UserInfo.getInstance().getCurrentPosition().setVisible(isVisible);
             UserInfo.getInstance().updateLocationInDB();
             SwitchPreference incognitoPref = (android.preference.SwitchPreference) findPreference(INCOGNITO);
             if (isVisible) {

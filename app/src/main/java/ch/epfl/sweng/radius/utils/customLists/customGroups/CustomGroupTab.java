@@ -10,6 +10,7 @@ import java.util.List;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
@@ -36,8 +37,10 @@ public abstract class CustomGroupTab extends CustomTab {
                     // The groupId serves also as a name
                     groupsItems.add(new CustomListItem(groupId, convId, groupId));
                 }
-                adapter.setItems(groupsItems);
-                adapter.notifyDataSetChanged();
+                if(adapter != null){
+                    adapter.setItems(groupsItems);
+                    adapter.notifyDataSetChanged();
+                }
 
             }
             @Override
@@ -51,9 +54,9 @@ public abstract class CustomGroupTab extends CustomTab {
 
     @Override
     protected void setUpAdapterWithList(List<String> listIds){
-        database.readListObjOnce(listIds,
+        List<String> ids = new ArrayList<>(OthersInfo.getInstance().getGroupsPos().keySet());
+
+        database.readListObjOnce(ids,
                 Database.Tables.CHATLOGS, getAdapterCallback());
     }
-
-    protected abstract List<String> getIds(User current_user);
 }

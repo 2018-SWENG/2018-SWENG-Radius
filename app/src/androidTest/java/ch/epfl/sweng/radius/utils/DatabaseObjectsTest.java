@@ -21,6 +21,7 @@ import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.database.UserUtils;
 import ch.epfl.sweng.radius.home.PeopleTab;
 
 import static junit.framework.TestCase.assertTrue;
@@ -85,10 +86,11 @@ public class DatabaseObjectsTest {
     @Test
     public void testInterface(){
         OthersInfo othersInfo = OthersInfo.getInstance();
+        UserUtils userUtils = UserUtils.getInstance();
         UserInfo userInfo = UserInfo.getInstance();
         PeopleTab pep = new PeopleTab();
         userInfo.addLocationObserver(pep);
-        userInfo.notifyLocactionObservers("HELO");
+        userInfo.notifyLocationObservers("HELO");
         userInfo.removeLocationObserver(pep);
     }
 
@@ -108,10 +110,8 @@ public class DatabaseObjectsTest {
         user.newChat("Arthur");
         List<String> blocked = user.getBlockedUsers();
         List<String> req = user.getFriendsRequests();
-        String url = user.getUrlProfilePhoto();
         Map<String, String> chats = user.getChatList();
 
-        assertEquals(50, user.getRadius());
         user.setID("Arthur");
         assertEquals("Arthur", user.getID());
 
@@ -124,15 +124,15 @@ public class DatabaseObjectsTest {
     @Test
     public void testMaxChars(){
 
-        User user = new User("1234");
+        MLocation user = new MLocation("1234");
 
         // Test status max characters
-        String status = user.getStatus();
+        String status = user.getMessage();
         try {
-            user.setStatus("123456789012345678901234567890123456789012345678902345678901234567890");
+            user.setMessage("123456789012345678901234567890123456789012345678902345678901234567890");
             assert(false);
         } catch (Exception e){}
-        assert(user.getStatus() == status);
+        assert(user.getMessage() == status);
 
         //Test interests max characters
         String interests = user.getInterests();
@@ -145,13 +145,13 @@ public class DatabaseObjectsTest {
 
     @Test
     public void testMLocation(){
-
-        MLocation mLocation = new MLocation();
+        MLocation tep = new MLocation();
+        MLocation mLocation = new MLocation("testLoc0");
         MLocation mLocation1 = new MLocation("locTest");
-        MLocation mLocation2 = new MLocation("locTest", new LatLng(2.0, 3.0));
+        MLocation mLocation2 = new MLocation("locTest2", 2.0, 3.0);
 
         assertTrue(mLocation1.getID().equals("locTest"));
-        assertTrue(mLocation2.getLatitude() == 2.0);
+        assert(3.0 == mLocation2.getLatitude());
 
         mLocation.setMessage("Msg");
         mLocation.setTitle("Title");
@@ -166,7 +166,7 @@ public class DatabaseObjectsTest {
         assert(mLocation2.getLongitude() == 4.0);
 
         assertTrue(mLocation.isVisible());
-        mLocation.setVisibility(false);
+        mLocation.setVisible(false);
         assertFalse(mLocation.isVisible());
 
     }

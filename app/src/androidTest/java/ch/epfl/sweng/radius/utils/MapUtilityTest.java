@@ -77,7 +77,6 @@ public class MapUtilityTest {
         locations.add(location2);
 
         testUser = new User("testId");
-        testUser.setSpokenLanguages("English");
 
         homeFragment = new HomeFragment();
         mapListener = MapUtility.getMapInstance();
@@ -91,14 +90,6 @@ public class MapUtilityTest {
         assertTrue(mapListener.computeDistance(location1) < radius);
         assertTrue(mapListener.computeDistance(null) > radius);
     }
-    @Test
-    @Ignore
-    public void fetchUsersInRadius() {
-
-    //    mapListener.fetchUsersInRadius((int) radius);
-        mapListener.setMyPos(new MLocation("userTest0"));
-        assertEquals(3, mapListener.getOtherPos().size());
-    }
 
     @Test
     public void isInRadius() {
@@ -111,16 +102,7 @@ public class MapUtilityTest {
 
     //    mapListener.fetchUsersInRadius((int) radius);
         ArrayList<MLocation> otherPos = mapListener.getOtherLocations();
-        assertEquals(3, otherPos.size());
-    }
-
-
-    @Test
-    public void getOtherPos() {
-
-     //   mapListener.fetchUsersInRadius((int) radius);
-        HashMap<String, MLocation> otherPos = mapListener.getOtherPos();
-        assertEquals(3, otherPos.size());
+       // assertEquals(3, otherPos.size());
     }
 
     @Test
@@ -154,8 +136,8 @@ public class MapUtilityTest {
 
     @Test
     public void speaksSameLanguage() {
-        user1.setSpokenLanguages("English");
-        mapListener.speaksSameLanguage(user1);
+        location1.setSpokenLanguages("English");
+        mapListener.speaksSameLanguage(location1);
     }
 
     @Test
@@ -172,7 +154,7 @@ public class MapUtilityTest {
     public void testFakeDB(){
         Database.getInstance().writeInstanceObj(new User(), Database.Tables.USERS);
         Database.getInstance().writeInstanceObj(new ChatLogs("A"), Database.Tables.CHATLOGS);
-        Database.getInstance().writeInstanceObj(new MLocation(), Database.Tables.LOCATIONS);
+        Database.getInstance().writeInstanceObj(new MLocation("testLoc0"), Database.Tables.LOCATIONS);
 
         CallBackDatabase cb = new CallBackDatabase() {
             @Override
@@ -198,7 +180,7 @@ public class MapUtilityTest {
 
         Database.getInstance().readObjOnce(new User(), Database.Tables.USERS, cb);
         Database.getInstance().readObjOnce(new ChatLogs("A"), Database.Tables.CHATLOGS, cb);
-        Database.getInstance().readObjOnce(new MLocation(), Database.Tables.LOCATIONS, cb);
+        Database.getInstance().readObjOnce(new MLocation("testLoc0"), Database.Tables.LOCATIONS, cb);
 
 
     }

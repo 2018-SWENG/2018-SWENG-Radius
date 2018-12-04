@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/text_message_name"
-        android:text="John Doe"
+        android:text="anonyme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"
@@ -27,7 +27,6 @@
 
     <TextView
         android:id="@+id/text_message_body"
-        android:text="hi man, how are you?"
         android:background="@drawable/message_received"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,7 +40,6 @@
 
     <TextView
         android:id="@+id/text_message_time"
-        android:text="11:40"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="10sp"

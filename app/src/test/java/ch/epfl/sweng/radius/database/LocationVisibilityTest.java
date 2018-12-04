@@ -12,7 +12,7 @@ public class LocationVisibilityTest {
 
     @Before
     public void setUp() {
-        testUser = new MLocation();
+        testUser = new MLocation("testLoc0");
     }
 
     @Test
@@ -22,9 +22,9 @@ public class LocationVisibilityTest {
 
     @Test
     public void testSetVisibility() {
-        testUser.setVisibility(false);
+        testUser.setVisible(false);
         assertFalse(testUser.isVisible());
-        testUser.setVisibility(true);
+        testUser.setVisible(true);
         assertTrue(testUser.isVisible());
     }
 

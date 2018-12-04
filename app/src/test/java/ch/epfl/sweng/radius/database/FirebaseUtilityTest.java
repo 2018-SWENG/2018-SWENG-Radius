@@ -66,11 +66,7 @@ public class FirebaseUtilityTest {
         for(int i = 0; i < 10; i++){
             String key = Integer.toString(i);
             User val = new User(Integer.toString(i));
-            val.setStatus("HeyHeyHey");
             val.addChat("1", "2");
-            val.setNickname("Arthy");
-            val.setRadius(22);
-
             mockedData.put(key, val);
         }
     }
@@ -130,7 +126,6 @@ public class FirebaseUtilityTest {
 
         fbUtil.readObjOnce(user, Tables.USERS, callback);
 
-        assertEquals(otherUser.getStatus(), "HeyHeyHey");
     }
 
     @Test
@@ -238,9 +233,7 @@ public class FirebaseUtilityTest {
             }
         };
         fbUtil.readObj(user, Tables.USERS, callback);
-
-        assertEquals(otherUser.getStatus(), "HeyHeyHey");
-    }
+        }
     @Test
     public void readObj2() {
 
@@ -287,9 +280,7 @@ public class FirebaseUtilityTest {
         System.out.print(user.getID());
 
         fbUtil.readObj(user, Tables.USERS, callback);
-
-        assertEquals(otherUser.getStatus(), "HeyHeyHey");
-    }
+        }
 
     @Test
     public void readListObjOnce() {

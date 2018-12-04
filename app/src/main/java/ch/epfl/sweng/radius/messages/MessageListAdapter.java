@@ -10,11 +10,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.database.UserUtils;
 
 /**
  * Adapter for the RecyclerView that will store a list of message,
@@ -24,20 +29,30 @@ import ch.epfl.sweng.radius.database.UserInfo;
 public class MessageListAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
+    private static HashMap<String, MLocation> usersHashMap;
+    private static UserUtils userUtils = UserUtils.getInstance();
 
     private Context context;
     private List<Message> messages;
     private int flags;
+    private List<String> membersIds;
 
-    public MessageListAdapter(Context context, List<Message> messages) {
+    public MessageListAdapter(Context context, List<Message> messages,List<String> membersIds) {
         this.context = context;
         this.messages = messages;
+        this.usersHashMap = new HashMap<>();
+        this.membersIds = new ArrayList<>();
         flags = DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE;
 
     }
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
+    }
+
+    public void setMembersIds(List<String> membersIds) {
+        this.membersIds = membersIds;
+        this.usersHashMap = userUtils.getSpecificsUsers(membersIds);
     }
 
     // Inflates the appropriate layout according to the ViewType.
@@ -115,7 +130,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags));
-        //    nameText.setText(message.getOwner().getNickname());
+            if(usersHashMap.get(message.getSenderId()) != null) {
+                nameText.setText(usersHashMap.get(message.getSenderId()).getTitle());
+            }
 
             // Insert the profile image from the URL into the ImageView.
             //Utils.displayRoundImageFromUrl(

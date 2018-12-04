@@ -10,6 +10,7 @@ import java.util.List;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
@@ -22,7 +23,6 @@ public abstract class CustomTopicTab extends CustomTab {
         return new CustomTopicListAdapter(items, getContext());
     }
 
-    @Override
     public CallBackDatabase getAdapterCallback() {
         return new CallBackDatabase() {
             @Override
@@ -39,8 +39,10 @@ public abstract class CustomTopicTab extends CustomTab {
                     convId = topics.getChatLogsId();
                     topicItems.add(new CustomListItem(topicId, convId, topicId));
                 }
-                adapter.setItems(topicItems);
-                adapter.notifyDataSetChanged();
+                if(adapter != null){
+                    adapter.setItems(topicItems);
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -52,9 +54,8 @@ public abstract class CustomTopicTab extends CustomTab {
 
     @Override
     protected void setUpAdapterWithList(List<String> listIds) {
-        database.readListObjOnce(listIds, Database.Tables.CHATLOGS, getAdapterCallback());
+        List<String> ids = new ArrayList<>(OthersInfo.getInstance().getTopicsPos().keySet());
+        database.readListObjOnce(ids, Database.Tables.CHATLOGS, getAdapterCallback());
     }
-
-    protected abstract List<String> getIds(User current_user);
 
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,11 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseError;
+import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.GroupLocationFetcher;
+import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.BrowseProfilesUtility;
@@ -29,6 +33,7 @@ public class BrowseProfilesActivity extends AppCompatActivity{
     private Toolbar toolbar;
     private final Database database = Database.getInstance();
     private String userUID;
+    private String userNickname;
 
     // UI elements
     private ImageView userPhoto;
@@ -43,11 +48,13 @@ public class BrowseProfilesActivity extends AppCompatActivity{
         setContentView(R.layout.activity_browse_profiles);
         Intent intent = getIntent();
 
-        profileActivityListener = new BrowseProfilesUtility(intent.getStringExtra("Clicked Name")); // WHEN THE CLASS STORES THE ID OF THE USER WE
+        //profileActivityListener = new BrowseProfilesUtility(intent.getStringExtra("Clicked Name")); // WHEN THE CLASS STORES THE ID OF THE USER WE
         // CLICKED ON CHANGE CLICKED NAME WITH THE ID
 
         // Initialize UI Components
+        userNickname = intent.getStringExtra("Clicked Name");
         userUID = intent.getStringExtra("UID");
+        profileActivityListener = new BrowseProfilesUtility(userUID);
         userPhoto = findViewById(R.id.userPhoto);
         textViewName = findViewById(R.id.userNickname);
         textViewStatus = findViewById(R.id.userStatus);
@@ -59,19 +66,22 @@ public class BrowseProfilesActivity extends AppCompatActivity{
 
         // ToolBar initialization
         setSupportActionBar(toolbar);
-        //REMOVE THIS PART FOR DEMO----------------------------------------
-        GroupLocationFetcher glf = new GroupLocationFetcher();
-        Database.getInstance().readAllTableOnce(Database.Tables.LOCATIONS, glf);
     }
 
+
     void fetchUserInfo(String userUID){
+
+        final MLocation targetUser = OthersInfo.getInstance().getUsersInRadius().get(userUID) != null ?
+                OthersInfo.getInstance().getUsersInRadius().get(userUID):
+                OthersInfo.getInstance().getConvUsers().get(userUID);
+
         database.readObjOnce(new User(userUID), Database.Tables.USERS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
                 // Get the current user profile from the DB
                 User current_profile = (User) value;
                 setUpAddFriendButton(current_profile);
-                setUpUIComponents(current_profile);
+                setUpUIComponents(targetUser);
             }
 
             @Override
@@ -79,12 +89,16 @@ public class BrowseProfilesActivity extends AppCompatActivity{
 
             }
         });
-    }
+        }
 
-    public void setUpUIComponents(User current_user){
-        userPhoto.setImageResource(R.drawable.ic_man);
-        textViewName.setText(current_user.getNickname());
-        textViewStatus.setText(current_user.getStatus());
+    public void setUpUIComponents(MLocation current_user){
+        if (current_user.getUrlProfilePhoto() != null && !current_user.getUrlProfilePhoto().equals("")) {
+            Picasso.get().load(current_user.getUrlProfilePhoto()).into(userPhoto);
+        } else {
+            userPhoto.setImageResource(R.drawable.user_photo_default);
+        }
+        textViewName.setText(current_user.getTitle());
+        textViewStatus.setText(current_user.getMessage());
         textViewInterests.setText(current_user.getInterests());
         textViewLanguages.setText(current_user.getSpokenLanguages());
     }
@@ -93,6 +107,9 @@ public class BrowseProfilesActivity extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.profile_menu, menu);
+        if (UserInfo.getInstance().getCurrentUser().getBlockedUsers().contains(userUID)) {
+            menu.getItem(0).getSubMenu().getItem(0).setTitle("Unblock User");
+        }
         return true;
     }
 
@@ -100,17 +117,18 @@ public class BrowseProfilesActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.block_user:
-                Toast.makeText(this, "User:" + profileActivityListener.getProfileOwner() +
-                        " is blocked.", Toast.LENGTH_SHORT).show();
+                if (item.getTitle().toString().trim().equals("Block User")) {
+                    profileActivityListener.blockUser();
+                    item.setTitle("Unblock user");
+                } else if (item.getTitle().toString().trim().equals("Unblock User")) {
+                    profileActivityListener.unblockUser();
+                    item.setTitle("Block User");
+                }
                 return true;
             case R.id.spam:
-                Toast.makeText(this, "User:" + profileActivityListener.getProfileOwner() +
-                        " is reported for spam.", Toast.LENGTH_SHORT).show();
                 profileActivityListener.reportUser("spam");
                 return true;
             case R.id.language:
-                Toast.makeText(this, "User:" + profileActivityListener.getProfileOwner() +
-                        " is reported for language.", Toast.LENGTH_SHORT).show();
                 profileActivityListener.reportUser("language");
                 return true;
             default:

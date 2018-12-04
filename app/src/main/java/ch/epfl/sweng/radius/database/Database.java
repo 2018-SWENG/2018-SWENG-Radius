@@ -1,5 +1,6 @@
 package ch.epfl.sweng.radius.database;
 
+import android.util.Log;
 import android.util.Pair;
 
 import java.util.List;
@@ -39,9 +40,10 @@ public abstract class Database {
      * Modify the singleton instance of the DBUtility, with a FakeDatabase instance
      * Call this method only for testing purpose.
      */
-    public static void activateDebugMode(){
+    public static boolean activateDebugMode(){
         DEBUG_MODE = true;
         database = new FakeFirebaseUtility();
+        return false;
     }
 
     /**
@@ -49,6 +51,7 @@ public abstract class Database {
      * @return the singleton instance of the DBUtility
      */
     public static Database getInstance(){
+        Log.e("DEBUGG", "Valu of debug is " + DEBUG_MODE);
         if(database == null)
             database = new FirebaseUtility();
         return database;

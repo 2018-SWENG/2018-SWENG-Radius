@@ -12,7 +12,7 @@ public class GroupLocationTest {
 
     @Before
     public void setUp() {
-        testLocation = new MLocation();
+        testLocation = new MLocation("testLoc0");
     }
 
     @Test

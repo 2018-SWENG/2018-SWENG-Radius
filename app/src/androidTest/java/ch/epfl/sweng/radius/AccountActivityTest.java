@@ -13,6 +13,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 
 import static android.support.test.espresso.action.ViewActions.click;
@@ -32,7 +34,8 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
 
     @Rule
     public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
-            Manifest.permission.ACCESS_FINE_LOCATION);
+            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
 
     public AccountActivityTest(Class<AccountActivity> activityClass) {
         super(activityClass);
@@ -43,10 +46,11 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
+        OthersInfo.getInstance();
 
-        User testUser = new User("testId");
-        testUser.setNickname("testNickname");
-        testUser.setStatus("testStatus");
+        MLocation testUser = new MLocation("userTest1");
+        testUser.setTitle("testNickname");
+        testUser.setMessage("testStatus");
         testUser.setInterests("testInterests");
         testUser.setSpokenLanguages("English");
 
@@ -97,4 +101,12 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
     }
 
 
+    @Test
+    public void testLeaveApp(){
+
+        AccountActivity.myTimer mt = new AccountActivity.myTimer();
+        mt.isSet();
+        mt.run();
+
+    }
 }

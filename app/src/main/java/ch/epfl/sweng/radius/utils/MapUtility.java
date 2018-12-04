@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -64,7 +65,7 @@ public class MapUtility implements DBLocationObserver {
     public static boolean isInRadius(MLocation loc){
         if(loc == null)
             return false;
-        return findDistance(loc.getLatitude(), loc.getLongitude()) <= myPos.getRadius() ;
+        return findDistance(loc.getLatitude(), loc.getLongitude()) <= UserInfo.getInstance().getCurrentPosition().getRadius() ;
     }
 
     public ArrayList<MLocation> getOtherLocations() {
@@ -75,15 +76,11 @@ public class MapUtility implements DBLocationObserver {
         myPos = mPos;
     }
 
-    public HashMap<String, MLocation> getOtherPos() {
-        return otherPos;
-    }
-
     public void getDeviceLocation(final FragmentActivity activity) {
         mblFusedLocationClient = LocationServices.getFusedLocationProviderClient( activity);
         try {
             if ( mblLocationPermissionGranted) {
-                Task location = mblFusedLocationClient.getLastLocation();
+                final Task location = mblFusedLocationClient.getLastLocation();
                 location.addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
@@ -91,6 +88,7 @@ public class MapUtility implements DBLocationObserver {
                             currentLocation = (Location) task.getResult();
                             LatLng currentCoordinates = new LatLng( currentLocation.getLatitude(), currentLocation.getLongitude());
                             setCurrCoordinates(currentCoordinates);
+
                         }
                         else {
                             Toast.makeText( activity.getApplicationContext(), "Unable to get current location",
@@ -129,7 +127,12 @@ public class MapUtility implements DBLocationObserver {
     public void setCurrCoordinates(LatLng curCoordinates) {
         UserInfo.getInstance().getCurrentPosition().setLatitude(currCoordinates.latitude);
         UserInfo.getInstance().getCurrentPosition().setLongitude(currCoordinates.longitude);
-        UserInfo.getInstance().updateLocationInDB();
+        Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(), Database.Tables.LOCATIONS,
+                "latitude",
+                currCoordinates.latitude);
+        Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(), Database.Tables.LOCATIONS,
+                "longitude",
+                currCoordinates.longitude);
         currCoordinates = curCoordinates;
     }
 
@@ -177,7 +180,8 @@ public class MapUtility implements DBLocationObserver {
      * */
     public static double findDistance(double p2latitude, double p2longtitude) {
         float[] distance = new float[3];
-        Location.distanceBetween( myPos.getLatitude(), myPos.getLongitude(),
+        Location.distanceBetween(UserInfo.getInstance().getCurrentPosition().getLatitude(),
+                UserInfo.getInstance().getCurrentPosition().getLongitude(),
                 p2latitude, p2longtitude, distance);
 
         return distance[0];
@@ -190,7 +194,7 @@ public class MapUtility implements DBLocationObserver {
         return distance[0];
     }
 
-    public boolean speaksSameLanguage(User user) {
+    public boolean speaksSameLanguage(MLocation user) {
         String[] languagesSpoken = user.getSpokenLanguages().split(" ");
         Fragment profileFragment = ProfileFragment.newInstance();
         String languagesSpokenByCurrUser = ((ProfileFragment)profileFragment).getLanguagesText();
@@ -215,6 +219,6 @@ public class MapUtility implements DBLocationObserver {
     public void onLocationChange(String id){
         myPos = UserInfo.getInstance().getCurrentPosition();
         otherPos = OthersInfo.getInstance().getUsersInRadius();
+
     }
 }
-
