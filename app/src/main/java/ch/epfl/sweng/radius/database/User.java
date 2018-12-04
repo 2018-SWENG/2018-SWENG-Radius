@@ -14,9 +14,9 @@ public class User implements DatabaseObject, Serializable {
     private static long idGenerator = 0;// Debugging purpose only
 
     private String userID;
-    private List<String> friendsRequests;
-    private List<String> friendsInvitations;
-    private List<String> friends;
+    private Map<String, String> friendsRequests;
+    private Map<String, String> friendsInvitations;
+    private Map<String, String> friends;
     private List<String> blockedUsers;
     // Map is uID --> convID
     private Map<String, String> chatList = new HashMap<>();
@@ -26,9 +26,9 @@ public class User implements DatabaseObject, Serializable {
 
     public User(String userID) {
         this.userID = userID;
-        this.friendsRequests = new ArrayList<>();
-        this.friendsInvitations = new ArrayList<>();
-        this.friends = new ArrayList<>();
+        this.friendsRequests = new HashMap<>();
+        this.friendsInvitations = new HashMap<>();
+        this.friends = new HashMap<>();
         this.blockedUsers = new ArrayList<>();
         this.chatList = new HashMap<>();
         this.reportList = new HashMap<>();
@@ -46,15 +46,15 @@ public class User implements DatabaseObject, Serializable {
 
     // Getter
 
-    public List<String> getFriendsRequests() {
+    public Map<String, String> getFriendsRequests() {
         return friendsRequests;
     }
 
-    public List<String> getFriendsInvitations() {
+    public Map<String, String> getFriendsInvitations() {
         return friendsInvitations;
     }
 
-    public List<String> getFriends() {
+    public Map<String, String> getFriends() {
         return friends;
     }
     // Setter
@@ -83,14 +83,14 @@ public class User implements DatabaseObject, Serializable {
     }
 
     public void addFriendRequest(User friend) {
-        if (friendsInvitations.contains(friend.getID())) {
+        if (friendsInvitations.containsKey(friend.getID())) {
             friend.friendsRequests.remove(this.userID);
             friendsInvitations.remove(friend.getID());
-            friends.add(friend.getID());
-            friend.friends.add(this.userID);
-        } else if (!friendsRequests.contains(friend.getID())) {
-            friendsRequests.add(friend.getID());
-            friend.friendsInvitations.add(this.userID);
+            friends.put(friend.getID(), friend.getID());
+            friend.friends.put(this.userID, this.userID);
+        } else if (!friendsRequests.containsKey(friend.getID())) {
+            friendsRequests.put(friend.getID(), friend.getID());
+            friend.friendsInvitations.put(this.userID, this.userID);
         }
     }
 
