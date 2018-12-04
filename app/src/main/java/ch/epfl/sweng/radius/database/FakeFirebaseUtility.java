@@ -175,6 +175,10 @@ public class FakeFirebaseUtility extends Database {
        // usersTable.get("testUser1").addChat("testUser4", "1");
         usersTable.get("testUser1").addChat("testUser23", "0");
 
+        //Add friend to test near friend notification
+        usersTable.get("testUser2").addFriendRequest(currentUSer);
+        currentUSer.addFriendRequest(usersTable.get("testUser2"));
+
         // TODO: Fill the chatLogs table
         currentLoc = new MLocation("testUser1", defaultLng, defaultLat);
         fillLocationsTable();
