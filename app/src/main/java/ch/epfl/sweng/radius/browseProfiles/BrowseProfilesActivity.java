@@ -92,15 +92,19 @@ public class BrowseProfilesActivity extends AppCompatActivity{
         }
 
     public void setUpUIComponents(MLocation current_user){
-        if (current_user.getUrlProfilePhoto() != null && !current_user.getUrlProfilePhoto().equals("")) {
+        if (current_user != null && current_user.getUrlProfilePhoto() != null && !current_user.getUrlProfilePhoto().equals("")) {
             Picasso.get().load(current_user.getUrlProfilePhoto()).into(userPhoto);
+            textViewName.setText(current_user.getTitle());
+            textViewStatus.setText(current_user.getMessage());
+            textViewInterests.setText(current_user.getInterests());
+            textViewLanguages.setText(current_user.getSpokenLanguages());
         } else {
             userPhoto.setImageResource(R.drawable.user_photo_default);
+            textViewName.setText("Default title");
+            textViewStatus.setText("Default Status");
+            textViewInterests.setText("Default Interests");
+            textViewLanguages.setText("Default Language");
         }
-        textViewName.setText(current_user.getTitle());
-        textViewStatus.setText(current_user.getMessage());
-        textViewInterests.setText(current_user.getInterests());
-        textViewLanguages.setText(current_user.getSpokenLanguages());
     }
 
     @Override

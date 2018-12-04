@@ -109,6 +109,7 @@ public class BrowseProfilesActivityTest extends ActivityInstrumentationTestCase2
     @Test
     public void testAddFriends() {
         Espresso.onView(withId(R.id.add_user)).perform(click());
+        //onView(withText("Add User")).perform(click());
     }
 
     @After
