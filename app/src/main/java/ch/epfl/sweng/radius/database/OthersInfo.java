@@ -21,6 +21,7 @@ public class OthersInfo extends DBObservable{
     private static final MapUtility mapUtility = MapUtility.getMapInstance();
 
     private static final HashMap<String, MLocation> usersPos = new HashMap<>();
+    private static final HashMap<String, MLocation> allUserPos = new HashMap<>();
     private static final HashMap<String, MLocation> convUsers = new HashMap<>();
     private static final HashMap<String, MLocation> groupsPos = new HashMap<>();
     private static final HashMap<String, MLocation> topicsPos = new HashMap<>();
@@ -46,6 +47,10 @@ public class OthersInfo extends DBObservable{
         return usersPos;
     }
 
+    public HashMap<String, MLocation> getAllUserLocations(){
+        return allUserPos;
+    }
+
     public HashMap<String, MLocation> getGroupsPos(){
         return groupsPos;
     }
@@ -62,7 +67,7 @@ public class OthersInfo extends DBObservable{
         return convUsers;
     }
 
-    public void fetchUsersInMyRadius(){
+    public void fetchUsersInMyRadius(){ // Might want to change the name of this method later on.
         database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
@@ -72,6 +77,9 @@ public class OthersInfo extends DBObservable{
                             && loc.isVisible()) {
 
                         putInTable(loc);
+                    }
+                    if (loc.getLocationType() == 0) {
+                        allUserPos.put(loc.getID(), loc);
                     }
                 }
                 notifyLocationObservers(Database.Tables.LOCATIONS.toString());

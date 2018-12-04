@@ -31,7 +31,7 @@ public class CustomUserListAdapter extends CustomListAdapter {
 
         viewHolder.txtViewTitle.setText(item.getItemName());
 
-/*<<<<<<< HEAD
+/*
         if (OthersInfo.getInstance().getUsers().get(item.getItemId()).getUrlProfilePhoto() != null &&
                 !OthersInfo.getInstance().getUsers().get(item.getItemId()).getUrlProfilePhoto().equals("")) {
             Picasso.get().load
@@ -41,8 +41,8 @@ public class CustomUserListAdapter extends CustomListAdapter {
         } else {
             viewHolder.imgViewIcon.setImageResource(items.get(position).getProfilePic());
         }
-=======*/
-        MLocation itemUser = OthersInfo.getInstance().getUsersInRadius().get(item.getItemId());
+*/
+        MLocation itemUser = OthersInfo.getInstance().getAllUserLocations().get(item.getItemId());
 
         if(itemUser != null){
             if (!itemUser.getUrlProfilePhoto().isEmpty()) {
