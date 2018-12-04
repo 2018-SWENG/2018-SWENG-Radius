@@ -33,14 +33,14 @@ public class NotificationUtilityTest {
         when(mockedBuilder.setContentTitle(anyString())).thenReturn(mockedBuilder);
         when(mockedBuilder.setContentText(anyString())).thenReturn(mockedBuilder);
         when(mockedBuilder.setContentIntent(any(PendingIntent.class))).thenReturn(mockedBuilder);
-        test = NotificationUtility.getInstance(mockedManager, mockedBuilder, mockedBuilder);
+        test = NotificationUtility.getInstance(mockedManager, mockedBuilder, mockedBuilder, mockedBuilder);
 
     }
 
     @Test
     public void getInstance() {
-        NotificationUtility.getInstance(mockedManager, mockedBuilder, mockedBuilder);
-        NotificationUtility.getInstance(null, null, null);
+        NotificationUtility.getInstance(mockedManager, mockedBuilder, mockedBuilder, mockedBuilder);
+        NotificationUtility.getInstance(null, null, null, null);
     }
 
     @Test
@@ -67,5 +67,10 @@ public class NotificationUtilityTest {
     public void notifyNewFrienReq() {
         test.notifyNewFrienReq("0", "okok", mockedIntent);
 
+    }
+
+    @Test
+    public void notifyNearFriend(){
+        test.notifyFriendIsNear("0", "test friend", mockedIntent);
     }
 }
