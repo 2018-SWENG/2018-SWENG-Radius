@@ -31,9 +31,9 @@ public abstract class CustomUserTab extends CustomTab implements DBLocationObser
         UserUtils.getInstance().addLocationObserver(this);
     }
 
-
     @Override
     protected void setUpAdapterWithList(List<String> listIds){
+        List<String> ids = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().keySet());
         ArrayList<CustomListItem> usersItems = new ArrayList<>();
         List<MLocation> locs = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().values());
         for(MLocation loc : locs)
@@ -42,10 +42,11 @@ public abstract class CustomUserTab extends CustomTab implements DBLocationObser
                         , loc.getTitle()));
                 Log.e("Setupadapterwith list: ", "--------------------------------------" + loc.getID() +"----------------------------------------");
             }
-      //  database.readListObjOnce(listIds,
-      //          Database.Tables.USERS, getAdapterCallback());
 
-
+        if (adapter != null) {
+            adapter.setItems(usersItems);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override
