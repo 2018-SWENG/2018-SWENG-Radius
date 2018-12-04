@@ -117,6 +117,7 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
         assertNotNull(mlActivity.findViewById(R.id.layout_chatbox));
         assertNotNull(mlActivity.findViewById(R.id.edittext_chatbox));
         assertNotNull(mlActivity.findViewById(R.id.button_chatbox_send));
+        assertNotNull(mlActivity.findViewById(R.id.profile_picture));
 
     }
 
