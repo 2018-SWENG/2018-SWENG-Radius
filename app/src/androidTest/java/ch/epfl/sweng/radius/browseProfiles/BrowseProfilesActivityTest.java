@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.UserInfo;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -111,6 +112,7 @@ public class BrowseProfilesActivityTest extends ActivityInstrumentationTestCase2
         Espresso.onView(withId(R.id.add_user)).perform(click());
         //Try clicking again
         Espresso.onView(withId(R.id.add_user)).perform(click());
+        assertTrue(UserInfo.getInstance().getCurrentUser().getFriendsRequests().contains("testUser2"));
     }
 
     @After

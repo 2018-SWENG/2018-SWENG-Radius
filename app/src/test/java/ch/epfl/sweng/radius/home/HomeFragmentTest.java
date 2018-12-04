@@ -39,6 +39,7 @@ import java.util.concurrent.Executor;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.MapUtilityTest;
+import ch.epfl.sweng.radius.utils.NotificationUtility;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
@@ -59,6 +60,7 @@ public class HomeFragmentTest {
     FirebaseDatabase mockedFb   = Mockito.mock(FirebaseDatabase.class);
     FusedLocationProviderClient mockedPos = Mockito.mock(FusedLocationProviderClient.class);
     String curRef;
+
     @Before
     public void setUp(){
         PowerMockito.mockStatic(FirebaseDatabase.class);
@@ -202,4 +204,11 @@ public class HomeFragmentTest {
         fragment.onMapReady(mockMap);
   //  }catch (Exception e){};
     }
+
+    /*
+    @Test
+    public void testNearFriendNotification(){
+        fragment.showNearFriendNotification("testUser","testNickname");
+    }
+    */
 }

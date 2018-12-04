@@ -66,7 +66,6 @@ public class NotificationUtilityTest {
     @Test
     public void notifyNewFrienReq() {
         test.notifyNewFrienReq("0", "okok", mockedIntent);
-
     }
 
     @Test
