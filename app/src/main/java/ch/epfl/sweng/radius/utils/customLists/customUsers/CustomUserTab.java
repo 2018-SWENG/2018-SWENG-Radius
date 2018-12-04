@@ -40,6 +40,7 @@ public abstract class CustomUserTab extends CustomTab implements DBLocationObser
             if(loc.isVisible()){
                 usersItems.add(new CustomListItem(loc.getID(), UserInfo.getInstance().getCurrentUser().getConvFromUser(loc.getID())
                         , loc.getTitle()));
+                Log.e("Setupadapterwith list: ", "--------------------------------------" + loc.getID() +"----------------------------------------");
             }
       //  database.readListObjOnce(listIds,
       //          Database.Tables.USERS, getAdapterCallback());

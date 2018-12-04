@@ -44,6 +44,8 @@ public class CustomUserListAdapter extends CustomListAdapter {
 */
         MLocation itemUser = OthersInfo.getInstance().getAllUserLocations().get(item.getItemId());
 
+        Log.e("CustomUserListAdapter", "-----------------------------------People Tab-------------------------------------");
+
         if(itemUser != null){
             if (!itemUser.getUrlProfilePhoto().isEmpty()) {
                 Picasso.get().load(itemUser.getUrlProfilePhoto()).into(viewHolder.imgViewIcon);
