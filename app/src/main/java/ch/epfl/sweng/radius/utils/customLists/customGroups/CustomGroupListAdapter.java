@@ -1,12 +1,18 @@
 package ch.epfl.sweng.radius.utils.customLists.customGroups;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
+import ch.epfl.sweng.radius.R;
 
 public class CustomGroupListAdapter extends CustomListAdapter{
 
@@ -15,21 +21,32 @@ public class CustomGroupListAdapter extends CustomListAdapter{
         super(items,context);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
+    @NonNull
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
-
-        Log.e("CustomGroupListAdapter", "Items groups size :" + items.size());
-
-        viewHolder.txtViewTitle.setText(items.get(position).getItemName());
-
-        CustomListItem item = items.get(position);
-        final String groupId = item.getItemId();
-        final String groupName = item.getItemName();
-        final String convId = item.getConvId();
-        CustomGroupListListeners customListener = new CustomGroupListListeners(groupId,groupName,convId);
-        customListener.setCustomOnClick(viewHolder.txtViewTitle, context);
+    public CustomListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new GroupItemHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.group_item_layout, null));
     }
 
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+        GroupItemHolder groupItemHolder = (GroupItemHolder) viewHolder;
+        Log.e("CustomTopicListAdapter", "Items topics size :" + items.size());
+        groupItemHolder.textViewTitle.setText(items.get(position).getItemName());
+        CustomListItem item = items.get(position);
+        CustomGroupListListeners customListener = new CustomGroupListListeners(item.getItemId(),
+                item.getItemName(), item.getConvId());
+        customListener.setCustomOnClick(groupItemHolder.textViewTitle, context);
+    }
+
+    // inner class to hold a reference to each item of RecyclerView
+    public static class GroupItemHolder extends ViewHolder {
+        TextView textViewTitle;
+
+        GroupItemHolder(View itemLayoutView) {
+            super(itemLayoutView);
+            textViewTitle = itemLayoutView.findViewById(R.id.groupName);
+        }
+    }
 
 }
