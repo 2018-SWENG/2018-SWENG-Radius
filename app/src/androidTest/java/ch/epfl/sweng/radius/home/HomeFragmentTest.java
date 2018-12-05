@@ -153,10 +153,6 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
         Espresso.onView(withText("TOPICS"))
                 .check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
-
-        //Debug because android studio doesnt recognize new tests
-        fragment.onLocationChange("testUser1");
-        fragment.showNearFriendNotification("testUser","testNickname");
     }
 
     @Test
@@ -164,10 +160,12 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
         fragment.onLocationChange("testUser1");
     }
 
+    /*
     @Test
     public void testShowNearFriendNotification(){
         fragment.showNearFriendNotification("testUser","testNickname");
     }
+    */
 
     @After
     public void tearDown() {
