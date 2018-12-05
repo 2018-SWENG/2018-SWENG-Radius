@@ -21,9 +21,7 @@ public class CustomGroupListAdapterTest {
     private ImageView mockedImg = Mockito.mock(ImageView.class);
     private CustomGroupListAdapter test;
     ArrayList<CustomListItem> list = new ArrayList<CustomListItem>();
-
-
-
+    
     @Before
     public void setUp() throws Exception {
         list.add(new CustomListItem("1","0", "3"));
