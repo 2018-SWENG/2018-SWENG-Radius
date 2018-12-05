@@ -139,9 +139,7 @@ public class MessageListActivity extends AppCompatActivity {
      */
     private void setUpUI() {
         setContentView(R.layout.activity_message_list);
-        messageZone = (EditText) findViewById(R.id.edittext_chatbox);
         myMessageAdapter = new MessageListAdapter(this, chatLogs.getMessages(),chatLogs.getMembersId());
-        myMessageRecycler = findViewById(R.id.reyclerview_message_list);
         myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         myMessageRecycler.setAdapter(myMessageAdapter);
 
@@ -218,7 +216,6 @@ public class MessageListActivity extends AppCompatActivity {
      * If the button is clicked, add the message to the db
      */
     private void setUpSendButton() {
-        sendButton = findViewById(R.id.button_chatbox_send);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -349,7 +346,9 @@ public class MessageListActivity extends AppCompatActivity {
         myID = UserInfo.getInstance().getCurrentUser().getID();
         database = Database.getInstance();
         setContentView(R.layout.activity_message_list);
-        messageZone = findViewById(R.id.edittext_chatbox);
+        this.sendButton = findViewById(R.id.button_chatbox_send);
+        this.messageZone = (EditText) findViewById(R.id.edittext_chatbox);
+        this.myMessageRecycler = findViewById(R.id.reyclerview_message_list);
 
         setInfo();setUpUI();setUpSendButton();setUpListener();setEnabled(true);
     }

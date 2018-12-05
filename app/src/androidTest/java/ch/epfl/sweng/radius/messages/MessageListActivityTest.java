@@ -29,6 +29,7 @@ import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 
@@ -95,6 +96,8 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
+        UserInfo.getInstance();
+        OthersInfo.getInstance();
 
         user1 = new User();
         user2 = new User();
