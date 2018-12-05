@@ -142,26 +142,22 @@ public class BrowseProfilesActivity extends AppCompatActivity{
 
         if (currentUser.getFriends().containsKey(profileUser.getID())) {
             currentUser.removeFriend(profileUser);
-            addFriendButton.setText("Remove friend");
-            addFriendButton.setEnabled(true);
+            addFriendButton.setText("Remove friend"); addFriendButton.setEnabled(true);
         }
         else if (currentUser.getFriendsRequests().containsKey(profileUser.getID())) {
-            addFriendButton.setText("Request sent");
-            addFriendButton.setEnabled(false);
+            addFriendButton.setText("Request sent"); addFriendButton.setEnabled(false);
         }
 
         addFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentUser.getFriends().containsKey(profileUser.getID())) {
-                    addFriendButton.setText("Add Friend");
-                    addFriendButton.setEnabled(true);
+                    addFriendButton.setText("Add Friend"); addFriendButton.setEnabled(true);
                 } else {
                     currentUser.addFriendRequest(profileUser);
                     UserInfo.getInstance().updateUserInDB();
                     database.writeInstanceObj(profileUser, Database.Tables.USERS);
-                    addFriendButton.setText("Request sent");
-                    addFriendButton.setEnabled(false);
+                    addFriendButton.setText("Request sent"); addFriendButton.setEnabled(false);
                 }
             }
         });
