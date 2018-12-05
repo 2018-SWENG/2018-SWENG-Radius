@@ -6,17 +6,26 @@
     android:layout_height="wrap_content"
     android:paddingTop="8dp">
 
-    <ImageView
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/avatar"
         android:layout_alignParentLeft="true"
-        android:scaleType="centerInside"
-        android:background="@drawable/circle"
-        android:layout_width="34dp"
-        android:layout_height="34dp" />
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_centerHorizontal="true"
+        android:padding="8dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/user_photo_default"
+        android:elevation="5dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/ic_man"
+        app:civ_border_width="1dp"
+        app:civ_border_color="#ecf0f1"/>
 
     <TextView
         android:id="@+id/text_message_name"
-        android:text="anonyme"
+        android:text="anonymous"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"

@@ -42,10 +42,7 @@ public class ChatLogs implements DatabaseObject{
     }
 
     public ChatLogs() {
-        this.membersId = new ArrayList<>();
-        this.messages = new LinkedList<>();
-        this.chatLogsId = UUID.randomUUID().toString();
-        this.id = this.chatLogsId;
+        this(UUID.randomUUID().toString());
     }
 
     // Getters
