@@ -166,6 +166,7 @@ public class FakeFirebaseUtility extends Database {
         User temp = new User("testUser2");
         currentUSer.addFriendRequest(temp);
         temp.addFriendRequest(currentUSer);
+        currentUSer.removeFriend(temp);
         usersTable.put("testUser2", temp);
         // Fill the users table
         usersTable.put("testUser1", currentUSer);
