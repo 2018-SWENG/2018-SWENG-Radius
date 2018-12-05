@@ -140,11 +140,12 @@ public class BrowseProfilesActivity extends AppCompatActivity{
         final Button addFriendButton = findViewById(R.id.add_user);
         final User currentUser = UserInfo.getInstance().getCurrentUser();
 
-        if (currentUser.getFriends().contains(profileUser.getID())) {
-            addFriendButton.setText("Already friends");
-            addFriendButton.setEnabled(false);
+        if (currentUser.getFriends().containsKey(profileUser.getID())) {
+            currentUser.removeFriend(profileUser);
+            addFriendButton.setText("Remove friend");
+            addFriendButton.setEnabled(true);
         }
-        if (currentUser.getFriendsRequests().contains(profileUser.getID())) {
+        else if (currentUser.getFriendsRequests().containsKey(profileUser.getID())) {
             addFriendButton.setText("Request sent");
             addFriendButton.setEnabled(false);
         }
@@ -152,11 +153,16 @@ public class BrowseProfilesActivity extends AppCompatActivity{
         addFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentUser.addFriendRequest(profileUser);
-                UserInfo.getInstance().updateUserInDB();
-                database.writeInstanceObj(profileUser, Database.Tables.USERS);
-                addFriendButton.setText("Request sent");
-                addFriendButton.setEnabled(false);
+                if (currentUser.getFriends().containsKey(profileUser.getID())) {
+                    addFriendButton.setText("Add Friend");
+                    addFriendButton.setEnabled(true);
+                } else {
+                    currentUser.addFriendRequest(profileUser);
+                    UserInfo.getInstance().updateUserInDB();
+                    database.writeInstanceObj(profileUser, Database.Tables.USERS);
+                    addFriendButton.setText("Request sent");
+                    addFriendButton.setEnabled(false);
+                }
             }
         });
     }

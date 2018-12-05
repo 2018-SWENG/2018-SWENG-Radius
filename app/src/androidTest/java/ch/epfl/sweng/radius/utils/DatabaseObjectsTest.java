@@ -109,7 +109,7 @@ public class DatabaseObjectsTest {
         assert(chat.isEmpty());
         user.newChat("Arthur");
         List<String> blocked = user.getBlockedUsers();
-        List<String> req = user.getFriendsRequests();
+        Map<String, String> req = user.getFriendsRequests();
         Map<String, String> chats = user.getChatList();
 
         user.setID("Arthur");
