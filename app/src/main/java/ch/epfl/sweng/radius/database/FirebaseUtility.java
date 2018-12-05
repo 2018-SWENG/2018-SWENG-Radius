@@ -72,7 +72,6 @@ public class FirebaseUtility extends Database{
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
-
     @Override
     public void writeToInstanceChild(final DatabaseObject obj, Tables tablename,
                                               final String childName, final Object child){

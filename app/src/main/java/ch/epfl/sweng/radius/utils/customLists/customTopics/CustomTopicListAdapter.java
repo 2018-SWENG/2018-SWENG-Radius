@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,6 +115,14 @@ public class CustomTopicListAdapter extends CustomListAdapter {
             super(itemLayoutView);
             textViewTitle = itemLayoutView.findViewById(R.id.topicName);
             removeTopicButton = itemLayoutView.findViewById(R.id.removeTopicButton);
+            removeTopicButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FirebaseDatabase.getInstance().
+                            getReference(Database.Tables.LOCATIONS.toString())
+                            .child(textViewTitle.getText().toString()).removeValue();
+                }
+            });
         }
     }
 
