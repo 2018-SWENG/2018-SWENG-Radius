@@ -15,8 +15,7 @@ import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 
 public class CustomGroupListAdapterTest {
 
-    private CustomGroupListAdapter.GroupItemHolder mockedView =
-            Mockito.mock(CustomGroupListAdapter.GroupItemHolder.class);
+    private CustomListAdapter.ViewHolder mockedView = Mockito.mock(CustomListAdapter.ViewHolder.class);
     private TextView mockedText = Mockito.mock(TextView.class);
     private ImageView mockedImg = Mockito.mock(ImageView.class);
     private CustomGroupListAdapter test;

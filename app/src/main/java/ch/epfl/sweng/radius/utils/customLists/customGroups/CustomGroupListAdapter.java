@@ -40,7 +40,7 @@ public class CustomGroupListAdapter extends CustomListAdapter{
     }
 
     // inner class to hold a reference to each item of RecyclerView
-    public static class GroupItemHolder extends ViewHolder {
+    static class GroupItemHolder extends ViewHolder {
         TextView textViewTitle;
 
         GroupItemHolder(View itemLayoutView) {
