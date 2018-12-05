@@ -22,14 +22,7 @@ public abstract class CustomTopicTab extends CustomTab {
 
     @Override
     public CustomListAdapter getAdapter(List<CustomListItem> items) {
-        HashMap<String, MLocation> topics = OthersInfo.getInstance().getTopicsPos();
-        ArrayList<Integer> removableTopicPositions = new ArrayList<>();
-        for (int i = 0; i < items.size(); i++) {
-            MLocation location = topics.get(items.get(i).getItemId());
-            if (location != null && location.isRemovableTopic()) {
-                removableTopicPositions.add(i);
-            }
-        }
+        ArrayList<Integer> removableTopicPositions = getRemovableTopicPositions(items);
         return new CustomTopicListAdapter(items, getContext(), removableTopicPositions);
     }
 
@@ -50,14 +43,7 @@ public abstract class CustomTopicTab extends CustomTab {
                     topicItems.add(new CustomListItem(topicId, convId, topicId));
                 }
                 if(adapter != null){
-                    HashMap<String, MLocation> topics = OthersInfo.getInstance().getTopicsPos();
-                    ArrayList<Integer> removableTopicPositions = new ArrayList<>();
-                    for (int i = 0; i < topicItems.size(); i++) {
-                        MLocation location = topics.get(topicItems.get(i).getItemId());
-                        if (location != null && location.isRemovableTopic()) {
-                            removableTopicPositions.add(i);
-                        }
-                    }
+                    ArrayList<Integer> removableTopicPositions = getRemovableTopicPositions(topicItems);
                     ((CustomTopicListAdapter) adapter).setRemovableTopicPositions(removableTopicPositions);
                     adapter.setItems(topicItems);
                     adapter.notifyDataSetChanged();
@@ -75,6 +61,18 @@ public abstract class CustomTopicTab extends CustomTab {
     protected void setUpAdapterWithList(List<String> listIds) {
         List<String> ids = new ArrayList<>(OthersInfo.getInstance().getTopicsPos().keySet());
         database.readListObjOnce(ids, Database.Tables.CHATLOGS, getAdapterCallback());
+    }
+
+    private ArrayList<Integer> getRemovableTopicPositions(List<CustomListItem> items) {
+        HashMap<String, MLocation> topics = OthersInfo.getInstance().getTopicsPos();
+        ArrayList<Integer> removableTopicPositions = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            MLocation location = topics.get(items.get(i).getItemId());
+            if (location != null && location.isRemovableTopic()) {
+                removableTopicPositions.add(i);
+            }
+        }
+        return removableTopicPositions;
     }
 
 }
