@@ -181,8 +181,5 @@ public class MapUtilityTest {
         Database.getInstance().readObjOnce(new User(), Database.Tables.USERS, cb);
         Database.getInstance().readObjOnce(new ChatLogs("A"), Database.Tables.CHATLOGS, cb);
         Database.getInstance().readObjOnce(new MLocation("testLoc0"), Database.Tables.LOCATIONS, cb);
-
-
     }
-
 }
