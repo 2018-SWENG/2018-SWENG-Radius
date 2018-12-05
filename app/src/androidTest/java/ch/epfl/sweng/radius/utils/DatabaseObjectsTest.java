@@ -41,6 +41,7 @@ public class DatabaseObjectsTest {
         Date sendingTime = new Date();
 
         Message message = new Message(senderId, contentMessage, sendingTime);
+        assert(message.getID() == null);
 
         String senderIdCompare = message.getSenderId();
         String contentMessageCompare = message.getContentMessage();
@@ -57,6 +58,7 @@ public class DatabaseObjectsTest {
         new ChatLogs(usersIds);
 
         ChatLogs chat = new ChatLogs();
+        chat.setId("test");
         usersIds.add("1234");
         usersIds.add("4321");
         ChatLogs chatLogs = new ChatLogs(usersIds);
