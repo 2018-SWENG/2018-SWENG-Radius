@@ -117,8 +117,6 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
         assertNotNull(mlActivity.findViewById(R.id.layout_chatbox));
         assertNotNull(mlActivity.findViewById(R.id.edittext_chatbox));
         assertNotNull(mlActivity.findViewById(R.id.button_chatbox_send));
-        assertNotNull(mlActivity.findViewById(R.id.profile_picture));
-
     }
 
     @Test
@@ -132,15 +130,13 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
 
     @Test
     public void setUpSendButton() {
-
         onView(withId(R.id.edittext_chatbox)).perform(typeText("Coucou"));
         Espresso.closeSoftKeyboard();
+        mlActivity.usersInRadius();
         onView(withId(R.id.button_chatbox_send)).perform(click());
 
         assert (mlActivity.findViewById(R.id.edittext_chatbox).toString().isEmpty());
-
-
-    }
+        }
 
     @Test
     public void testSetEnabledTrue() {

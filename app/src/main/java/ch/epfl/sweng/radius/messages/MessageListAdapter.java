@@ -18,9 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
-import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.database.UserUtils;
 
@@ -124,7 +124,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             messageText = itemView.findViewById(R.id.text_message_body);
             timeText = itemView.findViewById(R.id.text_message_time);
             nameText = itemView.findViewById(R.id.text_message_name);
-            profileImage = itemView.findViewById(R.id.avatar);
         }
 
         void bind(Message message) {
@@ -136,16 +135,23 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             MLocation currentUser = usersHashMap.get(message.getSenderId());
             if (currentUser != null) {
                 nameText.setText(currentUser.getTitle());
-
-                if (currentUser.getUrlProfilePhoto() != null && !currentUser.getUrlProfilePhoto().isEmpty()) {
-                    Picasso.get().load(currentUser.getUrlProfilePhoto()).into(profileImage);
-                } else {
-                    profileImage.setImageResource(R.drawable.user_photo_default);
-                }
+                setPicture(currentUser.getUrlProfilePhoto(),itemView);
             }
 
 
         }
+    }
+
+    private void setPicture(String currentUserUrl,View itemView){
+        ImageView profileImage;
+        profileImage = itemView.findViewById(R.id.avatar);
+
+        if (currentUserUrl != null && !currentUserUrl.isEmpty()) {
+            Picasso.get().load(currentUserUrl).into(profileImage);
+        } else {
+            profileImage.setImageResource(R.drawable.user_photo_default);
+        }
+
     }
 
     private class SentMessageHolder extends RecyclerView.ViewHolder {
@@ -166,8 +172,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags));
 
             // Insert the profile image from the URL into the ImageView.
-            //Utils.displayRoundImageFromUrl(
-            // context, message.getSenderId().getProfileUrl(), profileImage);
+            //            setPicture(UserInfo.getInstance().getCurrentPosition().getUrlProfilePhoto(),itemView);
         }
     }
 }
