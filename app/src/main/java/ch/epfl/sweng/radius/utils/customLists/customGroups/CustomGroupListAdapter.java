@@ -28,12 +28,14 @@ public class CustomGroupListAdapter extends CustomListAdapter{
         Log.e("CustomGroupListAdapter", "Items groups size :" + items.size());
 
         viewHolder.txtViewTitle.setText(items.get(position).getItemName());
+        /*
         if (viewHolder.imgViewIcon != null) {
             viewHolder.imgViewIcon.setVisibility(View.GONE);
         }
         if (viewHolder.txtViewStatus != null) {
             viewHolder.txtViewStatus.setText("Group");
         }
+        */
         CustomListItem item = items.get(position);
         final String groupId = item.getItemId();
         final String groupName = item.getItemName();
