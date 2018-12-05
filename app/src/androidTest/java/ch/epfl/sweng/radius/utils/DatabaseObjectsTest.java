@@ -103,12 +103,14 @@ public class DatabaseObjectsTest {
         user2.addFriendRequest(user);
         user.addFriendRequest(user2);
         assert(user.getFriendsRequests().size() == 1);
+        assert(user.getFriendsInvitations().size() == 1);
 
         String chat = user.getConvFromUser("Arthur");
         Log.e("Test", "Coucou");
         assert(chat.isEmpty());
         user.newChat("Arthur");
         List<String> blocked = user.getBlockedUsers();
+        user.setBlockedUsers(blocked);
         Map<String, String> req = user.getFriendsRequests();
         Map<String, String> chats = user.getChatList();
 
