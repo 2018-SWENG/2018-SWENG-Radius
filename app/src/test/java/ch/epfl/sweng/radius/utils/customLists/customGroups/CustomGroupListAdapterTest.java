@@ -14,13 +14,12 @@ import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 
 public class CustomGroupListAdapterTest {
-    //private CustomListAdapter.ViewHolder mockedView = Mockito.mock(CustomListAdapter.ViewHolder.class);
-    private CustomListAdapter.ViewHolder mockedView = Mockito.mock(CustomGroupListAdapter.GroupItemHolder.class);
+    private CustomListAdapter.ViewHolder mockedView = Mockito.mock(CustomListAdapter.ViewHolder.class);
     private TextView mockedText = Mockito.mock(TextView.class);
     private ImageView mockedImg = Mockito.mock(ImageView.class);
     private CustomGroupListAdapter test;
     ArrayList<CustomListItem> list = new ArrayList<CustomListItem>();
-    
+
     @Before
     public void setUp() throws Exception {
         list.add(new CustomListItem("1","0", "3"));
@@ -30,7 +29,6 @@ public class CustomGroupListAdapterTest {
 
     @Test
     public void onBindViewHolder() {
-
         test = new CustomGroupListAdapter(list, MapUtilityTest.context);
         test.onBindViewHolder(mockedView, 0);
     }

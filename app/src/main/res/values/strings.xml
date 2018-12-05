@@ -37,4 +37,5 @@
     <string name="new_topic_prompt">Enter a name for yout topic:</string>
     <string name="my_topic">My Topic</string>
     <string name="remove">Remove</string>
+    <string name="default_status">Default Status</string>
 </resources>

@@ -50,10 +50,12 @@ public abstract class CustomListAdapter extends RecyclerView.Adapter<CustomListA
 
         public TextView txtViewTitle;
         public ImageView imgViewIcon;
+        public TextView txtViewStatus;
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
             txtViewTitle = itemLayoutView.findViewById(R.id.username);
+            txtViewStatus = itemLayoutView.findViewById(R.id.status);
             imgViewIcon = (CircleImageView) itemLayoutView.findViewById(R.id.profile_picture);
         }
     }
