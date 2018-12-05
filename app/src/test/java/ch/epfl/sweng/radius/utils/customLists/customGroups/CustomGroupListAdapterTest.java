@@ -1,5 +1,6 @@
 package ch.epfl.sweng.radius.utils.customLists.customGroups;
 
+import android.support.annotation.NonNull;
 import android.widget.ImageView;
 import android.widget.TextView;
 

@@ -33,4 +33,5 @@ public class CustomTopicListAdapterTest {
         test = new CustomTopicListAdapter(list, MapUtilityTest.context, new ArrayList<Integer>());
         test.onBindViewHolder(mockedView, 0);
     }
+
 }
