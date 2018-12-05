@@ -332,7 +332,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         Intent notifIntent = new Intent(this.getActivity(), HomeFragment.class);
         PendingIntent pi = PendingIntent.getActivity(this.getActivity(), 0, notifIntent, 0);
         // Build and show notification
-        NotificationUtility.getInstance(null, null, null, null)
-                .notifyFriendIsNear(userID, userNickname, pi);
+        NotificationUtility.getInstance(null, null, null, null).notifyFriendIsNear(userID, userNickname, pi);
     }
 }

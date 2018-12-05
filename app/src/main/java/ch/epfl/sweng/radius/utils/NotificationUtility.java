@@ -67,6 +67,7 @@ public class NotificationUtility {
                  .setContentTitle(senderId);
         unseenMsg++;
         notificationManager.notify(1, msgNotifBuilder.build());
+        Log.d("NewMessageNotif", "New Message : " + content);
     }
 
     public void notifyNewFrienReq(String userID, String userNickname, PendingIntent pi) {
@@ -76,6 +77,7 @@ public class NotificationUtility {
                 .setContentTitle("Radius Friend Request")
                 .setContentIntent(pi);
         notificationManager.notify(2, reqNotifBuilder.build());
+        Log.d("NewFriendReqNotif", "New Friend Request from "+ userNickname + " (" + userID+")");
     }
 
     public void notifyFriendIsNear(String userID, String userNickname, PendingIntent pi) {
@@ -84,6 +86,6 @@ public class NotificationUtility {
                 .setContentTitle("Radius Friend Is Near")
                 .setContentIntent(pi);
         notificationManager.notify(3, nearFriendNotifBuilder.build());
-        //Log.d("NearFriendNotif", "Your friend "+ userNickname + " (" + userID+")" + "is in the Radius!");
+        Log.d("NearFriendNotif", "Your friend "+ userNickname + " (" + userID+")" + "is in the Radius!");
     }
 }
