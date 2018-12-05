@@ -2,6 +2,7 @@ package ch.epfl.sweng.radius.messages;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,14 +11,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
-import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.database.UserUtils;
 
@@ -37,7 +40,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private int flags;
     private List<String> membersIds;
 
-    public MessageListAdapter(Context context, List<Message> messages,List<String> membersIds) {
+    public MessageListAdapter(Context context, List<Message> messages, List<String> membersIds) {
         this.context = context;
         this.messages = messages;
         this.usersHashMap = new HashMap<>();
@@ -121,7 +124,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             messageText = itemView.findViewById(R.id.text_message_body);
             timeText = itemView.findViewById(R.id.text_message_time);
             nameText = itemView.findViewById(R.id.text_message_name);
-            profileImage = itemView.findViewById(R.id.avatar);
         }
 
         void bind(Message message) {
@@ -130,14 +132,26 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags));
-            if(usersHashMap.get(message.getSenderId()) != null) {
-                nameText.setText(usersHashMap.get(message.getSenderId()).getTitle());
+            MLocation currentUser = usersHashMap.get(message.getSenderId());
+            if (currentUser != null) {
+                nameText.setText(currentUser.getTitle());
+                setPicture(currentUser.getUrlProfilePhoto(),itemView);
             }
 
-            // Insert the profile image from the URL into the ImageView.
-            //Utils.displayRoundImageFromUrl(
-            // context, message.getSenderId().getProfileUrl(), profileImage);
+
         }
+    }
+
+    private void setPicture(String currentUserUrl,View itemView){
+        ImageView profileImage;
+        profileImage = itemView.findViewById(R.id.avatar);
+
+        if (currentUserUrl != null && !currentUserUrl.isEmpty()) {
+            Picasso.get().load(currentUserUrl).into(profileImage);
+        } else {
+            profileImage.setImageResource(R.drawable.user_photo_default);
+        }
+
     }
 
     private class SentMessageHolder extends RecyclerView.ViewHolder {
@@ -158,8 +172,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags));
 
             // Insert the profile image from the URL into the ImageView.
-            //Utils.displayRoundImageFromUrl(
-            // context, message.getSenderId().getProfileUrl(), profileImage);
+            //            setPicture(UserInfo.getInstance().getCurrentPosition().getUrlProfilePhoto(),itemView);
         }
     }
 }

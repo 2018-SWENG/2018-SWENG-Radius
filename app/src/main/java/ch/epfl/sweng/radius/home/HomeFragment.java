@@ -29,7 +29,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.DBLocationObserver;
@@ -59,7 +61,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
     //testing
     public static MapUtility mapListener = MapUtility.getMapInstance();
-    private static List<String> friendsID;
+    private static Map<String, String> friendsID;
     private static ArrayList<MLocation> usersLoc;
     private static List<MarkerOptions> mapMarkers = new ArrayList<>();
     /**
@@ -95,7 +97,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         OthersInfo.getInstance().addLocationObserver(this);
         super.onCreate(savedInstanceState);
         radius = UserInfo.getInstance().getCurrentPosition().getRadius();
-        friendsID = new ArrayList<>();
+        friendsID = new HashMap<>();
         usersLoc = new ArrayList<>();
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
                 UserInfo.getInstance().getCurrentPosition().getLongitude());
@@ -286,7 +288,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     public void markNearbyUser(int indexOfUser, String status, String userName, String locID) {
         LatLng newPos = new LatLng(usersLoc.get(indexOfUser).getLatitude(),
                                     usersLoc.get(indexOfUser).getLongitude()    );
-        float color = friendsID.contains(locID) ? BitmapDescriptorFactory.HUE_BLUE :
+        float color = friendsID.containsKey(locID) ? BitmapDescriptorFactory.HUE_BLUE :
                                                         BitmapDescriptorFactory.HUE_RED;
 
         if(friendsID.contains(locID)){
