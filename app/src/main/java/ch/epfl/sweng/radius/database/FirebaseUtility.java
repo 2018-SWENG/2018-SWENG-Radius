@@ -139,8 +139,11 @@ public class FirebaseUtility extends Database{
                     writeInstanceObj(obj, tableName);
                     callback.onFinish(obj);
                 }
-                else
+                else{
+                    Log.e("FirebaseDebug", "Object is " + obj.getID() + "Objtype is " + tableName.toString());
                     callback.onFinish(dataSnapshot.getValue(obj.getClass()));
+
+                }
             }
 
             @Override
@@ -169,7 +172,7 @@ public class FirebaseUtility extends Database{
 
                 List<DatabaseObject> allItems = new ArrayList<>();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-            //        Log.e("DEBUG", postSnapshot.getKey());
+                    Log.e("FirebaseDebug", postSnapshot.getKey());
                     DatabaseObject snap = (DatabaseObject)postSnapshot
                             .getValue(tableName.getTableClass());
                     if (ids.contains(snap.getID())) {
@@ -196,6 +199,8 @@ public class FirebaseUtility extends Database{
                 .addListenerForSingleValueEvent( new ValueEventListener() {
                     @Override
                     public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Log.e("FirebaseDebug", "Objtype is " + tableName.toString());
+
                         Log.d("DEBUG", getLogTagWithMethod());
                         List<DatabaseObject> allItems = new ArrayList<>();
                         for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {

@@ -163,11 +163,13 @@ public class FakeFirebaseUtility extends Database {
         if(currentUSer != null) return;
         // Define Current user
         currentUSer = new User("testUser1");
-
+        User temp = new User("testUser2");
+        currentUSer.addFriendRequest(temp);
+        temp.addFriendRequest(currentUSer);
+        usersTable.put("testUser2", temp);
         // Fill the users table
         usersTable.put("testUser1", currentUSer);
-        User temp = new User("testUser2");
-        usersTable.put("testUser2", temp);
+
         temp = new User("testUser3");
         usersTable.put("testUser3",temp);
         temp = new User("testUser4");
