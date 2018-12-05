@@ -119,6 +119,7 @@ public class DatabaseObjectsTest {
         user.setChatList(userList);
 
         userList = user.getReportList();
+        user.removeFriend(user2);
     }
 
     @Test
