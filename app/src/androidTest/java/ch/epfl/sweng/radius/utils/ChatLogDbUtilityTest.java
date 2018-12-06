@@ -4,15 +4,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 
 public class ChatLogDbUtilityTest {
+
+    private ChatLogs chatLogs;
 
     @Before
     public void setUp() {
         Database.activateDebugMode();
-
-
+        ((FakeFirebaseUtility)Database.getInstance()).fillDatabase();
     }
 
     @After

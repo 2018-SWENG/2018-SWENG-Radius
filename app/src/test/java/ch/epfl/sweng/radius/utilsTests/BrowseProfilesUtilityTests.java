@@ -73,6 +73,13 @@ public class BrowseProfilesUtilityTests {
     }
 
     @Test
+    public void testBlockUser(){
+        User currentUser = UserInfo.getInstance().getCurrentUser();
+        profileListener.blockUser();
+        assertTrue(currentUser.getBlockedUsers().contains(profileOwner));
+    }
+
+    @Test
     public void testUnblockUser() {
         User currentUser = UserInfo.getInstance().getCurrentUser();
         currentUser.getBlockedUsers().add(profileOwner);

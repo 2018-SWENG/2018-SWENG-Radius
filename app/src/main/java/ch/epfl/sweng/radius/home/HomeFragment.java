@@ -1,7 +1,9 @@
 package ch.epfl.sweng.radius.home;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -25,7 +27,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,15 +34,13 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.DBLocationObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.OthersInfo;
-import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
-import ch.epfl.sweng.radius.database.UserUtils;
 import ch.epfl.sweng.radius.utils.MapUtility;
+import ch.epfl.sweng.radius.utils.NotificationUtility;
 import ch.epfl.sweng.radius.utils.TabAdapter;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLocationObserver {
@@ -58,7 +57,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     private static LatLng coord;
     private TabAdapter adapter;
     private TabLayout tabLayout;
-
     private ViewPager viewPager;
 
     //testing
@@ -87,7 +85,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         HomeFragment fragment = new HomeFragment();
         radius = radiusValue;
         mobileMap = googleMap;
-    //    mapListener = mapUtility;
         usersLoc = new ArrayList<>();
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
                 UserInfo.getInstance().getCurrentPosition().getLongitude());
@@ -104,10 +101,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         usersLoc = new ArrayList<>();
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
                 UserInfo.getInstance().getCurrentPosition().getLongitude());
-
-        /*User pınar = new User("BxbE0zC7RBRkbO5JjUiSBeHJYfX2");
-        pınar.getBlockedUsers().add("lU0EUkJKF0guvnxW10XrirLHLd13");
-        Database.getInstance().writeInstanceObj(pınar, Database.Tables.USERS);*/
     }
 
     @Override
@@ -141,7 +134,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-       mapListener = MapUtility.getMapInstance();
+        mapListener = MapUtility.getMapInstance();
 
         mapView = view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
@@ -298,6 +291,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         float color = friendsID.containsKey(locID) ? BitmapDescriptorFactory.HUE_BLUE :
                                                         BitmapDescriptorFactory.HUE_RED;
 
+        if(friendsID.containsKey(locID)){
+            showNearFriendNotification(locID, userName);
+            //Log.d("NearFriendNotif", "There is friend nearby");
+        }
+
         final MarkerOptions marker = new MarkerOptions().position(newPos)
                 .title(userName + ": " + status)
                 .icon(BitmapDescriptorFactory.defaultMarker(color));
@@ -327,5 +325,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
             initCircle(coord);
             markNearbyUsers();
         }
+    }
+
+    public void showNearFriendNotification(String userID, String userNickname) {
+        // Setup Intent to end here in case of click
+        Intent notifIntent = new Intent(this.getActivity(), HomeFragment.class);
+        PendingIntent pi = PendingIntent.getActivity(this.getActivity(), 0, notifIntent, 0);
+        // Build and show notification
+        NotificationUtility.getInstance(null, null, null, null).notifyFriendIsNear(userID, userNickname, pi);
     }
 }

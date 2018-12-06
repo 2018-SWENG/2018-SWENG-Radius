@@ -26,6 +26,7 @@ import java.util.Map;
 import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.MapUtility;
@@ -50,6 +51,7 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
             Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
 
     private AccountActivity mblAccountActivity;
+    private HomeFragment fragment;
 
     public HomeFragmentTest(Class<AccountActivity> activityClass) {
         super(activityClass);
@@ -66,7 +68,9 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
+        ((FakeFirebaseUtility) Database.getInstance()).fillDatabase();
 
+        fragment = new HomeFragment();
         Intent intent = new Intent();
         mblAccountActivity = mblActivityTestRule.launchActivity(intent);
         MapUtility map = MapUtility.getMapInstance();
@@ -163,6 +167,18 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
                 .check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
     }
+
+    @Test
+    public void testNearFriendNotification(){
+        fragment.onLocationChange("testUser1");
+    }
+
+    /*
+    @Test
+    public void testShowNearFriendNotification(){
+        fragment.showNearFriendNotification("testUser","testNickname");
+    }
+    */
 
     @After
     public void tearDown() {
