@@ -15,31 +15,30 @@ import org.junit.Test;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.UserInfo;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-public class BrowseProfilesActivityTest extends ActivityInstrumentationTestCase2<BrowseProfilesActivity> {
+public class BrowseProfilesUnblockedActivityTest extends ActivityInstrumentationTestCase2<BrowseProfilesUnblockedActivity> {
     @Rule
-    public final ActivityTestRule<BrowseProfilesActivity> mActivityRule =
-            new ActivityTestRule<>(BrowseProfilesActivity.class);
+    public final ActivityTestRule<BrowseProfilesUnblockedActivity> mActivityRule =
+            new ActivityTestRule<>(BrowseProfilesUnblockedActivity.class);
 
-    private BrowseProfilesActivity mblBrowseProfilesActivity;
+    private BrowseProfilesUnblockedActivity mblBrowseProfilesUnblockedActivity;
 
-    public BrowseProfilesActivityTest(){
-        super(BrowseProfilesActivity.class);
+    public BrowseProfilesUnblockedActivityTest(){
+        super(BrowseProfilesUnblockedActivity.class);
     }
 
-    private BrowseProfilesActivity mActivity;
+    private BrowseProfilesUnblockedActivity mActivity;
 
     @Rule
     public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
             Manifest.permission.ACCESS_FINE_LOCATION);
 
-    public BrowseProfilesActivityTest(Class<BrowseProfilesActivity> activityClass) {
+    public BrowseProfilesUnblockedActivityTest(Class<BrowseProfilesUnblockedActivity> activityClass) {
         super(activityClass);
     }
 
@@ -113,7 +112,7 @@ public class BrowseProfilesActivityTest extends ActivityInstrumentationTestCase2
 
     @After
     public void tearDown() throws Exception {
-        mblBrowseProfilesActivity = null;
+        mblBrowseProfilesUnblockedActivity = null;
     }
 
 }

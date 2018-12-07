@@ -13,7 +13,7 @@ import com.google.firebase.database.DatabaseError;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesActivity;
+import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesUnblockedActivity;
 import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesBlockedActivity;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
@@ -46,7 +46,7 @@ public class CustomUserListListeners {
                 if (OthersInfo.getInstance().getUsers().get(userId).getBlockedUsers().contains(UserInfo.getInstance().getCurrentUser().getID())) {
                     intent = new Intent(context, BrowseProfilesBlockedActivity.class);
                 } else {
-                    intent = new Intent(context, BrowseProfilesActivity.class);
+                    intent = new Intent(context, BrowseProfilesUnblockedActivity.class);
                 }
 
                 intent.putExtra("Clicked Picture", clickedPic);

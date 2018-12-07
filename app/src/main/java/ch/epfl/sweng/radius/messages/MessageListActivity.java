@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
@@ -284,13 +283,12 @@ public class MessageListActivity extends AppCompatActivity {
         });
     }
 
-    private void compareLocataion() {
+    private void compareLocation() {
         //TODO check if other users radius contains current user.
-        if (locType == 0) {//chatLogs.getMembersId().size() == 2) {
-            //System.out.println("ABCCD " + otherUserId);
-            //System.out.println(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId));//get(otherUserId);//.getLatitude();
-            //System.out.println("ABCCD " + OthersInfo.getInstance().getUsersInRadius().get(otherUserId).getLatitude() + " " + OthersInfo.getInstance().getUsersInRadius().get(otherUserId).getLongitude());
-            setEnabled(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId) && !OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().contains(UserInfo.getInstance().getCurrentUser().getID()));
+        if (locType == 0) {
+            setEnabled(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId) &&
+                    !OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
+                            contains(UserInfo.getInstance().getCurrentUser().getID()));
         }
         else {
             setEnabled(true);
@@ -305,7 +303,7 @@ public class MessageListActivity extends AppCompatActivity {
         prepareUsers(participants);
 
         //compare the locations of the users and whether they are able to talk to each other or not.
-        compareLocataion();
+        compareLocation();
 
     }
 
