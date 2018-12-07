@@ -112,16 +112,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         View view = infltr.inflate(R.layout.fragment_home, container, false);
 
         // Create the tab layout under the map
-        viewPager = view.findViewById(R.id.viewPager);
-        tabLayout = view.findViewById(R.id.tabLayout);
+        viewPager = view.findViewById(R.id.viewPager); tabLayout = view.findViewById(R.id.tabLayout);
 
         adapter = new TabAdapter(this.getChildFragmentManager());
-        adapter.addFragment(new PeopleTab(), "People");
-        adapter.addFragment(new GroupTab(), "Groups");
-        adapter.addFragment(new TopicsTab(), "Topics");
+        adapter.addFragment(new PeopleTab(), "People"); adapter.addFragment(new GroupTab(), "Groups"); adapter.addFragment(new TopicsTab(), "Topics");
 
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
+        viewPager.setAdapter(adapter); tabLayout.setupWithViewPager(viewPager);
         getReadWritePermission(getContext(), getActivity());
 
         return view;
@@ -202,8 +198,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
             MLocation curPos = UserInfo.getInstance().getCurrentPosition();
             coord = new LatLng(curPos.getLatitude(), curPos.getLongitude());
-            initCircle(coord);
-            moveCamera(coord, ZOOM);
+            initCircle(coord); moveCamera(coord, ZOOM);
 
             // Do locations here
             markNearbyUsers();
@@ -252,15 +247,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     public void markNearbyUsers() {
 
         // Clear Markers
-      //  mapMarkers.removeAll(mapMarkers);
         try
         {
             getActivity().runOnUiThread(new Runnable(){
                 public void run(){
                     if(mobileMap != null){
-                        mobileMap.clear();
-
-                        mobileMap.addCircle(radiusOptions);
+                        mobileMap.clear(); mobileMap.addCircle(radiusOptions);
                     }
 
                 }
