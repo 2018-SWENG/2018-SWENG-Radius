@@ -25,10 +25,10 @@ public class CustomUserListAdapter extends CustomListAdapter {
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
         CustomListItem item = items.get(position);
-        viewHolder.txtViewTitle.setText(item.getItemName());
-        viewHolder.txtViewStatus.setText();
-
         MLocation itemUser = OthersInfo.getInstance().getAllUserLocations().get(item.getItemId());
+
+        viewHolder.txtViewTitle.setText(item.getItemName());
+        viewHolder.txtViewStatus.setText(itemUser.getMessage());
 
         if(itemUser != null){
             if (!itemUser.getUrlProfilePhoto().isEmpty()) {
