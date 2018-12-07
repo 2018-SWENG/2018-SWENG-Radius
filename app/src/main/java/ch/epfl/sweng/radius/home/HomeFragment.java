@@ -204,24 +204,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
             coord = new LatLng(curPos.getLatitude(), curPos.getLongitude());
             initCircle(coord);
             moveCamera(coord, ZOOM);
-            // Push current location to DB
-            // Write the location of the current user to the database
-            /*
-            Database.getInstance().readObjOnce(new MLocation("EPFL"), Database.Tables.LOCATIONS, new CallBackDatabase() {
-                @Override
-                public void onFinish(Object value) {
-                    MLocation epfl2 = (MLocation) value;
-                    epfl2.setLocationType(1);
-                    epfl2.setRadius(2000);
-                    Database.getInstance().writeInstanceObj(epfl2, Database.Tables.LOCATIONS);
-                }
-
-                @Override
-                public void onError(DatabaseError error) {
-
-                }
-            });*/
-          //  mapListener.setMyPos(myPos);
 
             // Do locations here
             markNearbyUsers();
