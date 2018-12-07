@@ -126,6 +126,21 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
                 .perform(click());
     }
 
+    @Test
+    public void testTopicTabRemove() {
+        Espresso.onView(withText("TOPICS")).check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+        Espresso.onView(withText("NEW TOPIC")).check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+        Espresso.onView(withText("OK")).check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+
+        Espresso.onView(withText("REMOVE")).check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
+
+    }
+
+
     public void testOnMapDoesNotFailWithBadInput() {
         FrameLayout fcontainer = mblAccountActivity.findViewById(R.id.fcontainer);
         final Fragment fragment = new HomeFragment();
@@ -147,6 +162,7 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
         Espresso.onView(withText("TOPICS"))
                 .check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
+
         Espresso.onView(withText("PEOPLE"))
                 .check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());

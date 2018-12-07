@@ -19,6 +19,8 @@ public class MLocation implements DatabaseObject, Serializable {
     private String spokenLanguages;
     private String interests;
 
+    private String ownerId = ""; // for topics, no significance for locations and groups (so default is "")
+
     public MLocation(){
         this.userID = Database.getInstance().getCurrent_user_id();
         this.latitude = 46.5160698;
@@ -156,4 +158,18 @@ public class MLocation implements DatabaseObject, Serializable {
     public void setVisible(boolean visible) {
         isVisible = visible;
     }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public boolean isRemovableTopic() { // Is Topic created by the current user?
+        return this.locationType == 2 &&
+                this.getOwnerId().equals(UserInfo.getInstance().getCurrentUser().getID());
+    }
+
 }

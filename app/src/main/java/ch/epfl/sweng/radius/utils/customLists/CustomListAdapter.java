@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,11 +27,6 @@ public abstract class CustomListAdapter extends RecyclerView.Adapter<CustomListA
         this.context = context;
     }
 
-    public CustomListAdapter(CustomListAdapter customListAdapter) {
-        this.items = new ArrayList<>(customListAdapter.items);
-        this.context = customListAdapter.context;
-    }
-
     @NonNull
     @Override
     public CustomListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,  int viewType) {
@@ -49,10 +45,12 @@ public abstract class CustomListAdapter extends RecyclerView.Adapter<CustomListA
 
         public TextView txtViewTitle;
         public ImageView imgViewIcon;
+        public TextView txtViewStatus;
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
             txtViewTitle = itemLayoutView.findViewById(R.id.username);
+            txtViewStatus = itemLayoutView.findViewById(R.id.status);
             imgViewIcon = (CircleImageView) itemLayoutView.findViewById(R.id.profile_picture);
         }
     }

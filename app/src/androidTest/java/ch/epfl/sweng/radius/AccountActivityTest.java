@@ -86,6 +86,11 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
 
     @Test
     public void testNavigationToSettings() {
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Espresso.onView(withId(R.id.action_settings)).perform(click());
 
     }

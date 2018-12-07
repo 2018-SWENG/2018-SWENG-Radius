@@ -226,6 +226,23 @@ public class FakeFirebaseUtility extends Database {
                 defaultLat - 1.5);
         UNIL.setLocationType(1); // set UNIL as group location
         locationsTable.put(UNIL.getID(), UNIL);
+
+        MLocation topic = new MLocation("MyTestTopic", defaultLng, defaultLat);
+        topic.setOwnerId("testUser1"); topic.setLocationType(2);
+        locationsTable.put("MyTestTopic", topic);
+
+        ChatLogs topicChat = new ChatLogs("MyTestTopic");
+        topicChat.addMembersId("testUser1");
+        chatLogsTable.put("MyTestTopic", topicChat);
+
+        MLocation otopic = new MLocation("MyTestTopic2", defaultLng + 0.2, defaultLat + 0.1);
+        otopic.setOwnerId("testUser2"); otopic.setLocationType(2);
+        locationsTable.put("MyTestTopic2", otopic);
+
+        ChatLogs otopicChat = new ChatLogs("MyTestTopic2");
+        otopicChat.addMembersId("testUser2");
+        otopicChat.addMembersId("testUser1");
+        chatLogsTable.put("MyTestTopic2", otopicChat);
     }
 
     private HashMap<String,DatabaseObject> getTable(Tables tableName){

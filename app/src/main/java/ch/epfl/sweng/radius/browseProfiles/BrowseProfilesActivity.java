@@ -139,15 +139,12 @@ public class BrowseProfilesActivity extends AppCompatActivity{
     private void setUpAddFriendButton(final User profileUser){
         final Button addFriendButton = findViewById(R.id.add_user);
         final User currentUser = UserInfo.getInstance().getCurrentUser();
-
         if (currentUser.getFriends().containsKey(profileUser.getID())) {
-            currentUser.removeFriend(profileUser);
             addFriendButton.setText("Remove friend"); addFriendButton.setEnabled(true);
         }
         else if (currentUser.getFriendsRequests().containsKey(profileUser.getID())) {
             addFriendButton.setText("Request sent"); addFriendButton.setEnabled(false);
         }
-
         addFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
