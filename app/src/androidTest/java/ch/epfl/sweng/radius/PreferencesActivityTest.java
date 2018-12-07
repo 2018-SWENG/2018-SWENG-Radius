@@ -73,6 +73,11 @@ public class PreferencesActivityTest  extends ActivityInstrumentationTestCase2<P
 
     @Test
     public void testIncognitoMode(){
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Espresso.onView(AllOf.allOf(withText(R.string.incognitoTitle)))
                 .perform(click());
     }
