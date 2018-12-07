@@ -23,28 +23,12 @@ public class CustomUserListAdapter extends CustomListAdapter {
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-//        Log.e("CustomUserListAdapter", "Items users size :" + items.size());
 
         CustomListItem item = items.get(position);
- //       Log.e("CustomUserListAdapter", "Item users ID :" + item.getItemId());
-//        Log.e("CustomUserListAdapter", "Item position :" + position);
-
         viewHolder.txtViewTitle.setText(item.getItemName());
+        viewHolder.txtViewStatus.setText();
 
-/*
-        if (OthersInfo.getInstance().getUsers().get(item.getItemId()).getUrlProfilePhoto() != null &&
-                !OthersInfo.getInstance().getUsers().get(item.getItemId()).getUrlProfilePhoto().equals("")) {
-            Picasso.get().load
-                    (OthersInfo.getInstance().
-                            getUsers().get(item.getItemId()).getUrlProfilePhoto()).
-                    into(viewHolder.imgViewIcon);
-        } else {
-            viewHolder.imgViewIcon.setImageResource(items.get(position).getProfilePic());
-        }
-*/
         MLocation itemUser = OthersInfo.getInstance().getAllUserLocations().get(item.getItemId());
-
-        Log.e("CustomUserListAdapter", "-----------------------------------People Tab-------------------------------------");
 
         if(itemUser != null){
             if (!itemUser.getUrlProfilePhoto().isEmpty()) {

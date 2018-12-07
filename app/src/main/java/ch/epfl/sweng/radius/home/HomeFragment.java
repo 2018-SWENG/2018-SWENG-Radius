@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -17,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -58,6 +61,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     private TabAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private ImageView zoomInButton;
 
     //testing
     public static MapUtility mapListener = MapUtility.getMapInstance();
@@ -110,13 +114,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         // Create the tab layout under the map
         viewPager = view.findViewById(R.id.viewPager);
         tabLayout = view.findViewById(R.id.tabLayout);
+
         adapter = new TabAdapter(this.getChildFragmentManager());
         adapter.addFragment(new PeopleTab(), "People");
         adapter.addFragment(new GroupTab(), "Groups");
         adapter.addFragment(new TopicsTab(), "Topics");
+
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         getReadWritePermission(getContext(), getActivity());
+
         return view;
     }
 
@@ -140,6 +147,19 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
         mapView.getMapAsync(this);
+
+        setUpZoomButton(view);
+    }
+
+    private void setUpZoomButton(View view) {
+        zoomInButton = view.findViewById(R.id.zoomButton);
+        zoomInButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (coord != null) {
+                    moveCamera(coord, ZOOM);
+                }
+            }
+        });
     }
 
     @Override
@@ -163,7 +183,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
                 return;
             }
 
-            mobileMap.setMyLocationEnabled(true);
+            //mobileMap.setMyLocationEnabled(true);
             try
             {
                 getActivity().runOnUiThread(new Runnable(){
