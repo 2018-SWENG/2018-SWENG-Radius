@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     }*/
 
     // For debug purpose only
-    /*public static HomeFragment newInstance(MapUtility mapUtility, GoogleMap googleMap,
+    public static HomeFragment newInstance(MapUtility mapUtility, GoogleMap googleMap,
                                            int radiusValue) {
         HomeFragment fragment = new HomeFragment();
         radius = radiusValue;
@@ -93,7 +93,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
                 UserInfo.getInstance().getCurrentPosition().getLongitude());
         return fragment;
-    }*/
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -147,10 +147,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         mapView.onResume();
         mapView.getMapAsync(this);
 
-        setUpZoomButton(view);
-    }
-
-    private void setUpZoomButton(View view) {
         zoomInButton = view.findViewById(R.id.zoomButton);
         zoomInButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -160,6 +156,17 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
             }
         });
     }
+
+    /*private void setUpZoomButton(View view) {
+        zoomInButton = view.findViewById(R.id.zoomButton);
+        zoomInButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (coord != null) {
+                    moveCamera(coord, ZOOM);
+                }
+            }
+        });
+    }*/
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
