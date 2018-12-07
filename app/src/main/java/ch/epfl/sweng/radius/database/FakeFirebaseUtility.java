@@ -235,7 +235,7 @@ public class FakeFirebaseUtility extends Database {
         topicChat.addMembersId("testUser1");
         chatLogsTable.put("MyTestTopic", topicChat);
 
-        MLocation otopic = new MLocation("MyTestTopic2", defaultLng, defaultLat);
+        MLocation otopic = new MLocation("MyTestTopic2", defaultLng + 0.2, defaultLat + 0.1);
         otopic.setOwnerId("testUser2"); otopic.setLocationType(2);
         locationsTable.put("MyTestTopic2", otopic);
 
