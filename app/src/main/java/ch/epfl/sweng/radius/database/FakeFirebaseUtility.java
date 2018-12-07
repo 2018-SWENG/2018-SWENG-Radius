@@ -234,6 +234,15 @@ public class FakeFirebaseUtility extends Database {
         ChatLogs topicChat = new ChatLogs("MyTestTopic");
         topicChat.addMembersId("testUser1");
         chatLogsTable.put("MyTestTopic", topicChat);
+
+        MLocation otopic = new MLocation("MyTestTopic2", defaultLng + 0.2, defaultLat + 0.1);
+        otopic.setOwnerId("testUser2"); otopic.setLocationType(2);
+        locationsTable.put("MyTestTopic2", otopic);
+
+        ChatLogs otopicChat = new ChatLogs("MyTestTopic2");
+        topicChat.addMembersId("testUser2");
+        topicChat.addMembersId("testUser1");
+        chatLogsTable.put("MyTestTopic2", otopicChat);
     }
 
     private HashMap<String,DatabaseObject> getTable(Tables tableName){
