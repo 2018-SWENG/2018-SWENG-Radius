@@ -44,8 +44,8 @@ public class MessageListActivity extends AppCompatActivity {
     private Button sendButton;
     private ChatLogs chatLogs;
     private String chatId, otherUserId, myID;
-    //these might cause problems when we switch to multiple users and multiple different chats
-    //This field will be used to enable chat with FRIENDS not in radius
+    private int locType;
+
     private MLocation otherLoc;
     private Database database;
     private static HashMap<String, ChatState> isChatRunning = new HashMap<>();
@@ -127,6 +127,7 @@ public class MessageListActivity extends AppCompatActivity {
             otherUserId = b.getString("otherId");
             chatLogs = new ChatLogs(chatId);
             database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, chatLogCallBack);
+            locType = b.getInt("locType");
             Log.e("message", "Setup Messages size" + Integer.toString(chatLogs.getMessages().size()));
         } else {
             throw new RuntimeException("MessagListActivity Intent created without bundle");
@@ -284,26 +285,8 @@ public class MessageListActivity extends AppCompatActivity {
     }
 
     private void compareLocataion() {
-        /*TODO check if other users radius contains current user.
-           The problem here is, if the other user is in my radius I can send messages to them, however, if current user
-           is not in the radius of the other user, they can not reply to those messages.*//*
-        MLocation location = OthersInfo.getInstance().getGroupsPos().get(chatId);
-        if(location != null){
-            // If the Chat is a groupChat
-            setEnabled(true);
-        }
-        else{
-            for(String s : chatLogs.getMembersId()){
-                if(s != UserInfo.getInstance().getCurrentUser().getID())
-                    location = OthersInfo.getInstance().getUsersInRadius().get(s);
-            }
-            if(location != null)
-                setEnabled(true);
-            else
-                setEnabled(false);
-        }
-        */
-        if(chatLogs.getMembersId().size() == 2) {
+        //TODO check if other users radius contains current user.
+        if (locType == 0) {//chatLogs.getMembersId().size() == 2) {
             //System.out.println("ABCCD " + otherUserId);
             //System.out.println(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId));//get(otherUserId);//.getLatitude();
             //System.out.println("ABCCD " + OthersInfo.getInstance().getUsersInRadius().get(otherUserId).getLatitude() + " " + OthersInfo.getInstance().getUsersInRadius().get(otherUserId).getLongitude());

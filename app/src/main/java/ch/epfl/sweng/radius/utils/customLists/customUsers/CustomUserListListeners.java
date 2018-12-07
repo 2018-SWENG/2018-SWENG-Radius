@@ -24,6 +24,7 @@ import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.messages.MessageListActivity;
 
 public class CustomUserListListeners {
+    private final static int LOCATION_TYPE = 0;
     private final Database database = Database.getInstance();
     private int clickedPic;
     private String clickedName;
@@ -91,6 +92,7 @@ public class CustomUserListListeners {
         Bundle b = new Bundle();
         b.putString("chatId", chatId);
         b.putString("otherId", userId);
+        b.putInt("locType", LOCATION_TYPE);
         intent.putExtras(b); context.startActivity(intent);
     }
 

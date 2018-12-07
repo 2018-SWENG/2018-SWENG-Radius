@@ -107,10 +107,14 @@ public class BrowseProfilesActivity extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.profile_menu, menu);
+        setUpUnblockButton(menu);
+        return true;
+    }
+
+    private void setUpUnblockButton(Menu menu) {
         if (UserInfo.getInstance().getCurrentUser().getBlockedUsers().contains(userUID)) {
             menu.getItem(0).getSubMenu().getItem(0).setTitle("Unblock User");
         }
-        return true;
     }
 
     @Override
