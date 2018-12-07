@@ -75,16 +75,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
      * @return A new instance of fragment SettingsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance() {
+    /*public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         radius = UserInfo.getInstance().getCurrentPosition().getRadius(); // converting to meters.
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
                 UserInfo.getInstance().getCurrentPosition().getLongitude());
         return fragment;
-    }
+    }*/
 
     // For debug purpose only
-    public static HomeFragment newInstance(MapUtility mapUtility, GoogleMap googleMap,
+    /*public static HomeFragment newInstance(MapUtility mapUtility, GoogleMap googleMap,
                                            int radiusValue) {
         HomeFragment fragment = new HomeFragment();
         radius = radiusValue;
@@ -93,7 +93,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
                 UserInfo.getInstance().getCurrentPosition().getLongitude());
         return fragment;
-    }
+    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,10 +112,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         View view = infltr.inflate(R.layout.fragment_home, container, false);
 
         // Create the tab layout under the map
-        viewPager = view.findViewById(R.id.viewPager); tabLayout = view.findViewById(R.id.tabLayout);
+        viewPager = view.findViewById(R.id.viewPager);
+        tabLayout = view.findViewById(R.id.tabLayout);
 
         adapter = new TabAdapter(this.getChildFragmentManager());
-        adapter.addFragment(new PeopleTab(), "People"); adapter.addFragment(new GroupTab(), "Groups"); adapter.addFragment(new TopicsTab(), "Topics");
+        adapter.addFragment(new PeopleTab(), "People");
+        adapter.addFragment(new GroupTab(), "Groups");
+        adapter.addFragment(new TopicsTab(), "Topics");
 
         viewPager.setAdapter(adapter); tabLayout.setupWithViewPager(viewPager);
         getReadWritePermission(getContext(), getActivity());
@@ -198,7 +201,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
             MLocation curPos = UserInfo.getInstance().getCurrentPosition();
             coord = new LatLng(curPos.getLatitude(), curPos.getLongitude());
-            initCircle(coord); moveCamera(coord, ZOOM);
+            initCircle(coord);
+            moveCamera(coord, ZOOM);
 
             // Do locations here
             markNearbyUsers();
