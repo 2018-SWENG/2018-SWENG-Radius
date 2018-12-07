@@ -71,7 +71,7 @@ public class BrowseProfilesUnblockedActivityTest extends ActivityInstrumentation
         onView(withText("Options")).perform(click());
         onView(withText("Block User")).perform(click());
         onView(withText("Options")).perform(click());
-        onView(withText("Unblock user")).perform(click());
+        onView(withText("Unblock User")).perform(click());
     }
 
     @Test
