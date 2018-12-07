@@ -240,8 +240,8 @@ public class FakeFirebaseUtility extends Database {
         locationsTable.put("MyTestTopic2", otopic);
 
         ChatLogs otopicChat = new ChatLogs("MyTestTopic2");
-        topicChat.addMembersId("testUser2");
-        topicChat.addMembersId("testUser1");
+        otopicChat.addMembersId("testUser2");
+        otopicChat.addMembersId("testUser1");
         chatLogsTable.put("MyTestTopic2", otopicChat);
     }
 
