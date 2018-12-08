@@ -2,8 +2,6 @@ package ch.epfl.sweng.radius.database;
 
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.util.Pair;
@@ -11,13 +9,13 @@ import android.util.Pair;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.radius.messages.ChatState;
 import ch.epfl.sweng.radius.messages.MessageListActivity;
-import ch.epfl.sweng.radius.utils.NotificationUtility;
 
 public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
@@ -141,7 +139,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         Pair<String, Class> child = new Pair<String, Class>("messages", Message.class);
         Database.getInstance().listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
             public void onFinish(Object value) {
-     //           Log.e("message", "message received " + ((Message) value).getContentMessage());
+                Log.e("ChatlogsDebug", "message received " + ((Message) value).getContentMessage());
                 receiveMessage(chatLogs, (Message) value, chatType);
             }
 
@@ -174,17 +172,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         if(messageActivity == null) messageActivity = new MessageListActivity(chatLogs, context, chatType);
         if(!messageActivity.getIsChatRunning().isRunning()){
             // Show notification as chat is not running
-            Log.e("message", "Construcor Intent with " +chatLogs.getID() + " " + chatType);
-            Intent notifIntent = new Intent(context, MessageListActivity.class);
-
-            notifIntent.putExtra("chatId", chatLogs.getID()).putExtra("otherId", getOtherID(chatLogs))
-                    .putExtra("locType", chatType);
-            notifIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            PendingIntent pendingIntent = PendingIntent.getService(context, 0, notifIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-            PendingIntent pi = PendingIntent.getActivity(context, 0, notifIntent, 0);
-            // Build and show notification
-            NotificationUtility.getInstance(null, null, null, null)
-                    .notifyNewMessage(message.getSenderId(), message.getContentMessage(), pendingIntent);
+            messageActivity.showNotification(message.getContentMessage(), senderNickname, chatLogs.getID());
             return;
         }
         // If Chat is running, there's nothing to do here
@@ -258,7 +246,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
-                  //      Log.e("ChatlogsDebug", "Size of user is" + Integer.toString(userChat.size()));
+                        Log.e("ChatlogsDebug", "Size of user is" + Integer.toString(userChat.size()));
                         for(ChatLogs newChat : (List<ChatLogs>) value){
                             switch (chatType){
                                 case 0:
@@ -287,7 +275,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
     @Override
     public void onLocationChange(String id) {
-//        Log.e("ChatlogsDebug", "Update tables " + groupChat.size() + " " + topicChat.size());
+        Log.e("ChatlogsDebug", "Update tables " + groupChat.size() + " " + topicChat.size());
 
         updateGroups();
         updateTopic();
@@ -312,3 +300,4 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
                 fetchSingleChatAndListen(s.getValue(), 0);
     }
 }
+
