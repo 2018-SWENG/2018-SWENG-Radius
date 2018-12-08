@@ -163,7 +163,9 @@ public class FakeFirebaseUtility extends Database {
         if(currentUSer != null) return;
         // Define Current user
         currentUSer = new User("testUser1");
+        currentUSer.addChat("usertTest2", "10");
         User temp = new User("testUser2");
+        temp.addChat("userTest1", "10");
         currentUSer.addFriendRequest(temp);
         temp.addFriendRequest(currentUSer);
         usersTable.put("testUser2", temp);
@@ -185,9 +187,9 @@ public class FakeFirebaseUtility extends Database {
         currentLoc = new MLocation("testUser1", defaultLng, defaultLat);
         fillLocationsTable();
 
-        ChatLogs chat = new ChatLogs("0");
+        ChatLogs chat = new ChatLogs("10");
         chat.addMembersId("testUser1");
-        chat.addMembersId("testUser3");
+        chat.addMembersId("testUser2");
         chat.addMessage(new Message("testUser1", "fff", new Date()));
         chat.addMessage(new Message("testUser2", "aaa", new Date()));
         chat.addMessage(new Message("testUser1", "aaa", new Date()));

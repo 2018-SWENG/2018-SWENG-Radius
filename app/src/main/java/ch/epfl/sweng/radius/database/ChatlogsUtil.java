@@ -125,6 +125,9 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
     public ChatLogs getChat(String chatID, int chatType){
 
+        if(Database.DEBUG_MODE)
+            return new ChatLogs("10");
+
         switch (chatType){
             case 0:
                 return userChat.get(chatID);

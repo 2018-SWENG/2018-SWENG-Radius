@@ -3,6 +3,7 @@ package ch.epfl.sweng.radius.messages;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Looper;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
@@ -17,6 +18,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.ValueEventListener;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,8 +29,10 @@ import java.util.Date;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.ChatlogsUtil;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 
@@ -72,7 +76,9 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
             Intent result = new Intent(targetContext, MessageListActivity.class);
             result.putExtra("chatId", chatLogs.getChatLogsId());
             result.putExtra("otherId", user2.getID());
+            result.putExtra("locType", 0);
 
+            result.setAction(chatLogs.getID());
             return result;
         }
 
@@ -91,32 +97,52 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
     }
 
 
+
+
     @Before
     public void setUp() throws Exception {
         super.setUp();
         Database.activateDebugMode();
-
+        UserInfo.getInstance().fetchDataFromDB();
+        OthersInfo.getInstance().fetchUsersInMyRadius();
+        ChatlogsUtil.getInstance(mlActivity);
         user1 = new User();
         user2 = new User();
         ArrayList<String> userIds = new ArrayList<>();
         userIds.add(user1.getID());
         userIds.add(user2.getID());
-        chatLogs = new ChatLogs(userIds);
+        chatLogs = new ChatLogs("10");
+        chatLogs.addMembersId(userIds.get(0));
+        chatLogs.addMembersId(userIds.get(1));
         Context targetContext = InstrumentationRegistry.getInstrumentation()
                 .getTargetContext();
         Intent intent = new Intent(targetContext, MessageListActivity.class);
         intent.putExtra("chatId", chatLogs.getChatLogsId());
         intent.putExtra("otherId", user2.getID());
+        intent.putExtra("locType", 0);
+        intent.setAction(chatLogs.getID());
         mlActivity = mblActivityTestRule.getActivity();
+
+        mblActivityTestRule.launchActivity(intent);
 
     }
 
     @Test
     public void setUpUI() {
-        assertNotNull(mlActivity.findViewById(R.id.reyclerview_message_list));
-        assertNotNull(mlActivity.findViewById(R.id.layout_chatbox));
-        assertNotNull(mlActivity.findViewById(R.id.edittext_chatbox));
-        assertNotNull(mlActivity.findViewById(R.id.button_chatbox_send));
+        try {
+            runTestOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    assertNotNull(mlActivity.findViewById(R.id.reyclerview_message_list));
+                    assertNotNull(mlActivity.findViewById(R.id.layout_chatbox));
+                    assertNotNull(mlActivity.findViewById(R.id.edittext_chatbox));
+                    assertNotNull(mlActivity.findViewById(R.id.button_chatbox_send));
+                }
+            });
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+
     }
 
     @Test
@@ -130,12 +156,22 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
 
     @Test
     public void setUpSendButton() {
+        try {
+            runTestOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Looper.prepare();
         onView(withId(R.id.edittext_chatbox)).perform(typeText("Coucou"));
         Espresso.closeSoftKeyboard();
         mlActivity.usersInRadius();
         onView(withId(R.id.button_chatbox_send)).perform(click());
 
         assert (mlActivity.findViewById(R.id.edittext_chatbox).toString().isEmpty());
+                }
+            });
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         }
 
     @Test
