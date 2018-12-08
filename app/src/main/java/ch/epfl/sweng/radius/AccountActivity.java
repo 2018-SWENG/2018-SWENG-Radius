@@ -27,6 +27,7 @@ import java.util.TimerTask;
 import ch.epfl.sweng.radius.database.ChatlogsUtil;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.friends.FriendsFragment;
 import ch.epfl.sweng.radius.home.HomeFragment;
@@ -99,6 +100,7 @@ public class AccountActivity extends AppCompatActivity {
         timer = new Timer();
         // To load the current user infos
         UserInfo.getInstance().fetchDataFromDB();
+        OthersInfo.getInstance().fetchUsersInMyRadius();
         ChatlogsUtil.getInstance(getApplicationContext());
         // Set the layout
         setContentView(R.layout.activity_account);

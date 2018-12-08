@@ -25,6 +25,7 @@ import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.ChatlogsUtil;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
@@ -53,10 +54,16 @@ public class MessageListActivity extends AppCompatActivity {
     private Context context;
 
     public MessageListActivity(){}
-    public MessageListActivity(ChatLogs chatLogs, Context context){
+    public MessageListActivity(ChatLogs chatLogs, Context context, int locType){
         // Just create entry to avoid duplicate activities
 
         if(MessageListActivity.getChatInstance(chatLogs.getID()) == null){
+            Log.e("message", "Construcor called with " + chatLogs.getID() + " " + locType);
+
+            this.otherUserId = ChatlogsUtil.getOtherID(chatLogs);
+            this.chatId = chatLogs.getID();
+            this.chatLogs = chatLogs;
+            this.locType =locType;
             chatInstance.put(chatId, this);
             isChatRunning = new ChatState();
             isChatRunning.leaveActivity();
@@ -82,10 +89,11 @@ public class MessageListActivity extends AppCompatActivity {
         return chatInstance.get(chatID);
     }
 
-    public void showNotification(String content, String senderId) {
+    public void showNotification(String content, String senderId, String chatId) {
         // Setup Intent to end here in case of click
         Intent notifIntent = new Intent(context, MessageListActivity.class);
-        notifIntent.putExtra("chatId", this.chatId).putExtra("otherId", this.otherUserId);
+        notifIntent.putExtra("chatId", chatId).putExtra("otherId", this.otherUserId)
+            .putExtra("locType", this.locType);
 
         PendingIntent pi = PendingIntent.getActivity(context, 0,notifIntent, 0);
         // Build and show notification
@@ -144,11 +152,13 @@ public class MessageListActivity extends AppCompatActivity {
             chatId = b.getString("chatId");
             Log.w("Message", "ChatId is " + chatId);
             otherUserId = b.getString("otherId");
+            locType = b.getInt("locType");
+
             chatInstance.put(chatId, this);
 
-            chatLogs = new ChatLogs(chatId);
-            database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, chatLogCallBack);
-            locType = b.getInt("locType");
+            chatLogs = ChatlogsUtil.getInstance().getChat(chatId, locType);
+        //    database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, chatLogCallBack);
+            Log.e("message", "Setup Messages size" + chatId + " " + locType);
             Log.e("message", "Setup Messages size" + Integer.toString(chatLogs.getMessages().size()));
         } else {
             throw new RuntimeException("MessagListActivity Intent created without bundle");
@@ -179,10 +189,10 @@ public class MessageListActivity extends AppCompatActivity {
      *
      * @param message the new message
      */
-    private void receiveMessage(Message message) {
+    public void receiveMessage(Message message) {
 
-        if (!chatLogs.getMessages().contains(message))
-            chatLogs.addMessage(message);
+  //      if (!chatLogs.getMessages().contains(message))
+  //          chatLogs.addMessage(message);
         Log.e("message", "Messages size" + Integer.toString(chatLogs.getMessages().size()));
         Log.e("message", "Messages size" + Integer.toString(chatLogs.getNumberOfMessages()));
         //  database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
@@ -191,7 +201,7 @@ public class MessageListActivity extends AppCompatActivity {
         myMessageAdapter.notifyDataSetChanged();
 
         // If thread is running
-        if(isChatRunning != null && !isChatRunning.isRunning()){
+  /*      if(isChatRunning != null && !isChatRunning.isRunning()){
             String senderNickname;
             MLocation sender = OthersInfo.getInstance().getConvUsers().get(message.getSenderId());
             // TODO: Replace by local data I guess
@@ -200,8 +210,9 @@ public class MessageListActivity extends AppCompatActivity {
 
             isChatRunning.msgReceived();
 
-            showNotification(message.getContentMessage(), senderNickname);
+            showNotification(message.getContentMessage(), senderNickname, this.chatId);
         }
+        */
     }
 
 
@@ -346,8 +357,9 @@ public class MessageListActivity extends AppCompatActivity {
         super.onStart();
 
         String chatId = getIntent().getExtras().getString("chatId");
-
+        getIntent().putExtra("chatId", chatId);
         if(chatId == null) return;
+        isChatRunning = new ChatState();
 
         if(MessageListActivity.getChatInstance(chatId) == null){
             chatInstance.put(chatId, this);
