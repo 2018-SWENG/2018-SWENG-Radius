@@ -24,7 +24,7 @@ public class ChatlogsUtil implements DBLocationObserver {
     private static Map<String, ChatLogs> topicChat = new HashMap<>();
     private static Map<String, ChatLogs> groupChat = new HashMap<>();
 
-    private static ChatlogsUtil getInstance(){
+    public static ChatlogsUtil getInstance(){
         if(instance == null)
             instance = new ChatlogsUtil();
 
@@ -48,10 +48,11 @@ public class ChatlogsUtil implements DBLocationObserver {
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
-                        ChatLogs newChat = (ChatLogs) value;
-                        topicChat.put(newChat.getID(), newChat);
-                        listenToChatMessages(newChat, 2);
-                        listenToChatMembers(newChat);
+                        for(ChatLogs newChat : (ArrayList<ChatLogs>) value){
+                            topicChat.put(newChat.getID(), newChat);
+                            listenToChatMessages(newChat, 2);
+                            listenToChatMembers(newChat);
+                        }
                     }
 
                     @Override
@@ -62,7 +63,7 @@ public class ChatlogsUtil implements DBLocationObserver {
 
     }
 
-    public void fetchGroupChatsAndListen(){
+    private void fetchGroupChatsAndListen(){
 
         List<String> groupChatsID = new ArrayList<>(OthersInfo.getInstance().getGroupsPos().keySet());
 
@@ -74,10 +75,11 @@ public class ChatlogsUtil implements DBLocationObserver {
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
-                        ChatLogs newChat = (ChatLogs) value;
-                        groupChat.put(newChat.getID(), newChat);
-                        listenToChatMessages(newChat, 1);
-                        listenToChatMembers(newChat);
+                        for(ChatLogs newChat : (ArrayList<ChatLogs>) value){
+                            groupChat.put(newChat.getID(), newChat);
+                            listenToChatMessages(newChat, 1);
+                            listenToChatMembers(newChat);
+                        }
                     }
 
                     @Override
@@ -103,9 +105,7 @@ public class ChatlogsUtil implements DBLocationObserver {
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
-                        ChatLogs newChat = (ChatLogs) value;
-                        userChat.put(getOtherID(newChat), newChat);
-                        listenToChatMessages(newChat, 0);
+                        fetchSingleChatAndListen((String) value, 0);
                     }
 
                     public void onError(DatabaseError error) {
@@ -133,11 +133,13 @@ public class ChatlogsUtil implements DBLocationObserver {
     private void receiveMessage(ChatLogs chatLogs, Message message, int chatType){
         if (!chatLogs.getMessages().contains(message))
             chatLogs.addMessage(message);
-
+        String senderNickname;
         // Setup Sender name to display
-        String senderNickname = OthersInfo.getInstance().getUsersInRadius()
+        if(OthersInfo.getInstance().getUsersInRadius()
+                .containsKey(message.getSenderId()))
+            senderNickname = OthersInfo.getInstance().getUsersInRadius()
                 .get(message.getSenderId()).getTitle();
-        if(senderNickname == null) senderNickname = "Anonymous";
+        else senderNickname = "Anonymous";
         // If chat is Group or Topic, add its name to Notification title
         if(chatType != 0) senderNickname = chatLogs.getID() + " : " + senderNickname;
 
@@ -145,7 +147,8 @@ public class ChatlogsUtil implements DBLocationObserver {
         MessageListActivity messageActivity = MessageListActivity.getChatInstance(chatLogs.getID());
 
         // If return Activity is null, Chat was never opened in the past
-        if(messageActivity == null){ messageActivity = new MessageListActivity(chatLogs);}
+        if(messageActivity == null){
+            messageActivity = new MessageListActivity(chatLogs);}
         ChatState chatState = messageActivity.getIsChatRunning();
 
         if(!chatState.isRunning()){
@@ -155,7 +158,6 @@ public class ChatlogsUtil implements DBLocationObserver {
         }
         // If Chat is running, there's nothing to do here
     }
-
 
     private void listenToChatMembers(final ChatLogs chatLogs){
         Pair<String, Class> child = new Pair<String, Class>("membersId", String.class);
@@ -210,7 +212,7 @@ public class ChatlogsUtil implements DBLocationObserver {
         // Nothing to do for User as we keep the conversation in local list
         // TODO Remove chats when topic/group not in radius anymore
     }
-    
+
     private void updateGroups(){
         for(String s : OthersInfo.getInstance().getGroupsPos().keySet())
             if(!groupChat.keySet().contains(s))
