@@ -54,7 +54,7 @@ public class ChatlogsUtil implements DBLocationObserver {
                     public void onFinish(Object value) {
                         ChatLogs newChat = (ChatLogs) value;
                         topicChat.put(newChat.getID(), newChat);
-                        listenToChatMessages(newChat);
+                        listenToChatMessages(newChat, 2);
                         listenToChatMembers(newChat);
                     }
 
@@ -71,7 +71,7 @@ public class ChatlogsUtil implements DBLocationObserver {
                     public void onFinish(Object value) {
                         ChatLogs newChat = (ChatLogs) value;
                         groupChat.put(newChat.getID(), newChat);
-                        listenToChatMessages(newChat);
+                        listenToChatMessages(newChat, 1);
                         listenToChatMembers(newChat);
                     }
 
@@ -100,7 +100,7 @@ public class ChatlogsUtil implements DBLocationObserver {
                     public void onFinish(Object value) {
                         ChatLogs newChat = (ChatLogs) value;
                         userChat.put(getOtherID(newChat), newChat);
-                        listenToChatMessages(newChat);
+                        listenToChatMessages(newChat, 0);
                     }
 
                     @Override
@@ -111,12 +111,12 @@ public class ChatlogsUtil implements DBLocationObserver {
         );
     }
 
-    private void listenToChatMessages(final ChatLogs chatLogs){
+    private void listenToChatMessages(final ChatLogs chatLogs, final int chatType){
         Pair<String, Class> child = new Pair<String, Class>("messages", Message.class);
         Database.getInstance().listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
             public void onFinish(Object value) {
                 Log.e("message", "message received " + ((Message) value).getContentMessage());
-                receiveMessage(chatLogs, (Message) value);
+                receiveMessage(chatLogs, (Message) value, chatType);
             }
 
             @Override
@@ -136,7 +136,7 @@ public class ChatlogsUtil implements DBLocationObserver {
         if(senderNickname == null) senderNickname = "Anonymous";
         // If chat is Group or Topic, add its name to Notification title
         if(chatType != 0) senderNickname = chatLogs.getID() + " : " + senderNickname;
-        
+
         // Get ChatActivity instance if it exists
         MessageListActivity messageActivity = MessageListActivity.getChatInstance(chatLogs.getID());
 
