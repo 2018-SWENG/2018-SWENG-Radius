@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -17,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -58,6 +61,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     private TabAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private ImageView zoomInButton;
 
     //testing
     public static MapUtility mapListener = MapUtility.getMapInstance();
@@ -71,13 +75,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
      * @return A new instance of fragment SettingsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance() {
+    /*public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         radius = UserInfo.getInstance().getCurrentPosition().getRadius(); // converting to meters.
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
                 UserInfo.getInstance().getCurrentPosition().getLongitude());
         return fragment;
-    }
+    }*/
 
     // For debug purpose only
     public static HomeFragment newInstance(MapUtility mapUtility, GoogleMap googleMap,
@@ -110,13 +114,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         // Create the tab layout under the map
         viewPager = view.findViewById(R.id.viewPager);
         tabLayout = view.findViewById(R.id.tabLayout);
+
         adapter = new TabAdapter(this.getChildFragmentManager());
         adapter.addFragment(new PeopleTab(), "People");
         adapter.addFragment(new GroupTab(), "Groups");
         adapter.addFragment(new TopicsTab(), "Topics");
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
+
+        viewPager.setAdapter(adapter); tabLayout.setupWithViewPager(viewPager);
         getReadWritePermission(getContext(), getActivity());
+
         return view;
     }
 
@@ -140,7 +146,27 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
         mapView.getMapAsync(this);
+
+        zoomInButton = view.findViewById(R.id.zoomButton);
+        zoomInButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (coord != null) {
+                    moveCamera(coord, ZOOM);
+                }
+            }
+        });
     }
+
+    /*private void setUpZoomButton(View view) {
+        zoomInButton = view.findViewById(R.id.zoomButton);
+        zoomInButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (coord != null) {
+                    moveCamera(coord, ZOOM);
+                }
+            }
+        });
+    }*/
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -163,7 +189,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
                 return;
             }
 
-            mobileMap.setMyLocationEnabled(true);
+            //mobileMap.setMyLocationEnabled(true);
             try
             {
                 getActivity().runOnUiThread(new Runnable(){
@@ -184,24 +210,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
             coord = new LatLng(curPos.getLatitude(), curPos.getLongitude());
             initCircle(coord);
             moveCamera(coord, ZOOM);
-            // Push current location to DB
-            // Write the location of the current user to the database
-            /*
-            Database.getInstance().readObjOnce(new MLocation("EPFL"), Database.Tables.LOCATIONS, new CallBackDatabase() {
-                @Override
-                public void onFinish(Object value) {
-                    MLocation epfl2 = (MLocation) value;
-                    epfl2.setLocationType(1);
-                    epfl2.setRadius(2000);
-                    Database.getInstance().writeInstanceObj(epfl2, Database.Tables.LOCATIONS);
-                }
-
-                @Override
-                public void onError(DatabaseError error) {
-
-                }
-            });*/
-          //  mapListener.setMyPos(myPos);
 
             // Do locations here
             markNearbyUsers();
@@ -250,15 +258,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     public void markNearbyUsers() {
 
         // Clear Markers
-      //  mapMarkers.removeAll(mapMarkers);
         try
         {
             getActivity().runOnUiThread(new Runnable(){
                 public void run(){
                     if(mobileMap != null){
-                        mobileMap.clear();
-
-                        mobileMap.addCircle(radiusOptions);
+                        mobileMap.clear(); mobileMap.addCircle(radiusOptions);
                     }
 
                 }

@@ -9,7 +9,7 @@ import android.widget.TextView;
 import ch.epfl.sweng.radius.messages.MessageListActivity;
 
 public class CustomTopicListListeners {
-
+    private static final int LOCATION_TYPE = 2;
     private String topicId;
     private String topicName;
     private String convId;
@@ -29,6 +29,7 @@ public class CustomTopicListListeners {
                 bundle.putString("chatId", convId);
                 bundle.putString("topicId", topicId);
                 bundle.putString("topicName", topicName);
+                bundle.putInt("locType", LOCATION_TYPE);
                 intent.putExtras(bundle);
                 context.startActivity(intent);
             }

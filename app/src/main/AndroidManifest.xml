@@ -36,7 +36,7 @@
             android:name=".AccountActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".browseProfiles.BrowseProfilesActivity"
+            android:name=".browseProfiles.BrowseProfilesUnblockedActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".browseProfiles.BrowseProfilesBlockedActivity"
@@ -52,6 +52,8 @@
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+
+        <activity android:name=".browseProfiles.BrowseProfilesActivity"></activity>
     </application>
 
 </manifest>

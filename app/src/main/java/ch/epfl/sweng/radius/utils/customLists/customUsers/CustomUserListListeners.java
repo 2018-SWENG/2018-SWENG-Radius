@@ -13,7 +13,7 @@ import com.google.firebase.database.DatabaseError;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesActivity;
+import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesUnblockedActivity;
 import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesBlockedActivity;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
@@ -24,6 +24,7 @@ import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.messages.MessageListActivity;
 
 public class CustomUserListListeners {
+    private final static int LOCATION_TYPE = 0;
     private final Database database = Database.getInstance();
     private int clickedPic;
     private String clickedName;
@@ -45,7 +46,7 @@ public class CustomUserListListeners {
                 if (OthersInfo.getInstance().getUsers().get(userId).getBlockedUsers().contains(UserInfo.getInstance().getCurrentUser().getID())) {
                     intent = new Intent(context, BrowseProfilesBlockedActivity.class);
                 } else {
-                    intent = new Intent(context, BrowseProfilesActivity.class);
+                    intent = new Intent(context, BrowseProfilesUnblockedActivity.class);
                 }
 
                 intent.putExtra("Clicked Picture", clickedPic);
@@ -91,6 +92,7 @@ public class CustomUserListListeners {
         Bundle b = new Bundle();
         b.putString("chatId", chatId);
         b.putString("otherId", userId);
+        b.putInt("locType", LOCATION_TYPE);
         intent.putExtras(b); context.startActivity(intent);
     }
 
