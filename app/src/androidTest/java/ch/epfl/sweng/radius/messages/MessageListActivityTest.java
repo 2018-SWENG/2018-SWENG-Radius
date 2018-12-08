@@ -167,7 +167,7 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
 
     @Test
     public void sendMessage() {
-        mlActivity.showNotification("Coucou", "Coucou");
+        mlActivity.showNotification("Coucou", "Coucou", "MyTestTopic");
     }
 
     @Ignore
