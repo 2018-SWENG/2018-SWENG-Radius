@@ -97,6 +97,7 @@ public class MessageListActivity extends AppCompatActivity {
         b.putString("otherId", senderId);
         b.putInt("locType", locType);
         notifIntent.putExtras(b);
+        notifIntent.setAction(chatId);
 
         PendingIntent pi = PendingIntent.getActivity(context, 0,notifIntent, 0);
         // Build and show notification
