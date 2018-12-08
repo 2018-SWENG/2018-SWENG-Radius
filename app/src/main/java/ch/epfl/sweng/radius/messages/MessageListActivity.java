@@ -277,7 +277,7 @@ public class MessageListActivity extends AppCompatActivity {
         Pair<String, Class> child = new Pair<String, Class>("messages", Message.class);
         database.listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
             public void onFinish(Object value) {
-                Log.e("message", "message received " + ((Message) value).getContentMessage());
+      //          Log.e("message", "message received " + ((Message) value).getContentMessage());
                 receiveMessage((Message) value);
 
             }
@@ -394,7 +394,9 @@ public class MessageListActivity extends AppCompatActivity {
         messageZone = findViewById(R.id.edittext_chatbox);
         this.context = this;
 
-        setInfo();setUpUI();setUpSendButton();setUpListener();setEnabled(true);
+        setInfo();setUpUI();setUpSendButton();
+        //setUpListener();
+        setEnabled(true);
     }
 
     @Override

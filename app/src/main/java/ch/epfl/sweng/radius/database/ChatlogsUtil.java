@@ -236,18 +236,17 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
                     @Override
                     public void onFinish(Object value) {
                         ChatLogs newChat = (ChatLogs) value;
-
-                        Log.e("ChatlogsDebug", "Size of user is" + Integer.toString(userChat.size()));
-                        Log.e("ChatlogsDebug", "Added Chat " + newChat.getID());
-
                         switch (chatType){
                             case 0:
+                                if(userChat.containsKey(newChat.getID())) return;
                                 userChat.put(chatID, newChat);
                                 break;
                             case 1:
+                                if(groupChat.containsKey(newChat.getID())) return;
                                 groupChat.put(newChat.getID(), newChat);
                                 break;
                             case 2:
+                                if(topicChat.containsKey(newChat.getID())) return;
                                 topicChat.put(newChat.getID(), newChat);
                                 break;
                             default:
