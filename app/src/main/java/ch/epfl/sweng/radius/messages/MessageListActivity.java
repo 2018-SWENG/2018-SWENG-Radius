@@ -42,10 +42,22 @@ public class MessageListActivity extends AppCompatActivity {
     private ChatLogs chatLogs;
     private String chatId, otherUserId, myID;
     private int locType;
+    private static HashMap<String, MessageListActivity> chatInstance = new HashMap<>();
 
     private MLocation otherLoc;
     private Database database;
-    private static HashMap<String, ChatState> isChatRunning = new HashMap<>();
+    private ChatState isChatRunning = null;
+
+    public MessageListActivity(ChatLogs chatLogs){
+        // Just create entry to avoid duplicate activities
+        if(MessageListActivity.getChatInstance(chatLogs.getID()) == null){
+            chatInstance.put(chatId, this);
+            isChatRunning = new ChatState();
+            isChatRunning.leaveActivity();
+            return;
+        }
+
+    }
 
     private final CallBackDatabase otherLocationCallback = new CallBackDatabase() {
         @Override
@@ -59,6 +71,10 @@ public class MessageListActivity extends AppCompatActivity {
 
         }
     };
+
+    public static MessageListActivity getChatInstance(String chatID){
+        return chatInstance.get(chatID);
+    }
 
     public void showNotification(String content, String senderId) {
         // Setup Intent to end here in case of click
@@ -122,6 +138,8 @@ public class MessageListActivity extends AppCompatActivity {
             chatId = b.getString("chatId");
             Log.w("Message", "ChatId is " + chatId);
             otherUserId = b.getString("otherId");
+            chatInstance.put(chatId, this);
+
             chatLogs = new ChatLogs(chatId);
             database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, chatLogCallBack);
             locType = b.getInt("locType");
@@ -130,6 +148,10 @@ public class MessageListActivity extends AppCompatActivity {
             throw new RuntimeException("MessagListActivity Intent created without bundle");
         }
 
+    }
+
+    public ChatState getIsChatRunning() {
+        return isChatRunning;
     }
 
     /**
@@ -163,14 +185,14 @@ public class MessageListActivity extends AppCompatActivity {
         myMessageAdapter.notifyDataSetChanged();
 
         // If thread is running
-        if(isChatRunning.get(chatId) != null && !isChatRunning.get(chatId).isRunning()){
+        if(isChatRunning != null && !isChatRunning.isRunning()){
             String senderNickname;
             MLocation sender = OthersInfo.getInstance().getConvUsers().get(message.getSenderId());
             // TODO: Replace by local data I guess
             if(sender == null) senderNickname = "Anonymous";
             else senderNickname = sender.getTitle();
 
-            isChatRunning.get(chatId).msgReceived();
+            isChatRunning.msgReceived();
 
             showNotification(message.getContentMessage(), senderNickname);
         }
@@ -321,20 +343,21 @@ public class MessageListActivity extends AppCompatActivity {
 
         if(chatId == null) return;
 
-        if(!isChatRunning.containsKey(chatId)){
-            final ChatState state = new ChatState();
-            isChatRunning.put(chatId, state);
+        if(MessageListActivity.getChatInstance(chatId) == null){
+            chatInstance.put(chatId, this);
+            isChatRunning = new ChatState();
             return;
         }
-        NotificationUtility.clearSeenMsg(isChatRunning.get(chatId).getUnreadMsg());
+        //
+        NotificationUtility.clearSeenMsg(isChatRunning.getUnreadMsg());
 
-        isChatRunning.get(chatId).clear();
+        isChatRunning.clear();
     }
 
     @Override
     public void onPause(){
         super.onPause();
-        if(isChatRunning.containsKey(chatId))isChatRunning.get(chatId).leaveActivity();
+        isChatRunning.leaveActivity();
     }
 
     @Override

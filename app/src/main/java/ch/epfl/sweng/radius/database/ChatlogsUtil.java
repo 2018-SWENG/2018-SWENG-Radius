@@ -1,5 +1,6 @@
 package ch.epfl.sweng.radius.database;
 
+import android.app.PendingIntent;
 import android.util.Log;
 import android.util.Pair;
 
@@ -9,6 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import ch.epfl.sweng.radius.messages.ChatState;
+import ch.epfl.sweng.radius.messages.MessageListActivity;
 
 public class ChatlogsUtil implements DBLocationObserver {
 
@@ -125,7 +129,31 @@ public class ChatlogsUtil implements DBLocationObserver {
     private void receiveMessage(ChatLogs chatLogs, Message message){
         if (!chatLogs.getMessages().contains(message))
             chatLogs.addMessage(message);
+
+        String senderNickname = OthersInfo.getInstance().getUsersInRadius()
+                .get(message.getSenderId()).getTitle();
+        if(senderNickname == null) senderNickname = "Anonymous";
+
+        MessageListActivity messageActivity = MessageListActivity.getChatInstance(chatLogs.getID());
+        if(messageActivity != null){
+            // If Activity exists, chat was open in the pas
+            ChatState chatState = messageActivity.getIsChatRunning();
+            if(!chatState.isRunning()){
+                // Show notification as chat is null running
+                messageActivity.showNotification(message.getContentMessage(), senderNickname);
+                return;
+            }
+
+        // If Chat is running, there's nothing to do here
+        }
+        else{
+            // Create Activity and Show notif
+            MessageListActivity newChatActivity = new MessageListActivity(chatLogs);
+            newChatActivity.showNotification(message.getContentMessage(), senderNickname);
+
+        }
     }
+
 
     private void listenToChatMembers(final ChatLogs chatLogs){
         Pair<String, Class> child = new Pair<String, Class>("membersId", String.class);
