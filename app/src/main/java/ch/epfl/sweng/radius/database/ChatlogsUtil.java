@@ -126,32 +126,30 @@ public class ChatlogsUtil implements DBLocationObserver {
         });
     }
 
-    private void receiveMessage(ChatLogs chatLogs, Message message){
+    private void receiveMessage(ChatLogs chatLogs, Message message, int chatType){
         if (!chatLogs.getMessages().contains(message))
             chatLogs.addMessage(message);
 
+        // Setup Sender name to display
         String senderNickname = OthersInfo.getInstance().getUsersInRadius()
                 .get(message.getSenderId()).getTitle();
         if(senderNickname == null) senderNickname = "Anonymous";
-
+        // If chat is Group or Topic, add its name to Notification title
+        if(chatType != 0) senderNickname = chatLogs.getID() + " : " + senderNickname;
+        
+        // Get ChatActivity instance if it exists
         MessageListActivity messageActivity = MessageListActivity.getChatInstance(chatLogs.getID());
-        if(messageActivity != null){
-            // If Activity exists, chat was open in the pas
-            ChatState chatState = messageActivity.getIsChatRunning();
-            if(!chatState.isRunning()){
-                // Show notification as chat is null running
-                messageActivity.showNotification(message.getContentMessage(), senderNickname);
-                return;
-            }
 
+        // If return Activity is null, Chat was never opened in the past
+        if(messageActivity == null){ messageActivity = new MessageListActivity(chatLogs);}
+        ChatState chatState = messageActivity.getIsChatRunning();
+
+        if(!chatState.isRunning()){
+            // Show notification as chat is not running
+            messageActivity.showNotification(message.getContentMessage(), senderNickname);
+            return;
+        }
         // If Chat is running, there's nothing to do here
-        }
-        else{
-            // Create Activity and Show notif
-            MessageListActivity newChatActivity = new MessageListActivity(chatLogs);
-            newChatActivity.showNotification(message.getContentMessage(), senderNickname);
-
-        }
     }
 
 
