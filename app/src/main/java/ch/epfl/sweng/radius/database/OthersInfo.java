@@ -113,7 +113,6 @@ public class OthersInfo extends DBObservable{
         });
     }
     public void fetchUserObjects(){
-        Log.e("DEBUGG0", "Fetching the users");
         database.readAllTableOnce(Database.Tables.USERS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {

@@ -60,7 +60,7 @@ public class MessageListActivity extends AppCompatActivity {
         if(MessageListActivity.getChatInstance(chatLogs.getID()) == null){
             Log.e("message", "Construcor called with " + chatLogs.getID() + " " + locType);
 
-            this.otherUserId = ChatlogsUtil.getOtherID(chatLogs);
+            this.otherUserId = ChatLogs.getOtherID(chatLogs);
             this.chatId = chatLogs.getID();
             this.chatLogs = chatLogs;
             this.locType =locType;
@@ -89,6 +89,21 @@ public class MessageListActivity extends AppCompatActivity {
         return chatInstance.get(chatID);
     }
 
+    public void showNotification(String content, String senderId, String chatId) {
+        // Setup Intent to end here in case of click
+        Intent notifIntent = new Intent(context, MessageListActivity.class);
+        Bundle b = new Bundle();
+        b.putString("chatId", chatId);
+        b.putString("otherId", senderId);
+        b.putInt("locType", locType);
+        notifIntent.putExtras(b);
+        notifIntent.setAction(chatId);
+
+        PendingIntent pi = PendingIntent.getActivity(context, 0,notifIntent, 0);
+        // Build and show notification
+        NotificationUtility.getInstance(null, null, null, null)
+                .notifyNewMessage(senderId, content, pi);
+    }
 
 
     @Override
@@ -108,9 +123,9 @@ public class MessageListActivity extends AppCompatActivity {
 
         if (b != null) {
             chatId = b.getString("chatId");
-            Log.w("Message", "ChatId is " + chatId);
             otherUserId = b.getString("otherId");
             locType = b.getInt("locType");
+            Log.w("Message", "ChatId is " + chatId + " " + otherUserId + " " + locType);
 
             chatInstance.put(chatId, this);
 
@@ -231,7 +246,7 @@ public class MessageListActivity extends AppCompatActivity {
         Pair<String, Class> child = new Pair<String, Class>("messages", Message.class);
         database.listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
             public void onFinish(Object value) {
-        //        Log.e("message", "message received " + ((Message) value).getContentMessage());
+      //          Log.e("message", "message received " + ((Message) value).getContentMessage());
                 receiveMessage((Message) value);
 
             }
@@ -347,8 +362,11 @@ public class MessageListActivity extends AppCompatActivity {
         database = Database.getInstance();
         setContentView(R.layout.activity_message_list);
         messageZone = findViewById(R.id.edittext_chatbox);
+        this.context = this;
 
-        setInfo();setUpUI();setUpSendButton();setUpListener();setEnabled(true);
+        setInfo();setUpUI();setUpSendButton();
+        //setUpListener();
+        setEnabled(true);
     }
 
     @Override

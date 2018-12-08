@@ -66,9 +66,9 @@ public class ChatLogs implements DatabaseObject{
     public void addMembersId(String userID){
         if(!membersId.contains(userID))
             membersId.add(userID);
-        if(!Database.DEBUG_MODE) {
+       /* if(!Database.DEBUG_MODE) {
             Database.getInstance().writeToInstanceChild(this, Database.Tables.CHATLOGS, "membersId",membersId);
-        }
+        }*/
 
     }
 
@@ -101,6 +101,14 @@ public class ChatLogs implements DatabaseObject{
 
     public int getNumberOfMessages() {
         return numberOfMessages;
+    }
+
+   public static String getOtherID(ChatLogs chat){
+        if(chat.getMembersId().size() != 2)
+            return null;
+
+        return chat.getMembersId().get(0) == UserInfo.getInstance().getCurrentUser().getID() ?
+                chat.getMembersId().get(1) : chat.getMembersId().get(0);
     }
 
 }
