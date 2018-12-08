@@ -16,6 +16,7 @@ import java.util.Map;
 
 import ch.epfl.sweng.radius.messages.ChatState;
 import ch.epfl.sweng.radius.messages.MessageListActivity;
+import ch.epfl.sweng.radius.utils.NotificationUtility;
 
 public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
@@ -156,15 +157,8 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         // Add message to local chatlog
         chatLogs.addMessage(message);
 
-        String senderNickname;
         // Setup Sender name to display
-        if(OthersInfo.getInstance().getUsersInRadius()
-                .containsKey(message.getSenderId()))
-            senderNickname = OthersInfo.getInstance().getUsersInRadius()
-                .get(message.getSenderId()).getTitle();
-        else senderNickname = "Anonymous";
-        // If chat is Group or Topic, add its name to Notification title
-        if(chatType != 0) senderNickname = chatLogs.getID() + " : " + senderNickname;
+        String senderData = NotificationUtility.getNickname(chatLogs, message, chatType);
 
         // Get ChatActivity instance if it exists
         MessageListActivity messageActivity = MessageListActivity.getChatInstance(chatLogs.getID());
@@ -172,7 +166,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         if(messageActivity == null) messageActivity = new MessageListActivity(chatLogs, context, chatType);
         if(!messageActivity.getIsChatRunning().isRunning()){
             // Show notification as chat is not running
-            messageActivity.showNotification(message.getContentMessage(), senderNickname, chatLogs.getID());
+            messageActivity.showNotification(message.getContentMessage(), senderData, chatLogs.getID());
             return;
         }
         // If Chat is running, there's nothing to do here
@@ -241,12 +235,11 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
     }
 
     private void fetchListChatAndListen(final List<String> chatID, final int chatType){
-        Database.getInstance().readListObjOnce(chatID,
-                Database.Tables.CHATLOGS,
+        Database.getInstance().readListObjOnce(chatID, Database.Tables.CHATLOGS,
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
-                        Log.e("ChatlogsDebug", "Size of user is" + Integer.toString(userChat.size()));
+               //         Log.e("ChatlogsDebug", "Size of user is" + Integer.toString(userChat.size()));
                         for(ChatLogs newChat : (List<ChatLogs>) value){
                             switch (chatType){
                                 case 0:
@@ -258,8 +251,6 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
                                 case 2:
                                     if(topicChat.containsKey(newChat.getID())) continue;
                                     topicChat.put(newChat.getID(), newChat); break;
-                                default:
-                                    break;
                             }
                             listenToChatMessages(newChat, chatType);
                         }

@@ -7,6 +7,9 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.database.OthersInfo;
 
 public class NotificationUtility {
 
@@ -87,5 +90,18 @@ public class NotificationUtility {
                 .setContentIntent(pi);
         notificationManager.notify(3, nearFriendNotifBuilder.build());
         Log.d("NearFriendNotif", "Your friend "+ userNickname + " (" + userID+")" + "is in the Radius!");
+    }
+
+    public static String getNickname(ChatLogs chatlogs, Message message, int chatType){
+        String ret;
+        if(OthersInfo.getInstance().getUsersInRadius()
+                .containsKey(message.getSenderId()))
+            ret = OthersInfo.getInstance().getUsersInRadius()
+                    .get(message.getSenderId()).getTitle();
+        else ret = "Anonymous";
+        // If chat is Group or Topic, add its name to Notification title
+        if(chatType != 0) ret = chatlogs.getID() + " : " + ret;
+
+        return ret;
     }
 }
