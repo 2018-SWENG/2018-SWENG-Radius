@@ -5,12 +5,16 @@ import android.util.Pair;
 
 import com.google.firebase.database.DatabaseError;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ChatlogsUtil implements DBLocationObserver {
 
+    /**
+     * TODO Implement new OnChildEventListener to enable removing conversations
+     */
     private static ChatlogsUtil instance = null;
     private static Map<String, ChatLogs> userChat = new HashMap<>();
     private static Map<String, ChatLogs> topicChat = new HashMap<>();
@@ -24,16 +28,54 @@ public class ChatlogsUtil implements DBLocationObserver {
     }
 
     private ChatlogsUtil(){
+        OthersInfo.getInstance().addLocationObserver(this);
         // Read and setUp listener on the ChatList field of current user
         fetchUserChats();
         // Read and setUp listeners on the Group and Topics chats
+        fetchGroupChatsAndListen();
     }
 
-    public void fetchUserConvAndListen(){
+    public void fetchGroupChatsAndListen(){
 
-        Map<String, String> convIds = UserInfo.getInstance().getCurrentUser().getChatList();
-        Database.getInstance();
+        List<String> topicChatsID = new ArrayList<>(OthersInfo.getInstance().getTopicsPos().keySet());
+        List<String> groupChatsID = new ArrayList<>(OthersInfo.getInstance().getGroupsPos().keySet());
 
+        /**
+         *  WARNING This suppose that the Topic/Group ID and their respective ChatID are the same !
+         */
+        Database.getInstance().readListObjOnce(topicChatsID,
+                Database.Tables.CHATLOGS,
+                new CallBackDatabase() {
+                    @Override
+                    public void onFinish(Object value) {
+                        ChatLogs newChat = (ChatLogs) value;
+                        topicChat.put(newChat.getID(), newChat);
+                        listenToChatMessages(newChat);
+                        listenToChatMembers(newChat);
+                    }
+
+                    @Override
+                    public void onError(DatabaseError error) {
+
+                    }
+                });
+
+        Database.getInstance().readListObjOnce(groupChatsID,
+                Database.Tables.CHATLOGS,
+                new CallBackDatabase() {
+                    @Override
+                    public void onFinish(Object value) {
+                        ChatLogs newChat = (ChatLogs) value;
+                        groupChat.put(newChat.getID(), newChat);
+                        listenToChatMessages(newChat);
+                        listenToChatMembers(newChat);
+                    }
+
+                    @Override
+                    public void onError(DatabaseError error) {
+
+                    }
+                });
     }
 
     private String getOtherID(ChatLogs chat){
@@ -65,13 +107,12 @@ public class ChatlogsUtil implements DBLocationObserver {
         );
     }
 
-    private void listenToChatMessages(ChatLogs chatLogs){
+    private void listenToChatMessages(final ChatLogs chatLogs){
         Pair<String, Class> child = new Pair<String, Class>("messages", Message.class);
         Database.getInstance().listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
             public void onFinish(Object value) {
                 Log.e("message", "message received " + ((Message) value).getContentMessage());
-             //   receiveMessage((Message) value);
-
+                receiveMessage(chatLogs, (Message) value);
             }
 
             @Override
@@ -81,8 +122,68 @@ public class ChatlogsUtil implements DBLocationObserver {
         });
     }
 
+    private void receiveMessage(ChatLogs chatLogs, Message message){
+        if (!chatLogs.getMessages().contains(message))
+            chatLogs.addMessage(message);
+    }
+
+    private void listenToChatMembers(final ChatLogs chatLogs){
+        Pair<String, Class> child = new Pair<String, Class>("membersId", String.class);
+        Database.getInstance().listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
+            public void onFinish(Object value) {
+                String newMemberId = (String) value;
+                Log.e("MembersId", "New Member :" + newMemberId);
+                chatLogs.addMembersId(newMemberId);
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void fetchSingleChatAndListen(String chatID, final int chatType){
+        Database.getInstance().readObjOnce(new ChatLogs(chatID),
+                Database.Tables.CHATLOGS,
+                new CallBackDatabase() {
+                    @Override
+                    public void onFinish(Object value) {
+                        ChatLogs newChat = (ChatLogs) value;
+                        switch (chatType){
+                            case 0:
+                                userChat.put(getOtherID(newChat), newChat);
+                                break;
+                            case 1:
+                                groupChat.put(newChat.getID(), newChat);
+                                break;
+                            case 2:
+                                topicChat.put(newChat.getID(), newChat);
+                                break;
+                            default:
+                                break;
+                        }
+                        listenToChatMessages(newChat);
+                    }
+
+                    @Override
+                    public void onError(DatabaseError error) {
+
+                    }
+                });
+    }
+
     @Override
     public void onLocationChange(String id) {
+        for(String s : OthersInfo.getInstance().getGroupsPos().keySet())
+            if(!groupChat.keySet().contains(s))
+                fetchSingleChatAndListen(s, 1);
 
+        for(String s : OthersInfo.getInstance().getTopicsPos().keySet())
+            if(!topicChat.keySet().contains(s))
+                fetchSingleChatAndListen(s, 2);
+
+        // Nothing to do for User as we keep the conversation in local list
+        // TODO Remove chats when topic/group not in radius anymore
     }
 }
