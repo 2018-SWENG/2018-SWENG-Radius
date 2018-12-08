@@ -37,16 +37,12 @@ public class ChatlogsUtil implements DBLocationObserver {
         fetchUserChats();
         // Read and setUp listeners on the Group and Topics chats
         fetchGroupChatsAndListen();
+        fetchTopicChatsAndListen();
     }
 
-    public void fetchGroupChatsAndListen(){
-
+    private void fetchTopicChatsAndListen(){
         List<String> topicChatsID = new ArrayList<>(OthersInfo.getInstance().getTopicsPos().keySet());
-        List<String> groupChatsID = new ArrayList<>(OthersInfo.getInstance().getGroupsPos().keySet());
 
-        /**
-         *  WARNING This suppose that the Topic/Group ID and their respective ChatID are the same !
-         */
         Database.getInstance().readListObjOnce(topicChatsID,
                 Database.Tables.CHATLOGS,
                 new CallBackDatabase() {
@@ -64,6 +60,15 @@ public class ChatlogsUtil implements DBLocationObserver {
                     }
                 });
 
+    }
+
+    public void fetchGroupChatsAndListen(){
+
+        List<String> groupChatsID = new ArrayList<>(OthersInfo.getInstance().getGroupsPos().keySet());
+
+        /**
+         *  WARNING This suppose that the Topic/Group ID and their respective ChatID are the same !
+         */
         Database.getInstance().readListObjOnce(groupChatsID,
                 Database.Tables.CHATLOGS,
                 new CallBackDatabase() {
@@ -103,7 +108,6 @@ public class ChatlogsUtil implements DBLocationObserver {
                         listenToChatMessages(newChat, 0);
                     }
 
-                    @Override
                     public void onError(DatabaseError error) {
 
                     }
@@ -189,7 +193,7 @@ public class ChatlogsUtil implements DBLocationObserver {
                             default:
                                 break;
                         }
-                        listenToChatMessages(newChat);
+                        listenToChatMessages(newChat, chatType);
                     }
 
                     @Override
@@ -201,15 +205,23 @@ public class ChatlogsUtil implements DBLocationObserver {
 
     @Override
     public void onLocationChange(String id) {
-        for(String s : OthersInfo.getInstance().getGroupsPos().keySet())
-            if(!groupChat.keySet().contains(s))
-                fetchSingleChatAndListen(s, 1);
-
-        for(String s : OthersInfo.getInstance().getTopicsPos().keySet())
-            if(!topicChat.keySet().contains(s))
-                fetchSingleChatAndListen(s, 2);
-
+        updateGroups();
+        updateTopic();
         // Nothing to do for User as we keep the conversation in local list
         // TODO Remove chats when topic/group not in radius anymore
     }
+    
+    private void updateGroups(){
+        for(String s : OthersInfo.getInstance().getGroupsPos().keySet())
+            if(!groupChat.keySet().contains(s))
+                fetchSingleChatAndListen(s, 1);
+    }
+
+    private void updateTopic(){
+        for(String s : OthersInfo.getInstance().getTopicsPos().keySet())
+            if(!topicChat.keySet().contains(s))
+                fetchSingleChatAndListen(s, 2);
+    }
+
 }
+
