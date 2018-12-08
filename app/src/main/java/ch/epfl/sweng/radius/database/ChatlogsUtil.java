@@ -2,6 +2,7 @@ package ch.epfl.sweng.radius.database;
 
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.util.Pair;
 
@@ -14,6 +15,7 @@ import java.util.Map;
 
 import ch.epfl.sweng.radius.messages.ChatState;
 import ch.epfl.sweng.radius.messages.MessageListActivity;
+import ch.epfl.sweng.radius.utils.NotificationUtility;
 
 public class ChatlogsUtil implements DBLocationObserver {
 
@@ -190,7 +192,17 @@ public class ChatlogsUtil implements DBLocationObserver {
 
         if(!chatState.isRunning()){
             // Show notification as chat is not running
-            messageActivity.showNotification(message.getContentMessage(), senderNickname, chatLogs.getID());
+            Log.e("message", "Construcor Intent with " +chatLogs.getID() + " " + chatType);
+            Intent notifIntent = new Intent(context, MessageListActivity.class);
+
+            notifIntent.putExtra("chatId", chatLogs.getID()).putExtra("otherId", getOtherID(chatLogs))
+                    .putExtra("locType", chatType);
+            notifIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getService(context, 0, notifIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent pi = PendingIntent.getActivity(context, 0, notifIntent, 0);
+            // Build and show notification
+            NotificationUtility.getInstance(null, null, null, null)
+                    .notifyNewMessage(message.getSenderId(), message.getContentMessage(), pendingIntent);
             return;
         }
         // If Chat is running, there's nothing to do here

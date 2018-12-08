@@ -89,19 +89,6 @@ public class MessageListActivity extends AppCompatActivity {
         return chatInstance.get(chatID);
     }
 
-    public void showNotification(String content, String senderId, String chatId) {
-        // Setup Intent to end here in case of click
-        Intent notifIntent = new Intent(context, MessageListActivity.class);
-        Log.e("message", "Construcor Intent with " +chatId + " " + locType);
-
-        notifIntent.putExtra("chatId", chatId).putExtra("otherId", this.otherUserId)
-            .putExtra("locType", this.locType);
-        notifIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pi = PendingIntent.getActivity(context, UNIQUE_INT_PER_CALL++, notifIntent, 0);
-        // Build and show notification
-        NotificationUtility.getInstance(null, null, null, null)
-                .notifyNewMessage(senderId, content, pi);
-    }
 
 
     @Override
