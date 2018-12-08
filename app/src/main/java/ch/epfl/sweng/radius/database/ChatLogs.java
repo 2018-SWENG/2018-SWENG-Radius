@@ -103,4 +103,12 @@ public class ChatLogs implements DatabaseObject{
         return numberOfMessages;
     }
 
+   public static String getOtherID(ChatLogs chat){
+        if(chat.getMembersId().size() != 2)
+            return null;
+
+        return chat.getMembersId().get(0) == UserInfo.getInstance().getCurrentUser().getID() ?
+                chat.getMembersId().get(1) : chat.getMembersId().get(0);
+    }
+
 }

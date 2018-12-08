@@ -35,9 +35,9 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
         return instance;
     }
-    public static ChatlogsUtil getInstance(Context context){
+    public static ChatlogsUtil getInstance(Context ... context){
         if(instance == null)
-            instance = new ChatlogsUtil(context);
+            instance = context == null ? new ChatlogsUtil(null) : new ChatlogsUtil(context[0]);
 
         return instance;
     }
@@ -101,13 +101,6 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
                 });
     }
 
-    public static String getOtherID(ChatLogs chat){
-        if(chat.getMembersId().size() != 2)
-            return null;
-
-        return chat.getMembersId().get(0) == UserInfo.getInstance().getCurrentUser().getID() ?
-                chat.getMembersId().get(1) : chat.getMembersId().get(0);
-    }
 
     private void fetchUserChats(){
         Pair<String,Class> chatlistChild = new Pair<String, Class>("chatList", String.class);
@@ -158,12 +151,11 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
     }
 
     private void receiveMessage(ChatLogs chatLogs, Message message, int chatType){
-        if (!chatLogs.getMessages().contains(message))
-            chatLogs.addMessage(message);
-        else
+        if(upToDate < 0 || chatLogs.getMessages().contains(message))
             return;
+        // Add message to local chatlog
+        chatLogs.addMessage(message);
 
-        if(upToDate < 0) return;
         String senderNickname;
         // Setup Sender name to display
         if(OthersInfo.getInstance().getUsersInRadius()
@@ -176,16 +168,9 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
         // Get ChatActivity instance if it exists
         MessageListActivity messageActivity = MessageListActivity.getChatInstance(chatLogs.getID());
-
         // If return Activity is null, Chat was never opened in the past
-        if(messageActivity == null){
-            messageActivity = new MessageListActivity(chatLogs, context, chatType);}
-
-
-        ChatState chatState = messageActivity.getIsChatRunning();
-        Log.e("ChatlogsDebug", "Notification Util Chat " + chatLogs.getID());
-
-        if(!chatState.isRunning()){
+        if(messageActivity == null) messageActivity = new MessageListActivity(chatLogs, context, chatType);
+        if(!messageActivity.getIsChatRunning().isRunning()){
             // Show notification as chat is not running
             messageActivity.showNotification(message.getContentMessage(), senderNickname, chatLogs.getID());
             return;
@@ -194,7 +179,6 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
     }
 
     public String getNewChat(String otherUserId){
-        Log.e("ChatlogsDebug" , "Asked for new Chat ");
         ChatLogs newChat = new ChatLogs();
         newChat.addMembersId(UserInfo.getInstance().getCurrentUser().getID());
         newChat.addMembersId(otherUserId);
@@ -218,7 +202,6 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         Database.getInstance().listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
             public void onFinish(Object value) {
                 String newMemberId = (String) value;
-                Log.e("MembersId", "New Member :" + newMemberId);
                 chatLogs.addMembersId(newMemberId);
             }
 
@@ -239,20 +222,14 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
                         switch (chatType){
                             case 0:
                                 if(userChat.containsKey(newChat.getID())) return;
-                                userChat.put(chatID, newChat);
-                                break;
+                                userChat.put(chatID, newChat); break;
                             case 1:
                                 if(groupChat.containsKey(newChat.getID())) return;
-                                groupChat.put(newChat.getID(), newChat);
-                                break;
+                                groupChat.put(newChat.getID(), newChat); break;
                             case 2:
                                 if(topicChat.containsKey(newChat.getID())) return;
                                 topicChat.put(newChat.getID(), newChat);
-                                break;
-                            default:
-                                break;
                         }
-
                         listenToChatMessages(newChat, chatType);
                     }
 
@@ -274,16 +251,13 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
                             switch (chatType){
                                 case 0:
                                     if(userChat.containsKey(newChat.getID())) continue;
-                                        userChat.put(newChat.getID(), newChat);
-                                    break;
+                                    userChat.put(newChat.getID(), newChat); break;
                                 case 1:
                                     if(groupChat.containsKey(newChat.getID())) continue;
-                                        groupChat.put(newChat.getID(), newChat);
-                                    break;
+                                    groupChat.put(newChat.getID(), newChat); break;
                                 case 2:
                                     if(topicChat.containsKey(newChat.getID())) continue;
-                                        topicChat.put(newChat.getID(), newChat);
-                                    break;
+                                    topicChat.put(newChat.getID(), newChat); break;
                                 default:
                                     break;
                             }

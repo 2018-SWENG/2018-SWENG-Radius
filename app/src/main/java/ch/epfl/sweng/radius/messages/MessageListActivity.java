@@ -60,7 +60,7 @@ public class MessageListActivity extends AppCompatActivity {
         if(MessageListActivity.getChatInstance(chatLogs.getID()) == null){
             Log.e("message", "Construcor called with " + chatLogs.getID() + " " + locType);
 
-            this.otherUserId = ChatlogsUtil.getOtherID(chatLogs);
+            this.otherUserId = ChatLogs.getOtherID(chatLogs);
             this.chatId = chatLogs.getID();
             this.chatLogs = chatLogs;
             this.locType =locType;
