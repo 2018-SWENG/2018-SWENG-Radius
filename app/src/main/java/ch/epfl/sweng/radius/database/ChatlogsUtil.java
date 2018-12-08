@@ -8,7 +8,6 @@ import android.util.Pair;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -151,7 +150,7 @@ public class ChatlogsUtil implements DBLocationObserver {
         Pair<String, Class> child = new Pair<String, Class>("messages", Message.class);
         Database.getInstance().listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
             public void onFinish(Object value) {
-                Log.e("message", "message received " + ((Message) value).getContentMessage());
+     //           Log.e("message", "message received " + ((Message) value).getContentMessage());
                 receiveMessage(chatLogs, (Message) value, chatType);
             }
 
@@ -224,7 +223,7 @@ public class ChatlogsUtil implements DBLocationObserver {
                         ChatLogs newChat = (ChatLogs) value;
                         switch (chatType){
                             case 0:
-                                userChat.put(chatID, newChat);
+                                userChat.put(newChat.getID(), newChat);
                                 break;
                             case 1:
                                 groupChat.put(newChat.getID(), newChat);
@@ -251,7 +250,7 @@ public class ChatlogsUtil implements DBLocationObserver {
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
-                        Log.e("ChatlogsDebug", "Size of user is" + Integer.toString(userChat.size()));
+                  //      Log.e("ChatlogsDebug", "Size of user is" + Integer.toString(userChat.size()));
                         for(ChatLogs newChat : (List<ChatLogs>) value){
                             switch (chatType){
                                 case 0:
@@ -280,7 +279,7 @@ public class ChatlogsUtil implements DBLocationObserver {
 
     @Override
     public void onLocationChange(String id) {
-        Log.e("ChatlogsDebug", "Update tables " + groupChat.size() + " " + topicChat.size());
+//        Log.e("ChatlogsDebug", "Update tables " + groupChat.size() + " " + topicChat.size());
 
         updateGroups();
         updateTopic();

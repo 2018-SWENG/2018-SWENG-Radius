@@ -51,7 +51,7 @@ public abstract class Database {
      * @return the singleton instance of the DBUtility
      */
     public static Database getInstance(){
-        Log.e("DEBUGG", "Valu of debug is " + DEBUG_MODE);
+ //       Log.e("DEBUGG", "Valu of debug is " + DEBUG_MODE);
         if(database == null)
             database = new FirebaseUtility();
         return database;

@@ -14,7 +14,7 @@ public class CustomListItem {
     public CustomListItem(String itemId, String convId,String itemName){
       //  Log.e("MessageList", "Param of item "+ itemId + " " + convId + " " + itemName);
         this.itemId = itemId;
-        Log.e("CustomListItem: ", itemId);
+   //     Log.e("CustomListItem: ", itemId);
         this.itemName = itemName;
         this.convId = convId;
         this.profilePic = R.drawable.user_photo_default; // Getting the Profile pictures here.

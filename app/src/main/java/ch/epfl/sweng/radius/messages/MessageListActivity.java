@@ -47,7 +47,7 @@ public class MessageListActivity extends AppCompatActivity {
     private String chatId, otherUserId, myID;
     private int locType;
     private static HashMap<String, MessageListActivity> chatInstance = new HashMap<>();
-
+    private static int UNIQUE_INT_PER_CALL = 0;
     private MLocation otherLoc;
     private Database database;
     private ChatState isChatRunning = null;
@@ -92,52 +92,23 @@ public class MessageListActivity extends AppCompatActivity {
     public void showNotification(String content, String senderId, String chatId) {
         // Setup Intent to end here in case of click
         Intent notifIntent = new Intent(context, MessageListActivity.class);
+        Log.e("message", "Construcor Intent with " +chatId + " " + locType);
+
         notifIntent.putExtra("chatId", chatId).putExtra("otherId", this.otherUserId)
             .putExtra("locType", this.locType);
-
-        PendingIntent pi = PendingIntent.getActivity(context, 0,notifIntent, 0);
+        notifIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pi = PendingIntent.getActivity(context, UNIQUE_INT_PER_CALL++, notifIntent, 0);
         // Build and show notification
         NotificationUtility.getInstance(null, null, null, null)
                 .notifyNewMessage(senderId, content, pi);
     }
 
 
-    private String getOtherID() {
-        String otherId = this.otherUserId;
-        if (chatLogs.getMembersId().size() == 2) {
-            String tempID = chatLogs.getMembersId().get(0), tempID2 = chatLogs.getMembersId().get(1);
-            otherId = tempID.equals(myID) ? tempID : tempID2;
-        }
-        return otherId;
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
-
-    private final CallBackDatabase chatLogCallBack = new CallBackDatabase() {
-        @Override
-        public void onFinish(Object value) {
-            chatLogs = (ChatLogs) value;
-            if (chatLogs.getMembersId().size() == 2) {
-                otherLoc = new MLocation(getOtherID());
-                database.readObjOnce(otherLoc, Database.Tables.LOCATIONS, otherLocationCallback);
-            }
-            if (chatLogs.getMembersId().size() < 2 && otherUserId != null) {
-                chatLogs.addMembersId(otherUserId);
-            }
-            if (!chatLogs.getMembersId().contains(myID))
-                chatLogs.addMembersId(myID);
-
-            database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
-            usersInRadius();
-            Log.e("message", "Callback Messages size" + Integer.toString(chatLogs.getMessages().size()));
-            Log.e("message", "Chatlogs size" + chatLogs.getMembersId().size());
-
-        }
-
-        @Override
-        public void onError(DatabaseError error) {
-            Log.e("Firebase", "Error reading Database");
-        }
-    };
-
     /**
      * Get all infos needed to create the activity
      * We get the chatId and otherUserId from the parent fragment
@@ -159,7 +130,7 @@ public class MessageListActivity extends AppCompatActivity {
             chatLogs = ChatlogsUtil.getInstance().getChat(chatId, locType);
         //    database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, chatLogCallBack);
             Log.e("message", "Setup Messages size" + chatId + " " + locType);
-            Log.e("message", "Setup Messages size" + Integer.toString(chatLogs.getMessages().size()));
+     //       Log.e("message", "Setup Messages size" + Integer.toString(chatLogs.getMessages().size()));
         } else {
             throw new RuntimeException("MessagListActivity Intent created without bundle");
         }
@@ -193,8 +164,8 @@ public class MessageListActivity extends AppCompatActivity {
 
   //      if (!chatLogs.getMessages().contains(message))
   //          chatLogs.addMessage(message);
-        Log.e("message", "Messages size" + Integer.toString(chatLogs.getMessages().size()));
-        Log.e("message", "Messages size" + Integer.toString(chatLogs.getNumberOfMessages()));
+     //   Log.e("message", "Messages size" + Integer.toString(chatLogs.getMessages().size()));
+    //    Log.e("message", "Messages size" + Integer.toString(chatLogs.getNumberOfMessages()));
         //  database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
         myMessageAdapter.setMessages(chatLogs.getMessages());
         myMessageRecycler.smoothScrollToPosition(chatLogs.getNumberOfMessages());
@@ -241,7 +212,7 @@ public class MessageListActivity extends AppCompatActivity {
             chatLogs.addMessage(msg);
             //  database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
             List<Message> newList = chatLogs.getMessages();
-            Log.e("message", "NewList size is " + newList.size());
+       //     Log.e("message", "NewList size is " + newList.size());
             database.writeToInstanceChild(chatLogs, Database.Tables.CHATLOGS, "messages",
                     chatLogs.getMessages());
 
@@ -273,7 +244,7 @@ public class MessageListActivity extends AppCompatActivity {
         Pair<String, Class> child = new Pair<String, Class>("messages", Message.class);
         database.listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
             public void onFinish(Object value) {
-                Log.e("message", "message received " + ((Message) value).getContentMessage());
+        //        Log.e("message", "message received " + ((Message) value).getContentMessage());
                 receiveMessage((Message) value);
 
             }
@@ -287,7 +258,7 @@ public class MessageListActivity extends AppCompatActivity {
         Pair<String, Class> child_members = new Pair<String, Class>("membersId", String.class);
         database.listenObjChild(chatLogs, Database.Tables.CHATLOGS, child_members, new CallBackDatabase() {
             public void onFinish(Object value) {
-                Log.e("membersId", "members list update");
+     //           Log.e("membersId", "members list update");
                 addMembersInfo((String) value);
 
             }
@@ -368,6 +339,7 @@ public class MessageListActivity extends AppCompatActivity {
         }
         //
         NotificationUtility.clearSeenMsg(isChatRunning.getUnreadMsg());
+        Log.e("message", "Construcor oNStart with " +chatId + " " + locType);
 
         isChatRunning.clear();
     }
@@ -380,7 +352,7 @@ public class MessageListActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.w("MessageActivity", "Just got onCreated");
+        Log.e("message", "Construcor oNStart with " +chatId + " " + locType);
 
         //ChatInfo.getInstance().addUserObserver(this)
         super.onCreate(savedInstanceState);
