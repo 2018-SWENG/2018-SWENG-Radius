@@ -2,6 +2,7 @@ package ch.epfl.sweng.radius.database;
 
 import android.app.PendingIntent;
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.util.Pair;
 
@@ -16,7 +17,7 @@ import java.util.Map;
 import ch.epfl.sweng.radius.messages.ChatState;
 import ch.epfl.sweng.radius.messages.MessageListActivity;
 
-public class ChatlogsUtil implements DBLocationObserver {
+public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
     /**
      * TODO Implement new OnChildEventListener to enable removing conversations
@@ -44,6 +45,7 @@ public class ChatlogsUtil implements DBLocationObserver {
     private ChatlogsUtil(Context context){
         this.context = context;
         OthersInfo.getInstance().addLocationObserver(this);
+        UserInfo.getInstance().addUserObserver(this);
         // Read and setUp listener on the ChatList field of current user
         fetchUserChats();
         // Read and setUp listeners on the Group and Topics chats
@@ -54,16 +56,12 @@ public class ChatlogsUtil implements DBLocationObserver {
 
     private void fetchTopicChatsAndListen(){
         List<String> topicChatsID = new ArrayList<>(OthersInfo.getInstance().getTopicsPos().keySet());
-        Log.e("ChatlogsDebug", "Size of topics ID is" + Integer.toString(topicChatsID.size()));
-
         Database.getInstance().readListObjOnce(topicChatsID,
                 Database.Tables.CHATLOGS,
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
                         for(ChatLogs newChat : (ArrayList<ChatLogs>) value){
-                            Log.e("ChatlogsDebug", "Size of topics is" + Integer.toString(topicChat.size()));
-
                             topicChat.put(newChat.getID(), newChat);
                             listenToChatMessages(newChat, 2);
                             listenToChatMembers(newChat);
@@ -81,8 +79,6 @@ public class ChatlogsUtil implements DBLocationObserver {
     private void fetchGroupChatsAndListen(){
 
         List<String> groupChatsID = new ArrayList<>(OthersInfo.getInstance().getGroupsPos().keySet());
-        Log.e("ChatlogsDebug", "Size of groupChatsID is" + Integer.toString(groupChatsID.size()));
-
         /**
          *  WARNING This suppose that the Topic/Group ID and their respective ChatID are the same !
          */
@@ -92,7 +88,6 @@ public class ChatlogsUtil implements DBLocationObserver {
                     @Override
                     public void onFinish(Object value) {
                         for(ChatLogs newChat : (ArrayList<ChatLogs>) value){
-                            Log.e("ChatlogsDebug", "Size of group is" + Integer.toString(groupChat.size()));
                             groupChat.put(newChat.getID(), newChat);
                             listenToChatMessages(newChat, 1);
                             listenToChatMembers(newChat);
@@ -151,7 +146,7 @@ public class ChatlogsUtil implements DBLocationObserver {
         Pair<String, Class> child = new Pair<String, Class>("messages", Message.class);
         Database.getInstance().listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
             public void onFinish(Object value) {
-                Log.e("message", "message received " + ((Message) value).getContentMessage());
+                Log.e("ChatlogsDebug", "message received " + ((Message) value).getContentMessage());
                 receiveMessage(chatLogs, (Message) value, chatType);
             }
 
@@ -188,6 +183,7 @@ public class ChatlogsUtil implements DBLocationObserver {
 
 
         ChatState chatState = messageActivity.getIsChatRunning();
+        Log.e("ChatlogsDebug", "Notification Util Chat " + chatLogs.getID());
 
         if(!chatState.isRunning()){
             // Show notification as chat is not running
@@ -195,6 +191,26 @@ public class ChatlogsUtil implements DBLocationObserver {
             return;
         }
         // If Chat is running, there's nothing to do here
+    }
+
+    public String getNewChat(String otherUserId){
+        Log.e("ChatlogsDebug" , "Asked for new Chat ");
+        ChatLogs newChat = new ChatLogs();
+        newChat.addMembersId(UserInfo.getInstance().getCurrentUser().getID());
+        newChat.addMembersId(otherUserId);
+
+        // Update local data
+        userChat.put(newChat.getID(), newChat);
+        UserInfo.getInstance().getCurrentUser().addChat(otherUserId, newChat.getID());
+        OthersInfo.getInstance().getUsers().get(otherUserId).addChat(UserInfo.getInstance().getCurrentUser().getID(),
+                                                                    newChat.getID()); // Should always be there
+
+        // Update database
+        Database.getInstance().writeInstanceObj(newChat, Database.Tables.CHATLOGS);
+        UserInfo.getInstance().updateUserInDB();
+        Database.getInstance().writeInstanceObj(OthersInfo.getInstance().getUsers().get(otherUserId), Database.Tables.USERS);
+
+        return newChat.getID();
     }
 
     private void listenToChatMembers(final ChatLogs chatLogs){
@@ -219,9 +235,11 @@ public class ChatlogsUtil implements DBLocationObserver {
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
-                        Log.e("ChatlogsDebug", "Size of user is" + Integer.toString(userChat.size()));
-
                         ChatLogs newChat = (ChatLogs) value;
+
+                        Log.e("ChatlogsDebug", "Size of user is" + Integer.toString(userChat.size()));
+                        Log.e("ChatlogsDebug", "Added Chat " + newChat.getID());
+
                         switch (chatType){
                             case 0:
                                 userChat.put(chatID, newChat);
@@ -235,6 +253,7 @@ public class ChatlogsUtil implements DBLocationObserver {
                             default:
                                 break;
                         }
+
                         listenToChatMessages(newChat, chatType);
                     }
 
@@ -255,13 +274,16 @@ public class ChatlogsUtil implements DBLocationObserver {
                         for(ChatLogs newChat : (List<ChatLogs>) value){
                             switch (chatType){
                                 case 0:
-                                    userChat.put(newChat.getID(), newChat);
+                                    if(!userChat.containsKey(newChat.getID()));
+                                        userChat.put(newChat.getID(), newChat);
                                     break;
                                 case 1:
-                                    groupChat.put(newChat.getID(), newChat);
+                                    if(!groupChat.containsKey(newChat.getID()));
+                                        groupChat.put(newChat.getID(), newChat);
                                     break;
                                 case 2:
-                                    topicChat.put(newChat.getID(), newChat);
+                                    if(!topicChat.containsKey(newChat.getID()));
+                                        topicChat.put(newChat.getID(), newChat);
                                     break;
                                 default:
                                     break;
@@ -298,5 +320,11 @@ public class ChatlogsUtil implements DBLocationObserver {
                 2);
     }
 
+    @Override
+    public void onUserChange(String id) {
+        for(Map.Entry<String, String> s : UserInfo.getInstance().getCurrentUser().getChatList().entrySet())
+            if(!userChat.keySet().contains(s.getValue()))
+                fetchSingleChatAndListen(s.getValue(), 0);
+    }
 }
 

@@ -66,9 +66,9 @@ public class ChatLogs implements DatabaseObject{
     public void addMembersId(String userID){
         if(!membersId.contains(userID))
             membersId.add(userID);
-        if(!Database.DEBUG_MODE) {
+       /* if(!Database.DEBUG_MODE) {
             Database.getInstance().writeToInstanceChild(this, Database.Tables.CHATLOGS, "membersId",membersId);
-        }
+        }*/
 
     }
 
