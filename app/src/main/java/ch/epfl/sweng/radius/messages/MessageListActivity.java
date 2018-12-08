@@ -1,6 +1,8 @@
 package ch.epfl.sweng.radius.messages;
 
+import android.app.ActivityManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -48,14 +50,17 @@ public class MessageListActivity extends AppCompatActivity {
     private MLocation otherLoc;
     private Database database;
     private ChatState isChatRunning = null;
+    private Context context;
 
-    public MessageListActivity(ChatLogs chatLogs){
+    public MessageListActivity(){}
+    public MessageListActivity(ChatLogs chatLogs, Context context){
         // Just create entry to avoid duplicate activities
+
         if(MessageListActivity.getChatInstance(chatLogs.getID()) == null){
             chatInstance.put(chatId, this);
             isChatRunning = new ChatState();
             isChatRunning.leaveActivity();
-            return;
+            this.context = context;
         }
 
     }
@@ -79,10 +84,10 @@ public class MessageListActivity extends AppCompatActivity {
 
     public void showNotification(String content, String senderId) {
         // Setup Intent to end here in case of click
-        Intent notifIntent = new Intent(this, MessageListActivity.class);
+        Intent notifIntent = new Intent(context, MessageListActivity.class);
         notifIntent.putExtra("chatId", this.chatId).putExtra("otherId", this.otherUserId);
 
-        PendingIntent pi = PendingIntent.getActivity(this, 0,notifIntent, 0);
+        PendingIntent pi = PendingIntent.getActivity(context, 0,notifIntent, 0);
         // Build and show notification
         NotificationUtility.getInstance(null, null, null, null)
                 .notifyNewMessage(senderId, content, pi);

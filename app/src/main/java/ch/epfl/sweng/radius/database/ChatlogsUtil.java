@@ -1,6 +1,7 @@
 package ch.epfl.sweng.radius.database;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.util.Log;
 import android.util.Pair;
 
@@ -24,20 +25,29 @@ public class ChatlogsUtil implements DBLocationObserver {
     private static Map<String, ChatLogs> topicChat = new HashMap<>();
     private static Map<String, ChatLogs> groupChat = new HashMap<>();
 
+    private Context context;
     public static ChatlogsUtil getInstance(){
         if(instance == null)
-            instance = new ChatlogsUtil();
+            instance = new ChatlogsUtil(null);
+
+        return instance;
+    }
+    public static ChatlogsUtil getInstance(Context context){
+        if(instance == null)
+            instance = new ChatlogsUtil(context);
 
         return instance;
     }
 
-    private ChatlogsUtil(){
+    private ChatlogsUtil(Context context){
+        this.context = context;
         OthersInfo.getInstance().addLocationObserver(this);
         // Read and setUp listener on the ChatList field of current user
         fetchUserChats();
         // Read and setUp listeners on the Group and Topics chats
         fetchGroupChatsAndListen();
         fetchTopicChatsAndListen();
+
     }
 
     private void fetchTopicChatsAndListen(){
@@ -148,7 +158,7 @@ public class ChatlogsUtil implements DBLocationObserver {
 
         // If return Activity is null, Chat was never opened in the past
         if(messageActivity == null){
-            messageActivity = new MessageListActivity(chatLogs);}
+            messageActivity = new MessageListActivity(chatLogs, context);}
         ChatState chatState = messageActivity.getIsChatRunning();
 
         if(!chatState.isRunning()){

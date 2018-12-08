@@ -99,7 +99,7 @@ public class AccountActivity extends AppCompatActivity {
         timer = new Timer();
         // To load the current user infos
         UserInfo.getInstance().fetchDataFromDB();
-        ChatlogsUtil.getInstance();
+        ChatlogsUtil.getInstance(getApplicationContext());
         // Set the layout
         setContentView(R.layout.activity_account);
 
