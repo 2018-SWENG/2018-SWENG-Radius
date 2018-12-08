@@ -273,15 +273,15 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
                         for(ChatLogs newChat : (List<ChatLogs>) value){
                             switch (chatType){
                                 case 0:
-                                    if(!userChat.containsKey(newChat.getID()));
+                                    if(userChat.containsKey(newChat.getID())) continue;
                                         userChat.put(newChat.getID(), newChat);
                                     break;
                                 case 1:
-                                    if(!groupChat.containsKey(newChat.getID()));
+                                    if(groupChat.containsKey(newChat.getID())) continue;
                                         groupChat.put(newChat.getID(), newChat);
                                     break;
                                 case 2:
-                                    if(!topicChat.containsKey(newChat.getID()));
+                                    if(topicChat.containsKey(newChat.getID())) continue;
                                         topicChat.put(newChat.getID(), newChat);
                                     break;
                                 default:
