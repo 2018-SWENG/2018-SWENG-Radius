@@ -71,13 +71,11 @@ public class FakeFirebaseUtility extends Database {
 
     public ChatLogs getChat(){
         ChatLogs chat = new ChatLogs("10");
-        chat.addMembersId("testUser1");
-        chat.addMembersId("testUser2");
+        chat.addMembersId("testUser1");chat.addMembersId("testUser2");
         chat.addMessage(new Message("testUser3", "helo", new Date()));
         chat.addMessage(new Message("testUser1", "aaa", new Date()));
         chat.addMessage(new Message("testUser4", "aaa", new Date()));
-        chatLogsTable.put("10", chat);
-        return chat;
+        chatLogsTable.put("10", chat);return chat;
     }
 
     @Override
@@ -95,30 +93,10 @@ public class FakeFirebaseUtility extends Database {
                 objsRead.add(objRead);
         }
 
-  /*      if(objsRead.isEmpty() && ids.size() > 0){
-            Log.e("ChatlogsDebug", "Objread is empty !");
-            objsRead.add(getNewEl(tableName));
-
-        }*/
-
         callback.onFinish(objsRead);
     }
+
 /*
-    private DatabaseObject getNewEl(Tables tableName) {
-
-        DatabaseObject ret = null;
-        switch (tableName){
-            case LOCATIONS:
-                ret = new MLocation("testUser2"); break;
-            case CHATLOGS:
-                ret = getChat(); break;
-            case USERS:
-                ret = new User(); break;
-
-        }
-        return ret;
-    }
-
     public void printDBtoJSON(){
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -148,6 +126,27 @@ public class FakeFirebaseUtility extends Database {
         callback.onFinish(objsRead);
     }
 
+    private void getRet(Pair<String, Class> child, DatabaseObject obj,
+                                  CallBackDatabase callback){
+        if(child.first.equals("messages")){
+            for(Message m : ((ChatLogs) curobj).getMessages())
+                callback.onFinish(m);
+            return;
+        }
+        else if(child.first.equals("membersId")){
+            for(String m : ((ChatLogs) curobj).getMembersId())
+                callback.onFinish(m);
+            return;
+        }
+        else if(child.first.equals("chatList")){
+            List<String> chatIDs = new ArrayList<>(((User) curobj).getChatList().values());
+            for(String m : chatIDs) callback.onFinish(m);
+            return;
+        }
+        callback.onFinish(null);
+    }
+
+
     @Override
     public void writeInstanceObj(final DatabaseObject obj, final Tables tableName){
         switch (tableName){
@@ -167,25 +166,7 @@ public class FakeFirebaseUtility extends Database {
     public void listenObjChild(DatabaseObject obj, Tables tableName, Pair<String, Class> child, CallBackDatabase callback) {
         HashMap<String, DatabaseObject> table = getTable(tableName);
         DatabaseObject curobj = table.get(obj.getID());
-        System.out.print(child.first);
-        Object ret = null;
-        if(child.first.equals("messages")){
-            for(Message m : ((ChatLogs) curobj).getMessages())
-                callback.onFinish(m);
-            return;
-        }
-        else if(child.first.equals("membersId")){
-            for(String m : ((ChatLogs) curobj).getMembersId())
-                callback.onFinish(m);
-            return;
-        }
-        else if(child.first.equals("chatList")){
-            List<String> chatIDs = new ArrayList<>(((User) curobj).getChatList().values());
-            for(String m : chatIDs) callback.onFinish(m);
-            return;
-        }
-
-        callback.onFinish(ret);
+        getRet(child, curobj, callback);
     }
 
 

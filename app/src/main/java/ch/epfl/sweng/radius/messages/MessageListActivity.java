@@ -200,42 +200,7 @@ public class MessageListActivity extends AppCompatActivity {
         });
 
     }
-    /**
-     * If a message is added in the db, add the message in the chat
-     */
-    /*
-    private void setUpListener() {
-        Pair<String, Class> child = new Pair<String, Class>("messages", Message.class);
-        database.listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
-            public void onFinish(Object value) {
-      //          Log.e("message", "message received " + ((Message) value).getContentMessage());
-                receiveMessage((Message) value);
 
-            }
-
-            @Override
-            public void onError(DatabaseError error) {
-
-            }
-        });
-
-        Pair<String, Class> child_members = new Pair<String, Class>("membersId", String.class);
-        database.listenObjChild(chatLogs, Database.Tables.CHATLOGS, child_members, new CallBackDatabase() {
-            public void onFinish(Object value) {
-     //           Log.e("membersId", "members list update");
-                addMembersInfo((String) value);
-
-            }
-
-            @Override
-            public void onError(DatabaseError error) {
-
-            }
-        });
-
-    }
-
-    */
 
     private void prepareUsers(ArrayList<String> participants) {
 
