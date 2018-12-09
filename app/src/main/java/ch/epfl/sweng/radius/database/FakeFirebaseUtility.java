@@ -96,8 +96,11 @@ public class FakeFirebaseUtility extends Database {
                 objsRead.add(objRead);
         }
 
-        if(objsRead.isEmpty())
+        if(objsRead.isEmpty() && ids.size() > 0){
+            Log.e("ChatlogsDebug", "Objread is empty !");
             objsRead.add(getNewEl(tableName));
+
+        }
 
         callback.onFinish(objsRead);
     }
@@ -168,7 +171,7 @@ public class FakeFirebaseUtility extends Database {
         Object ret = null;
 
         if(child.first.equals("messages"))
-            ret = new Message("userTest3", "Helo", new Date());
+            ret = new Message(((ChatLogs) obj).getMembersId().get(1), "Helo", new Date());
         else if(child.first.equals("membersId")){
             ChatLogs curChat = (ChatLogs) curobj;
             if((curChat.getMembersId().size() > 0))
@@ -176,6 +179,8 @@ public class FakeFirebaseUtility extends Database {
             else
                 ret = "userTest2";
         }
+        else if(child.first.equals("chatList"))
+            ret = ((User) curobj).getChatList().get("testUser2");
         callback.onFinish(ret);
     }
 
@@ -276,6 +281,15 @@ public class FakeFirebaseUtility extends Database {
         tempChat.addMembersId("testUser5"); tempChat.addMembersId("testUser4");
         tempChat.addMessage(new Message("testUser5", "Ok then", new Date()));
         chatLogsTable.put("testGroup3", tempChat);
+
+        ChatLogs chat = new ChatLogs("13");
+        chat.addMembersId("testUser1");
+        chat.addMembersId("testUser4");
+        chat.addMembersId("testUser3");
+        chat.addMessage(new Message("testUser3", "helo", new Date()));
+        chat.addMessage(new Message("testUser1", "aaa", new Date()));
+        chat.addMessage(new Message("testUser4", "aaa", new Date()));
+        chatLogsTable.put("13", chat);
 
     }
 

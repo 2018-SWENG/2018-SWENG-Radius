@@ -204,7 +204,8 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
                 Log.e("ChatlogsDebug", "Chat Members ID is "+ chatLogs.getID());
 
                 chatLogs.addMembersId(newMemberId);
-                MessageListActivity.getChatInstance(chatLogs.getID()).addMembersInfo(newMemberId);
+                if(MessageListActivity.getChatInstance(chatLogs.getID()) != null)
+                    MessageListActivity.getChatInstance(chatLogs.getID()).addMembersInfo(newMemberId);
             }
 
             @Override
