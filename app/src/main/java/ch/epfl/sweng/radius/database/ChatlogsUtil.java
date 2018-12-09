@@ -201,6 +201,8 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         Database.getInstance().listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
             public void onFinish(Object value) {
                 String newMemberId = (String) value;
+                Log.e("ChatlogsDebug", "Chat Members ID is "+ chatLogs.getID());
+
                 chatLogs.addMembersId(newMemberId);
                 MessageListActivity.getChatInstance(chatLogs.getID()).addMembersInfo(newMemberId);
             }
