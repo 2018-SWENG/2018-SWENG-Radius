@@ -155,7 +155,7 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
                     Looper.prepare();
         onView(withId(R.id.edittext_chatbox)).perform(typeText("Coucou"));
         Espresso.closeSoftKeyboard();
-        mlActivity.usersInRadius();
+    //    mlActivity.usersInRadius();
         onView(withId(R.id.button_chatbox_send)).perform(click());
 
         assert (mlActivity.findViewById(R.id.edittext_chatbox).toString().isEmpty());

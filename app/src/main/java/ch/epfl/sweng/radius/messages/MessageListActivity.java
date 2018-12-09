@@ -201,27 +201,6 @@ public class MessageListActivity extends AppCompatActivity {
 
     }
 
-
-    private void prepareUsers(ArrayList<String> participants) {
-
-        database.readListObjOnce(participants, Database.Tables.LOCATIONS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                if (((ArrayList) value).size() == 2) {
-                    UserInfo.getInstance().getCurrentPosition().setRadius(((MLocation) (((ArrayList) value).get(0))).getRadius());
-                    otherLoc.setRadius(((MLocation) (((ArrayList) value).get(1))).getRadius());
-                }
-
-            }
-
-            @Override
-            public void onError(DatabaseError error) {
-
-                Log.e("Firebase Error", error.getMessage());
-            }
-        });
-    }
-
     private void compareLocation() {
         //TODO check if other users radius contains current user.
         Log.e("ChatlogsDebug", "CompareLocation is : " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)) + otherUserId);
@@ -236,17 +215,6 @@ public class MessageListActivity extends AppCompatActivity {
         }
 
             }
-
-    public void usersInRadius() { //this method needs to go through severe change - currently we are not saving the radius or the locations of users properly.
-        ArrayList<String> participants = (ArrayList) chatLogs.getMembersId();
-        otherLoc = new MLocation(otherUserId);
-        //read the users from the database in order to be able to access their radius in the compareLocation method.
-        prepareUsers(participants);
-
-        //compare the locations of the users and whether they are able to talk to each other or not.
-        compareLocation();
-
-    }
 
     public void setEnabled(boolean enableChat) {
         if (!enableChat) {
