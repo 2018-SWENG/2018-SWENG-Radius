@@ -149,9 +149,10 @@ public class BrowseProfilesUnblockedActivity extends BrowseProfilesActivity{
         addFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (currentUser.getFriends().containsKey(profileUser.getID())) {
-                    addFriendButton.setText("Add Friend"); addFriendButton.setEnabled(true);
+                    currentUser.removeFriend(profileUser);
+                    addFriendButton.setText("Removed !");
+                    addFriendButton.setEnabled(false);
                 } else {
                     currentUser.addFriendRequest(profileUser);
                     UserInfo.getInstance().updateUserInDB();

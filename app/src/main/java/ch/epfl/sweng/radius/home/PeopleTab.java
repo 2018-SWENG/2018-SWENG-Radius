@@ -29,8 +29,7 @@ public class PeopleTab extends CustomUserTab implements DBLocationObserver {
     }
 
     @Override
-    public void onLocationChange(String id) {
-        if(this.adapter != null && !Database.DEBUG_MODE)
-            super.setUpAdapter();
+    public List<MLocation> getList(){
+        return new ArrayList(OthersInfo.getInstance().getUsersInRadius().values());
     }
 }

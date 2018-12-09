@@ -33,9 +33,8 @@ public abstract class CustomUserTab extends CustomTab implements DBLocationObser
 
     @Override
     protected void setUpAdapterWithList(List<String> listIds){
-        List<String> ids = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().keySet());
         ArrayList<CustomListItem> usersItems = new ArrayList<>();
-        List<MLocation> locs = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().values());
+        List<MLocation> locs = getList();
         for(MLocation loc : locs)
             if(loc.isVisible()){
                 usersItems.add(new CustomListItem(loc.getID(), UserInfo.getInstance().getCurrentUser().getConvFromUser(loc.getID())
@@ -51,8 +50,9 @@ public abstract class CustomUserTab extends CustomTab implements DBLocationObser
 
     @Override
     public void onLocationChange(String id) {
-        if (id.equals(Database.Tables.LOCATIONS.toString())){
+        if(this.adapter != null && !Database.DEBUG_MODE)
             super.setUpAdapter();
-        }
     }
+
+    abstract public List<MLocation> getList();
 }

@@ -16,7 +16,6 @@ import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.customLists.customTopics.CustomTopicTab;
-import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserTab;
 
 public class TopicsTab extends CustomTopicTab implements DBLocationObserver {
 
