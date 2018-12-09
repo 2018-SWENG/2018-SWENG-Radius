@@ -275,7 +275,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
     @Override
     public void onLocationChange(String id) {
-     //   Log.e("ChatlogsDebug", "Update tables " + groupChat.size() + " " + topicChat.size());
+        Log.e("ChatlogsDebug", "Update tables " + groupChat.size() + " " + topicChat.size());
 
         fetchListChatAndListen(new ArrayList<>(OthersInfo.getInstance().getGroupsPos().keySet()),
                 1);

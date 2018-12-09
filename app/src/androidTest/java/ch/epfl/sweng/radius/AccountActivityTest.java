@@ -93,7 +93,7 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
             MLocation temp = new MLocation("testUser2");
             temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
             temp.setTitle("testUser2"); temp.setMessage("Helping witht the tests !");
-            temp.setVisible(false); Database.getInstance().writeInstanceObj(temp, Database.Tables.LOCATIONS);
+            temp.setVisible(true); Database.getInstance().writeInstanceObj(temp, Database.Tables.LOCATIONS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

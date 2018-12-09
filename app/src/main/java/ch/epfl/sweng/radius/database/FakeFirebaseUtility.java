@@ -68,7 +68,7 @@ public class FakeFirebaseUtility extends Database {
         DatabaseObject ret = table.get(obj.getID());
         callback.onFinish(ret);
     }
-
+/*
     private ChatLogs getChat(){
         ChatLogs chat = new ChatLogs("13");
         chat.addMembersId("testUser1");
@@ -80,7 +80,7 @@ public class FakeFirebaseUtility extends Database {
         chatLogsTable.put("13", chat);
         return chat;
     }
-
+*/
     @Override
     public void readListObjOnce(final List<String> ids,
                                 final Tables tableName,
@@ -104,7 +104,7 @@ public class FakeFirebaseUtility extends Database {
 
         callback.onFinish(objsRead);
     }
-
+/*
     private DatabaseObject getNewEl(Tables tableName) {
 
         DatabaseObject ret = null;
@@ -119,7 +119,7 @@ public class FakeFirebaseUtility extends Database {
         }
         return ret;
     }
-/*
+
     public void printDBtoJSON(){
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -305,7 +305,7 @@ public class FakeFirebaseUtility extends Database {
         MLocation temp = new MLocation("testUser2", defaultLng + 0.01, defaultLat + 0.01);
         temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
         temp.setTitle("testUser2"); temp.setMessage("Helping witht the tests !");
-        temp.setVisible(false);locationsTable.put("testUser2", temp);
+        locationsTable.put("testUser2", temp);
 
         temp = new MLocation("testUser3", defaultLng - 0.01, defaultLat - 0.01);
         temp.setTitle("testUser3"); temp.setMessage("Helping witht the tests too !");

@@ -38,6 +38,7 @@ public class OthersInfo extends DBObservable{
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                Log.e("ChatlogsDebug", "Timer Triggered !");
                 fetchUsersInMyRadius();
                 fetchUserObjects();
                 fetchConvUsers();

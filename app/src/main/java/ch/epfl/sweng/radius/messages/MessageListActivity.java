@@ -92,13 +92,6 @@ public class MessageListActivity extends AppCompatActivity {
         NotificationUtility.getInstance(null, null, null, null)
                 .notifyNewMessage(senderId, content, pi);
     }
-
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-    }
     /**
      * Get all infos needed to create the activity
      * We get the chatId and otherUserId from the parent fragment
@@ -151,15 +144,11 @@ public class MessageListActivity extends AppCompatActivity {
      * @param message the new message
      */
     public void receiveMessage(Message message) {
-
-
         myMessageAdapter.setMessages(chatLogs.getMessages());
         myMessageRecycler.smoothScrollToPosition(chatLogs.getNumberOfMessages());
         myMessageAdapter.notifyDataSetChanged();
 
     }
-
-
     public void addMembersInfo(String membersId){
         if(!chatLogs.getMembersId().contains(membersId)){
             chatLogs.addMembersId(membersId);
@@ -213,6 +202,7 @@ public class MessageListActivity extends AppCompatActivity {
     /**
      * If a message is added in the db, add the message in the chat
      */
+    /*
     private void setUpListener() {
         Pair<String, Class> child = new Pair<String, Class>("messages", Message.class);
         database.listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
@@ -243,6 +233,8 @@ public class MessageListActivity extends AppCompatActivity {
         });
 
     }
+
+    */
 
     private void prepareUsers(ArrayList<String> participants) {
 

@@ -237,14 +237,14 @@ public class FirebaseUtility extends Database{
 
 
 
-
-    private String getLogTagWithMethod() {
-
+/*
         StackTraceElement[] trace = Thread.currentThread().getStackTrace();
         String res = "";
         for (int i = 0; i < trace.length  && i < 30; i++)
             res +=  trace[i].getClassName() + "." + trace[i].getMethodName() + ":" + trace[i].getLineNumber() + "\n";
         return res;
     }
+
+    */
 
 }
