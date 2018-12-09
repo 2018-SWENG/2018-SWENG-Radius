@@ -128,11 +128,8 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
 
     @Test
     public void testTopicTabRemove() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Espresso.onView(withText("TOPICS")).check(ViewAssertions.matches(isDisplayed()))
+                .perform(click());
         Espresso.onView(withText("REMOVE")).check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
 
