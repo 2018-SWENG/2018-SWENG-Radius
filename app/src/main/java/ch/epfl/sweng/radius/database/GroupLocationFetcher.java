@@ -1,4 +1,4 @@
-package ch.epfl.sweng.radius.database;
+/*package ch.epfl.sweng.radius.database;
 
 import android.util.Log;
 
@@ -42,3 +42,4 @@ public class GroupLocationFetcher implements CallBackDatabase {
         return groupLocationsIds;
     }
 }
+*/
