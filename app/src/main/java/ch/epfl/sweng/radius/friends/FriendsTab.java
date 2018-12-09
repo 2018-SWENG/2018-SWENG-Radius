@@ -15,7 +15,9 @@ import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserTab;
 
 public class FriendsTab extends CustomUserTab implements DBUserObserver{
-    public FriendsTab(){ super();}
+    public FriendsTab(){ super();
+        OthersInfo.getInstance().addUserObserver(this);
+    }
 
     @Override
     protected void setUpAdapterWithList(List<String> listIds){
@@ -34,7 +36,8 @@ public class FriendsTab extends CustomUserTab implements DBUserObserver{
 
     @Override
     public void onUserChange(String id) {
-        super.setUpAdapter();
+        Log.e("Test", "User change");
+        setUpAdapterWithList(new ArrayList());
     }
 }
 

@@ -15,6 +15,7 @@ import ch.epfl.sweng.radius.utils.customLists.customUsers.CustomUserTab;
 public class RequestsTab extends CustomUserTab implements DBUserObserver{
     public RequestsTab() {
         super();
+        OthersInfo.getInstance().addUserObserver(this);
     }
 
     @Override

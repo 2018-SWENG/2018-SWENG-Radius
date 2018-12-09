@@ -171,6 +171,7 @@ public class OthersInfo extends DBObservable{
                     Log.e("Refactor OthersInfo", "Current userID is" + loc.getID());
                     if(!requestList.containsKey(loc.getID()));
                     requestList.put(loc.getID(), loc);
+                    notifyUserObservers("");
                 }
             }
 
