@@ -7,7 +7,6 @@ import java.util.List;
 
 import ch.epfl.sweng.radius.database.DBLocationObserver;
 import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.GroupLocationFetcher;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.customLists.customGroups.CustomGroupTab;
