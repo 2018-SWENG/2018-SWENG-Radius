@@ -88,10 +88,15 @@ public class ChatlogsUtilTest {
 
     @Test
     public void testGetNewChat(){
-        test.getNewChat("testUser4");
+        String s = test.getNewChat("testUser4");
+        test.getChat(s, 0);
+        test.getChat("MyTopicTest", 2);
+        test.getChat("groupTest", 1);
     }
 
     @Test
     public void onUserChange() {
+        ChatlogsUtil.getInstance();
+        test.onUserChange("is");
     }
 }

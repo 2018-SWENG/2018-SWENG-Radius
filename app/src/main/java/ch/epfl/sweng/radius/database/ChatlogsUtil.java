@@ -122,8 +122,9 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         }
 
         if(ret == null && Database.DEBUG_MODE)
+
             return ((FakeFirebaseUtility) Database.getInstance()).getChat();
-        
+
         return ret;
     }
 
