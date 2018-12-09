@@ -1,7 +1,7 @@
 package ch.epfl.sweng.radius.database;
 
 import android.util.Log;
-import android.util.Pair;
+import android.support.v4.util.Pair;
 
 import java.util.List;
 

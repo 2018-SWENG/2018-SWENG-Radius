@@ -1,7 +1,7 @@
 package ch.epfl.sweng.radius.database;
 
 import android.util.Log;
-import android.util.Pair;
+import android.support.v4.util.Pair;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -167,6 +167,7 @@ public class FakeFirebaseUtility extends Database {
     public void listenObjChild(DatabaseObject obj, Tables tableName, Pair<String, Class> child, CallBackDatabase callback) {
         HashMap<String, DatabaseObject> table = getTable(tableName);
         DatabaseObject curobj = table.get(obj.getID());
+        System.out.print(child.first);
         Object ret = null;
         if(child.first.equals("messages")){
             for(Message m : ((ChatLogs) curobj).getMessages())

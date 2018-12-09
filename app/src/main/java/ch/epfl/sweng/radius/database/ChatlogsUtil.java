@@ -4,8 +4,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.provider.ContactsContract;
 import android.util.Log;
-import android.util.Pair;
-
+import android.support.v4.util.Pair;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
     }
 
-    private void fetchTopicChatsAndListen(){
+    public void fetchTopicChatsAndListen(){
         List<String> topicChatsID = new ArrayList<>(OthersInfo.getInstance().getTopicsPos().keySet());
         Database.getInstance().readListObjOnce(topicChatsID,
                 Database.Tables.CHATLOGS,
@@ -77,7 +76,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
     }
 
-    private void fetchGroupChatsAndListen(){
+    public void fetchGroupChatsAndListen(){
 
         List<String> groupChatsID = new ArrayList<>(OthersInfo.getInstance().getGroupsPos().keySet());
         /**
@@ -103,8 +102,9 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
     }
 
 
-    private void fetchUserChats(){
+    public void fetchUserChats(){
         Pair<String,Class> chatlistChild = new Pair<String, Class>("chatList", String.class);
+        System.out.print(chatlistChild.first);
 
         Database.getInstance().listenObjChild(UserInfo.getInstance().getCurrentUser(),
                 Database.Tables.USERS,
@@ -144,7 +144,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         return ret;
     }
 
-    private void listenToChatMessages(final ChatLogs chatLogs, final int chatType){
+    public void listenToChatMessages(final ChatLogs chatLogs, final int chatType){
         Pair<String, Class> child = new Pair<String, Class>("messages", Message.class);
         Database.getInstance().listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
             public void onFinish(Object value) {
@@ -159,7 +159,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         });
     }
 
-    private void receiveMessage(ChatLogs chatLogs, Message message, int chatType){
+    public void receiveMessage(ChatLogs chatLogs, Message message, int chatType){
         MessageListActivity messageActivity = MessageListActivity.getChatInstance(chatLogs.getID());
         if(chatLogs.getMessages().contains(message)) return;
         // Add message to local chatlog
@@ -199,7 +199,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         return newChat.getID();
     }
 
-    private void listenToChatMembers(final ChatLogs chatLogs){
+    public void listenToChatMembers(final ChatLogs chatLogs){
         Pair<String, Class> child = new Pair<String, Class>("membersId", String.class);
         Log.e("ChatlogsDebug", "Chat Members ID is "+ chatLogs.getID());
         Database.getInstance().listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
@@ -219,7 +219,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         });
     }
 
-    private void fetchSingleChatAndListen(final String chatID, final int chatType){
+    public void fetchSingleChatAndListen(final String chatID, final int chatType){
         Database.getInstance().readObjOnce(new ChatLogs(chatID),
                 Database.Tables.CHATLOGS,
                 new CallBackDatabase() {
@@ -247,7 +247,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
                 });
     }
 
-    private void fetchListChatAndListen(final List<String> chatID, final int chatType){
+    public void fetchListChatAndListen(final List<String> chatID, final int chatType){
         Database.getInstance().readListObjOnce(chatID, Database.Tables.CHATLOGS,
                 new CallBackDatabase() {
                     @Override

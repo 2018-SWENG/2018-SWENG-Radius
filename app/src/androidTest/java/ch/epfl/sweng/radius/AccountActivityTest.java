@@ -4,6 +4,11 @@ import android.Manifest;
 import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.action.CoordinatesProvider;
+import android.support.test.espresso.action.GeneralClickAction;
+import android.support.test.espresso.action.Press;
+import android.support.test.espresso.action.Tap;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.test.ActivityInstrumentationTestCase2;
@@ -20,7 +25,10 @@ import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withResourceName;
+import static org.hamcrest.Matchers.anything;
 
 public class AccountActivityTest extends ActivityInstrumentationTestCase2<AccountActivity> {
     @Rule

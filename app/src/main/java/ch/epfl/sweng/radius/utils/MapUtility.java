@@ -72,10 +72,6 @@ public class MapUtility implements DBLocationObserver {
         return new ArrayList<>(otherPos.values());
     }
 
-    public void setMyPos(MLocation mPos) {
-        myPos = mPos;
-    }
-
     public void getDeviceLocation(final FragmentActivity activity) {
         mblFusedLocationClient = LocationServices.getFusedLocationProviderClient( activity);
         try {
@@ -187,12 +183,6 @@ public class MapUtility implements DBLocationObserver {
         return distance[0];
     }
 
-    public static double findDistance(MLocation loc1, MLocation loc2) {
-        float[] distance = new float[3];
-        Location.distanceBetween( loc1.getLatitude(), loc1.getLongitude(),
-                loc2.getLatitude(), loc2.getLongitude(), distance);
-        return distance[0];
-    }
 
     public boolean speaksSameLanguage(MLocation user) {
         String[] languagesSpoken = user.getSpokenLanguages().split(" ");

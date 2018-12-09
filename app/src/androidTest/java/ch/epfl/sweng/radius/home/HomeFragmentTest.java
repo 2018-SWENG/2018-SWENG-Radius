@@ -134,7 +134,11 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
                 .perform(click());
         Espresso.onView(withText("OK")).check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
-
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Espresso.onView(withText("REMOVE")).check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
 
