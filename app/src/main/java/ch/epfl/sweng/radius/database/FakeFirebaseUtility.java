@@ -126,26 +126,16 @@ public class FakeFirebaseUtility extends Database {
         callback.onFinish(objsRead);
     }
 
-    private void getRet(Pair<String, Class> child, DatabaseObject obj,
-                                  CallBackDatabase callback){
-        if(child.first.equals("messages")){
-            for(Message m : ((ChatLogs) curobj).getMessages())
-                callback.onFinish(m);
-            return;
+    private Object getList(String child, DatabaseObject curObj){
+        if(child.equals("messages"))
+            return ((ChatLogs) curObj).getMessages();
+        else if(child.equals("membersId"))
+            return ((ChatLogs) curObj).getMembersId();
+        else if(child.equals("chatList")){
+            return new ArrayList<>(((User) curObj).getChatList().values());
         }
-        else if(child.first.equals("membersId")){
-            for(String m : ((ChatLogs) curobj).getMembersId())
-                callback.onFinish(m);
-            return;
-        }
-        else if(child.first.equals("chatList")){
-            List<String> chatIDs = new ArrayList<>(((User) curobj).getChatList().values());
-            for(String m : chatIDs) callback.onFinish(m);
-            return;
-        }
-        callback.onFinish(null);
+        return null;
     }
-
 
     @Override
     public void writeInstanceObj(final DatabaseObject obj, final Tables tableName){
@@ -166,7 +156,28 @@ public class FakeFirebaseUtility extends Database {
     public void listenObjChild(DatabaseObject obj, Tables tableName, Pair<String, Class> child, CallBackDatabase callback) {
         HashMap<String, DatabaseObject> table = getTable(tableName);
         DatabaseObject curobj = table.get(obj.getID());
-        getRet(child, curobj, callback);
+        Object ret = null;
+
+        for(Object o : (List<Object>) getList(child.first, curobj))
+            callback.onFinish(o);
+        return;
+      /*  if(child.first.equals("messages")){
+            for(Message m : ((ChatLogs) curobj).getMessages())
+                callback.onFinish(m);
+            return;
+        }
+        else if(child.first.equals("membersId")){
+            for(String m : ((ChatLogs) curobj).getMembersId())
+                callback.onFinish(m);
+            return;
+        }
+        else if(child.first.equals("chatList")){
+            List<String> chatIDs = new ArrayList<>(((User) curobj).getChatList().values());
+            for(String m : chatIDs) callback.onFinish(m);
+            return;
+        }
+
+        callback.onFinish(ret);*/
     }
 
 
