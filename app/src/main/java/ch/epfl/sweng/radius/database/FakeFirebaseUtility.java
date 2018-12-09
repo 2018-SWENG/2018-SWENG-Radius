@@ -195,7 +195,7 @@ public class FakeFirebaseUtility extends Database {
         fillChatlogsTable();
     }
 
-    private void fillChatlogsTable(){
+    private void fillFirstChat(){
 
         ChatLogs tempChat = new ChatLogs("10");
         tempChat.addMembersId("testUser1"); tempChat.addMembersId("testUser2");
@@ -205,7 +205,11 @@ public class FakeFirebaseUtility extends Database {
         tempChat.addMessage(new Message("testUser2", "Kenobi", new Date()));
         chatLogsTable.put("10", tempChat);
 
-        tempChat = new ChatLogs("11");
+    }
+
+    private void fillSecondChat(){
+
+        ChatLogs tempChat = new ChatLogs("11");
         tempChat.addMembersId("testUser3"); tempChat.addMembersId("testUser1");
         tempChat.addMessage(new Message("testUser1", "Hello There", new Date()));
         tempChat.addMessage(new Message("testUser3", "General Kenobi", new Date()));
@@ -217,7 +221,11 @@ public class FakeFirebaseUtility extends Database {
         tempChat.addMessage(new Message("testUser5", "General Kenobi", new Date()));
         chatLogsTable.put("12", tempChat);
 
-        tempChat = new ChatLogs("MyTestTopic");
+    }
+
+    private void fillTopicChats(){
+
+        ChatLogs tempChat = new ChatLogs("MyTestTopic");
         tempChat.addMembersId("testUser1"); tempChat.addMembersId("testUser2");
         tempChat.addMembersId("testUser3"); tempChat.addMembersId("testUser4");
         tempChat.addMessage(new Message("testUser1", "Hello There", new Date()));
@@ -234,7 +242,13 @@ public class FakeFirebaseUtility extends Database {
         tempChat.addMessage(new Message("testUser5", "Goodbye.", new Date()));
         chatLogsTable.put("MyTestTopic5", tempChat);
 
-        tempChat = new ChatLogs("testGroup");
+    }
+
+    private void fillChatlogsTable(){
+
+        fillFirstChat(); fillSecondChat(); fillTopicChats();
+
+        ChatLogs tempChat = new ChatLogs("testGroup");
         tempChat.addMembersId("testUser3"); tempChat.addMembersId("testUser4");
         tempChat.addMembersId("testUser1"); tempChat.addMembersId("testUser2");
         tempChat.addMessage(new Message("testUser3", "Howdihey", new Date()));
@@ -258,77 +272,52 @@ public class FakeFirebaseUtility extends Database {
         currentLoc = new MLocation("testUser1", defaultLng, defaultLat);
         currentLoc.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
         currentLoc.setTitle("testUser1");
-        currentLoc.setRadius(30000);
-        currentLoc.setMessage("Being tested on");
-        currentLoc.setInterests("Tests, mostly");
-
-        locationsTable.put("testUser1", currentLoc);
+        currentLoc.setRadius(30000); currentLoc.setMessage("Being tested on");
+        currentLoc.setInterests("Tests, mostly");locationsTable.put("testUser1", currentLoc);
 
         /** USERS **/
-        MLocation temp = new MLocation("testUser2", defaultLng + 0.01,
-                defaultLat + 0.01);
+        MLocation temp = new MLocation("testUser2", defaultLng + 0.01, defaultLat + 0.01);
         temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
         temp.setTitle("testUser2"); temp.setMessage("Helping witht the tests !");
         locationsTable.put("testUser2", temp);
 
-        temp = new MLocation("testUser3", defaultLng - 0.01,
-                defaultLat - 0.01);
+        temp = new MLocation("testUser3", defaultLng - 0.01, defaultLat - 0.01);
         temp.setTitle("testUser3"); temp.setMessage("Helping witht the tests too !");
         locationsTable.put("testUser3", temp);
 
-        temp = new MLocation("testUser4", defaultLng - 0.01,
-                defaultLat + 0.01);
+        temp = new MLocation("testUser4", defaultLng - 0.01, defaultLat + 0.01);
         temp.setTitle("testUser4"); temp.setMessage("Not Helping witht the tests !");
         locationsTable.put("testUser4", temp);
 
-        temp = new MLocation("testUser5", 0,
-                0);
+        temp = new MLocation("testUser5", 0, 0);
         temp.setTitle("testUser5"); temp.setMessage("Far awayyyy");
         locationsTable.put("testUser5", temp);
 
         /** TOPICS **/
-        MLocation tempTopic = new MLocation("MyTestTopic", defaultLng + 0.01,
-                defaultLat - 0.02);
-        tempTopic.setLocationType(2);
-        tempTopic.setOwnerId("testUser1");
-        tempTopic.setTitle("TopicTest !");
-        locationsTable.put("MyTestTopic", tempTopic);
+        MLocation tempTopic = new MLocation("MyTestTopic", defaultLng + 0.01, defaultLat - 0.02);
+        tempTopic.setLocationType(2);tempTopic.setOwnerId("testUser1");
+        tempTopic.setTitle("TopicTest !");locationsTable.put("MyTestTopic", tempTopic);
 
-        tempTopic = new MLocation("MyTestTopic2", defaultLng,
-                defaultLat);
-        tempTopic.setLocationType(2);
-        tempTopic.setOwnerId("testUser2");
-        tempTopic.setTitle("TopicTest2 !");
-        locationsTable.put("MyTestTopic2", tempTopic);
+        tempTopic = new MLocation("MyTestTopic2", defaultLng, defaultLat);
+        tempTopic.setLocationType(2);tempTopic.setOwnerId("testUser2");
+        tempTopic.setTitle("TopicTest2 !");locationsTable.put("MyTestTopic2", tempTopic);
 
-        tempTopic = new MLocation("MyTestTopic5", defaultLng + 10,
-                defaultLat - 10);
-        tempTopic.setLocationType(2);
-        tempTopic.setOwnerId("testUser5");
-        tempTopic.setTitle("TopicTest5 !");
-        locationsTable.put("MyTestTopic5", tempTopic);
+        tempTopic = new MLocation("MyTestTopic5", defaultLng + 10, defaultLat - 10);
+        tempTopic.setLocationType(2);tempTopic.setOwnerId("testUser5");
+        tempTopic.setTitle("TopicTest5 !");locationsTable.put("MyTestTopic5", tempTopic);
 
         /** GROUPS **/
-        MLocation tempGroup = new MLocation("testGroup", defaultLng + 0.2,
-                defaultLat + 0.1);
-        tempGroup.setLocationType(1);
-        tempGroup.setTitle("Test Group #1");
-        tempGroup.setMessage("Come to Daddy");
-        locationsTable.put("testGroup", tempGroup);
+        MLocation tempGroup = new MLocation("testGroup", defaultLng + 0.2, defaultLat + 0.1);
+        tempGroup.setLocationType(1);tempGroup.setTitle("Test Group #1");
+        tempGroup.setMessage("Come to Daddy");locationsTable.put("testGroup", tempGroup);
 
-        tempGroup = new MLocation("testGroup2", defaultLng - 0.2,
-                defaultLat + 0.1);
-        tempGroup.setLocationType(1);
-        tempGroup.setTitle("Test Group #2");
-        tempGroup.setMessage("Come to Mommy");
-        locationsTable.put("testGroup2", tempGroup);
+        tempGroup = new MLocation("testGroup2", defaultLng - 0.2, defaultLat + 0.1);
+        tempGroup.setLocationType(1);tempGroup.setTitle("Test Group #2");
+        tempGroup.setMessage("Come to Mommy");locationsTable.put("testGroup2", tempGroup);
 
-        tempGroup = new MLocation("testGroup3", defaultLng + 10,
-                defaultLat - 10);
-        tempGroup.setLocationType(1);
-        tempGroup.setTitle("Test Group #3");
-        tempGroup.setMessage("Don't come I guess");
-        locationsTable.put("testGroup", tempGroup);
+        tempGroup = new MLocation("testGroup3", defaultLng + 10, defaultLat - 10);
+        tempGroup.setLocationType(1);tempGroup.setTitle("Test Group #3");
+        tempGroup.setMessage("Don't come I guess");locationsTable.put("testGroup", tempGroup);
     }
 
     private HashMap<String,DatabaseObject> getTable(Tables tableName){
