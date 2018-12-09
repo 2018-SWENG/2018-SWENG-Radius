@@ -188,6 +188,7 @@ public class FakeFirebaseUtility extends Database {
         currentUSer.addChat("testUser2", "10");
         currentUSer.addChat("testUser3", "11");
         currentUSer.addChat("testUser5", "12");
+        currentUSer.addFriendRequest(new User("testUser5"));
         ArrayList<String> blockedUser = new ArrayList<>();
         blockedUser.add("testUser3");currentUSer.setBlockedUsers(blockedUser);
 
@@ -204,6 +205,7 @@ public class FakeFirebaseUtility extends Database {
 
         temp = new User("testUser4");usersTable.put("testUser4", temp);
         temp = new User("testUser5");usersTable.put("testUser5", temp);
+        temp.addFriendRequest(currentUSer);
         // Define Current user
         fillLocationsTable();fillChatlogsTable();
     }
