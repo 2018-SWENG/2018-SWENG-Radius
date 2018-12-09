@@ -275,22 +275,14 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
     @Override
     public void onLocationChange(String id) {
-        Log.e("ChatlogsDebug", "Update tables " + groupChat.size() + " " + topicChat.size());
+     //   Log.e("ChatlogsDebug", "Update tables " + groupChat.size() + " " + topicChat.size());
 
-        updateGroups();
-        updateTopic();
-        // Nothing to do for User as we keep the conversation in local list
-        // TODO Remove chats when topic/group not in radius anymore
-    }
-
-    private void updateGroups(){
         fetchListChatAndListen(new ArrayList<>(OthersInfo.getInstance().getGroupsPos().keySet()),
-            1);
-    }
-
-    private void updateTopic(){
+                1);
         fetchListChatAndListen(new ArrayList<>(OthersInfo.getInstance().getTopicsPos().keySet()),
                 2);
+        // Nothing to do for User as we keep the conversation in local list
+        // TODO Remove chats when topic/group not in radius anymore
     }
 
     @Override

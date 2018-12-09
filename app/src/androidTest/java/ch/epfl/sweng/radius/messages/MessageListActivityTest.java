@@ -104,21 +104,15 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
         UserInfo.getInstance().fetchDataFromDB();
         OthersInfo.getInstance().fetchUsersInMyRadius();
         ChatlogsUtil.getInstance(mlActivity);
-        user1 = new User();
-        user2 = new User();
-        ArrayList<String> userIds = new ArrayList<>();
-        userIds.add(user1.getID());
-        userIds.add(user2.getID());
-        chatLogs = new ChatLogs("10");
-        chatLogs.addMembersId(userIds.get(0));
-        chatLogs.addMembersId(userIds.get(1));
+        UserInfo.getInstance().getCurrentUser();
+        user2 = new User("testUser2");
         Context targetContext = InstrumentationRegistry.getInstrumentation()
                 .getTargetContext();
         Intent intent = new Intent(targetContext, MessageListActivity.class);
-        intent.putExtra("chatId", chatLogs.getChatLogsId());
+        intent.putExtra("chatId", "10");
         intent.putExtra("otherId", user2.getID());
         intent.putExtra("locType", 0);
-        intent.setAction(chatLogs.getID());
+        intent.setAction("10");
         mlActivity = mblActivityTestRule.getActivity();
 
         mblActivityTestRule.launchActivity(intent);

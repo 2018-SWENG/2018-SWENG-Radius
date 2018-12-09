@@ -96,11 +96,11 @@ public class FakeFirebaseUtility extends Database {
                 objsRead.add(objRead);
         }
 
-        if(objsRead.isEmpty() && ids.size() > 0){
+  /*      if(objsRead.isEmpty() && ids.size() > 0){
             Log.e("ChatlogsDebug", "Objread is empty !");
             objsRead.add(getNewEl(tableName));
 
-        }
+        }*/
 
         callback.onFinish(objsRead);
     }
@@ -119,7 +119,7 @@ public class FakeFirebaseUtility extends Database {
         }
         return ret;
     }
-
+/*
     public void printDBtoJSON(){
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -139,7 +139,7 @@ public class FakeFirebaseUtility extends Database {
         }
 
     }
-
+*/
     @Override
     public void readAllTableOnce(Tables tableName, CallBackDatabase callback) {
 
@@ -305,7 +305,7 @@ public class FakeFirebaseUtility extends Database {
         MLocation temp = new MLocation("testUser2", defaultLng + 0.01, defaultLat + 0.01);
         temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
         temp.setTitle("testUser2"); temp.setMessage("Helping witht the tests !");
-        locationsTable.put("testUser2", temp);
+        temp.setVisible(false);locationsTable.put("testUser2", temp);
 
         temp = new MLocation("testUser3", defaultLng - 0.01, defaultLat - 0.01);
         temp.setTitle("testUser3"); temp.setMessage("Helping witht the tests too !");

@@ -2,6 +2,7 @@ package ch.epfl.sweng.radius;
 
 import android.Manifest;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
@@ -12,6 +13,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import ch.epfl.sweng.radius.database.ChatlogsUtil;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.OthersInfo;
@@ -87,7 +89,11 @@ public class AccountActivityTest extends ActivityInstrumentationTestCase2<Accoun
     @Test
     public void testNavigationToSettings() {
         try {
-            Thread.sleep(7000);
+            Thread.sleep(5000);
+            MLocation temp = new MLocation("testUser2");
+            temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
+            temp.setTitle("testUser2"); temp.setMessage("Helping witht the tests !");
+            temp.setVisible(false); Database.getInstance().writeInstanceObj(temp, Database.Tables.LOCATIONS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

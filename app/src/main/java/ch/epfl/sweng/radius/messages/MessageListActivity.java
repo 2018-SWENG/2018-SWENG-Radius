@@ -266,6 +266,8 @@ public class MessageListActivity extends AppCompatActivity {
 
     private void compareLocation() {
         //TODO check if other users radius contains current user.
+        Log.e("ChatlogsDebug", "CompareLocation is : " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)) + otherUserId);
+
         if (locType == 0) {
             setEnabled(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId) &&
                     !OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
