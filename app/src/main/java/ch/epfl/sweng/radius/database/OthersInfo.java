@@ -149,6 +149,7 @@ public class OthersInfo extends DBObservable{
                     Log.e("Refactor OthersInfo", "Current userID is" + loc.getID());
                     if(!friendList.containsKey(loc.getID()));
                     friendList.put(loc.getID(), loc);
+                    notifyUserObservers("");
                 }
             }
 
@@ -165,11 +166,11 @@ public class OthersInfo extends DBObservable{
         database.readListObjOnce(ids, Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
-                friendList.clear();
+                requestList.clear();
                 for(MLocation loc : (ArrayList<MLocation>) value){
                     Log.e("Refactor OthersInfo", "Current userID is" + loc.getID());
-                    if(!friendList.containsKey(loc.getID()));
-                    friendList.put(loc.getID(), loc);
+                    if(!requestList.containsKey(loc.getID()));
+                    requestList.put(loc.getID(), loc);
                 }
             }
 

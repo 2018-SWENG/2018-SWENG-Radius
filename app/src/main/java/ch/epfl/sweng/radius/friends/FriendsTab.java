@@ -21,6 +21,7 @@ public class FriendsTab extends CustomUserTab implements DBUserObserver{
     protected void setUpAdapterWithList(List<String> listIds){
         ArrayList<CustomListItem> usersItems = new ArrayList<>();
         Collection<MLocation> locs = OthersInfo.getInstance().getFriendList();
+        Log.e("Test", locs.size() + " size");
         for(MLocation loc : locs)
             usersItems.add(new CustomListItem(loc.getID(), UserInfo.getInstance().getCurrentUser().getConvFromUser(loc.getID())
                         , loc.getTitle()));
