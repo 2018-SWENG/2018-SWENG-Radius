@@ -114,8 +114,8 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
         intent.putExtra("locType", 0);
         intent.setAction("10");
         mlActivity = mblActivityTestRule.getActivity();
-        Thread.sleep(5000);
         mblActivityTestRule.launchActivity(intent);
+        Thread.sleep(5000);
 
     }
 

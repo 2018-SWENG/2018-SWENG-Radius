@@ -68,19 +68,18 @@ public class FakeFirebaseUtility extends Database {
         DatabaseObject ret = table.get(obj.getID());
         callback.onFinish(ret);
     }
-/*
-    private ChatLogs getChat(){
-        ChatLogs chat = new ChatLogs("13");
+
+    public ChatLogs getChat(){
+        ChatLogs chat = new ChatLogs("10");
         chat.addMembersId("testUser1");
-        chat.addMembersId("testUser4");
-        chat.addMembersId("testUser3");
+        chat.addMembersId("testUser2");
         chat.addMessage(new Message("testUser3", "helo", new Date()));
         chat.addMessage(new Message("testUser1", "aaa", new Date()));
         chat.addMessage(new Message("testUser4", "aaa", new Date()));
-        chatLogsTable.put("13", chat);
+        chatLogsTable.put("10", chat);
         return chat;
     }
-*/
+
     @Override
     public void readListObjOnce(final List<String> ids,
                                 final Tables tableName,

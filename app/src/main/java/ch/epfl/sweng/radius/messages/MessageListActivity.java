@@ -114,6 +114,7 @@ public class MessageListActivity extends AppCompatActivity {
         //    database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, chatLogCallBack);
             Log.e("message", "Setup Messages size" + chatId + " " + locType);
      //       Log.e("message", "Setup Messages size" + Integer.toString(chatLogs.getMessages().size()));
+
         } else {
             throw new RuntimeException("MessagListActivity Intent created without bundle");
         }

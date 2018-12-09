@@ -125,18 +125,23 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
     public ChatLogs getChat(String chatID, int chatType){
 
-        if(Database.DEBUG_MODE)
-            return new ChatLogs("10");
-
+//        if(Database.DEBUG_MODE)
+//            return new ChatLogs("10");
+        ChatLogs ret = null;
+        // TODO UTILISER RET ET SI NULL ON CHANGE ET BOU
         switch (chatType){
             case 0:
-                return userChat.get(chatID);
+                ret = userChat.get(chatID);
             case 1:
-                return groupChat.get(chatID);
+                ret = groupChat.get(chatID);
             case 2:
-                return topicChat.get(chatID);
+                ret = topicChat.get(chatID);
         }
-        return null;
+
+        if(ret == null && Database.DEBUG_MODE)
+            return ((FakeFirebaseUtility) Database.getInstance()).getChat();
+
+        return ret;
     }
 
     private void listenToChatMessages(final ChatLogs chatLogs, final int chatType){
