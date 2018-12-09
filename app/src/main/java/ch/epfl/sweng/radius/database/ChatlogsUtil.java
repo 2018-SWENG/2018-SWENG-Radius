@@ -49,47 +49,28 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         // Read and setUp listener on the ChatList field of current user
         fetchUserChats();
         // Read and setUp listeners on the Group and Topics chats
-        fetchGroupChatsAndListen();
-        fetchTopicChatsAndListen();
+        fetchChatsAndListen();
 
     }
 
-    public void fetchTopicChatsAndListen(){
-        List<String> topicChatsID = new ArrayList<>(OthersInfo.getInstance().getTopicsPos().keySet());
-        Database.getInstance().readListObjOnce(topicChatsID,
-                Database.Tables.CHATLOGS,
-                new CallBackDatabase() {
-                    @Override
-                    public void onFinish(Object value) {
-                        for(ChatLogs newChat : (ArrayList<ChatLogs>) value){
-                            topicChat.put(newChat.getID(), newChat);
-                            listenToChatMessages(newChat, 2);
-                            listenToChatMembers(newChat);
-                        }
-                    }
-
-                    @Override
-                    public void onError(DatabaseError error) {
-
-                    }
-                });
-
-    }
-
-    public void fetchGroupChatsAndListen(){
-
+    public void fetchChatsAndListen(){
+        final List<String> topicChatsID = new ArrayList<>(OthersInfo.getInstance().getTopicsPos().keySet());
         List<String> groupChatsID = new ArrayList<>(OthersInfo.getInstance().getGroupsPos().keySet());
-        /**
-         *  WARNING This suppose that the Topic/Group ID and their respective ChatID are the same !
-         */
+        groupChatsID.addAll(topicChatsID);
         Database.getInstance().readListObjOnce(groupChatsID,
                 Database.Tables.CHATLOGS,
                 new CallBackDatabase() {
                     @Override
                     public void onFinish(Object value) {
                         for(ChatLogs newChat : (ArrayList<ChatLogs>) value){
-                            groupChat.put(newChat.getID(), newChat);
-                            listenToChatMessages(newChat, 1);
+                            if(topicChatsID.contains(newChat.getID())){
+                                topicChat.put(newChat.getID(), newChat);
+                                listenToChatMessages(newChat, 2);
+                            }
+                            else{
+                                groupChat.put(newChat.getID(), newChat);
+                                listenToChatMessages(newChat, 1);
+                            }
                             listenToChatMembers(newChat);
                         }
                     }
@@ -99,7 +80,9 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
                     }
                 });
+
     }
+
 
 
     public void fetchUserChats(){
