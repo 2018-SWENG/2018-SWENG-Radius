@@ -66,14 +66,14 @@ public class FakeFirebaseUtility extends Database {
     }
 
     private ChatLogs getChat(){
-        ChatLogs chat = new ChatLogs("10");
-        chat.addMembersId("usertTest1");
-        chat.addMembersId("usertTest4");
-        chat.addMembersId("usertTest0");
-        chat.addMessage(new Message("usertTest0", "helo", new Date()));
-        chat.addMessage(new Message("usertTest1", "aaa", new Date()));
-        chat.addMessage(new Message("as", "aaa", new Date()));
-        chatLogsTable.put("1", chat);
+        ChatLogs chat = new ChatLogs("13");
+        chat.addMembersId("testUser1");
+        chat.addMembersId("testUser4");
+        chat.addMembersId("testUser3");
+        chat.addMessage(new Message("testUser3", "helo", new Date()));
+        chat.addMessage(new Message("testUser1", "aaa", new Date()));
+        chat.addMessage(new Message("testUser4", "aaa", new Date()));
+        chatLogsTable.put("13", chat);
         return chat;
     }
 
@@ -103,14 +103,11 @@ public class FakeFirebaseUtility extends Database {
         DatabaseObject ret = null;
         switch (tableName){
             case LOCATIONS:
-                ret = new MLocation("testUser2");
-                break;
+                ret = new MLocation("testUser2"); break;
             case CHATLOGS:
-                ret = getChat();
-                break;
+                ret = getChat(); break;
             case USERS:
-                ret = new User();
-                break;
+                ret = new User(); break;
 
         }
         return ret;
@@ -167,32 +164,23 @@ public class FakeFirebaseUtility extends Database {
         currentUSer.addChat("testUser3", "11");
         currentUSer.addChat("testUser5", "12");
         ArrayList<String> blockedUser = new ArrayList<>();
-        blockedUser.add("testUser3");
-        currentUSer.setBlockedUsers(blockedUser);
+        blockedUser.add("testUser3");currentUSer.setBlockedUsers(blockedUser);
 
         usersTable.put("testUser1", currentUSer);
 
-        User temp = new User("testUser2");
-        currentUSer.addFriendRequest(temp);
+        User temp = new User("testUser2");currentUSer.addFriendRequest(temp);
 
-        temp.addFriendRequest(currentUSer);
-        temp.addChat("testUser1", "10");
+        temp.addFriendRequest(currentUSer);temp.addChat("testUser1", "10");
         usersTable.put("testUser2", temp);
 
-        temp = new User("testUser3");
-        currentUSer.addFriendRequest(temp);
-        blockedUser.clear();
-        blockedUser.add("testUser1");
-        temp.setBlockedUsers(blockedUser);
-        usersTable.put("testUser3", temp);
+        temp = new User("testUser3");currentUSer.addFriendRequest(temp);
+        blockedUser.clear();blockedUser.add("testUser1");
+        temp.setBlockedUsers(blockedUser);usersTable.put("testUser3", temp);
 
-        temp = new User("testUser4");
-        usersTable.put("testUser4", temp);
-        temp = new User("testUser5");
-        usersTable.put("testUser5", temp);
+        temp = new User("testUser4");usersTable.put("testUser4", temp);
+        temp = new User("testUser5");usersTable.put("testUser5", temp);
         // Define Current user
-        fillLocationsTable();
-        fillChatlogsTable();
+        fillLocationsTable();fillChatlogsTable();
     }
 
     private void fillFirstChat(){
