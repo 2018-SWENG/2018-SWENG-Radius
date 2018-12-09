@@ -296,7 +296,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         float color = friendsID.containsKey(locID) ? BitmapDescriptorFactory.HUE_BLUE :
                                                         BitmapDescriptorFactory.HUE_RED;
 
-        if(friendsID.containsKey(locID)){
+        if(friendsID.containsKey(locID) && OthersInfo.getInstance().getNewUsersPos().containsKey(locID)){
             showNearFriendNotification(locID, userName);
             //Log.d("NearFriendNotif", "There is friend nearby");
         }
@@ -330,6 +330,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
             initCircle(coord);
             markNearbyUsers();
         }
+
+
     }
 
     public void showNearFriendNotification(String userID, String userNickname) {

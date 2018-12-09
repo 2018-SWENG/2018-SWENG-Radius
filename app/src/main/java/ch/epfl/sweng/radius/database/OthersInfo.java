@@ -21,6 +21,7 @@ public class OthersInfo extends DBObservable{
     private static final MapUtility mapUtility = MapUtility.getMapInstance();
 
     private static final HashMap<String, MLocation> usersPos = new HashMap<>();
+    private static final HashMap<String, MLocation> newUsersPos = new HashMap<>();
     private static final HashMap<String, MLocation> allUserPos = new HashMap<>();
     private static final HashMap<String, MLocation> convUsers = new HashMap<>();
     private static final HashMap<String, MLocation> groupsPos = new HashMap<>();
@@ -59,6 +60,8 @@ public class OthersInfo extends DBObservable{
         return topicsPos;
     }
 
+    public HashMap<String, MLocation> getNewUsersPos() { return newUsersPos; }
+
     public HashMap<String, User> getUsers(){
         return users;
     }
@@ -71,7 +74,7 @@ public class OthersInfo extends DBObservable{
         database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
-                usersPos.clear();groupsPos.clear();topicsPos.clear();
+                newUsersPos.clear();
                 for (MLocation loc : (ArrayList<MLocation>) value) {
                     if(mapUtility.contains(loc.getLatitude(), loc.getLongitude())
                             && loc.isVisible()) {
@@ -137,6 +140,8 @@ public class OthersInfo extends DBObservable{
             case 0:
                 if(loc.getID().equals(UserInfo.getInstance().getCurrentPosition().getID()))
                     break;
+                // For near friend notifications
+                if(!usersPos.containsKey(loc.getID())) newUsersPos.put(loc.getID(), loc);
                 usersPos.put(loc.getID(), loc);
                 break;
             case 1:
