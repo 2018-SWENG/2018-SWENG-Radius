@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
@@ -26,6 +27,9 @@ public class OthersInfo extends DBObservable{
     private static final HashMap<String, MLocation> groupsPos = new HashMap<>();
     private static final HashMap<String, MLocation> topicsPos = new HashMap<>();
     private static final HashMap<String, User> users = new HashMap<>();
+    private static final HashMap<String, MLocation> friendList = new HashMap<>();
+    private static final HashMap<String, MLocation> requestList = new HashMap<>();
+
 
     public static OthersInfo getInstance(){
         if (othersInfo == null)
@@ -40,6 +44,8 @@ public class OthersInfo extends DBObservable{
                 fetchUsersInMyRadius();
                 fetchUserObjects();
                 fetchConvUsers();
+                fetchFriends();
+                fetchRequest();
             }
         }, 0, REFRESH_PERIOD*1000);    }
 
@@ -133,6 +139,47 @@ public class OthersInfo extends DBObservable{
         });
     }
 
+    public void fetchFriends(){
+        List<String> ids = new ArrayList<>(UserInfo.getInstance().getCurrentUser().getFriends().values());
+        database.readListObjOnce(ids, Database.Tables.LOCATIONS, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                friendList.clear();
+                for(MLocation loc : (ArrayList<MLocation>) value){
+                    Log.e("Refactor OthersInfo", "Current userID is" + loc.getID());
+                    if(!friendList.containsKey(loc.getID()));
+                    friendList.put(loc.getID(), loc);
+                }
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+                Log.e("FetchFriend", error.getMessage());
+            }
+        });
+    }
+
+
+    public void fetchRequest(){
+        List<String> ids = new ArrayList<>(UserInfo.getInstance().getCurrentUser().getFriendsInvitations().values());
+        database.readListObjOnce(ids, Database.Tables.LOCATIONS, new CallBackDatabase() {
+            @Override
+            public void onFinish(Object value) {
+                friendList.clear();
+                for(MLocation loc : (ArrayList<MLocation>) value){
+                    Log.e("Refactor OthersInfo", "Current userID is" + loc.getID());
+                    if(!friendList.containsKey(loc.getID()));
+                    friendList.put(loc.getID(), loc);
+                }
+            }
+
+            @Override
+            public void onError(DatabaseError error) {
+                Log.e("FetchRequests", error.getMessage());
+            }
+        });
+    }
+
     public void putInTable(MLocation loc){
         switch (loc.getLocationType()){
             case 0:
@@ -149,4 +196,11 @@ public class OthersInfo extends DBObservable{
         }
     }
 
+    public Collection<MLocation> getFriendList() {
+        return friendList.values();
+    }
+
+    public Collection<MLocation> getRequestList() {
+        return requestList.values();
+    }
 }
