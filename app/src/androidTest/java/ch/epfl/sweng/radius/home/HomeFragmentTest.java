@@ -3,6 +3,7 @@ package ch.epfl.sweng.radius.home;
 import android.Manifest;
 import android.content.Intent;
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewAssertion;
@@ -131,12 +132,12 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
         Espresso.onView(withText("TOPICS")).check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
         try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
+            Espresso.onView(withText("REMOVE")).check(ViewAssertions.matches(isDisplayed()))
+                    .perform(click());
+        } catch (NoMatchingViewException e) {
             e.printStackTrace();
         }
-        Espresso.onView(withText("REMOVE")).check(ViewAssertions.matches(isDisplayed()))
-                .perform(click());
+
 
     }
 
