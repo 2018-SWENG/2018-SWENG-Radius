@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 import ch.epfl.sweng.radius.database.DBUserObserver;
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
@@ -20,24 +21,20 @@ public class FriendsTab extends CustomUserTab implements DBUserObserver{
     }
 
     @Override
-    protected void setUpAdapterWithList(List<String> listIds){
-        ArrayList<CustomListItem> usersItems = new ArrayList<>();
-        Collection<MLocation> locs = OthersInfo.getInstance().getFriendList();
-        Log.e("Test", locs.size() + " size");
-        for(MLocation loc : locs)
-            usersItems.add(new CustomListItem(loc.getID(), UserInfo.getInstance().getCurrentUser().getConvFromUser(loc.getID())
-                        , loc.getTitle()));
-
-        if (adapter != null) {
-            adapter.setItems(usersItems);
-            adapter.notifyDataSetChanged();
-        }
+    public List<MLocation> getList(){
+        return new ArrayList(OthersInfo.getInstance().getFriendList());
     }
 
     @Override
     public void onUserChange(String id) {
-        Log.e("Test", "User change");
-        setUpAdapterWithList(new ArrayList());
+        if(this.adapter != null && !Database.DEBUG_MODE)
+            super.setUpAdapter();
+    }
+
+    @Override
+    public void onLocationChange(String id) {
+        if(this.adapter != null && !Database.DEBUG_MODE)
+            super.setUpAdapter();
     }
 }
 
