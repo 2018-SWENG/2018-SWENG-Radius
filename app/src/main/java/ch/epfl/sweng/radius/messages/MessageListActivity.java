@@ -73,19 +73,6 @@ public class MessageListActivity extends AppCompatActivity {
 
     }
 
-    private final CallBackDatabase otherLocationCallback = new CallBackDatabase() {
-        @Override
-        public void onFinish(Object value) {
-            otherLoc = (MLocation) value;
-
-        }
-
-        @Override
-        public void onError(DatabaseError error) {
-
-        }
-    };
-
     public static MessageListActivity getChatInstance(String chatID){
         return chatInstance.get(chatID);
     }
@@ -165,32 +152,15 @@ public class MessageListActivity extends AppCompatActivity {
      */
     public void receiveMessage(Message message) {
 
-  //      if (!chatLogs.getMessages().contains(message))
-  //          chatLogs.addMessage(message);
-     //   Log.e("message", "Messages size" + Integer.toString(chatLogs.getMessages().size()));
-    //    Log.e("message", "Messages size" + Integer.toString(chatLogs.getNumberOfMessages()));
-        //  database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
+
         myMessageAdapter.setMessages(chatLogs.getMessages());
         myMessageRecycler.smoothScrollToPosition(chatLogs.getNumberOfMessages());
         myMessageAdapter.notifyDataSetChanged();
 
-        // If thread is running
-  /*      if(isChatRunning != null && !isChatRunning.isRunning()){
-            String senderNickname;
-            MLocation sender = OthersInfo.getInstance().getConvUsers().get(message.getSenderId());
-            // TODO: Replace by local data I guess
-            if(sender == null) senderNickname = "Anonymous";
-            else senderNickname = sender.getTitle();
-
-            isChatRunning.msgReceived();
-
-            showNotification(message.getContentMessage(), senderNickname, this.chatId);
-        }
-        */
     }
 
 
-    private void addMembersInfo(String membersId){
+    public void addMembersInfo(String membersId){
         if(!chatLogs.getMembersId().contains(membersId)){
             chatLogs.addMembersId(membersId);
         }
@@ -368,6 +338,7 @@ public class MessageListActivity extends AppCompatActivity {
         setInfo();setUpUI();setUpSendButton();
         //setUpListener();
         setEnabled(true);
+        compareLocation();
     }
 
     @Override

@@ -170,8 +170,9 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         if(!messageActivity.getIsChatRunning().isRunning()){
             // Show notification as chat is not running
             messageActivity.showNotification(message.getContentMessage(), senderData, chatLogs.getID());
-            return;
         }
+        messageActivity.receiveMessage(message);
+
         // If Chat is running, there's nothing to do here
     }
 
@@ -201,6 +202,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
             public void onFinish(Object value) {
                 String newMemberId = (String) value;
                 chatLogs.addMembersId(newMemberId);
+                MessageListActivity.getChatInstance(chatLogs.getID()).addMembersInfo(newMemberId);
             }
 
             @Override

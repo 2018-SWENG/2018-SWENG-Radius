@@ -1,14 +1,8 @@
 package ch.epfl.sweng.radius.home;
 
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import ch.epfl.sweng.radius.database.DBLocationObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.OthersInfo;
-import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.customLists.customGroups.CustomGroupTab;
 
 public class GroupTab extends CustomGroupTab implements DBLocationObserver {
