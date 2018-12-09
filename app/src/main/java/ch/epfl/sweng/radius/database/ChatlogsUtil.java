@@ -155,8 +155,8 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
     }
 
     private void receiveMessage(ChatLogs chatLogs, Message message, int chatType){
-        if(upToDate < 0 || chatLogs.getMessages().contains(message))
-            return;
+        MessageListActivity messageActivity = MessageListActivity.getChatInstance(chatLogs.getID());
+        if(chatLogs.getMessages().contains(message)) return;
         // Add message to local chatlog
         chatLogs.addMessage(message);
 
@@ -164,10 +164,9 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         String senderData = NotificationUtility.getNickname(chatLogs, message, chatType);
 
         // Get ChatActivity instance if it exists
-        MessageListActivity messageActivity = MessageListActivity.getChatInstance(chatLogs.getID());
         // If return Activity is null, Chat was never opened in the past
         if(messageActivity == null) messageActivity = new MessageListActivity(chatLogs, context, chatType);
-        if(!messageActivity.getIsChatRunning().isRunning()){
+        if(!messageActivity.getIsChatRunning().isRunning() && upToDate >= 0){
             // Show notification as chat is not running
             messageActivity.showNotification(message.getContentMessage(), senderData, chatLogs.getID());
         }

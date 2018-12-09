@@ -169,18 +169,22 @@ public class FakeFirebaseUtility extends Database {
         HashMap<String, DatabaseObject> table = getTable(tableName);
         DatabaseObject curobj = table.get(obj.getID());
         Object ret = null;
-
-        if(child.first.equals("messages"))
-            ret = new Message(((ChatLogs) obj).getMembersId().get(1), "Helo", new Date());
-        else if(child.first.equals("membersId")){
-            ChatLogs curChat = (ChatLogs) curobj;
-            if((curChat.getMembersId().size() > 0))
-                ret = ((ChatLogs) curobj).getMembersId().get(((ChatLogs) curobj).getMembersId().size()-1);
-            else
-                ret = "userTest2";
+        if(child.first.equals("messages")){
+            for(Message m : ((ChatLogs) curobj).getMessages())
+                callback.onFinish(m);
+            return;
         }
-        else if(child.first.equals("chatList"))
-            ret = ((User) curobj).getChatList().get("testUser2");
+        else if(child.first.equals("membersId")){
+            for(String m : ((ChatLogs) curobj).getMembersId())
+                callback.onFinish(m);
+            return;
+        }
+        else if(child.first.equals("chatList")){
+            List<String> chatIDs = new ArrayList<>(((User) curobj).getChatList().values());
+            for(String m : chatIDs) callback.onFinish(m);
+            return;
+        }
+
         callback.onFinish(ret);
     }
 
