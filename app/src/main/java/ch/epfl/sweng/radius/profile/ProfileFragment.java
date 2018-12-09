@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.DBUserObserver;
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
@@ -179,7 +180,7 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
     private void setUpProfilePhoto() {
         MLocation current_user = UserInfo.getInstance().getCurrentPosition();
 
-        if (current_user.getUrlProfilePhoto() != null && !current_user.getUrlProfilePhoto().equals("")) { // puts the image from database into the circle
+        if (current_user.getUrlProfilePhoto() != null && !current_user.getUrlProfilePhoto().equals("") && !Database.DEBUG_MODE) { // puts the image from database into the circle
             Picasso.get().load(current_user.getUrlProfilePhoto()).into(userPhoto);
         }
 

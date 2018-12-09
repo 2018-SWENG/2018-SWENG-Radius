@@ -68,6 +68,7 @@ public class MessageListActivity extends AppCompatActivity {
             isChatRunning = new ChatState();
             isChatRunning.leaveActivity();
             this.context = context;
+            this.isChatRunning = new ChatState();
         }
 
     }
@@ -355,7 +356,7 @@ public class MessageListActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.e("message", "Construcor oNStart with " +chatId + " " + locType);
-
+        if(isChatRunning == null) isChatRunning = new ChatState();
         //ChatInfo.getInstance().addUserObserver(this)
         super.onCreate(savedInstanceState);
         myID = UserInfo.getInstance().getCurrentUser().getID();

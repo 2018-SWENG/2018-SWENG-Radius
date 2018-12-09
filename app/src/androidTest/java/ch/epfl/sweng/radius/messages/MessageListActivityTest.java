@@ -46,9 +46,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-
-
-
 @RunWith(AndroidJUnit4.class)
 public class MessageListActivityTest extends ActivityInstrumentationTestCase2<MessageListActivity> {
 
@@ -56,6 +53,7 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
     public final GrantPermissionRule mPermissionRule = GrantPermissionRule.grant(
             Manifest.permission.ACCESS_FINE_LOCATION);
 
+    /* TODO CLEAN FAKE DB AND START FROM ACCOUNT ACTIVITY OR SOMETHING*/
     @Rule
     public ActivityTestRule<MessageListActivity> mblActivityTestRule
             = new ActivityTestRule<MessageListActivity>(MessageListActivity.class, false, true){

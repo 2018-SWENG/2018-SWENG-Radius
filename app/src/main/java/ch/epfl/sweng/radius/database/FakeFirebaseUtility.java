@@ -258,6 +258,7 @@ public class FakeFirebaseUtility extends Database {
         currentLoc = new MLocation("testUser1", defaultLng, defaultLat);
         currentLoc.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
         currentLoc.setTitle("testUser1");
+        currentLoc.setRadius(30000);
         currentLoc.setMessage("Being tested on");
         currentLoc.setInterests("Tests, mostly");
 
@@ -280,8 +281,8 @@ public class FakeFirebaseUtility extends Database {
         temp.setTitle("testUser4"); temp.setMessage("Not Helping witht the tests !");
         locationsTable.put("testUser4", temp);
 
-        temp = new MLocation("testUser5", defaultLng + 10,
-                defaultLat - 10);
+        temp = new MLocation("testUser5", 0,
+                0);
         temp.setTitle("testUser5"); temp.setMessage("Far awayyyy");
         locationsTable.put("testUser5", temp);
 
@@ -293,8 +294,8 @@ public class FakeFirebaseUtility extends Database {
         tempTopic.setTitle("TopicTest !");
         locationsTable.put("MyTestTopic", tempTopic);
 
-        tempTopic = new MLocation("MyTestTopic2", defaultLng - 0.01,
-                defaultLat + 0.02);
+        tempTopic = new MLocation("MyTestTopic2", defaultLng,
+                defaultLat);
         tempTopic.setLocationType(2);
         tempTopic.setOwnerId("testUser2");
         tempTopic.setTitle("TopicTest2 !");
