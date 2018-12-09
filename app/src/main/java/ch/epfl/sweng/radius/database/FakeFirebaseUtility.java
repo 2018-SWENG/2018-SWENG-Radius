@@ -3,6 +3,10 @@ package ch.epfl.sweng.radius.database;
 import android.util.Log;
 import android.util.Pair;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
@@ -111,6 +115,26 @@ public class FakeFirebaseUtility extends Database {
 
         }
         return ret;
+    }
+
+    public void printDBtoJSON(){
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writeValue(new File("./user-db.json"), usersTable);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            mapper.writeValue(new File("./loc-db.json"), locationsTable);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            mapper.writeValue(new File("./chat-db.json"), chatLogsTable);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
