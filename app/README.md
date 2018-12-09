@@ -18,7 +18,7 @@
 
 
 
-![]https://github.com/2018-SWENG/2018-SWENG-Radius/blob/fix-refactorChatUsage/app/fake-chatdb0.png)
+![](https://github.com/2018-SWENG/2018-SWENG-Radius/blob/fix-refactorChatUsage/app/fake-chatdb0.png)
 
 ![](https://github.com/2018-SWENG/2018-SWENG-Radius/blob/fix-refactorChatUsage/app/fake-chatdb1.png)
 
