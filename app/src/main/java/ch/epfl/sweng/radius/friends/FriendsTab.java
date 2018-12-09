@@ -30,11 +30,5 @@ public class FriendsTab extends CustomUserTab implements DBUserObserver{
         if(this.adapter != null && !Database.DEBUG_MODE)
             super.setUpAdapter();
     }
-
-    @Override
-    public void onLocationChange(String id) {
-        if(this.adapter != null && !Database.DEBUG_MODE)
-            super.setUpAdapter();
-    }
 }
 

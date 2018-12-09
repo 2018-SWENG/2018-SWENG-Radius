@@ -50,7 +50,8 @@ public abstract class CustomUserTab extends CustomTab implements DBLocationObser
 
     @Override
     public void onLocationChange(String id) {
-        super.setUpAdapter();
+        if(this.adapter != null && !Database.DEBUG_MODE)
+            super.setUpAdapter();
     }
 
     abstract public List<MLocation> getList();
