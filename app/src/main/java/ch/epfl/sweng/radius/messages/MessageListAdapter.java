@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseError;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
@@ -53,9 +55,23 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         this.messages = messages;
     }
 
-    public void setMembersIds(List<String> membersIds) {
+    public void setMembersIds(final List<String> membersIds) {
         this.membersIds = membersIds;
-        this.usersHashMap = userUtils.getSpecificsUsers(membersIds);
+        this.membersIds.remove(UserInfo.getInstance().getCurrentUser().getID());
+        Database.getInstance().readListObjOnce(membersIds,
+                Database.Tables.LOCATIONS,
+                new CallBackDatabase() {
+                    @Override
+                    public void onFinish(Object value) {
+                        for(MLocation loc : (ArrayList<MLocation>) value)
+                            usersHashMap.put(loc.getID(), loc);
+                    }
+
+                    @Override
+                    public void onError(DatabaseError error) {
+
+                    }
+                });
     }
 
     // Inflates the appropriate layout according to the ViewType.

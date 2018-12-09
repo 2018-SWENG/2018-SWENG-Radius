@@ -112,7 +112,7 @@ public class MessageListActivity extends AppCompatActivity {
 
             chatLogs = ChatlogsUtil.getInstance().getChat(chatId, locType);
         //    database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, chatLogCallBack);
-            Log.e("message", "Setup Messages size" + chatId + " " + locType);
+            Log.e("ChatlogsDebug", "Setup Messages size" + chatId + " " + locType);
      //       Log.e("message", "Setup Messages size" + Integer.toString(chatLogs.getMessages().size()));
 
         } else {
@@ -129,6 +129,10 @@ public class MessageListActivity extends AppCompatActivity {
      * Set up the interface
      */
     private void setUpUI() {
+        if(chatLogs == null)
+            chatLogs = ChatlogsUtil.getInstance().getChat(chatId, locType);
+
+        Log.e("ChatlogsDebug", chatId);
         setContentView(R.layout.activity_message_list);
         messageZone = (EditText) findViewById(R.id.edittext_chatbox);
         myMessageAdapter = new MessageListAdapter(this, chatLogs.getMessages(),chatLogs.getMembersId());
