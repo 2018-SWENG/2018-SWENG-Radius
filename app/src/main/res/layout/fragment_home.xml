@@ -22,7 +22,8 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/AppTabLayout"/>
+            style="@style/AppTabLayout"
+            app:tabTextAppearance="@style/AppTabTextAppearance"/>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"

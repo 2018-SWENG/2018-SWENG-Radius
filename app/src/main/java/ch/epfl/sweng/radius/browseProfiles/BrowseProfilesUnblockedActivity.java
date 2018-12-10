@@ -59,9 +59,6 @@ public class BrowseProfilesUnblockedActivity extends BrowseProfilesActivity{
         toolbar = findViewById(R.id.toolbar);
 
         fetchUserInfo(userUID);
-
-        // ToolBar initialization
-        setSupportActionBar(toolbar);
     }
 
 
