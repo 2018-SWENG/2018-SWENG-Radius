@@ -17,7 +17,5 @@ public class BrowseProfilesBlockedActivity extends BrowseProfilesActivity {
         userUID = intent.getStringExtra("UID");
         profileActivityListener = new BrowseProfilesUtility(userUID);
         toolbar = findViewById(R.id.toolbar);
-
-        setSupportActionBar(toolbar);
     }
 }
