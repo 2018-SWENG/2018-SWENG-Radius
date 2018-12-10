@@ -7,7 +7,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-
     <!-- Top Bar application style -->
     <style name="AppTheme.TopBar"
         parent="@style/Theme.AppCompat.Light.DarkActionBar">
@@ -21,7 +20,6 @@
         <item name="actionMenuTextColor">@color/white</item>
     </style>
 
-    <!-- ActionBar styles -->
     <style name="MyActionBar"
         parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse" >
         <item name="android:background">@color/colorPrimary</item>
@@ -32,15 +30,35 @@
         <item name="titleTextStyle">@style/MyActionBarTitleText</item>
     </style>
 
-    <!-- ActionBar title text -->
     <style name="MyActionBarTitleText"
         parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <!-- ActionBar tabs text -->
     <style name="MyActionBarTabText"
         parent="@style/Widget.AppCompat.ActionBar.TabText">
         <item name="android:textColor">@color/white</item>
     </style>
+
+    <!-- Bottom Navigation Bar Style -->
+    <style name="BottomNavigation">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="itemBackground">@color/colorPrimary</item>
+        <item name="itemIconTint">@color/white</item>
+        <item name="itemTextColor">@color/white</item>
+    </style>
+
+
+    <!-- Tab Style -->
+    <style name="AppTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@color/whiteDark</item>
+        <item name="tabIndicatorHeight">4dp</item>
+        <item name="tabBackground">@color/colorPrimary</item>
+        <item name="tabSelectedTextColor">@color/white</item>
+        <item name="tabGravity">fill</item>
+        <item name="tabMode">fixed</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 </resources>

@@ -22,11 +22,7 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabGravity="fill"
-            app:tabIndicatorColor="@color/white"
-            app:tabIndicatorHeight="4dp"
-            app:tabBackground="@color/colorPrimary"
-            app:tabMode="fixed"/>
+            style="@style/AppTabLayout"/>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"

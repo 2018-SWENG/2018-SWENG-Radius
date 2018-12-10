@@ -13,11 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.OthersInfo;
-import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.database.UserInfo;
 
 public abstract class CustomTab extends Fragment {
     protected final Database database = Database.getInstance();
@@ -33,7 +29,7 @@ public abstract class CustomTab extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        View view = inflater.inflate(R.layout.friends_tab, container, false);
+        View view = inflater.inflate(R.layout.custom_tab, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.friendsList);
 
         ArrayList<CustomListItem> items = new ArrayList<>();
