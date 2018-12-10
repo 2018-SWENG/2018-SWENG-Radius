@@ -66,7 +66,9 @@ public class DatabaseObjectsTest {
         Message m = new Message(chatLogs.getMembersId().get(0), chatLogs.getMembersId().get(1), new Date());
         chatLogs.addMessage(m);
         chatLogs.addMembersId("56789");
-        chatLogs.addMembersId("56789");
+        chatLogs.addMembersId("6789");
+        chatLogs.addMembersId("5465");
+        ChatLogs.getOtherID(chatLogs);
         // Test Ids generation
         Assert.assertNotNull(chatLogs.getID());
         // Test messages
@@ -82,6 +84,7 @@ public class DatabaseObjectsTest {
         chatLogs.setMessages(allmessages);
         String id = chatLogs.getChatLogsId();
         chatLogs.setChatLogsId(id);
+        chatLogs.getNumberOfMessages();
 
     }
 

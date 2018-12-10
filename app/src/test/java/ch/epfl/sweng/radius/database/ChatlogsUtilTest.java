@@ -38,8 +38,7 @@ public class ChatlogsUtilTest {
         Database.DEBUG_MODE = true;
 
         Database.activateDebugMode();
-        test = ChatlogsUtil.getInstance(mockedContext);
-        testChat = new ChatLogs("10");
+        testChat = new ChatLogs("11");
         Database.getInstance().readObjOnce(testChat, Database.Tables.CHATLOGS,
                 new CallBackDatabase() {
                     @Override
@@ -63,14 +62,18 @@ public class ChatlogsUtilTest {
 
     @Test(expected = NullPointerException.class)
     public void receiveMessage() {
+        test = ChatlogsUtil.getInstance(mockedContext);
+
         test.upToDate = 0;
 
-        test.receiveMessage(testChat, new Message("testUser1", "Coucou", new Date()),
+        test.receiveMessage(testChat, new Message("testUser1", "Heloo", new Date()),
                 0);
     }
 
     @Test
     public void fetchSingleChatAndListen() {
+        test = ChatlogsUtil.getInstance(mockedContext);
+
         MLocation newTopic = new MLocation("TOPIK"); newTopic.setLocationType(2);
         MLocation newGroup = new MLocation("GROUP"); newGroup.setLocationType(1);
         Database.getInstance().writeInstanceObj(newGroup, Database.Tables.LOCATIONS);
@@ -81,6 +84,8 @@ public class ChatlogsUtilTest {
 
     @Test
     public void fetchListChatAndListen() {
+        test = ChatlogsUtil.getInstance(null);
+
         List<String> ids = new ArrayList<>();
         ids.add("testUser1");
     //    test.fetchListChatAndListen(ids, 0);
@@ -88,6 +93,8 @@ public class ChatlogsUtilTest {
 
     @Test
     public void testGetNewChat(){
+        test = ChatlogsUtil.getInstance(mockedContext);
+
         String s = test.getNewChat("testUser4");
         test.getChat(s, 0);
         test.getChat("MyTopicTest", 2);
@@ -96,6 +103,8 @@ public class ChatlogsUtilTest {
 
     @Test
     public void onUserChange() {
+        test = ChatlogsUtil.getInstance(mockedContext);
+
         ChatlogsUtil.getInstance();
         test.onUserChange("is");
     }

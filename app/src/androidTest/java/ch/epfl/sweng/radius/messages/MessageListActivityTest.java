@@ -198,10 +198,30 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
         mlActivity.showNotification("Coucou", "Coucou", "MyTestTopic");
     }
 
-    @Ignore
     @Test
     public void receiveMessage() {
         //Methode a tester dans ChatLogDbUtility lorsque cette derniere sera disponible
+        try {
+            runTestOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mlActivity.addMembersInfo("Coucou");
+                    mlActivity.receiveMessage(new Message("testUser1", "Okidoki", new Date()));
+                }
+            });
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+        try {
+            runTestOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mlActivity.receiveMessage(new Message("testUser1", "Okidoki", new Date()));
+                }
+            });
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
 }

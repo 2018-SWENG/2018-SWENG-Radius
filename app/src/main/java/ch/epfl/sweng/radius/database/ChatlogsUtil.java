@@ -155,11 +155,12 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         // Get ChatActivity instance if it exists
         // If return Activity is null, Chat was never opened in the past
         if(messageActivity == null) messageActivity = new MessageListActivity(chatLogs, context, chatType);
-        if(!messageActivity.getIsChatRunning().isRunning() && upToDate >= 0){
+        messageActivity.receiveMessage(message);
+        if(!messageActivity.getIsChatRunning().isRunning() && upToDate >= 0)
             // Show notification as chat is not running
             messageActivity.showNotification(message.getContentMessage(), senderData, chatLogs.getID());
-        }
-        messageActivity.receiveMessage(message);
+
+
 
         // If Chat is running, there's nothing to do here
     }
