@@ -1,10 +1,12 @@
 package ch.epfl.sweng.radius;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -94,8 +96,16 @@ public class AccountActivity extends AppCompatActivity {
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         PreferenceManager.setDefaultValues(this, R.xml.app_preferences, false);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean nightMode = settings.getBoolean("nightModeSwitch", false);
+        if (nightMode)
+            setTheme(R.style.DarkTheme);
+        else
+            setTheme(R.style.LightTheme);
+        Log.e("NIGHT", nightMode + "");
+        super.onCreate(savedInstanceState);
+
         timer = new Timer();
         // To load the current user infos
         UserInfo.getInstance().fetchDataFromDB();

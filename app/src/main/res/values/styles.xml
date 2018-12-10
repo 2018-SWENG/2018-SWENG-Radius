@@ -1,14 +1,21 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="LightTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Night Mode application theme. -->
+    <style name="DarkTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
     <!-- Top Bar application style -->
-    <style name="AppTheme.TopBar"
+    <style name="TopBar"
         parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <item name="android:actionBarTabTextStyle">@style/MyActionBarTabText</item>
@@ -22,11 +29,11 @@
 
     <style name="MyActionBar"
         parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse" >
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">?attr/colorPrimary</item>
         <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
 
         <!-- Support library compatibility -->
-        <item name="background">@color/colorPrimary</item>
+        <item name="background">?attr/colorPrimary</item>
         <item name="titleTextStyle">@style/MyActionBarTitleText</item>
     </style>
 
@@ -42,8 +49,8 @@
 
     <!-- Bottom Navigation Bar Style -->
     <style name="BottomNavigation">
-        <item name="android:background">@color/colorPrimary</item>
-        <item name="itemBackground">@color/colorPrimary</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="itemBackground">?attr/colorPrimary</item>
         <item name="itemIconTint">@color/white</item>
         <item name="itemTextColor">@color/white</item>
     </style>
@@ -53,7 +60,7 @@
     <style name="AppTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@color/whiteDark</item>
         <item name="tabIndicatorHeight">4dp</item>
-        <item name="tabBackground">@color/colorPrimary</item>
+        <item name="tabBackground">?attr/colorPrimary</item>
         <item name="tabSelectedTextColor">@color/white</item>
         <item name="tabGravity">fill</item>
         <item name="tabMode">fixed</item>
