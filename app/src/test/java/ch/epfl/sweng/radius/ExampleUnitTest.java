@@ -1,8 +1,11 @@
 package ch.epfl.sweng.radius;
 
+import android.provider.ContactsContract;
+
 import org.junit.Test;
 
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 import ch.epfl.sweng.radius.friends.FriendsTab;
 import ch.epfl.sweng.radius.friends.RequestsTab;
 import ch.epfl.sweng.radius.home.GroupTab;
@@ -46,6 +49,8 @@ public class ExampleUnitTest {
 
         MapUtility m1 = MapUtility.getMapInstance();
         m1.onLocationChange("HELO");
+
+    //    ((FakeFirebaseUtility) Database.getInstance()).printDBtoJSON();
 
     }
 }

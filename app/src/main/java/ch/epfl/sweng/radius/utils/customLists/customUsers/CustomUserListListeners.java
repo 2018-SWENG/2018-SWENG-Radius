@@ -17,6 +17,7 @@ import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesUnblockedActivity;
 import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesBlockedActivity;
 import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
+import ch.epfl.sweng.radius.database.ChatlogsUtil;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
@@ -61,35 +62,24 @@ public class CustomUserListListeners {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String chatId = convId;
+                ChatLogs chat = ChatlogsUtil.getInstance().getChat(convId, 0);
+                Log.e("ChatlogsDebug", "Chat OnClick ConvId is" + convId);
+                if(chat == null){
+                    chatId = ChatlogsUtil.getInstance().getNewChat(userId);
+                    Log.e("ChatlogsDebug", "Chat was null" + chatId);
 
-                database.readListObjOnce(Arrays.asList(UserInfo.getInstance().getCurrentUser().getID(), userId),
-                        Database.Tables.USERS, new CallBackDatabase() {
-                            @Override
-                            public void onFinish(Object value) {
-                                ArrayList<User> users = (ArrayList<User>)value;
-                                String chatId = convId;
-                                if(convId == null || convId.isEmpty()){ // If the conversation doesn't exist, it has to be created
-                                    ArrayList<String> ids = new ArrayList();
-                                    ids.add(userId); ids.add(UserInfo.getInstance().getCurrentUser().getID());
-                                    chatId = new ChatLogs(ids).getID();
-                                    users.get(0).addChat(users.get(1).getID(), chatId);
-                                    users.get(1).addChat(users.get(0).getID(), chatId);
-                                    // Update database entry for temp user with new chatLof
-                                    database.writeInstanceObj(users.get(0), Database.Tables.USERS);
-                                    database.writeInstanceObj(users.get(1), Database.Tables.USERS);
-                                }
-                                goToMessageActivity(context, chatId, userId);
-                            }
-                            @Override
-                            public void onError(DatabaseError error) {Log.e("Firebase", error.getMessage());}
-                        });
-            }
-        });
-    }
+                }
+
+                goToMessageActivity(context, chatId, userId);
+                }
+            });
+        }
 
     private void goToMessageActivity(Context context, String chatId, String userId){
         Intent intent = new Intent(context, MessageListActivity.class);
         Bundle b = new Bundle();
+
         b.putString("chatId", chatId);
         b.putString("otherId", userId);
         b.putInt("locType", LOCATION_TYPE);

@@ -9,7 +9,7 @@ package ch.epfl.sweng.radius.database;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.util.Pair;
+import android.support.v4.util.Pair;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -35,7 +35,7 @@ class ChildListener implements ChildEventListener {
 
     @Override
     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        Log.e("Notification", "CHild added !");
+      //  Log.e("Notification", "CHild added !");
         callback.onFinish(dataSnapshot.getValue(child.second));
     }
 
@@ -140,7 +140,7 @@ public class FirebaseUtility extends Database{
                     callback.onFinish(obj);
                 }
                 else{
-                    Log.e("FirebaseDebug", "Object is " + obj.getID() + "Objtype is " + tableName.toString());
+            //        Log.e("FirebaseDebug", "Object is " + obj.getID() + "Objtype is " + tableName.toString());
                     callback.onFinish(dataSnapshot.getValue(obj.getClass()));
 
                 }
@@ -172,7 +172,7 @@ public class FirebaseUtility extends Database{
 
                 List<DatabaseObject> allItems = new ArrayList<>();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    Log.e("FirebaseDebug", postSnapshot.getKey());
+              //      Log.e("FirebaseDebug", postSnapshot.getKey());
                     DatabaseObject snap = (DatabaseObject)postSnapshot
                             .getValue(tableName.getTableClass());
                     if (ids.contains(snap.getID())) {
@@ -199,9 +199,9 @@ public class FirebaseUtility extends Database{
                 .addListenerForSingleValueEvent( new ValueEventListener() {
                     @Override
                     public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.e("FirebaseDebug", "Objtype is " + tableName.toString());
+           //             Log.e("FirebaseDebug", "Objtype is " + tableName.toString());
 
-                        Log.d("DEBUG", getLogTagWithMethod());
+     //                   Log.d("DEBUG", getLogTagWithMethod());
                         List<DatabaseObject> allItems = new ArrayList<>();
                         for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                             DatabaseObject snap = (DatabaseObject)postSnapshot
@@ -209,7 +209,7 @@ public class FirebaseUtility extends Database{
                                 allItems.add((DatabaseObject)postSnapshot
                                         .getValue(tableName.getTableClass()));
                         }
-                        Log.e("DEBUGG0", "Real Firebase my man");
+              //          Log.e("DEBUGG0", "Real Firebase my man");
                         callback.onFinish(allItems);
                     }
 
@@ -224,12 +224,12 @@ public class FirebaseUtility extends Database{
     @Override
     public void writeInstanceObj(final DatabaseObject obj, final Tables tableName){
 
-        Log.d("Firebase Message", "Called for " + obj.getID());
+    //    Log.d("Firebase Message", "Called for " + obj.getID());
         if(obj.getClass() == ChatLogs.class) {
             ChatLogs test = (ChatLogs) obj;
-            Log.d("Firebase Message", "Called for " + ((ChatLogs) obj).getMessages().size() +getLogTagWithMethod());
+  //          Log.d("Firebase Message", "Called for " + ((ChatLogs) obj).getMessages().size() +getLogTagWithMethod());
         }
-        Log.d( "writeInstance", "moveCamerafetchh: ");
+  //      Log.d( "writeInstance", "moveCamerafetchh: ");
         FirebaseDatabase.getInstance()
                 .getReference(tableName.toString())
                 .child(obj.getID()).setValue(obj);
@@ -237,14 +237,14 @@ public class FirebaseUtility extends Database{
 
 
 
-
-    private String getLogTagWithMethod() {
-
+/*
         StackTraceElement[] trace = Thread.currentThread().getStackTrace();
         String res = "";
         for (int i = 0; i < trace.length  && i < 30; i++)
             res +=  trace[i].getClassName() + "." + trace[i].getMethodName() + ":" + trace[i].getLineNumber() + "\n";
         return res;
     }
+
+    */
 
 }

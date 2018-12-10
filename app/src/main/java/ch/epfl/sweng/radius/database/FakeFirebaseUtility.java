@@ -1,8 +1,12 @@
 package ch.epfl.sweng.radius.database;
 
 import android.util.Log;
-import android.util.Pair;
+import android.support.v4.util.Pair;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
@@ -65,22 +69,19 @@ public class FakeFirebaseUtility extends Database {
         callback.onFinish(ret);
     }
 
-    private ChatLogs getChat(){
-        ChatLogs chat = new ChatLogs("1");
-        chat.addMembersId("usertTest1");
-        chat.addMembersId("usertTest4");
-        chat.addMembersId("usertTest0");
-        chat.addMessage(new Message("usertTest0", "helo", new Date()));
-        chat.addMessage(new Message("usertTest1", "aaa", new Date()));
-        chat.addMessage(new Message("as", "aaa", new Date()));
-        chatLogsTable.put("1", chat);
-        return chat;
+    public ChatLogs getChat(){
+        ChatLogs chat = new ChatLogs("10");
+        chat.addMembersId("testUser1");chat.addMembersId("testUser2");
+        chat.addMessage(new Message("testUser3", "helo", new Date()));
+        chat.addMessage(new Message("testUser1", "aaa", new Date()));
+        chat.addMessage(new Message("testUser4", "aaa", new Date()));
+        chatLogsTable.put("10", chat);return chat;
     }
 
     @Override
     public void readListObjOnce(final List<String> ids,
-                            final Tables tableName,
-                            final CallBackDatabase callback) {
+                                final Tables tableName,
+                                final CallBackDatabase callback) {
         ArrayList<DatabaseObject> objsRead = new ArrayList<>();
 
         HashMap<String, DatabaseObject> table = getTable(tableName);
@@ -92,30 +93,30 @@ public class FakeFirebaseUtility extends Database {
                 objsRead.add(objRead);
         }
 
-        if(objsRead.isEmpty())
-            objsRead.add(getNewEl(tableName));
-
         callback.onFinish(objsRead);
     }
 
-    private DatabaseObject getNewEl(Tables tableName) {
-
-        DatabaseObject ret = null;
-        switch (tableName){
-            case LOCATIONS:
-                ret = new MLocation("testUser2");
-                break;
-            case CHATLOGS:
-                ret = getChat();
-                break;
-            case USERS:
-                ret = new User();
-                break;
-
+/*
+    public void printDBtoJSON(){
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writeValue(new File("./user-db.json"), usersTable);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return ret;
-    }
+        try {
+            mapper.writeValue(new File("./loc-db.json"), locationsTable);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            mapper.writeValue(new File("./chat-db.json"), chatLogsTable);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+    }
+*/
     @Override
     public void readAllTableOnce(Tables tableName, CallBackDatabase callback) {
 
@@ -123,6 +124,17 @@ public class FakeFirebaseUtility extends Database {
         ArrayList<DatabaseObject> objsRead = new ArrayList<DatabaseObject>(table.values());
 
         callback.onFinish(objsRead);
+    }
+
+    private Object getList(String child, DatabaseObject curObj){
+        if(child.equals("messages"))
+            return ((ChatLogs) curObj).getMessages();
+        else if(child.equals("membersId"))
+            return ((ChatLogs) curObj).getMembersId();
+        else if(child.equals("chatList")){
+            return new ArrayList<>(((User) curObj).getChatList().values());
+        }
+        return null;
     }
 
     @Override
@@ -146,113 +158,200 @@ public class FakeFirebaseUtility extends Database {
         DatabaseObject curobj = table.get(obj.getID());
         Object ret = null;
 
-        if(child.first.equals("messages"))
-            ret = new Message("userTest3", "Helo", new Date());
-        else if(child.first.equals("membersId")){
-            ChatLogs curChat = (ChatLogs) curobj;
-            if((curChat.getMembersId().size() > 0))
-                ret = ((ChatLogs) curobj).getMembersId().get(((ChatLogs) curobj).getMembersId().size()-1);
-            else
-                ret = "userTest2";
+        for(Object o : (List<Object>) getList(child.first, curobj))
+            callback.onFinish(o);
+        return;
+      /*  if(child.first.equals("messages")){
+            for(Message m : ((ChatLogs) curobj).getMessages())
+                callback.onFinish(m);
+            return;
         }
-        callback.onFinish(ret);
+        else if(child.first.equals("membersId")){
+            for(String m : ((ChatLogs) curobj).getMembersId())
+                callback.onFinish(m);
+            return;
+        }
+        else if(child.first.equals("chatList")){
+            List<String> chatIDs = new ArrayList<>(((User) curobj).getChatList().values());
+            for(String m : chatIDs) callback.onFinish(m);
+            return;
+        }
+
+        callback.onFinish(ret);*/
     }
 
 
     public void fillDatabase(){
         if(currentUSer != null) return;
-        // Define Current user
+
         currentUSer = new User("testUser1");
-        User temp = new User("testUser2");
-        currentUSer.addFriendRequest(temp);
-        temp.addFriendRequest(currentUSer);
-        usersTable.put("testUser2", temp);
-        // Fill the users table
+        currentUSer.addChat("testUser2", "10");
+        currentUSer.addChat("testUser3", "11");
+        currentUSer.addChat("testUser5", "12");
+        currentUSer.addFriendRequest(new User("testUser5"));
+        ArrayList<String> blockedUser = new ArrayList<>();
+        blockedUser.add("testUser3");currentUSer.setBlockedUsers(blockedUser);
+
         usersTable.put("testUser1", currentUSer);
 
-        temp = new User("testUser3");
-        usersTable.put("testUser3",temp);
-        temp = new User("testUser4");
-        usersTable.put("testUser4",temp);
-       // usersTable.get("testUser1").addChat("testUser4", "1");
-        usersTable.get("testUser1").addChat("testUser23", "0");
+        User temp = new User("testUser2");currentUSer.addFriendRequest(temp);
 
-        //Add friend to test near friend notification
-        usersTable.get("testUser2").addFriendRequest(currentUSer);
-        currentUSer.addFriendRequest(usersTable.get("testUser2"));
+        temp.addFriendRequest(currentUSer);temp.addChat("testUser1", "10");
+        usersTable.put("testUser2", temp);
 
-        // TODO: Fill the chatLogs table
-        currentLoc = new MLocation("testUser1", defaultLng, defaultLat);
-        fillLocationsTable();
+        temp = new User("testUser3");currentUSer.addFriendRequest(temp);
+        blockedUser.clear();blockedUser.add("testUser1");
+        temp.setBlockedUsers(blockedUser);usersTable.put("testUser3", temp);
 
-        ChatLogs chat = new ChatLogs("0");
+        temp = new User("testUser4");usersTable.put("testUser4", temp);
+        temp = new User("testUser5");usersTable.put("testUser5", temp);
+        temp.addFriendRequest(currentUSer);
+        // Define Current user
+        fillLocationsTable();fillChatlogsTable();
+    }
+
+    private void fillFirstChat(){
+
+        ChatLogs tempChat = new ChatLogs("10");
+        tempChat.addMembersId("testUser1"); tempChat.addMembersId("testUser2");
+        tempChat.addMessage(new Message("testUser1", "Hello There", new Date()));
+        tempChat.addMessage(new Message("testUser2", "General", new Date()));
+        tempChat.addMessage(new Message("testUser1", "Obi-Wan", new Date()));
+        tempChat.addMessage(new Message("testUser2", "Kenobi", new Date()));
+        chatLogsTable.put("10", tempChat);
+
+    }
+
+    private void fillSecondChat(){
+
+        ChatLogs tempChat = new ChatLogs("11");
+        tempChat.addMembersId("testUser3"); tempChat.addMembersId("testUser1");
+        tempChat.addMessage(new Message("testUser1", "Hello There", new Date()));
+        tempChat.addMessage(new Message("testUser3", "General Kenobi", new Date()));
+        chatLogsTable.put("11", tempChat);
+
+        tempChat = new ChatLogs("12");
+        tempChat.addMembersId("testUser5"); tempChat.addMembersId("testUser1");
+        tempChat.addMessage(new Message("testUser1", "Hello There", new Date()));
+        tempChat.addMessage(new Message("testUser5", "General Kenobi", new Date()));
+        chatLogsTable.put("12", tempChat);
+
+    }
+
+    private void fillTopicChats(){
+
+        ChatLogs tempChat = new ChatLogs("MyTestTopic");
+        tempChat.addMembersId("testUser1"); tempChat.addMembersId("testUser2");
+        tempChat.addMembersId("testUser3"); tempChat.addMembersId("testUser4");
+        tempChat.addMessage(new Message("testUser1", "Hello There", new Date()));
+        chatLogsTable.put("MyTestTopic", tempChat);
+
+        tempChat = new ChatLogs("MyTestTopic2");
+        tempChat.addMembersId("testUser4"); tempChat.addMembersId("testUser3");
+        tempChat.addMembersId("testUser2"); tempChat.addMembersId("testUser1");
+        tempChat.addMessage(new Message("testUser4", "Hello", new Date()));
+        chatLogsTable.put("MyTestTopic2", tempChat);
+
+        tempChat = new ChatLogs("MyTestTopic5");
+        tempChat.addMembersId("testUser5"); tempChat.addMembersId("testUser1");
+        tempChat.addMessage(new Message("testUser5", "Goodbye.", new Date()));
+        chatLogsTable.put("MyTestTopic5", tempChat);
+
+    }
+
+    private void fillChatlogsTable(){
+
+        fillFirstChat(); fillSecondChat(); fillTopicChats();
+
+        ChatLogs tempChat = new ChatLogs("testGroup");
+        tempChat.addMembersId("testUser3"); tempChat.addMembersId("testUser4");
+        tempChat.addMembersId("testUser1"); tempChat.addMembersId("testUser2");
+        tempChat.addMessage(new Message("testUser3", "Howdihey", new Date()));
+        chatLogsTable.put("testGroup", tempChat);
+
+        tempChat = new ChatLogs("testGroup2");
+        tempChat.addMembersId("testUser2"); tempChat.addMembersId("testUser4");
+        tempChat.addMembersId("testUser3"); tempChat.addMembersId("testUser2");
+        tempChat.addMessage(new Message("testUser1", "Howdi", new Date()));
+        chatLogsTable.put("testGroup2", tempChat);
+
+        tempChat = new ChatLogs("testGroup3");
+        tempChat.addMembersId("testUser5"); tempChat.addMembersId("testUser4");
+        tempChat.addMessage(new Message("testUser5", "Ok then", new Date()));
+        chatLogsTable.put("testGroup3", tempChat);
+
+        ChatLogs chat = new ChatLogs("13");
         chat.addMembersId("testUser1");
+        chat.addMembersId("testUser4");
         chat.addMembersId("testUser3");
-        chat.addMessage(new Message("testUser1", "fff", new Date()));
-        chat.addMessage(new Message("testUser2", "aaa", new Date()));
+        chat.addMessage(new Message("testUser3", "helo", new Date()));
         chat.addMessage(new Message("testUser1", "aaa", new Date()));
-        chat.addMessage(new Message("as", "aaa", new Date()));
-        chatLogsTable.put("0", chat);
+        chat.addMessage(new Message("testUser4", "aaa", new Date()));
+        chatLogsTable.put("13", chat);
+
     }
 
     private void fillLocationsTable(){
 
+        currentLoc = new MLocation("testUser1", defaultLng, defaultLat);
         currentLoc.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
+        currentLoc.setTitle("testUser1");
+        currentLoc.setRadius(30000); currentLoc.setMessage("Being tested on");
+        currentLoc.setInterests("Tests, mostly");locationsTable.put("testUser1", currentLoc);
 
-        locationsTable.put("testUser1", currentLoc);
-        MLocation temp = new MLocation("testUser2", defaultLng + 0.01,
-                defaultLat + 0.01);
+        /** USERS **/
+        MLocation temp = new MLocation("testUser2", defaultLng + 0.01, defaultLat + 0.01);
         temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
-
+        temp.setTitle("testUser2"); temp.setMessage("Helping witht the tests !");
         locationsTable.put("testUser2", temp);
-        temp = new MLocation("testUser3", defaultLng - 0.02,
-                defaultLat + 0.02);
-        temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
 
+        temp = new MLocation("testUser3", defaultLng - 0.01, defaultLat - 0.01);
+        temp.setTitle("testUser3"); temp.setMessage("Helping witht the tests too !");
         locationsTable.put("testUser3", temp);
-        temp = new MLocation("testUser4",
-                defaultLng - 0.01, defaultLat - 0.01);
-        temp.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
+
+        temp = new MLocation("testUser4", defaultLng - 0.01, defaultLat + 0.01);
+        temp.setTitle("testUser4"); temp.setMessage("Not Helping witht the tests !");
         locationsTable.put("testUser4", temp);
 
-        // Fill the group locations
-        MLocation EPFL = new MLocation("EPFL",
-                defaultLng + 0.5,
-                defaultLat - 0.5);
-        EPFL.setLocationType(1); // set EPFL as group location
-        locationsTable.put(EPFL.getID(), EPFL);
-        MLocation UNIL = new MLocation("UNIL",
-                defaultLng + 1.5,
-                defaultLat - 1.5);
-        UNIL.setLocationType(1); // set UNIL as group location
-        locationsTable.put(UNIL.getID(), UNIL);
+        temp = new MLocation("testUser5", 0, 0);
+        temp.setTitle("testUser5"); temp.setMessage("Far awayyyy");
+        locationsTable.put("testUser5", temp);
 
-        MLocation topic = new MLocation("MyTestTopic", defaultLng, defaultLat);
-        topic.setOwnerId("testUser1"); topic.setLocationType(2);
-        locationsTable.put("MyTestTopic", topic);
+        /** TOPICS **/
+        MLocation tempTopic = new MLocation("MyTestTopic", defaultLng + 0.01, defaultLat - 0.02);
+        tempTopic.setLocationType(2);tempTopic.setOwnerId("testUser1");
+        tempTopic.setTitle("TopicTest !");locationsTable.put("MyTestTopic", tempTopic);
 
-        ChatLogs topicChat = new ChatLogs("MyTestTopic");
-        topicChat.addMembersId("testUser1");
-        chatLogsTable.put("MyTestTopic", topicChat);
+        tempTopic = new MLocation("MyTestTopic2", defaultLng, defaultLat);
+        tempTopic.setLocationType(2);tempTopic.setOwnerId("testUser2");
+        tempTopic.setTitle("TopicTest2 !");locationsTable.put("MyTestTopic2", tempTopic);
 
-        MLocation otopic = new MLocation("MyTestTopic2", defaultLng + 0.2, defaultLat + 0.1);
-        otopic.setOwnerId("testUser2"); otopic.setLocationType(2);
-        locationsTable.put("MyTestTopic2", otopic);
+        tempTopic = new MLocation("MyTestTopic5", defaultLng + 10, defaultLat - 10);
+        tempTopic.setLocationType(2);tempTopic.setOwnerId("testUser5");
+        tempTopic.setTitle("TopicTest5 !");locationsTable.put("MyTestTopic5", tempTopic);
 
-        ChatLogs otopicChat = new ChatLogs("MyTestTopic2");
-        otopicChat.addMembersId("testUser2");
-        otopicChat.addMembersId("testUser1");
-        chatLogsTable.put("MyTestTopic2", otopicChat);
+        /** GROUPS **/
+        MLocation tempGroup = new MLocation("testGroup", defaultLng + 0.2, defaultLat + 0.1);
+        tempGroup.setLocationType(1);tempGroup.setTitle("Test Group #1");
+        tempGroup.setMessage("Come to Daddy");locationsTable.put("testGroup", tempGroup);
+
+        tempGroup = new MLocation("testGroup2", defaultLng - 0.2, defaultLat + 0.1);
+        tempGroup.setLocationType(1);tempGroup.setTitle("Test Group #2");
+        tempGroup.setMessage("Come to Mommy");locationsTable.put("testGroup2", tempGroup);
+
+        tempGroup = new MLocation("testGroup3", defaultLng + 10, defaultLat - 10);
+        tempGroup.setLocationType(1);tempGroup.setTitle("Test Group #3");
+        tempGroup.setMessage("Don't come I guess");locationsTable.put("testGroup", tempGroup);
     }
 
     private HashMap<String,DatabaseObject> getTable(Tables tableName){
 
         return (HashMap<String, DatabaseObject>) (tableName == Tables.USERS ? usersTable :
-                        tableName == Tables.CHATLOGS ? chatLogsTable : locationsTable);
+                tableName == Tables.CHATLOGS ? chatLogsTable : locationsTable);
     }
     @Override
     public  void writeToInstanceChild(final DatabaseObject obj, Tables tablename,
-                                              final String childName, final Object child){
+                                      final String childName, final Object child){
 
     }
 }

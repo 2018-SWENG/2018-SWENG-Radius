@@ -26,7 +26,7 @@ public class UserUtils extends DBObservable{
     }
 
     private UserUtils(){ }
-
+/*
     public HashMap<String, MLocation> getSpecificsUsers(List<String> membersId){
         fetchSpeficitsOtherUsers(membersId);
         return users;
@@ -58,6 +58,6 @@ public class UserUtils extends DBObservable{
         });
     }
 
-
+*/
 
 }
