@@ -23,7 +23,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
@@ -34,13 +33,11 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.Executor;
 
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.MapUtilityTest;
-import ch.epfl.sweng.radius.utils.NotificationUtility;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;

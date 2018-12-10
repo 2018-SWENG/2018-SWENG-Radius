@@ -1,19 +1,13 @@
 package ch.epfl.sweng.radius.utils.customLists.customGroups;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.List;
 
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
-import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.utils.customLists.customTopics.CustomTopicListAdapter;
 
 public class CustomGroupListAdapter extends CustomListAdapter{
 

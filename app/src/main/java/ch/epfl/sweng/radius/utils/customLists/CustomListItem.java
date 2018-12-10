@@ -1,8 +1,5 @@
 package ch.epfl.sweng.radius.utils.customLists;
 
-import android.util.Log;
-import android.widget.Button;
-
 import ch.epfl.sweng.radius.R;
 
 public class CustomListItem {

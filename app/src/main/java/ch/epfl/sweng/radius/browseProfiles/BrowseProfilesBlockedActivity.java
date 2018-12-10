@@ -1,7 +1,6 @@
 package ch.epfl.sweng.radius.browseProfiles;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import ch.epfl.sweng.radius.R;

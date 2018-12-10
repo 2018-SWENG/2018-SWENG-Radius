@@ -13,8 +13,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.UserInfo;
 
 public class PreferencesActivity extends PreferenceActivity {

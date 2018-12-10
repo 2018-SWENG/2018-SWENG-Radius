@@ -2,15 +2,12 @@ package ch.epfl.sweng.radius.utils;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Intent;
-import android.graphics.drawable.Icon;
 import android.support.v4.app.NotificationCompat;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
