@@ -78,7 +78,6 @@ public class AccountActivity extends AppCompatActivity {
 
         NotificationChannel mChannel = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            System.out.print("HEELLLO");
             mChannel = new NotificationChannel(channel_name, channel_name, NotificationManager.IMPORTANCE_HIGH);
             mChannel.setDescription(channel_description); mChannel.enableLights(true);
             mChannel.setLightColor(Color.RED);mChannel.enableVibration(true);
@@ -144,8 +143,7 @@ public class AccountActivity extends AppCompatActivity {
         });
 
         // ToolBar initialization
-        toolbar = findViewById(R.id.toolbar); // Attaching the layout to the toolbar object
-        setSupportActionBar(toolbar);
+
     }
 
     @Override
