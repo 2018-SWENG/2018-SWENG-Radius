@@ -38,4 +38,5 @@
     <string name="my_topic">My Topic</string>
     <string name="remove">Remove</string>
     <string name="default_status">Default Status</string>
+    <string name="chat_disabled">You can\'t text this user.</string>
 </resources>

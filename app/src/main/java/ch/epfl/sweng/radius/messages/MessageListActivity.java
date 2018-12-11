@@ -51,7 +51,7 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
     private ChatState isChatRunning = null;
     private Context context;
     public boolean uiReady = false;
-
+    private boolean isEnabled = true;
     public MessageListActivity(){}
     public MessageListActivity(ChatLogs chatLogs, Context context, int locType){
         // Just create entry to avoid duplicate activities
@@ -114,6 +114,8 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
 
             //    database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, chatLogCallBack);
      //       Log.e("message", "Setup Messages size" + Integer.toString(chatLogs.getMessages().size()));
+            for(String member : chatLogs.getMembersId())
+                addMembersInfo(member);
 
         } else {
             throw new RuntimeException("MessagListActivity Intent created without bundle");
@@ -139,6 +141,8 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         myMessageRecycler = findViewById(R.id.reyclerview_message_list);
         myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         myMessageRecycler.setAdapter(myMessageAdapter);
+        myMessageRecycler.smoothScrollToPosition(chatLogs.getMessages().size());
+
         uiReady = true;
 
     }
@@ -150,8 +154,9 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
      * @param message the new message
      */
     public void receiveMessage(Message message) {
+        if(!uiReady) return;
         myMessageAdapter.setMessages(chatLogs.getMessages());
-        myMessageRecycler.smoothScrollToPosition(chatLogs.getNumberOfMessages());
+        myMessageRecycler.smoothScrollToPosition(chatLogs.getMessages().size());
         myMessageAdapter.notifyDataSetChanged();
         Log.e("RealTimeDebug", "MLA Message received !");
 
@@ -160,8 +165,9 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         if(!chatLogs.getMembersId().contains(membersId)){
             chatLogs.addMembersId(membersId);
         }
+        if(!uiReady) return;
         myMessageAdapter.setMembersIds(chatLogs.getMembersId());
-        myMessageRecycler.smoothScrollToPosition(chatLogs.getNumberOfMessages());
+        myMessageRecycler.smoothScrollToPosition(chatLogs.getMessages().size());
         myMessageAdapter.notifyDataSetChanged();
         Log.e("RealTimeDebug", "MLA Member received !");
     }
@@ -187,7 +193,8 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
                     chatLogs.getMessages());
 
             messageZone.setText("");
-            //receiveMessage(msg);
+
+            receiveMessage(msg);
         }
 
     }
@@ -210,11 +217,12 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
 
     private void compareLocation() {
         //TODO check if other users radius contains current user.
-         Log.e("RealTimeDebug", "Compare Location" +chatId + " " + locType +" " + otherUserId);
+       /*  Log.e("RealTimeDebug", "Compare Location" +chatId + " " + locType +" " + otherUserId);
                     Log.e("RealTimeDebug", "Compare Location contains " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)));
                     Log.e("RealTimeDebug", "Compare Location blocked " + String.valueOf(OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
                             contains(UserInfo.getInstance().getCurrentUser().getID())));
-        if (locType == 0) {
+        */
+       if (locType == 0) {
 
 
             setEnabled(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId) &&
@@ -228,15 +236,28 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
             }
 
     public void setEnabled(boolean enableChat) {
-        if (!enableChat) {
-            sendButton.setEnabled(false);
-            messageZone.setFocusable(false);
-            messageZone.setText("You can't text this user.");
+        if(!uiReady) return;
+        if (!enableChat && isEnabled) {
+
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    messageZone.setText(getString(R.string.chat_disabled));
+                    sendButton.setEnabled(false);
+                    messageZone.setFocusable(false);
+                }
+            });
         }
-        else{
-            sendButton.setEnabled(true);
-            messageZone.setFocusable(true);
-            messageZone.setText("");
+        else if (!isEnabled){
+
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    messageZone.setText("");
+                    sendButton.setEnabled(true);
+                    messageZone.setFocusable(true);
+                }
+            });
 
         }
     }
@@ -262,12 +283,14 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         Log.e("RealTimeDebug", "Construcor oNStart with " +chatId + " " + locType +" " + otherUserId);
 
         isChatRunning.clear();
+
     }
 
     @Override
     public void onPause(){
         super.onPause();
         isChatRunning.leaveActivity();
+
     }
 
     @Override
@@ -284,6 +307,9 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
             this.locType = MessageListActivity.getChatInstance(temp).locType;
             this.chatId = MessageListActivity.getChatInstance(temp).chatId;
             this.otherUserId = MessageListActivity.getChatInstance(temp).otherUserId;
+            this.uiReady = MessageListActivity.getChatInstance(temp).uiReady;
+            this.myMessageAdapter = MessageListActivity.getChatInstance(temp).myMessageAdapter;
+            this.myMessageRecycler = MessageListActivity.getChatInstance(temp).myMessageRecycler;
         }
         Log.e("NIGHT", nightMode + "");
         Log.e("message", "Construcor oNStart with " +temp + " " + locType);
@@ -308,11 +334,13 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
 
     @Override
     public void onLocationChange(String id) {
-        compareLocation();
+        if(chatId != null)
+            compareLocation();
     }
 
     @Override
     public void onUserChange(String id) {
-        compareLocation();
+        if(chatId != null)
+            compareLocation();
     }
 }
