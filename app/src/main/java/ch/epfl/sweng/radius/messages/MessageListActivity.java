@@ -57,6 +57,8 @@ public class MessageListActivity extends AppCompatActivity {
             Log.e("message", "Construcor called with " + chatLogs.getID() + " " + locType);
 
             this.otherUserId = ChatLogs.getOtherID(chatLogs);
+            Log.e("RealTimeDebug", "MLA : Param of otherUsedId " + otherUserId);
+
             this.chatId = chatLogs.getID();
             this.chatLogs = chatLogs;
             this.locType =locType;
@@ -77,10 +79,11 @@ public class MessageListActivity extends AppCompatActivity {
         Intent notifIntent = new Intent(context, MessageListActivity.class);
         Bundle b = new Bundle();
         b.putString("chatId", chatId);
-        b.putString("otherId", senderId);
+        b.putString("otherId", otherUserId);
         b.putInt("locType", locType);
         notifIntent.putExtras(b);
         notifIntent.setAction(chatId);
+        Log.e("RealTimeDebug", "MLA : Param of item "+ senderId + " " + otherUserId);
 
         PendingIntent pi = PendingIntent.getActivity(context, 0,notifIntent, 0);
         // Build and show notification
@@ -94,20 +97,17 @@ public class MessageListActivity extends AppCompatActivity {
     private void setInfo() {
         Bundle b = getIntent().getExtras();
 
-        //Get infos from parent fragment
-        otherUserId = "";
+        //Get infos from parent fragme
 
         if (b != null) {
             chatId = b.getString("chatId");
-            otherUserId = b.getString("otherId");
             locType = b.getInt("locType");
-            Log.w("Message", "ChatId is " + chatId + " " + otherUserId + " " + locType);
+            Log.e("RealTimeDebug", "MLA : Param of item setInfo " + chatId + "   " + locType);
 
             chatInstance.put(chatId, this);
 
             chatLogs = ChatlogsUtil.getInstance().getChat(chatId, locType);
         //    database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, chatLogCallBack);
-            Log.e("ChatlogsDebug", "Setup Messages size" + chatId + " " + locType);
      //       Log.e("message", "Setup Messages size" + Integer.toString(chatLogs.getMessages().size()));
 
         } else {
@@ -208,6 +208,10 @@ public class MessageListActivity extends AppCompatActivity {
         Log.e("ChatlogsDebug", "CompareLocation is : " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)) + otherUserId);
 
         if (locType == 0) {
+            Log.e("RealTimeDebug", "Compare location :  " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)));
+                    Log.e("RealTimeDebug", "Compare location :  " + " blocked " + OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
+                    contains(UserInfo.getInstance().getCurrentUser().getID()));
+
             setEnabled(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId) &&
                     !OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
                             contains(UserInfo.getInstance().getCurrentUser().getID()));
@@ -224,6 +228,10 @@ public class MessageListActivity extends AppCompatActivity {
             messageZone.setFocusable(false);
             messageZone.setText("You can't text this user.");
         }
+        else{
+            sendButton.setEnabled(true);
+            messageZone.setFocusable(true);
+        }
     }
 
     @Override
@@ -236,13 +244,15 @@ public class MessageListActivity extends AppCompatActivity {
         isChatRunning = new ChatState();
 
         if(MessageListActivity.getChatInstance(chatId) == null){
+            Log.e("RealTimeDebug", "Instance was null ! ");
+
             chatInstance.put(chatId, this);
             isChatRunning = new ChatState();
             return;
         }
         //
         NotificationUtility.clearSeenMsg(isChatRunning.getUnreadMsg());
-        Log.e("message", "Construcor oNStart with " +chatId + " " + locType);
+        Log.e("RealTimeDebug", "Construcor oNStart with " +chatId + " " + locType +" " + otherUserId);
 
         isChatRunning.clear();
     }
@@ -257,12 +267,17 @@ public class MessageListActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         boolean nightMode = settings.getBoolean("nightModeSwitch", false);
-        if (nightMode)
-            setTheme(R.style.DarkTheme);
-        else
+        String temp = getIntent().getExtras().getString("chatId");
             setTheme(R.style.LightTheme);
+        if(MessageListActivity.getChatInstance(temp) == null){
+            Log.e("RealTimeDebug", "Instance was null ! ");}
+        else{
+            this.locType = MessageListActivity.getChatInstance(temp).locType;
+            this.chatId = MessageListActivity.getChatInstance(temp).chatId;
+            this.otherUserId = MessageListActivity.getChatInstance(temp).otherUserId;
+        }
         Log.e("NIGHT", nightMode + "");
-        Log.e("message", "Construcor oNStart with " +chatId + " " + locType);
+        Log.e("message", "Construcor oNStart with " +temp + " " + locType);
         if(isChatRunning == null) isChatRunning = new ChatState();
         //ChatInfo.getInstance().addUserObserver(this)
         super.onCreate(savedInstanceState);

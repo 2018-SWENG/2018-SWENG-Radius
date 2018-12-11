@@ -107,7 +107,7 @@ public class ChatLogs implements DatabaseObject{
         if(chat.getMembersId().size() != 2)
             return null;
 
-        return chat.getMembersId().get(0) == UserInfo.getInstance().getCurrentUser().getID() ?
+        return chat.getMembersId().get(0).equals(UserInfo.getInstance().getCurrentUser().getID()) ?
                 chat.getMembersId().get(1) : chat.getMembersId().get(0);
     }
 
