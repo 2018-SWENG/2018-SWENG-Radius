@@ -86,6 +86,8 @@ public class OthersInfo extends DBObservable{
 
                         putInTable(loc);
                     }
+                    else
+                        removeFromTable(loc);
                     if (loc.getLocationType() == 0) {
                         allUserPos.put(loc.getID(), loc);
                     }
