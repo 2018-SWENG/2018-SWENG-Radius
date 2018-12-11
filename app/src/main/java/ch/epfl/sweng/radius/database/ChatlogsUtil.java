@@ -44,9 +44,12 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         OthersInfo.getInstance().addLocationObserver(this);
         UserInfo.getInstance().addUserObserver(this);
         // Read and setUp listener on the ChatList field of current user
+
         fetchUserChats();
         // Read and setUp listeners on the Group and Topics chats
         fetchChatsAndListen();
+        Log.e("ChatlogsDebug", "Creation ");
+
 
     }
 
@@ -63,11 +66,17 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
                             if(topicChatsID.contains(newChat.getID())){
                                 topicChat.put(newChat.getID(), newChat);
                                 listenToChatMessages(newChat, 2);
+                                Log.e("ChatlogsDebug", "Topic listening");
+
                             }
                             else{
                                 groupChat.put(newChat.getID(), newChat);
                                 listenToChatMessages(newChat, 1);
+                                Log.e("ChatlogsDebug", "Group listening");
+
                             }
+                            Log.e("ChatlogsDebug", "Members listening");
+
                             listenToChatMembers(newChat);
                         }
                         upToDate++;
@@ -197,7 +206,6 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
     public void listenToChatMembers(final ChatLogs chatLogs){
         Pair<String, Class> child = new Pair<String, Class>("membersId", String.class);
-        Log.e("ChatlogsDebug", "Chat Members ID is "+ chatLogs.getID());
         Database.getInstance().listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
             public void onFinish(Object value) {
                 String newMemberId = (String) value;
@@ -276,6 +284,11 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
     @Override
     public void onLocationChange(String id) {
         Log.e("ChatlogsDebug", "Update tables " + groupChat.size() + " " + topicChat.size());
+        if(groupChat.size() == 0){
+            fetchChatsAndListen();
+            return;
+        }
+
 
         for(String s : new ArrayList<>(OthersInfo.getInstance().getGroupsPos().keySet()))
             fetchSingleChatAndListen(s, 1);

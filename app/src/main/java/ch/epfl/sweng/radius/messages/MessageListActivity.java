@@ -32,7 +32,7 @@ import ch.epfl.sweng.radius.utils.NotificationUtility;
  * Activity that hosts messages between two users
  * MessageListActivity and MessageListAdapter and some layout files are inspired from https://blog.sendbird.com/android-chat-tutorial-building-a-messaging-ui
  */
-public class MessageListActivity extends AppCompatActivity {
+public class MessageListActivity extends AppCompatActivity  {
 
     private RecyclerView myMessageRecycler;
     private MessageListAdapter myMessageAdapter;
@@ -205,13 +205,7 @@ public class MessageListActivity extends AppCompatActivity {
 
     private void compareLocation() {
         //TODO check if other users radius contains current user.
-        Log.e("ChatlogsDebug", "CompareLocation is : " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)) + otherUserId);
-
         if (locType == 0) {
-            Log.e("RealTimeDebug", "Compare location :  " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)));
-                    Log.e("RealTimeDebug", "Compare location :  " + " blocked " + OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
-                    contains(UserInfo.getInstance().getCurrentUser().getID()));
-
             setEnabled(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId) &&
                     !OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
                             contains(UserInfo.getInstance().getCurrentUser().getID()));
@@ -269,9 +263,7 @@ public class MessageListActivity extends AppCompatActivity {
         boolean nightMode = settings.getBoolean("nightModeSwitch", false);
         String temp = getIntent().getExtras().getString("chatId");
             setTheme(R.style.LightTheme);
-        if(MessageListActivity.getChatInstance(temp) == null){
-            Log.e("RealTimeDebug", "Instance was null ! ");}
-        else{
+        if(MessageListActivity.getChatInstance(temp) != null){
             this.locType = MessageListActivity.getChatInstance(temp).locType;
             this.chatId = MessageListActivity.getChatInstance(temp).chatId;
             this.otherUserId = MessageListActivity.getChatInstance(temp).otherUserId;
