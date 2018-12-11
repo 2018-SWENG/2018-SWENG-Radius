@@ -47,7 +47,6 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
     private static HashMap<String, MessageListActivity> chatInstance = new HashMap<>();
     private static int UNIQUE_INT_PER_CALL = 0;
     private MLocation otherLoc;
-    private Database database;
     private ChatState isChatRunning = null;
     private Context context;
     public boolean uiReady = false;
@@ -176,10 +175,10 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         if (!message.isEmpty()) {
             Message msg = new Message(senderId, message, date);
             chatLogs.addMessage(msg);
-            //  database.writeInstanceObj(chatLogs, Database.Tables.CHATLOGS);
+
             List<Message> newList = chatLogs.getMessages();
        //     Log.e("message", "NewList size is " + newList.size());
-            database.writeToInstanceChild(chatLogs, Database.Tables.CHATLOGS, "messages",
+            Database.getInstance().writeToInstanceChild(chatLogs, Database.Tables.CHATLOGS, "messages",
                     chatLogs.getMessages());
 
             messageZone.setText("");receiveMessage(msg);
@@ -206,25 +205,21 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
     private void compareLocation() {
         //TODO check if other users radius contains current user.
        // Log.e("RealTimeDebug", "User is in table : " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)));
-         if(!OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)){ setEnabled(false);isEnabled = false; }
+         if(!OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)){
+             setEnabled(false);isEnabled = false; }
          else{
-             if (locType == 0) {
-                 handleUserChat();
+             if (locType == 0) handleUserChat();
                //  Log.e("RealTimeDebug", "User is visible : " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().get(otherUserId).isVisible()));
                //  Log.e("RealTimeDebug", "Chat is enabled: " + isEnabled);
-
-             }
-             else {
-                 setEnabled(true);
-             }
+             else setEnabled(true);
 
          }
 
             }
 
     private void handleUserChat() {
-        boolean enable = OthersInfo.getInstance().getUsersInRadius().get(otherUserId).isVisible() &&
-                !OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
+        boolean enable = OthersInfo.getInstance().getUsersInRadius().get(otherUserId).isVisible()
+                && !OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
                         contains(UserInfo.getInstance().getCurrentUser().getID());
         //   Log.e("RealTimeDebug", "Chat should be enabled: " + enable);
 
@@ -262,18 +257,15 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         super.onStart();
 
         String chatId = getIntent().getExtras().getString("chatId");
-        getIntent().putExtra("chatId", chatId);
         if(chatId == null) return;
+
         isChatRunning = new ChatState();
 
         if(MessageListActivity.getChatInstance(chatId) == null){
      //       Log.e("RealTimeDebug", "Instance was null ! ");
-
             chatInstance.put(chatId, this);
-            isChatRunning = new ChatState();
             return;
         }
-        //
         NotificationUtility.clearSeenMsg(isChatRunning.getUnreadMsg());
    //     Log.e("RealTimeDebug", "Construcor oNStart with " +chatId + " " + locType +" " + otherUserId);
 
@@ -292,12 +284,14 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-    //    OthersInfo.getInstance().addUserObserver(this);
-    //    OthersInfo.getInstance().addLocationObserver(this);
+        OthersInfo.getInstance().addUserObserver(this);
+        OthersInfo.getInstance().addLocationObserver(this);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         boolean nightMode = settings.getBoolean("nightModeSwitch", false);
+
         String temp = getIntent().getExtras().getString("chatId");
             setTheme(R.style.LightTheme);
+
         if(MessageListActivity.getChatInstance(temp) != null){
             this.locType = MessageListActivity.getChatInstance(temp).locType;
             this.chatId = MessageListActivity.getChatInstance(temp).chatId;
@@ -306,18 +300,18 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
             this.myMessageAdapter = MessageListActivity.getChatInstance(temp).myMessageAdapter;
             this.myMessageRecycler = MessageListActivity.getChatInstance(temp).myMessageRecycler;
         }
+        this.context = this;
+
         Log.e("NIGHT", nightMode + "");
         Log.e("message", "Construcor oNStart with " +temp + " " + locType);
         if(isChatRunning == null) isChatRunning = new ChatState();
         //ChatInfo.getInstance().addUserObserver(this)
         myID = UserInfo.getInstance().getCurrentUser().getID();
-        database = Database.getInstance();
         setContentView(R.layout.activity_message_list);
         messageZone = findViewById(R.id.edittext_chatbox);
-        this.context = this;
 
         setInfo();setUpUI();setUpSendButton();
-        //setUpListener();
+
         compareLocation();
        // Log.e("RealTimeDebug ","Init done !");
     }
