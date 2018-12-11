@@ -346,8 +346,9 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
 
     @Override
     public void onLocationChange(String id) {
-        if(chatId != null)
+        if(chatId != null){
             compareLocation();
+        }
     }
 
     @Override
