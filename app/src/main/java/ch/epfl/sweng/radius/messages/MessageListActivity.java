@@ -148,7 +148,7 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
     public void receiveMessage(Message message) {
         if(!uiReady) return;
         myMessageAdapter.setMessages(chatLogs.getMessages());
-    //    myMessageRecycler.smoothScrollToPosition(chatLogs.getMessages().size());
+        myMessageRecycler.smoothScrollToPosition(chatLogs.getMessages().size());
         myMessageAdapter.notifyDataSetChanged();
         Log.e("RealTimeDebug", "MLA Message received !");
 
@@ -159,7 +159,7 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         }
         if(!uiReady) return;
         myMessageAdapter.setMembersIds(chatLogs.getMembersId());
-  //      myMessageRecycler.smoothScrollToPosition(chatLogs.getMessages().size());
+        myMessageRecycler.smoothScrollToPosition(chatLogs.getMessages().size());
         myMessageAdapter.notifyDataSetChanged();
         Log.e("RealTimeDebug", "MLA Member received !");
     }
@@ -242,25 +242,25 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         if(!uiReady) return;
         if (!enableChat) {
 
-         //   this.runOnUiThread(new Runnable() {
-//                @Override
-         //       public void run() {
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
                     messageZone.setText(getString(R.string.chat_disabled));
                     sendButton.setEnabled(false);
                     messageZone.setFocusable(false);
 
-          //      }
-          //  });
+                }
+            });
         }
         else{
-            //this.runOnUiThread(new Runnable() {
- //               @Override
-            //    public void run() {
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
                     messageZone.setText("");
                     sendButton.setEnabled(true);
                     messageZone.setFocusable(true);
-            //    }
-           // });
+                }
+            });
         }
     }
 
