@@ -66,20 +66,16 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
                             if(topicChatsID.contains(newChat.getID())){
                                 topicChat.put(newChat.getID(), newChat);
                                 listenToChatMessages(newChat, 2);
-                                Log.e("ChatlogsDebug", "Topic listening");
+                              //  Log.e("ChatlogsDebug", "Topic listening");
 
                             }
                             else{
                                 groupChat.put(newChat.getID(), newChat);
                                 listenToChatMessages(newChat, 1);
-                                Log.e("ChatlogsDebug", "Group listening");
-
+                             //   Log.e("ChatlogsDebug", "Group listening");
                             }
-                            Log.e("ChatlogsDebug", "Members listening");
-
-                            listenToChatMembers(newChat);
-                        }
-                        upToDate++;
+                          //  Log.e("ChatlogsDebug", "Members listening");
+                            listenToChatMembers(newChat); }upToDate++;
                     }
 
                     @Override
@@ -158,7 +154,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
         // Setup Sender name to display
         String senderData = NotificationUtility.getNickname(chatLogs, message, chatType);
-        Log.e("RealTimeDebug", "ChatlogUtil " + chatLogs.getID());
+    //    Log.e("RealTimeDebug", "ChatlogUtil " + chatLogs.getID());
 
         // Get ChatActivity instance if it exists
         // If return Activity is null, Chat was never opened in the past
@@ -169,7 +165,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
         if(messageActivity.uiReady)
             messageActivity.receiveMessage(message);
-        Log.e("RealTimeDebug", "Show Notification" + String.valueOf(upToDate) + " " + String.valueOf(messageActivity.getIsChatRunning().isRunning()));
+   //     Log.e("RealTimeDebug", "Show Notification" + String.valueOf(upToDate) + " " + String.valueOf(messageActivity.getIsChatRunning().isRunning()));
 
         if(!messageActivity.getIsChatRunning().isRunning() && upToDate >= 0){
             // Show notification as chat is not running
