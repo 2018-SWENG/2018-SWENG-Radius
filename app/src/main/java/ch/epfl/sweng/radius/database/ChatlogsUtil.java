@@ -159,26 +159,27 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         // Get ChatActivity instance if it exists
         // If return Activity is null, Chat was never opened in the past
         if(messageActivity == null) {
-            Log.e("RealTimeDebug", "ChatlogUtil MLA was null");
+          //  Log.e("RealTimeDebug", "ChatlogUtil MLA was null");
             messageActivity = new MessageListActivity(chatLogs, context, chatType);
         }
 
-        if(messageActivity.uiReady)
-            messageActivity.receiveMessage(message);
-   //     Log.e("RealTimeDebug", "Show Notification" + String.valueOf(upToDate) + " " + String.valueOf(messageActivity.getIsChatRunning().isRunning()));
+        handleActvity(messageActivity, message, senderData, chatLogs);
 
-        if(!messageActivity.getIsChatRunning().isRunning() && upToDate >= 0){
-            // Show notification as chat is not running
-            Log.e("RealTimeDebug", "Show Notification" + String.valueOf(upToDate) + " " + String.valueOf(messageActivity.getIsChatRunning().isRunning()));
-
-            messageActivity.showNotification(message.getContentMessage(), senderData, chatLogs.getID());
-        }
-
-
-
-        Log.e("RealTimeDebug", "ChatlogUtil Message received !");
+        //Log.e("RealTimeDebug", "ChatlogUtil Message received !");
 
         // If Chat is running, there's nothing to do here
+    }
+
+    private void handleActvity(MessageListActivity mla, Message message, String senderData, ChatLogs chatLogs) {
+        if(mla.uiReady) mla.receiveMessage(message);
+        //     Log.e("RealTimeDebug", "Show Notification" + String.valueOf(upToDate) + " " + String.valueOf(messageActivity.getIsChatRunning().isRunning()));
+
+        if(!mla.getIsChatRunning().isRunning() && upToDate >= 0){
+            // Show notification as chat is not running
+            Log.e("RealTimeDebug", "Show Notification" + String.valueOf(upToDate) + " " + String.valueOf(mla.getIsChatRunning().isRunning()));
+
+            mla.showNotification(message.getContentMessage(), senderData, chatLogs.getID());
+        }
     }
 
     public String getNewChat(String otherUserId){
