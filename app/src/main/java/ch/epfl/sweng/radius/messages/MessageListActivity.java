@@ -209,17 +209,10 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
          if(!OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)){ setEnabled(false);isEnabled = false; }
          else{
              if (locType == 0) {
+                 handleUserChat();
                //  Log.e("RealTimeDebug", "User is visible : " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().get(otherUserId).isVisible()));
                //  Log.e("RealTimeDebug", "Chat is enabled: " + isEnabled);
-                 boolean enable = OthersInfo.getInstance().getUsersInRadius().get(otherUserId).isVisible() &&
-                         !OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
-                                 contains(UserInfo.getInstance().getCurrentUser().getID());
-              //   Log.e("RealTimeDebug", "Chat should be enabled: " + enable);
 
-                 if(enable != isEnabled){
-                   //  Log.e("RealTimeDebug", "Chat is toggled");
-                     setEnabled(enable);isEnabled = enable;
-                 }
              }
              else {
                  setEnabled(true);
@@ -228,6 +221,18 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
          }
 
             }
+
+    private void handleUserChat() {
+        boolean enable = OthersInfo.getInstance().getUsersInRadius().get(otherUserId).isVisible() &&
+                !OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
+                        contains(UserInfo.getInstance().getCurrentUser().getID());
+        //   Log.e("RealTimeDebug", "Chat should be enabled: " + enable);
+
+        if(enable != isEnabled){
+            //  Log.e("RealTimeDebug", "Chat is toggled");
+            setEnabled(enable);isEnabled = enable;
+        }
+    }
 
     public void setEnabled(boolean enableChat) {
         if(!uiReady) return;
