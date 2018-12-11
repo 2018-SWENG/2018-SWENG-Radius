@@ -1,29 +1,24 @@
 package ch.epfl.sweng.radius.messages;
 
-import android.app.ActivityManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.firebase.database.DatabaseError;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.R;
-import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.ChatlogsUtil;
 import ch.epfl.sweng.radius.database.Database;
@@ -257,6 +252,13 @@ public class MessageListActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean nightMode = settings.getBoolean("nightModeSwitch", false);
+        if (nightMode)
+            setTheme(R.style.DarkTheme);
+        else
+            setTheme(R.style.LightTheme);
+        Log.e("NIGHT", nightMode + "");
         Log.e("message", "Construcor oNStart with " +chatId + " " + locType);
         if(isChatRunning == null) isChatRunning = new ChatState();
         //ChatInfo.getInstance().addUserObserver(this)

@@ -7,10 +7,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.OthersInfo;
-import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 

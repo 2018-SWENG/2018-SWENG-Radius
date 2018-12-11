@@ -1,8 +1,6 @@
 package ch.epfl.sweng.radius.database;
 
-import java.util.HashSet;
 import java.util.Queue;
-import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public abstract class DBObservable{

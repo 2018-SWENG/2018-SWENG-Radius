@@ -1,15 +1,10 @@
 package ch.epfl.sweng.radius.database;
 
-import android.support.annotation.NonNull;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;

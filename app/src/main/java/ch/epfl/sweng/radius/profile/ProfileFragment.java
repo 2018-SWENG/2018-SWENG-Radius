@@ -25,7 +25,6 @@ import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.DBUserObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
-import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.storage.Storage;
 import ch.epfl.sweng.radius.utils.profileFragmentUtils.TextFileReader;

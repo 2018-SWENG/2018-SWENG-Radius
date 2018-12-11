@@ -1,22 +1,19 @@
 package ch.epfl.sweng.radius;
 
-import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,9 +33,6 @@ import ch.epfl.sweng.radius.profile.ProfileFragment;
 import ch.epfl.sweng.radius.utils.NotificationUtility;
 
 public class AccountActivity extends AppCompatActivity {
-
-    private Toolbar toolbar;
-
     private Fragment homeFragment;
     private Fragment messageFragment;
     private Fragment friendsFragment;
@@ -78,7 +72,6 @@ public class AccountActivity extends AppCompatActivity {
 
         NotificationChannel mChannel = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            System.out.print("HEELLLO");
             mChannel = new NotificationChannel(channel_name, channel_name, NotificationManager.IMPORTANCE_HIGH);
             mChannel.setDescription(channel_description); mChannel.enableLights(true);
             mChannel.setLightColor(Color.RED);mChannel.enableVibration(true);
@@ -95,8 +88,16 @@ public class AccountActivity extends AppCompatActivity {
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         PreferenceManager.setDefaultValues(this, R.xml.app_preferences, false);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean nightMode = settings.getBoolean("nightModeSwitch", false);
+        if (nightMode)
+            setTheme(R.style.DarkTheme);
+        else
+            setTheme(R.style.LightTheme);
+        Log.e("NIGHT", nightMode + "");
+        super.onCreate(savedInstanceState);
+
         timer = new Timer();
         // To load the current user infos
         UserInfo.getInstance().fetchDataFromDB();
@@ -144,8 +145,7 @@ public class AccountActivity extends AppCompatActivity {
         });
 
         // ToolBar initialization
-        toolbar = findViewById(R.id.toolbar); // Attaching the layout to the toolbar object
-        setSupportActionBar(toolbar);
+
     }
 
     @Override
@@ -218,6 +218,8 @@ public class AccountActivity extends AppCompatActivity {
             Intent i = new Intent(this, PreferencesActivity.class);
             startActivity(i);
         }
+
+        finish();
 
         return super.onOptionsItemSelected(item);
     }

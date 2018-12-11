@@ -16,7 +16,6 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.v4.app.Fragment;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -29,16 +28,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mockito;
-
-import java.io.File;
 
 import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 import ch.epfl.sweng.radius.database.MLocation;
-import ch.epfl.sweng.radius.database.User;
 
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -46,7 +41,6 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.mockito.Mockito.when;
 
 class RelaunchActivityRule<T extends Activity> extends ActivityTestRule<T> {
 

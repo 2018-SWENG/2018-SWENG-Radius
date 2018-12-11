@@ -11,15 +11,11 @@ import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import android.widget.EditText;
 
 import com.firebase.client.Firebase;
-import com.firebase.client.ValueEventListener;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

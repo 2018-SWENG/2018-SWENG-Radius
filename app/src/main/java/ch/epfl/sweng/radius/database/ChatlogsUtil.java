@@ -1,19 +1,16 @@
 package ch.epfl.sweng.radius.database;
 
-import android.app.PendingIntent;
 import android.content.Context;
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.support.v4.util.Pair;
+import android.util.Log;
+
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.epfl.sweng.radius.messages.ChatState;
 import ch.epfl.sweng.radius.messages.MessageListActivity;
 import ch.epfl.sweng.radius.utils.NotificationUtility;
 

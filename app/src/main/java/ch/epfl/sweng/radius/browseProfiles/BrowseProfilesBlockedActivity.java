@@ -1,7 +1,6 @@
 package ch.epfl.sweng.radius.browseProfiles;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import ch.epfl.sweng.radius.R;
@@ -18,7 +17,5 @@ public class BrowseProfilesBlockedActivity extends BrowseProfilesActivity {
         userUID = intent.getStringExtra("UID");
         profileActivityListener = new BrowseProfilesUtility(userUID);
         toolbar = findViewById(R.id.toolbar);
-
-        setSupportActionBar(toolbar);
     }
 }

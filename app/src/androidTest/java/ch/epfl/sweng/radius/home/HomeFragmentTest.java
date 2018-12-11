@@ -4,11 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.NoMatchingViewException;
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
-import android.support.test.espresso.ViewAssertion;
 import android.support.test.espresso.assertion.ViewAssertions;
-import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.v4.app.Fragment;
@@ -16,28 +12,19 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.Map;
-
 import ch.epfl.sweng.radius.AccountActivity;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
-import ch.epfl.sweng.radius.database.User;
-import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.MapUtility;
 
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withResourceName;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 

@@ -5,5 +5,6 @@
     <color name="colorAccent">#D81B60</color>
     <color name="red">#951F16</color>
     <color name="white">#FFFF</color>
+    <color name="whiteDark">#ecf0f1</color>
     <color name="menu_item_color">#000000</color>
 </resources>

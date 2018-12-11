@@ -1,13 +1,7 @@
 package ch.epfl.sweng.radius.database;
 
-import android.util.Log;
 import android.support.v4.util.Pair;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;

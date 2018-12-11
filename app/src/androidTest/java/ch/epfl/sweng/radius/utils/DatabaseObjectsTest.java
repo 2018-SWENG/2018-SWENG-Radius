@@ -4,8 +4,6 @@ import android.Manifest;
 import android.support.test.rule.GrantPermissionRule;
 import android.util.Log;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;

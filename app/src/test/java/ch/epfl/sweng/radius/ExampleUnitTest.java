@@ -1,17 +1,13 @@
 package ch.epfl.sweng.radius;
 
-import android.provider.ContactsContract;
-
 import org.junit.Test;
 
 import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.FakeFirebaseUtility;
 import ch.epfl.sweng.radius.friends.FriendsTab;
 import ch.epfl.sweng.radius.friends.RequestsTab;
 import ch.epfl.sweng.radius.home.GroupTab;
 import ch.epfl.sweng.radius.home.PeopleTab;
 import ch.epfl.sweng.radius.home.TopicsTab;
-import ch.epfl.sweng.radius.messages.MessageListActivity;
 import ch.epfl.sweng.radius.messages.MessagesFragment;
 import ch.epfl.sweng.radius.utils.MapUtility;
 

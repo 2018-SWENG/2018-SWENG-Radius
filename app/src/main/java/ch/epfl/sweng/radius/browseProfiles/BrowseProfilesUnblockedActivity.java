@@ -2,16 +2,10 @@ package ch.epfl.sweng.radius.browseProfiles;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseError;
 import com.squareup.picasso.Picasso;
@@ -59,9 +53,6 @@ public class BrowseProfilesUnblockedActivity extends BrowseProfilesActivity{
         toolbar = findViewById(R.id.toolbar);
 
         fetchUserInfo(userUID);
-
-        // ToolBar initialization
-        setSupportActionBar(toolbar);
     }
 
 

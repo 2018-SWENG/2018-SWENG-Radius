@@ -1,23 +1,74 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="LightTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+    </style>
 
+    <!-- Night Mode application theme. -->
+    <style name="DarkTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
 
+    <!-- Top Bar application style -->
+    <style name="TopBar"
+        parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:actionBarTabTextStyle">@style/MyActionBarTabText</item>
+        <item name="android:actionMenuTextColor">@color/white</item>
+
+        <!-- Support library compatibility -->
+        <item name="actionBarStyle">@style/MyActionBar</item>
+        <item name="actionBarTabTextStyle">@style/MyActionBarTabText</item>
+        <item name="actionMenuTextColor">@color/white</item>
+    </style>
+
+    <style name="MyActionBar"
+        parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse" >
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
+
+        <!-- Support library compatibility -->
+        <item name="background">?attr/colorPrimary</item>
+        <item name="titleTextStyle">@style/MyActionBarTitleText</item>
+    </style>
+
+    <style name="MyActionBarTitleText"
+        parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="MyActionBarTabText"
+        parent="@style/Widget.AppCompat.ActionBar.TabText">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- Bottom Navigation Bar Style -->
+    <style name="BottomNavigation">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="itemBackground">?attr/colorPrimary</item>
+        <item name="itemIconTint">@color/white</item>
+        <item name="itemTextColor">@color/white</item>
     </style>
 
 
-    <!-- Top Bar application style -->
-    <style name="AppTheme.TopBar" parent="AppTheme">
-        <item name="android:textColorPrimary">@color/menu_item_color</item>
-        <item name="android:textColorSecondary">@color/white</item>
-        <item name="actionOverflowButtonStyle">@color/white</item>
-
+    <!-- Tab Style -->
+    <style name="AppTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@color/whiteDark</item>
+        <item name="tabIndicatorHeight">4dp</item>
+        <item name="tabBackground">?attr/colorPrimary</item>
+        <item name="tabSelectedTextColor">@color/white</item>
+        <item name="tabGravity">fill</item>
+        <item name="tabMode">fixed</item>
+    </style>
+        <!-- for text -->
+    <style name="AppTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/whiteDark</item>
     </style>
 
 </resources>

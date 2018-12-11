@@ -8,19 +8,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.database.DatabaseError;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesUnblockedActivity;
 import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesBlockedActivity;
-import ch.epfl.sweng.radius.database.CallBackDatabase;
+import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesUnblockedActivity;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.ChatlogsUtil;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.OthersInfo;
-import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.messages.MessageListActivity;
 

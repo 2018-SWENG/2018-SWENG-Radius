@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.FirebaseDatabase;
@@ -22,12 +21,9 @@ import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
-import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
-import ch.epfl.sweng.radius.utils.customLists.customGroups.CustomGroupListListeners;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CustomTopicListAdapter extends CustomListAdapter {
 

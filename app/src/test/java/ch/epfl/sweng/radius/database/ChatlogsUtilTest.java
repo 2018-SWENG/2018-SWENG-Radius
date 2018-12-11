@@ -1,9 +1,7 @@
 package ch.epfl.sweng.radius.database;
 
 import android.content.Context;
-import android.provider.ContactsContract;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -13,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
@@ -21,9 +18,6 @@ import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(JUnit4.class)
