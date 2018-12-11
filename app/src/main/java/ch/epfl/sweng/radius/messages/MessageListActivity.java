@@ -47,6 +47,7 @@ public class MessageListActivity extends AppCompatActivity {
     private Database database;
     private ChatState isChatRunning = null;
     private Context context;
+    public boolean uiReady = false;
 
     public MessageListActivity(){}
     public MessageListActivity(ChatLogs chatLogs, Context context, int locType){
@@ -63,7 +64,6 @@ public class MessageListActivity extends AppCompatActivity {
             isChatRunning = new ChatState();
             isChatRunning.leaveActivity();
             this.context = context;
-            this.isChatRunning = new ChatState();
         }
 
     }
@@ -134,6 +134,7 @@ public class MessageListActivity extends AppCompatActivity {
         myMessageRecycler = findViewById(R.id.reyclerview_message_list);
         myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         myMessageRecycler.setAdapter(myMessageAdapter);
+        uiReady = true;
 
     }
 
@@ -147,6 +148,7 @@ public class MessageListActivity extends AppCompatActivity {
         myMessageAdapter.setMessages(chatLogs.getMessages());
         myMessageRecycler.smoothScrollToPosition(chatLogs.getNumberOfMessages());
         myMessageAdapter.notifyDataSetChanged();
+        Log.e("RealTimeDebug", "MLA Message received !");
 
     }
     public void addMembersInfo(String membersId){
@@ -156,6 +158,7 @@ public class MessageListActivity extends AppCompatActivity {
         myMessageAdapter.setMembersIds(chatLogs.getMembersId());
         myMessageRecycler.smoothScrollToPosition(chatLogs.getNumberOfMessages());
         myMessageAdapter.notifyDataSetChanged();
+        Log.e("RealTimeDebug", "MLA Member received !");
     }
 
 
