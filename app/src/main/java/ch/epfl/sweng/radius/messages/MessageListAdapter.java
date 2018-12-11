@@ -149,8 +149,13 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags));
             MLocation currentUser = usersHashMap.get(message.getSenderId());
             if (currentUser != null) {
+                Log.e("RealTimeDebug", "User is not null !");
                 nameText.setText(currentUser.getTitle());
                 setPicture(currentUser.getUrlProfilePhoto(),itemView);
+            }
+            else{
+                Log.e("RealTimeDebug", "User is null !");
+
             }
 
 
