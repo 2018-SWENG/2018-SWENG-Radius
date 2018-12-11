@@ -57,10 +57,10 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         // Just create entry to avoid duplicate activities
         OthersInfo.getInstance().addLocationObserver(this);
         if(MessageListActivity.getChatInstance(chatLogs.getID()) == null){
-            Log.e("message", "Construcor called with " + chatLogs.getID() + " " + locType);
+        //    Log.e("message", "Construcor called with " + chatLogs.getID() + " " + locType);
 
             this.otherUserId = ChatLogs.getOtherID(chatLogs);
-            Log.e("RealTimeDebug", "MLA : Param of otherUsedId " + otherUserId);
+         //   Log.e("RealTimeDebug", "MLA : Param of otherUsedId " + otherUserId);
 
             this.chatId = chatLogs.getID();
             this.chatLogs = chatLogs;
@@ -80,13 +80,10 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
     public void showNotification(String content, String senderId, String chatId) {
         // Setup Intent to end here in case of click
         Intent notifIntent = new Intent(context, MessageListActivity.class);
-        Bundle b = new Bundle();
-        b.putString("chatId", chatId);
-        b.putString("otherId", otherUserId);
-        b.putInt("locType", locType);
-        notifIntent.putExtras(b);
-        notifIntent.setAction(chatId);
-        Log.e("RealTimeDebug", "MLA : Param of item "+ senderId + " " + otherUserId);
+        Bundle b = new Bundle();b.putString("chatId", chatId);
+        b.putString("otherId", otherUserId);b.putInt("locType", locType);
+        notifIntent.putExtras(b);notifIntent.setAction(chatId);
+      //  Log.e("RealTimeDebug", "MLA : Param of item "+ senderId + " " + otherUserId);
 
         PendingIntent pi = PendingIntent.getActivity(context, 0,notifIntent, 0);
         // Build and show notification
@@ -103,20 +100,13 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         //Get infos from parent fragme
 
         if (b != null) {
-            chatId = b.getString("chatId");
-            locType = b.getInt("locType");
-
+            chatId = b.getString("chatId"); locType = b.getInt("locType");
             chatInstance.put(chatId, this);
 
             chatLogs = ChatlogsUtil.getInstance().getChat(chatId, locType);
             otherUserId = ChatLogs.getOtherID(chatLogs);
-            Log.e("RealTimeDebug", "MLA : Param of item setInnfo " + chatId + "   " + locType + "   " + otherUserId);
-
-            //    database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, chatLogCallBack);
-     //       Log.e("message", "Setup Messages size" + Integer.toString(chatLogs.getMessages().size()));
             for(int i = 0; i < chatLogs.getMembersId().size(); i++){
-                String s =chatLogs.getMembersId().get(i);
-                addMembersInfo(s);
+                String s =chatLogs.getMembersId().get(i); addMembersInfo(s);
             }
 
         } else {
@@ -158,7 +148,7 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
     public void receiveMessage(Message message) {
         if(!uiReady) return;
         myMessageAdapter.setMessages(chatLogs.getMessages());
-        myMessageRecycler.smoothScrollToPosition(chatLogs.getMessages().size());
+    //    myMessageRecycler.smoothScrollToPosition(chatLogs.getMessages().size());
         myMessageAdapter.notifyDataSetChanged();
         Log.e("RealTimeDebug", "MLA Message received !");
 
@@ -169,7 +159,7 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         }
         if(!uiReady) return;
         myMessageAdapter.setMembersIds(chatLogs.getMembersId());
-        myMessageRecycler.smoothScrollToPosition(chatLogs.getMessages().size());
+  //      myMessageRecycler.smoothScrollToPosition(chatLogs.getMessages().size());
         myMessageAdapter.notifyDataSetChanged();
         Log.e("RealTimeDebug", "MLA Member received !");
     }
@@ -252,26 +242,25 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         if(!uiReady) return;
         if (!enableChat) {
 
-            this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+         //   this.runOnUiThread(new Runnable() {
+//                @Override
+         //       public void run() {
                     messageZone.setText(getString(R.string.chat_disabled));
                     sendButton.setEnabled(false);
                     messageZone.setFocusable(false);
 
-                }
-            });
+          //      }
+          //  });
         }
         else{
-
-            this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            //this.runOnUiThread(new Runnable() {
+ //               @Override
+            //    public void run() {
                     messageZone.setText("");
                     sendButton.setEnabled(true);
                     messageZone.setFocusable(true);
-                }
-            });
+            //    }
+           // });
         }
     }
 
@@ -310,8 +299,8 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        OthersInfo.getInstance().addUserObserver(this);
-        OthersInfo.getInstance().addLocationObserver(this);
+    //    OthersInfo.getInstance().addUserObserver(this);
+    //    OthersInfo.getInstance().addLocationObserver(this);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         boolean nightMode = settings.getBoolean("nightModeSwitch", false);
         String temp = getIntent().getExtras().getString("chatId");
@@ -337,6 +326,8 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         setInfo();setUpUI();setUpSendButton();
         //setUpListener();
         compareLocation();
+        Log.e("RealTimeDebug ","Init done !");
+        return;
     }
 
     @Override
