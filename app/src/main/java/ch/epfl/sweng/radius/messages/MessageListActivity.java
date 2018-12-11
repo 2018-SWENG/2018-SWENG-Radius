@@ -51,7 +51,7 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
     private ChatState isChatRunning = null;
     private Context context;
     public boolean uiReady = false;
-    private boolean isEnabled = true;
+    private static boolean isEnabled = true;
     public MessageListActivity(){}
     public MessageListActivity(ChatLogs chatLogs, Context context, int locType){
         // Just create entry to avoid duplicate activities
@@ -114,8 +114,10 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
 
             //    database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, chatLogCallBack);
      //       Log.e("message", "Setup Messages size" + Integer.toString(chatLogs.getMessages().size()));
-            for(String member : chatLogs.getMembersId())
-                addMembersInfo(member);
+            for(int i = 0; i < chatLogs.getMembersId().size(); i++){
+                String s =chatLogs.getMembersId().get(i);
+                addMembersInfo(s);
+            }
 
         } else {
             throw new RuntimeException("MessagListActivity Intent created without bundle");
@@ -217,27 +219,38 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
 
     private void compareLocation() {
         //TODO check if other users radius contains current user.
-       /*  Log.e("RealTimeDebug", "Compare Location" +chatId + " " + locType +" " + otherUserId);
-                    Log.e("RealTimeDebug", "Compare Location contains " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)));
-                    Log.e("RealTimeDebug", "Compare Location blocked " + String.valueOf(OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
-                            contains(UserInfo.getInstance().getCurrentUser().getID())));
-        */
-       if (locType == 0) {
+        Log.e("RealTimeDebug", "User is in table : " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)));
+         if(!OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)){
+             setEnabled(false);
+             isEnabled = false;
+         }
+         else{
+             if (locType == 0) {
+                 Log.e("RealTimeDebug", "User is visible : " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().get(otherUserId).isVisible()));
+                 Log.e("RealTimeDebug", "Chat is enabled: " + isEnabled);
+                 boolean enable = OthersInfo.getInstance().getUsersInRadius().get(otherUserId).isVisible() &&
+                         !OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
+                                 contains(UserInfo.getInstance().getCurrentUser().getID());
+                 Log.e("RealTimeDebug", "Chat should be enabled: " + enable);
 
+                 if(enable != isEnabled){
+                     Log.e("RealTimeDebug", "Chat is toggled");
 
-            setEnabled(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId) &&
-                    !OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
-                            contains(UserInfo.getInstance().getCurrentUser().getID()));
-        }
-        else {
-            setEnabled(true);
-        }
+                     setEnabled(enable);
+                     isEnabled = enable;
+                 }
+             }
+             else {
+                 setEnabled(true);
+             }
+
+         }
 
             }
 
     public void setEnabled(boolean enableChat) {
         if(!uiReady) return;
-        if (!enableChat && isEnabled) {
+        if (!enableChat) {
 
             this.runOnUiThread(new Runnable() {
                 @Override
@@ -245,10 +258,11 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
                     messageZone.setText(getString(R.string.chat_disabled));
                     sendButton.setEnabled(false);
                     messageZone.setFocusable(false);
+
                 }
             });
         }
-        else if (!isEnabled){
+        else{
 
             this.runOnUiThread(new Runnable() {
                 @Override
@@ -258,7 +272,6 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
                     messageZone.setFocusable(true);
                 }
             });
-
         }
     }
 
@@ -323,7 +336,6 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
 
         setInfo();setUpUI();setUpSendButton();
         //setUpListener();
-        setEnabled(true);
         compareLocation();
     }
 
