@@ -242,6 +242,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
                                 topicChat.put(newChat.getID(), newChat);
                         }
                         listenToChatMessages(newChat, chatType);
+                        listenToChatMembers(newChat);
                     }
 
                     @Override

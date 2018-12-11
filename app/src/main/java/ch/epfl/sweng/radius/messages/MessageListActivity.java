@@ -1,5 +1,6 @@
 package ch.epfl.sweng.radius.messages;
 
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +22,8 @@ import java.util.List;
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.ChatlogsUtil;
+import ch.epfl.sweng.radius.database.DBLocationObserver;
+import ch.epfl.sweng.radius.database.DBUserObserver;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
@@ -32,7 +35,7 @@ import ch.epfl.sweng.radius.utils.NotificationUtility;
  * Activity that hosts messages between two users
  * MessageListActivity and MessageListAdapter and some layout files are inspired from https://blog.sendbird.com/android-chat-tutorial-building-a-messaging-ui
  */
-public class MessageListActivity extends AppCompatActivity  {
+public class MessageListActivity extends AppCompatActivity implements DBLocationObserver, DBUserObserver {
 
     private RecyclerView myMessageRecycler;
     private MessageListAdapter myMessageAdapter;
@@ -52,7 +55,7 @@ public class MessageListActivity extends AppCompatActivity  {
     public MessageListActivity(){}
     public MessageListActivity(ChatLogs chatLogs, Context context, int locType){
         // Just create entry to avoid duplicate activities
-
+        OthersInfo.getInstance().addLocationObserver(this);
         if(MessageListActivity.getChatInstance(chatLogs.getID()) == null){
             Log.e("message", "Construcor called with " + chatLogs.getID() + " " + locType);
 
@@ -102,12 +105,14 @@ public class MessageListActivity extends AppCompatActivity  {
         if (b != null) {
             chatId = b.getString("chatId");
             locType = b.getInt("locType");
-            Log.e("RealTimeDebug", "MLA : Param of item setInfo " + chatId + "   " + locType);
 
             chatInstance.put(chatId, this);
 
             chatLogs = ChatlogsUtil.getInstance().getChat(chatId, locType);
-        //    database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, chatLogCallBack);
+            otherUserId = ChatLogs.getOtherID(chatLogs);
+            Log.e("RealTimeDebug", "MLA : Param of item setInnfo " + chatId + "   " + locType + "   " + otherUserId);
+
+            //    database.readObjOnce(chatLogs, Database.Tables.CHATLOGS, chatLogCallBack);
      //       Log.e("message", "Setup Messages size" + Integer.toString(chatLogs.getMessages().size()));
 
         } else {
@@ -205,7 +210,13 @@ public class MessageListActivity extends AppCompatActivity  {
 
     private void compareLocation() {
         //TODO check if other users radius contains current user.
+         Log.e("RealTimeDebug", "Compare Location" +chatId + " " + locType +" " + otherUserId);
+                    Log.e("RealTimeDebug", "Compare Location contains " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)));
+                    Log.e("RealTimeDebug", "Compare Location blocked " + String.valueOf(OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
+                            contains(UserInfo.getInstance().getCurrentUser().getID())));
         if (locType == 0) {
+
+
             setEnabled(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId) &&
                     !OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
                             contains(UserInfo.getInstance().getCurrentUser().getID()));
@@ -225,6 +236,8 @@ public class MessageListActivity extends AppCompatActivity  {
         else{
             sendButton.setEnabled(true);
             messageZone.setFocusable(true);
+            messageZone.setText("");
+
         }
     }
 
@@ -259,6 +272,10 @@ public class MessageListActivity extends AppCompatActivity  {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        OthersInfo.getInstance().addUserObserver(this);
+        OthersInfo.getInstance().addLocationObserver(this);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         boolean nightMode = settings.getBoolean("nightModeSwitch", false);
         String temp = getIntent().getExtras().getString("chatId");
@@ -272,7 +289,6 @@ public class MessageListActivity extends AppCompatActivity  {
         Log.e("message", "Construcor oNStart with " +temp + " " + locType);
         if(isChatRunning == null) isChatRunning = new ChatState();
         //ChatInfo.getInstance().addUserObserver(this)
-        super.onCreate(savedInstanceState);
         myID = UserInfo.getInstance().getCurrentUser().getID();
         database = Database.getInstance();
         setContentView(R.layout.activity_message_list);
@@ -288,5 +304,15 @@ public class MessageListActivity extends AppCompatActivity  {
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public void onLocationChange(String id) {
+        compareLocation();
+    }
+
+    @Override
+    public void onUserChange(String id) {
+        compareLocation();
     }
 }

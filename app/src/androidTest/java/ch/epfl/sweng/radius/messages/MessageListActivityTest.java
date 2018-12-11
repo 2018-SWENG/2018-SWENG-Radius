@@ -164,7 +164,12 @@ public class MessageListActivityTest extends ActivityInstrumentationTestCase2<Me
 
     @Test
     public void testSetEnabledTrue() {
-        mlActivity.setEnabled(true);
+        mlActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mlActivity.setEnabled(true);
+            }
+        });
         onView(withId(R.id.edittext_chatbox)).perform(typeText("Test"));
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_chatbox_send)).perform(click());

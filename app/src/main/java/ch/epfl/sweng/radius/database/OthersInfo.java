@@ -87,6 +87,7 @@ public class OthersInfo extends DBObservable{
 
                         putInTable(loc);
                     }
+                    if(!loc.isVisible()) removeFromTable(loc);
                     if (loc.getLocationType() == 0) {
                         allUserPos.put(loc.getID(), loc);
                     }
@@ -198,6 +199,23 @@ public class OthersInfo extends DBObservable{
                 break;
             case 2:
                 topicsPos.put(loc.getID(), loc);
+                break;
+        }
+    }
+
+    public void removeFromTable(MLocation loc){
+        switch (loc.getLocationType()){
+            case 0:
+                if(loc.getID().equals(UserInfo.getInstance().getCurrentPosition().getID()))
+                    break;
+                // For near friend notifications
+                usersPos.remove(loc.getID());
+                break;
+            case 1:
+                groupsPos.remove(loc.getID());
+                break;
+            case 2:
+                topicsPos.remove(loc.getID());
                 break;
         }
     }
