@@ -56,7 +56,7 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         // Just create entry to avoid duplicate activities
         OthersInfo.getInstance().addLocationObserver(this);
         if(MessageListActivity.getChatInstance(chatLogs.getID()) == null){
-        //    Log.e("message", "Construcor called with " + chatLogs.getID() + " " + locType);
+            Log.e("message", "Construcor called with " + chatLogs.getID() + " " + locType);
 
             this.otherUserId = ChatLogs.getOtherID(chatLogs);
          //   Log.e("RealTimeDebug", "MLA : Param of otherUsedId " + otherUserId);
@@ -204,7 +204,11 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
 
     private void compareLocation() {
         //TODO check if other users radius contains current user.
-       // Log.e("RealTimeDebug", "User is in table : " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)));
+        Log.e("RealTimeDebug", "User is in table : " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)) + otherUserId);
+        if(chatLogs.getMembersId().size() != 2 ) {
+            if(!isEnabled){ setEnabled(true); isEnabled = true;}
+            return;
+        }
          if(!OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)){
              setEnabled(false);isEnabled = false; }
          else{
@@ -221,10 +225,10 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         boolean enable = OthersInfo.getInstance().getUsersInRadius().get(otherUserId).isVisible()
                 && !OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
                         contains(UserInfo.getInstance().getCurrentUser().getID());
-        //   Log.e("RealTimeDebug", "Chat should be enabled: " + enable);
+           Log.e("RealTimeDebug", "Chat should be enabled: " + enable);
 
         if(enable != isEnabled){
-            //  Log.e("RealTimeDebug", "Chat is toggled");
+              Log.e("RealTimeDebug", "Chat is toggled");
             setEnabled(enable);isEnabled = enable;
         }
     }
@@ -277,6 +281,8 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
     public void onPause(){
         super.onPause();
         isChatRunning.leaveActivity();
+        OthersInfo.getInstance().removeLocationObserver(this);
+        OthersInfo.getInstance().removeUserObserver(this);
 
     }
 
