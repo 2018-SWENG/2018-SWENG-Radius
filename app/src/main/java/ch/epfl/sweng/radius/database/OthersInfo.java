@@ -82,11 +82,12 @@ public class OthersInfo extends DBObservable{
             public void onFinish(Object value) {
                 newUsersPos.clear();
                 for (MLocation loc : (ArrayList<MLocation>) value) {
-                    if(mapUtility.contains(loc.getLatitude(), loc.getLongitude())
-                            && loc.isVisible()) {
+                    if(mapUtility.contains(loc.getLatitude(), loc.getLongitude())) {
 
                         putInTable(loc);
                     }
+                    else
+                        removeFromTable(loc);
                     if (loc.getLocationType() == 0) {
                         allUserPos.put(loc.getID(), loc);
                     }
@@ -107,7 +108,6 @@ public class OthersInfo extends DBObservable{
         database.readListObjOnce(ids, Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
-                convUsers.clear();
                 for(MLocation loc : (ArrayList<MLocation>) value){
                     Log.e("Refactor OthersInfo", "Current userID is" + loc.getID());
                     if(!usersPos.containsKey(loc.getID()));
@@ -125,7 +125,6 @@ public class OthersInfo extends DBObservable{
         database.readAllTableOnce(Database.Tables.USERS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
-                users.clear();
                 for (User user : (ArrayList<User>) value) {
                     users.put(user.getID(), user);
                 }
@@ -198,6 +197,23 @@ public class OthersInfo extends DBObservable{
                 break;
             case 2:
                 topicsPos.put(loc.getID(), loc);
+                break;
+        }
+    }
+
+    public void removeFromTable(MLocation loc){
+        switch (loc.getLocationType()){
+            case 0:
+                if(loc.getID().equals(UserInfo.getInstance().getCurrentPosition().getID()))
+                    break;
+                // For near friend notifications
+                usersPos.remove(loc.getID());
+                break;
+            case 1:
+                groupsPos.remove(loc.getID());
+                break;
+            case 2:
+                topicsPos.remove(loc.getID());
                 break;
         }
     }

@@ -23,7 +23,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
     private static Map<String, ChatLogs> userChat = new HashMap<>();
     private static Map<String, ChatLogs> topicChat = new HashMap<>();
     private static Map<String, ChatLogs> groupChat = new HashMap<>();
-    public int upToDate = -2;
+    public int upToDate = -1;
 
     private Context context;
     public static ChatlogsUtil getInstance(){
@@ -44,9 +44,12 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         OthersInfo.getInstance().addLocationObserver(this);
         UserInfo.getInstance().addUserObserver(this);
         // Read and setUp listener on the ChatList field of current user
+
         fetchUserChats();
         // Read and setUp listeners on the Group and Topics chats
         fetchChatsAndListen();
+        Log.e("ChatlogsDebug", "Creation ");
+
 
     }
 
@@ -63,13 +66,16 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
                             if(topicChatsID.contains(newChat.getID())){
                                 topicChat.put(newChat.getID(), newChat);
                                 listenToChatMessages(newChat, 2);
+                              //  Log.e("ChatlogsDebug", "Topic listening");
+
                             }
                             else{
                                 groupChat.put(newChat.getID(), newChat);
                                 listenToChatMessages(newChat, 1);
+                             //   Log.e("ChatlogsDebug", "Group listening");
                             }
-                            listenToChatMembers(newChat);
-                        }
+                          //  Log.e("ChatlogsDebug", "Members listening");
+                            listenToChatMembers(newChat); }upToDate++;
                     }
 
                     @Override
@@ -148,18 +154,32 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
         // Setup Sender name to display
         String senderData = NotificationUtility.getNickname(chatLogs, message, chatType);
+    //    Log.e("RealTimeDebug", "ChatlogUtil " + chatLogs.getID());
 
         // Get ChatActivity instance if it exists
         // If return Activity is null, Chat was never opened in the past
-        if(messageActivity == null) messageActivity = new MessageListActivity(chatLogs, context, chatType);
-        messageActivity.receiveMessage(message);
-        if(!messageActivity.getIsChatRunning().isRunning() && upToDate >= 0)
-            // Show notification as chat is not running
-            messageActivity.showNotification(message.getContentMessage(), senderData, chatLogs.getID());
+        if(messageActivity == null) {
+          //  Log.e("RealTimeDebug", "ChatlogUtil MLA was null");
+            messageActivity = new MessageListActivity(chatLogs, context, chatType);
+        }
 
+        handleActvity(messageActivity, message, senderData, chatLogs);
 
+        //Log.e("RealTimeDebug", "ChatlogUtil Message received !");
 
         // If Chat is running, there's nothing to do here
+    }
+
+    private void handleActvity(MessageListActivity mla, Message message, String senderData, ChatLogs chatLogs) {
+        if(mla.uiReady) mla.receiveMessage(message);
+        //     Log.e("RealTimeDebug", "Show Notification" + String.valueOf(upToDate) + " " + String.valueOf(messageActivity.getIsChatRunning().isRunning()));
+
+        if(!mla.getIsChatRunning().isRunning() && upToDate >= 0){
+            // Show notification as chat is not running
+            Log.e("RealTimeDebug", "Show Notification" + String.valueOf(upToDate) + " " + String.valueOf(mla.getIsChatRunning().isRunning()));
+
+            mla.showNotification(message.getContentMessage(), senderData, chatLogs.getID());
+        }
     }
 
     public String getNewChat(String otherUserId){
@@ -183,15 +203,18 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
     public void listenToChatMembers(final ChatLogs chatLogs){
         Pair<String, Class> child = new Pair<String, Class>("membersId", String.class);
-        Log.e("ChatlogsDebug", "Chat Members ID is "+ chatLogs.getID());
         Database.getInstance().listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
             public void onFinish(Object value) {
                 String newMemberId = (String) value;
-                Log.e("ChatlogsDebug", "Chat Members ID is "+ chatLogs.getID());
+                Log.e("ChatlogsDebug", "Chat Members ID is "+ newMemberId);
 
                 chatLogs.addMembersId(newMemberId);
-                if(MessageListActivity.getChatInstance(chatLogs.getID()) != null)
+                if(MessageListActivity.getChatInstance(chatLogs.getID()) != null){
                     MessageListActivity.getChatInstance(chatLogs.getID()).addMembersInfo(newMemberId);
+                    Log.e("ChatlogsDebug", "Chat Members ID is "+ newMemberId);
+
+                }
+
             }
 
             @Override
@@ -220,6 +243,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
                                 topicChat.put(newChat.getID(), newChat);
                         }
                         listenToChatMessages(newChat, chatType);
+                        listenToChatMembers(newChat);
                     }
 
                     @Override
@@ -262,6 +286,11 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
     @Override
     public void onLocationChange(String id) {
         Log.e("ChatlogsDebug", "Update tables " + groupChat.size() + " " + topicChat.size());
+        if(groupChat.size() == 0){
+            fetchChatsAndListen();
+            return;
+        }
+
 
         for(String s : new ArrayList<>(OthersInfo.getInstance().getGroupsPos().keySet()))
             fetchSingleChatAndListen(s, 1);

@@ -289,6 +289,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     }
 
     public void markNearbyUser(int indexOfUser, String status, String userName, String locID) {
+        if(!usersLoc.get(indexOfUser).isVisible()) return;
         LatLng newPos = new LatLng(usersLoc.get(indexOfUser).getLatitude(),
                                     usersLoc.get(indexOfUser).getLongitude()    );
         float color = friendsID.containsKey(locID) ? BitmapDescriptorFactory.HUE_BLUE :

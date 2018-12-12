@@ -1,5 +1,7 @@
 package ch.epfl.sweng.radius.utils.customLists;
 
+import android.util.Log;
+
 import ch.epfl.sweng.radius.R;
 
 public class CustomListItem {
@@ -9,7 +11,6 @@ public class CustomListItem {
     private int profilePic;
 
     public CustomListItem(String itemId, String convId,String itemName){
-      //  Log.e("MessageList", "Param of item "+ itemId + " " + convId + " " + itemName);
         this.itemId = itemId;
    //     Log.e("CustomListItem: ", itemId);
         this.itemName = itemName;

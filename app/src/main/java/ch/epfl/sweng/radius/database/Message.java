@@ -64,6 +64,10 @@ public class Message implements DatabaseObject{
                 && m1.senderId.equals(m2.senderId);
     }
 
+    public void setSendingTime(Date sendingTime) {
+        this.sendingTime = sendingTime;
+    }
+
     @Override
     public String getID() {
         return null;
