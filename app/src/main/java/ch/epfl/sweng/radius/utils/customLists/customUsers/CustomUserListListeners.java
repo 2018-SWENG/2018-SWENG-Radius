@@ -52,12 +52,14 @@ public class CustomUserListListeners {
     }
 
     public void setCustomOnClick(TextView textView, final Context context, final String userId, final String convId) {
+        Log.e("ChatlogsDebug", "Chat OnClick UserId is" + userId);
+
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String chatId = convId;
                 ChatLogs chat = ChatlogsUtil.getInstance().getChat(convId, 0);
-                Log.e("ChatlogsDebug", "Chat OnClick ConvId is" + convId);
+                Log.e("ChatlogsDebug", "Chat OnClick UserId is" + userId);
                 if(chat == null){
                     chatId = ChatlogsUtil.getInstance().getNewChat(userId);
                     Log.e("ChatlogsDebug", "Chat was null" + chatId);
@@ -72,6 +74,7 @@ public class CustomUserListListeners {
     private void goToMessageActivity(Context context, String chatId, String userId){
         Intent intent = new Intent(context, MessageListActivity.class);
         Bundle b = new Bundle();
+        Log.e("RealTimeDebug", "gotToMessageActivity" + userId);
 
         b.putString("chatId", chatId);
         b.putString("otherId", userId);

@@ -22,6 +22,7 @@ import ch.epfl.sweng.radius.database.CallBackDatabase;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.database.UserUtils;
 
@@ -147,10 +148,15 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags));
-            MLocation currentUser = usersHashMap.get(message.getSenderId());
+            MLocation currentUser = OthersInfo.getInstance().getUsersInRadius().get(message.getSenderId());
             if (currentUser != null) {
+                Log.e("RealTimeDebug", "User is not null !");
                 nameText.setText(currentUser.getTitle());
                 setPicture(currentUser.getUrlProfilePhoto(),itemView);
+            }
+            else{
+                Log.e("RealTimeDebug", "User is null !");
+
             }
 
 

@@ -2,7 +2,7 @@
 
 ### User Table
 
-![](https://github.com/2018-SWENG/2018-SWENG-Radius/blob/fix-refactorChatUsage/app/fakke-userdb.png)
+![](https://github.com/2018-SWENG/2018-SWENG-Radius/blob/master/app/fakke-userdb.png)
 
 
 
@@ -10,7 +10,7 @@
 
 ### Location Table
 
-![](https://github.com/2018-SWENG/2018-SWENG-Radius/blob/fix-refactorChatUsage/app/fake-userdb.png)
+![](https://github.com/2018-SWENG/2018-SWENG-Radius/blob/master/app/fake-userdb.png)
 
 
 
@@ -18,7 +18,7 @@
 
 
 
-![](https://github.com/2018-SWENG/2018-SWENG-Radius/blob/fix-refactorChatUsage/app/fake-chatdb0.png)
+![](https://github.com/2018-SWENG/2018-SWENG-Radius/blob/master/app/fake-chatdb0.png)
 
-![](https://github.com/2018-SWENG/2018-SWENG-Radius/blob/fix-refactorChatUsage/app/fake-chatdb1.png)
+![](https://github.com/2018-SWENG/2018-SWENG-Radius/blob/master/app/fake-chatdb1.png)
 
