@@ -295,11 +295,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         float color = friendsID.containsKey(locID) ? BitmapDescriptorFactory.HUE_BLUE :
                                                         BitmapDescriptorFactory.HUE_RED;
 
-        //Change the marker color to green if users speak the same language
-        for(String language : UserInfo.getInstance().getCurrentPosition().getLanguageList()){
-            if(usersLoc.get(indexOfUser).getLanguageList().contains(language)){
-                color = BitmapDescriptorFactory.HUE_GREEN;
-                break;
+        //Change the marker color to green if users speak the same language but they are not friends
+        if(color != BitmapDescriptorFactory.HUE_BLUE){
+            for(String language : UserInfo.getInstance().getCurrentPosition().getLanguageList()){
+                if(usersLoc.get(indexOfUser).getLanguageList().contains(language)){
+                    color = BitmapDescriptorFactory.HUE_GREEN;
+                    break;
+                }
             }
         }
 
