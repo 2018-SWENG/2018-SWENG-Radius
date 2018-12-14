@@ -210,8 +210,10 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
     private void compareLocation() {
         //TODO check if other users radius contains current user.
        // Log.e("RealTimeDebug", "User is in table : " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)) + otherUserId);
-        if(locType != 0 || chatLogs.getMembersId().size() != 2 )
+        if(locType != 0 ) {//|| chatLogs.getMembersId().size() != 2 ) {
             toggleFlagAndSendingFields(true);
+            Log.e("RealTimeDebug", "Here ffs");
+        }
         else{
             handleUserChat(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId));
         }
