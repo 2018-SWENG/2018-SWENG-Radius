@@ -209,16 +209,19 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
     private void compareLocation() {
         //TODO check if other users radius contains current user.
        // Log.e("RealTimeDebug", "User is in table : " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)) + otherUserId);
-        if(chatLogs.getMembersId().size() != 2 || locType != 0) {
+        if(chatLogs.getMembersId().size() != 2 ) {
             if(!isEnabled){ toggleFlagAndSendingFields(true);}
             return;
         }
          if(!OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)){
              toggleFlagAndSendingFields(false); }
-         else handleUserChat();
+         else{
+             if (locType == 0) handleUserChat();
                //  Log.e("RealTimeDebug", "User is visible : " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().get(otherUserId).isVisible()));
                //  Log.e("RealTimeDebug", "Chat is enabled: " + isEnabled);
-         
+             else setEnabled(true);
+
+         }
 
             }
 
