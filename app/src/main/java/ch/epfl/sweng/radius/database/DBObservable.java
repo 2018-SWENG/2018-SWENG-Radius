@@ -25,6 +25,9 @@ public abstract class DBObservable{
     public void removeLocationObserver(DBLocationObserver observer){
         this.locationObservers.remove(observer);
     }
+    public void removeUserObserver(DBUserObserver observer){
+        this.userObservers.remove(observer);
+    }
     public void notifyLocationObservers(String id){
         for (DBLocationObserver observer: this.locationObservers) {
             observer.onLocationChange(id);

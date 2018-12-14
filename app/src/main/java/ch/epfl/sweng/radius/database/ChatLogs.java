@@ -1,5 +1,7 @@
 package ch.epfl.sweng.radius.database;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -104,8 +106,12 @@ public class ChatLogs implements DatabaseObject{
     }
 
    public static String getOtherID(ChatLogs chat){
-        if(chat.getMembersId().size() != 2)
+       Log.e("RealTimeDebug", " Size of membersID is"+ chat.getMembersId().size());
+
+       if(chat.getMembersId().size() != 2){
             return null;
+
+        }
 
         return chat.getMembersId().get(0).equals(UserInfo.getInstance().getCurrentUser().getID()) ?
                 chat.getMembersId().get(1) : chat.getMembersId().get(0);
