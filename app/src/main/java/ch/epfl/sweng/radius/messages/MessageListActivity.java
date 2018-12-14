@@ -213,25 +213,19 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         if(locType != 0 || chatLogs.getMembersId().size() != 2 )
             toggleFlagAndSendingFields(true);
         else{
-            if(!OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)){
-                toggleFlagAndSendingFields(false); }
-            else{
-                handleUserChat();
-            }
+                handleUserChat(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId));
         }
 
         }
 
-    private void handleUserChat() {
-        boolean enable = OthersInfo.getInstance().getUsersInRadius().get(otherUserId).isVisible()
+    private void handleUserChat(boolean isInRadius) {
+        boolean unBlockedAndVisible = OthersInfo.getInstance().getUsersInRadius().get(otherUserId).isVisible()
                 && !OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
                         contains(UserInfo.getInstance().getCurrentUser().getID());
-           Log.e("RealTimeDebug", "Chat should be enabled: " + enable);
+           Log.e("RealTimeDebug", "Chat should be enabled: " + unBlockedAndVisible);
 
-        if(enable != isEnabled){
-              Log.e("RealTimeDebug", "Chat is toggled");
-            setEnabled(enable);isEnabled = enable;
-        }
+           toggleFlagAndSendingFields(unBlockedAndVisible && isInRadius);
+
     }
 
     public void setEnabled(boolean enableChat) {
