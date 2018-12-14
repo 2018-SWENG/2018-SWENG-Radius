@@ -29,6 +29,7 @@ import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.UserInfo;
+import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.NotificationUtility;
 
 /**
@@ -215,17 +216,22 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
             Log.e("RealTimeDebug", "Here ffs");
         }
         else{
-            handleUserChat(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId));
+            handleUserChat();
         }
     }
 
-    private void handleUserChat(boolean isInRadius) {
-        boolean unBlockedAndVisible = OthersInfo.getInstance().getUsersInRadius().get(otherUserId).isVisible()
+    private void handleUserChat() {
+        boolean unBlockedAndVisible = OthersInfo.getInstance().getAllUserLocations().get(otherUserId).isVisible()
                 && !OthersInfo.getInstance().getUsers().get(otherUserId).getBlockedUsers().
                         contains(UserInfo.getInstance().getCurrentUser().getID());
            Log.e("RealTimeDebug", "Chat should be enabled: " + unBlockedAndVisible);
 
-           toggleFlagAndSendingFields(unBlockedAndVisible && isInRadius);
+        MapUtility mapUtility = new MapUtility();
+        double latitude = OthersInfo.getInstance().getAllUserLocations().get(otherUserId).getLatitude();
+        double longtitude = OthersInfo.getInstance().getAllUserLocations().get(otherUserId).getLongitude();
+        Boolean isInRadius = mapUtility.contains(latitude, longtitude);
+
+        toggleFlagAndSendingFields(unBlockedAndVisible && isInRadius);
 
     }
 

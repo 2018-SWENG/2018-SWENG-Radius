@@ -83,8 +83,6 @@ public class OthersInfo extends DBObservable{
                 newUsersPos.clear();
                 for (MLocation loc : (ArrayList<MLocation>) value) {
                     if(mapUtility.contains(loc.getLatitude(), loc.getLongitude())) {
-
-
                         putInTable(loc);
                     }
                     else
