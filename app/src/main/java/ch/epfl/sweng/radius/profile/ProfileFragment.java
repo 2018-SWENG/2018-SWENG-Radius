@@ -51,7 +51,6 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
     private static ArrayList<String> selectableLanguages;
     private static boolean[] checkedLanguages;
     private static ArrayList<Integer> spokenLanguagesList;
-    //private TextView selectedLanguages;
     private static String languagesText;
     private static Uri mImageUri;
 
@@ -202,7 +201,7 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         builder.setPositiveButton(R.string.ok_label, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String languagesText = UserInfo.getInstance().getCurrentPosition().getSpokenLanguages();
+                //String languagesText = UserInfo.getInstance().getCurrentPosition().getSpokenLanguages();
                 for (int i = 0; i < spokenLanguagesList.size() ; i++) {
                     if (!languagesText.contains(selectableLanguages.get(spokenLanguagesList.get(i)))) {
                         languagesText = languagesText + " " + selectableLanguages.get(spokenLanguagesList.get(i));
@@ -244,7 +243,6 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         String nicknameString = getDataFromTextInput(nicknameInput);
         String statusString = getDataFromTextInput(statusInput);
         String interestsString = getDataFromTextInput(interestsInput);
-        String languagesString = languagesText;
 
         MLocation currentUser = UserInfo.getInstance().getCurrentPosition();
 
@@ -268,8 +266,8 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
 
         UserInfo.getInstance().getCurrentPosition().setRadius(userRadius);
         currentUser.setRadius(userRadius);
-        currentUser.setSpokenLanguages(languagesString);
-        spokenLanguages.setText(languagesString);
+        currentUser.setSpokenLanguages(languagesText);
+        spokenLanguages.setText(languagesText);
         //Write to DB
         UserInfo.getInstance().updateUserInDB();
         UserInfo.getInstance().updateLocationInDB();
