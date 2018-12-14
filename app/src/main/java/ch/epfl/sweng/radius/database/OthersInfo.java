@@ -84,7 +84,7 @@ public class OthersInfo extends DBObservable{
                 for (MLocation loc : (ArrayList<MLocation>) value) {
                     if(mapUtility.contains(loc.getLatitude(), loc.getLongitude())
                             && loc.isVisible()) {
-
+                        Log.e("FML", loc.getID() + " - HERE - " + mapUtility.contains(loc.getLatitude(), loc.getLongitude()));
                         putInTable(loc);
                     }
                     if (loc.getLocationType() == 0) {
