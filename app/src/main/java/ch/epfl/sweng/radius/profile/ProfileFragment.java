@@ -139,7 +139,8 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         userNickname.setText(current_user.getTitle());
         userStatus.setText(current_user.getMessage());
         userInterests.setText(current_user.getInterests());
-        spokenLanguages.setText(current_user.getSpokenLanguages());
+        languagesText = current_user.getSpokenLanguages();
+        spokenLanguages.setText(languagesText);
         radiusValue.setText(current_user.getRadius() + "m");
         radiusBar.setProgress((int) UserInfo.getInstance().getCurrentPosition().getRadius());
 
