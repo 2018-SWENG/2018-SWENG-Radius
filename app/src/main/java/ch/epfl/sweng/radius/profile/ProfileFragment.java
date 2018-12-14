@@ -205,6 +205,8 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
                 for (int i = 0; i < spokenLanguagesList.size() ; i++) {
                     if (!languagesText.contains(selectableLanguages.get(spokenLanguagesList.get(i)))) {
                         languagesText = languagesText + " " + selectableLanguages.get(spokenLanguagesList.get(i));
+                        UserInfo.getInstance().getCurrentPosition()
+                                .addLanguage(selectableLanguages.get(spokenLanguagesList.get(i)));
                         if (i != spokenLanguagesList.size() - 1) {
                             languagesText = languagesText + " ";
                         }
