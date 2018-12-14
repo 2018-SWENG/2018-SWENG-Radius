@@ -1,5 +1,8 @@
 package ch.epfl.sweng.radius;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,6 +11,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -20,6 +24,7 @@ public class PreferencesActivity extends PreferenceActivity {
     private static final String INCOGNITO = "incognitoSwitch";
     private static final String INVISIBLE = "You are currently invisible, nobody can see you in the map.";
     private static final String VISIBLE = "You are visible, people can see your location in the map.";
+    private static final String DELETINGACCOUNTMESSAGE = "All your conversations and friends will be deleted.";
     private static boolean isVisible = true;
 
     @Override
@@ -35,13 +40,85 @@ public class PreferencesActivity extends PreferenceActivity {
             // Load the Preferences from the XML file
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.app_preferences);
-            Preference logOutButton = findPreference("logOutButton");
+
+            //Initialize the preferences activity
             initializeIncognitoPreference();
+            setupLogoutButton();
+            setupDeleteAccountButton();
+        }
+
+        public void setupLogoutButton() {
+            Preference logOutButton = findPreference("logOutButton");
+
             logOutButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     logOut();
                     return true;
+                }
+            });
+        }
+
+        private void setupDeleteAccountButton() {
+            Preference deleteAccountButton = findPreference("deleteAccount");
+            deleteAccountButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    //Prepare alert dialog
+                    AlertDialog.Builder dialog = setupAlertDialogBuilder();
+                    AlertDialog alertDialog = dialog.create();
+                    alertDialog.show();
+
+                    return true;
+                }
+            });
+        }
+
+        /*
+        * Creates a pop up to ask the user if they want
+        * to delete their account one more time and warn them.
+        * */
+        private AlertDialog.Builder setupAlertDialogBuilder() {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+            dialog.setTitle("Are you sure?");
+            dialog.setMessage(DELETINGACCOUNTMESSAGE);
+
+            setupPositiveButton(dialog);
+            setupNegativeButton(dialog);
+
+            return dialog;
+        }
+
+        /*
+        * Deletes account and takes the user to the sign in page
+        * */
+        private void setupPositiveButton(AlertDialog.Builder dialog) {
+            dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getActivity(), "Account Deleted", Toast.LENGTH_SHORT).show();
+                                logOut(); // might just want to change this line with startActivity
+                            } else {
+                                Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        /*
+        * Cancels the operation to delete the account.
+        * */
+        private void setupNegativeButton(AlertDialog.Builder dialog) {
+            dialog.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
                 }
             });
         }

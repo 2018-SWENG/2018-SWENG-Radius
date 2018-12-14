@@ -67,7 +67,10 @@ public class FirebaseUtility extends Database{
 
     @Override
     public String getCurrent_user_id() {
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+        if (FirebaseAuth.getInstance().getCurrentUser().getUid() != null)
+            return FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        return "gOWPmvL3ZueI5QpEzNmYbih5gne2";
     }
 
     @Override

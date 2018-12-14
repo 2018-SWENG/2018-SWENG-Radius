@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import org.hamcrest.core.AllOf;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -101,9 +102,18 @@ public class PreferencesActivityTest  extends ActivityInstrumentationTestCase2<P
     }
 
     @Test
+    public void testDeleteAccountDismiss(){
+        Espresso.onView(AllOf.allOf(withText(R.string.deleteAccountTitle)))
+                .perform(click());
+        Espresso.onView(withText("Dismiss"));
+    }
+
+    @Test
+    @Ignore
     public void testDeleteAccount(){
         Espresso.onView(AllOf.allOf(withText(R.string.deleteAccountTitle)))
                 .perform(click());
+        Espresso.onView(withText("Delete"));
     }
 
     @After

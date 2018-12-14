@@ -50,7 +50,7 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
     private ChatState isChatRunning = null;
     private Context context;
     public boolean uiReady = false;
-    private static boolean isEnabled = true;
+    private boolean isEnabled = true;
     public MessageListActivity(){}
     public MessageListActivity(ChatLogs chatLogs, Context context, int locType){
         // Just create entry to avoid duplicate activities
@@ -203,8 +203,8 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
     }
 
     private void toggleFlagAndSendingFields(boolean newState){
-        if(newState != isEnabled)
-            setEnabled(newState); isEnabled = newState;
+        if(newState != isEnabled) {
+            setEnabled(newState); isEnabled = newState; }
     }
 
     private void compareLocation() {
@@ -213,10 +213,9 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         if(locType != 0 || chatLogs.getMembersId().size() != 2 )
             toggleFlagAndSendingFields(true);
         else{
-                handleUserChat(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId));
+            handleUserChat(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId));
         }
-
-        }
+    }
 
     private void handleUserChat(boolean isInRadius) {
         boolean unBlockedAndVisible = OthersInfo.getInstance().getUsersInRadius().get(otherUserId).isVisible()
