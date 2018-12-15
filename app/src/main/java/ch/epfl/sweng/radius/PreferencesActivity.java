@@ -103,7 +103,7 @@ public class PreferencesActivity extends PreferenceActivity {
                                 Toast.makeText(getActivity(), "Account Deleted", Toast.LENGTH_SHORT).show();
                                 MLocation currentLocation = UserInfo.getInstance().getCurrentPosition();
                                 currentLocation.setDeleted(true);
-                                currentLocation.setTitle("Deleted User");
+                                currentLocation.setTitle("Deleted User - " + currentLocation.getTitle());
                                 UserInfo.getInstance().updateLocationInDB();
                                 logOut(); // might just want to change this line with startActivity
                             } else {
