@@ -106,11 +106,12 @@ public class ChatLogs implements DatabaseObject{
     }
 
    public static String getOtherID(ChatLogs chat){
-       Log.e("RealTimeDebug", " Size of membersID is"+ chat.getMembersId().size());
+       if (!chat.getMembersId().contains(UserInfo.getInstance().getCurrentUser().getID())) {
+           chat.membersId.add(UserInfo.getInstance().getCurrentUser().getID());
+       }
 
        if(chat.getMembersId().size() != 2){
             return null;
-
         }
 
         return chat.getMembersId().get(0).equals(UserInfo.getInstance().getCurrentUser().getID()) ?

@@ -12,7 +12,8 @@ public class MLocation implements DatabaseObject, Serializable {
     private String message;
     private double longitude;
     private double latitude;
-    private boolean isVisible; // added for invisibility feature
+    private boolean visible; // added for invisibility feature
+    private boolean deleted;
     private String urlProfilePhoto;
 
     private int locationType; // 0: user location, 1: group location, 2: topic location
@@ -31,7 +32,8 @@ public class MLocation implements DatabaseObject, Serializable {
         this.message = "";
         this.locationType = 0;
         this.radius = 5000;
-        this.isVisible = true;
+        this.visible = true;
+        this.deleted = false;
         this.urlProfilePhoto = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
         this.spokenLanguages = "";
         this.interests = "";
@@ -46,7 +48,8 @@ public class MLocation implements DatabaseObject, Serializable {
         this.message = "";
         this.locationType = 0;
         this.radius = 5000;
-        this.isVisible = true;
+        this.visible = true;
+        this.deleted = false;
         this.urlProfilePhoto = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
         this.spokenLanguages = "";
         this.interests = "";
@@ -61,7 +64,7 @@ public class MLocation implements DatabaseObject, Serializable {
         this.message = "Here I am";
         this.locationType = 0;
         this.radius = 5000;
-        this.isVisible = true;
+        this.visible = true;
         this.urlProfilePhoto = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
         this.spokenLanguages = "";
         this.interests = "";
@@ -156,13 +159,17 @@ public class MLocation implements DatabaseObject, Serializable {
         //}
     }
 
-    public boolean isVisible() {
-        return isVisible;
+    public boolean getVisible() {
+        return visible;
     }
 
     public void setVisible(boolean visible) {
-        isVisible = visible;
+        this.visible = visible;
     }
+
+    public boolean getDeleted() { return deleted; }
+
+    public void setDeleted(boolean deleted) { this.deleted = deleted; }
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;

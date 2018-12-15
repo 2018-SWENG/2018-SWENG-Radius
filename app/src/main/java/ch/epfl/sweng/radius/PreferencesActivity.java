@@ -1,7 +1,6 @@
 package ch.epfl.sweng.radius;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.UserInfo;
 
 public class PreferencesActivity extends PreferenceActivity {
@@ -101,6 +101,9 @@ public class PreferencesActivity extends PreferenceActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getActivity(), "Account Deleted", Toast.LENGTH_SHORT).show();
+                                MLocation currentLocation = UserInfo.getInstance().getCurrentPosition();
+                                currentLocation.setDeleted(true);
+                                UserInfo.getInstance().updateLocationInDB();
                                 logOut(); // might just want to change this line with startActivity
                             } else {
                                 Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -124,7 +127,7 @@ public class PreferencesActivity extends PreferenceActivity {
         }
 
         private void initializeIncognitoPreference() {
-            isVisible = UserInfo.getInstance().getCurrentPosition().isVisible();
+            isVisible = UserInfo.getInstance().getCurrentPosition().getVisible();
             SwitchPreference incognitoPref = (android.preference.SwitchPreference) findPreference(INCOGNITO);
             if (isVisible) {
                 findPreference(INCOGNITO).setDefaultValue("false");

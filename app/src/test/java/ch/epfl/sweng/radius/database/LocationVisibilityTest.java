@@ -17,15 +17,15 @@ public class LocationVisibilityTest {
 
     @Test
     public void testInitialVisibility() {
-        assertTrue(testUser.isVisible());
+        assertTrue(testUser.getVisible());
     }
 
     @Test
     public void testSetVisibility() {
         testUser.setVisible(false);
-        assertFalse(testUser.isVisible());
+        assertFalse(testUser.getVisible());
         testUser.setVisible(true);
-        assertTrue(testUser.isVisible());
+        assertTrue(testUser.getVisible());
     }
 
 }
