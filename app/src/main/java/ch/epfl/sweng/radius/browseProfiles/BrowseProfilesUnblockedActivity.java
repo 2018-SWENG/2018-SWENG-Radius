@@ -90,23 +90,35 @@ public class BrowseProfilesUnblockedActivity extends BrowseProfilesActivity{
     private void setUpAddFriendButton(final User profileUser){
         final Button addFriendButton = findViewById(R.id.add_user);
         final User currentUser = UserInfo.getInstance().getCurrentUser();
-        if (OthersInfo.getInstance().getAllUserLocations().containsKey(profileUser.getID())
-                && OthersInfo.getInstance().getAllUserLocations().get(profileUser.getID()).getDeleted()) {
+
+        setupAddFriendButtonText(addFriendButton, profileUser, currentUser);
+        setupAddFriendButtonListener(addFriendButton, profileUser, currentUser);
+    }
+
+    private void setupAddFriendButtonText(Button addFriendButton, User profileUser, User currentUser) {
+        if (OthersInfo.getInstance().getAllUserLocations().get(profileUser.getID()).getDeleted()
+                && currentUser.getFriends().containsKey(profileUser.getID())) {
+            addFriendButton.setText("This User Is Deleted - Remove Friend");
+        }
+        else if (OthersInfo.getInstance().getAllUserLocations().get(profileUser.getID()).getDeleted()) {
             addFriendButton.setText("This User Is Deleted");
             addFriendButton.setEnabled(false);
-            return;
         }
-        if (currentUser.getFriends().containsKey(profileUser.getID())) {
+        else if (currentUser.getFriends().containsKey(profileUser.getID())) {
             addFriendButton.setText("Remove friend"); addFriendButton.setEnabled(true);
         }
         else if (currentUser.getFriendsRequests().containsKey(profileUser.getID())) {
             addFriendButton.setText("Request sent"); addFriendButton.setEnabled(false);
         }
+    }
+
+    private void setupAddFriendButtonListener(final Button addFriendButton, final User profileUser, final User currentUser) {
         addFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentUser.getFriends().containsKey(profileUser.getID())) {
                     currentUser.removeFriend(profileUser);
+                    UserInfo.getInstance().updateUserInDB();
                     addFriendButton.setText("Removed !");
                     addFriendButton.setEnabled(false);
                 } else {
