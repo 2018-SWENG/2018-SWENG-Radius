@@ -1,6 +1,8 @@
 package ch.epfl.sweng.radius.utils.customLists.customGroups;
 
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.junit.After;
@@ -11,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.utils.MapUtilityTest;
 
 import static org.mockito.Mockito.verify;
@@ -18,7 +21,7 @@ import static org.powermock.api.mockito.PowerMockito.doAnswer;
 
 public class CustomGroupListListenersTest {
 
-    private TextView mockedView = Mockito.mock(TextView.class);
+    private LinearLayout mockedView = Mockito.mock(LinearLayout.class);
     private CustomGroupListListeners test;
 
     @Before

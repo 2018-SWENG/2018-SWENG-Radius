@@ -1,6 +1,7 @@
 package ch.epfl.sweng.radius.utils.customLists.customGroups;
 
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.junit.Before;
@@ -15,7 +16,7 @@ import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
 
 public class CustomGroupListAdapterTest {
     private CustomListAdapter.ViewHolder mockedView = Mockito.mock(CustomListAdapter.ViewHolder.class);
-    private TextView mockedText = Mockito.mock(TextView.class);
+    private LinearLayout mockedLinearLayout = Mockito.mock(LinearLayout.class);
     private ImageView mockedImg = Mockito.mock(ImageView.class);
     private CustomGroupListAdapter customGroupListAdapter;
     ArrayList<CustomListItem> list = new ArrayList<CustomListItem>();
@@ -23,13 +24,15 @@ public class CustomGroupListAdapterTest {
     @Before
     public void setUp() throws Exception {
         list.add(new CustomListItem("1","0", "3"));
-        mockedView.txtViewTitle = mockedText;
+        mockedView.titleAndStatus = mockedLinearLayout;
         mockedView.imgViewIcon = mockedImg;
     }
 
     @Test
     public void onBindViewHolder() {
         customGroupListAdapter = new CustomGroupListAdapter(list, MapUtilityTest.context);
-        customGroupListAdapter.onBindViewHolder(mockedView, 0);
+        if(mockedView!=null) {
+            customGroupListAdapter.onBindViewHolder(mockedView, 0);
+        }
     }
 }

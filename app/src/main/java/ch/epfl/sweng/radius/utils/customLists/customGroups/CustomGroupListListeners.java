@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import ch.epfl.sweng.radius.messages.MessageListActivity;
@@ -21,8 +22,8 @@ public class CustomGroupListListeners {
         this.convId =  convId;
     }
 
-    public void setCustomOnClick(TextView textView, final Context context) {
-        textView.setOnClickListener(new View.OnClickListener() {
+    public void setCustomOnClick(LinearLayout linearLayout, final Context context) {
+        linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
