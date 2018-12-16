@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.DBUserObserver;
@@ -244,6 +245,9 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         String interestsString = getDataFromTextInput(interestsInput);
 
         MLocation currentUser = UserInfo.getInstance().getCurrentPosition();
+
+        //replace all nonalphanumeric char by an empty string
+        nicknameString = nicknameString.replaceAll("[^A-Za-z0-9_]", "");
 
         if (!nicknameString.isEmpty()) {
             currentUser.setTitle(nicknameString);

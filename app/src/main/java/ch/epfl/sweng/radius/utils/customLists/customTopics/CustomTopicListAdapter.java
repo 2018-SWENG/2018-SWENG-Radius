@@ -157,6 +157,7 @@ public class CustomTopicListAdapter extends CustomListAdapter {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 String topicName = userInput.getText().toString();
+                                topicName = topicName.replaceAll("[^A-Za-z0-9_ f]", "");
                                 pushTopicToDatabase(topicName);
                             }
                         })
