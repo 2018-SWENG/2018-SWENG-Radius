@@ -339,8 +339,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
             initCircle(coord);
             markNearbyUsers();
         }
-
-
     }
 
     public void showNearFriendNotification(String userID, String userNickname) {
