@@ -21,6 +21,7 @@ import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
@@ -37,7 +38,6 @@ public class CustomTopicListAdapter extends CustomListAdapter {
                                   ArrayList<Integer> removableTopicPositions) {
         super(items, context);
         this.removableTopicPositions = removableTopicPositions;
-        items.add(0, new CustomListItem("Dummy","Dummy","Dummy"));
     }
 
     @Override
@@ -118,6 +118,7 @@ public class CustomTopicListAdapter extends CustomListAdapter {
                     FirebaseDatabase.getInstance().
                             getReference(Database.Tables.LOCATIONS.toString())
                             .child(textViewTitle.getText().toString()).removeValue();
+
                 }
             });
         }

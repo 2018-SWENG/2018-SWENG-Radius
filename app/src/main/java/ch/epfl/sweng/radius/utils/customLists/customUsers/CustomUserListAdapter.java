@@ -33,7 +33,7 @@ public class CustomUserListAdapter extends CustomListAdapter {
         //Log.e("CustomUserListAdapter", "item.getItemId() :" + item.getItemId());
         CustomUserListListeners customListener = new CustomUserListListeners(item.getProfilePic(), clickedId,item.getItemName());
         customListener.setCustomOnClick(viewHolder.imgViewIcon, context);
-        customListener.setCustomOnClick(viewHolder.txtViewTitle, context,clickedId,item.getConvId());
+        customListener.setCustomOnClick(viewHolder.linearLayout_name, context,clickedId,item.getConvId());
     }
 
 

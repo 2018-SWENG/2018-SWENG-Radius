@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesBlockedActivity;
@@ -51,10 +52,10 @@ public class CustomUserListListeners {
         });
     }
 
-    public void setCustomOnClick(TextView textView, final Context context, final String userId, final String convId) {
+    public void setCustomOnClick(LinearLayout linearLayout, final Context context, final String userId, final String convId) {
         Log.e("ChatlogsDebug", "Chat OnClick UserId is" + userId);
 
-        textView.setOnClickListener(new View.OnClickListener() {
+        linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String chatId = convId;

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -50,11 +51,13 @@ public abstract class CustomListAdapter extends RecyclerView.Adapter<CustomListA
         public TextView txtViewTitle;
         public ImageView imgViewIcon;
         public TextView txtViewStatus;
+        public LinearLayout linearLayout_name;
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
             txtViewTitle = itemLayoutView.findViewById(R.id.username);
             txtViewStatus = itemLayoutView.findViewById(R.id.status);
+            linearLayout_name = itemLayoutView.findViewById(R.id.container_name_status);
             imgViewIcon = (CircleImageView) itemLayoutView.findViewById(R.id.profile_picture);
         }
     }

@@ -44,7 +44,7 @@ public class CustomGroupListAdapter extends CustomListAdapter{
         setIcon(viewHolder,position,itemGroup);
 
         CustomGroupListListeners customListener = new CustomGroupListListeners(groupId,groupName,convId);
-        customListener.setCustomOnClick(viewHolder.txtViewTitle, context);
+        customListener.setCustomOnClick(viewHolder.linearLayout_name, context);
     }
 
 }
