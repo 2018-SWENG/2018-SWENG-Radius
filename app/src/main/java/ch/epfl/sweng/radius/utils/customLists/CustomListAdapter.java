@@ -3,16 +3,20 @@ package ch.epfl.sweng.radius.utils.customLists;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.MLocation;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -28,14 +32,15 @@ public abstract class CustomListAdapter extends RecyclerView.Adapter<CustomListA
 
     @NonNull
     @Override
-    public CustomListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,  int viewType) {
+    public CustomListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // create a new view
         View itemLayoutView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.custom_list_item_layout, null);
 
         // create ViewHolder
         CustomListAdapter.ViewHolder viewHolder = new CustomListAdapter.ViewHolder(itemLayoutView);
-        return viewHolder;    }
+        return viewHolder;
+    }
 
     public abstract void onBindViewHolder(@NonNull CustomListAdapter.ViewHolder viewHolder, int i);
 
@@ -60,7 +65,22 @@ public abstract class CustomListAdapter extends RecyclerView.Adapter<CustomListA
         return items.size();
     }
 
-    public void setItems(List<CustomListItem> items){
+    public void setItems(List<CustomListItem> items) {
         this.items = new ArrayList<>(items);
+    }
+
+    //Set the icon
+    protected void setIcon(ViewHolder viewHolder, int position, MLocation item) {
+        if (viewHolder.imgViewIcon != null) {
+            if (item != null) {
+                if (!item.getUrlProfilePhoto().isEmpty()) {
+                    Picasso.get().load(item.getUrlProfilePhoto()).into(viewHolder.imgViewIcon);
+                } else {
+                    viewHolder.imgViewIcon.setImageResource(items.get(position).getProfilePic());
+                }
+            } else {
+                Log.e("CustomUserListAdapter", "Item ID not found in Users");
+            }
+        }
     }
 }

@@ -28,16 +28,7 @@ public class CustomUserListAdapter extends CustomListAdapter {
         viewHolder.txtViewTitle.setText(item.getItemName());
         viewHolder.txtViewStatus.setText(itemUser.getMessage());
 
-        if(itemUser != null){
-            if (!itemUser.getUrlProfilePhoto().isEmpty()) {
-                Picasso.get().load(itemUser.getUrlProfilePhoto()).into(viewHolder.imgViewIcon);
-            } else {
-                viewHolder.imgViewIcon.setImageResource(items.get(position).getProfilePic());
-            }
-        }
-        else{
-            Log.e("CustomUserListAdapter", "Item ID not found in Users");
-        }
+        setIcon(viewHolder,position,itemUser);
         final String clickedId = item.getItemId();
         //Log.e("CustomUserListAdapter", "item.getItemId() :" + item.getItemId());
         CustomUserListListeners customListener = new CustomUserListListeners(item.getProfilePic(), clickedId,item.getItemName());
