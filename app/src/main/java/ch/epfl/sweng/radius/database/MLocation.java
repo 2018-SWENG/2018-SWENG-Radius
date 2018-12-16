@@ -1,6 +1,7 @@
 package ch.epfl.sweng.radius.database;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class MLocation implements DatabaseObject, Serializable {
 
@@ -18,6 +19,7 @@ public class MLocation implements DatabaseObject, Serializable {
     private double radius; // Use it only if the mLocation is a group.
     private String spokenLanguages;
     private String interests;
+    private ArrayList<String> languageList;
 
     private String ownerId = ""; // for topics, no significance for locations and groups (so default is "")
 
@@ -33,6 +35,7 @@ public class MLocation implements DatabaseObject, Serializable {
         this.urlProfilePhoto = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
         this.spokenLanguages = "";
         this.interests = "";
+        this.languageList = new ArrayList<>();
     }
 
     public MLocation(String userID){
@@ -47,6 +50,7 @@ public class MLocation implements DatabaseObject, Serializable {
         this.urlProfilePhoto = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
         this.spokenLanguages = "";
         this.interests = "";
+        this.languageList = new ArrayList<>();
     }
 
     public MLocation(String userID, double longitude, double latitude){
@@ -61,6 +65,7 @@ public class MLocation implements DatabaseObject, Serializable {
         this.urlProfilePhoto = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
         this.spokenLanguages = "";
         this.interests = "";
+        this.languageList = new ArrayList<>();
     }
 
     public double getLatitude() {
@@ -170,6 +175,14 @@ public class MLocation implements DatabaseObject, Serializable {
     public boolean isRemovableTopic() { // Is Topic created by the current user?
         return this.locationType == 2 &&
                 this.getOwnerId().equals(UserInfo.getInstance().getCurrentUser().getID());
+    }
+
+    public ArrayList<String> getLanguageList(){
+        return languageList;
+    }
+
+    public void addLanguage(String language){
+        languageList.add(language);
     }
 
 }
