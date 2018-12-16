@@ -141,8 +141,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
         mapView = view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
-        mapView.onResume();
-        mapView.getMapAsync(this);
+        mapView.onResume();mapView.getMapAsync(this);
 
         zoomInButton = view.findViewById(R.id.zoomButton);
         zoomInButton.setOnClickListener(new View.OnClickListener() {
@@ -205,8 +204,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
             MLocation curPos = UserInfo.getInstance().getCurrentPosition();
             coord = new LatLng(curPos.getLatitude(), curPos.getLongitude());
-            initCircle(coord);
-            moveCamera(coord, ZOOM);
+            initCircle(coord);moveCamera(coord, ZOOM);
 
             // Do locations here
             markNearbyUsers();
