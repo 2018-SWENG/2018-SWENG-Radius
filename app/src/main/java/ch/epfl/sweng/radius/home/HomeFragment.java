@@ -82,8 +82,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     }*/
 
     // For debug purpose only
-    public static HomeFragment newInstance(MapUtility mapUtility, GoogleMap googleMap,
-                                           int radiusValue) {
+    public static HomeFragment newInstance(MapUtility mapUtility, GoogleMap googleMap, int radiusValue){
         HomeFragment fragment = new HomeFragment();
         radius = radiusValue;
         mobileMap = googleMap;
@@ -276,16 +275,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         getFriendsID();
         if(usersLoc != null) {
             for (int i = 0; i < usersLoc.size(); i++) {
-                markNearbyUser(i, usersLoc.get(i).getMessage(), usersLoc.get(i).getTitle(),
-                usersLoc.get(i).getID());
+                markNearbyUser(i, usersLoc.get(i).getMessage(), usersLoc.get(i).getTitle(), usersLoc.get(i).getID());
             }
         }
     }
 
     public void getFriendsID() {
-
         friendsID = UserInfo.getInstance().getCurrentUser().getFriends();
-
     }
 
     public void markNearbyUser(int indexOfUser, String status, String userName, String locID) {
@@ -319,11 +315,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
             public void run(){
                 if(mobileMap != null && mobileMap.getProjection() != null)
                     mobileMap.addMarker(marker);
-
             }
             });
         }catch(NullPointerException e){/* Only happens in Unit Test*/}
-
 
     }
 
@@ -332,14 +326,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
         radius = UserInfo.getInstance().getCurrentPosition().getRadius();
         Log.e("OnLocationChange", "radius : " + radius);
-        coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
-                UserInfo.getInstance().getCurrentPosition().getLongitude());
+        coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(), UserInfo.getInstance().getCurrentPosition().getLongitude());
         if (getActivity() != null && !Database.DEBUG_MODE) {
             initCircle(coord);
             markNearbyUsers();
         }
-
-
     }
 
     public void showNearFriendNotification(String userID, String userNickname) {
