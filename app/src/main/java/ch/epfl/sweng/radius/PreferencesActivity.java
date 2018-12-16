@@ -101,6 +101,8 @@ public class PreferencesActivity extends PreferenceActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getActivity(), "Account Deleted", Toast.LENGTH_SHORT).show();
+
+                                //delete user
                                 MLocation currentLocation = UserInfo.getInstance().getCurrentPosition();
                                 currentLocation.setDeleted(true);
                                 currentLocation.setTitle("Deleted User - " + currentLocation.getTitle());
