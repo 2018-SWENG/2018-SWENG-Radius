@@ -3,6 +3,7 @@ package ch.epfl.sweng.radius.utils.customLists;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.radius.R;
+import ch.epfl.sweng.radius.database.MLocation;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -66,5 +70,17 @@ public abstract class CustomListAdapter extends RecyclerView.Adapter<CustomListA
 
     public void setItems(List<CustomListItem> items){
         this.items = new ArrayList<>(items);
+    }
+
+    protected void setIcon(MLocation mLocation,int position,ViewHolder viewHolder){
+        if(mLocation != null){
+            if (!mLocation.getUrlProfilePhoto().isEmpty()) {
+                Picasso.get().load(mLocation.getUrlProfilePhoto()).into(viewHolder.imgViewIcon);
+            } else {
+                viewHolder.imgViewIcon.setImageResource(items.get(position).getProfilePic());
+            }
+        } else{
+            Log.e("CustomUserListAdapter", "Item ID not found in Users");
+        }
     }
 }

@@ -37,13 +37,7 @@ public class CustomGroupListAdapter extends CustomListAdapter{
 
         if (viewHolder.imgViewIcon != null) {
             if(itemGroup.getLocationType() == 1) { //is a group
-                if(itemGroup != null) {
-                    if (!itemGroup.getUrlProfilePhoto().isEmpty()) {
-                        Picasso.get().load(itemGroup.getUrlProfilePhoto()).into(viewHolder.imgViewIcon);
-                    } else {
-                        viewHolder.imgViewIcon.setImageResource(items.get(position).getProfilePic());
-                    }
-                }
+                setIcon(itemGroup,position,viewHolder);
             }
         }
         if (viewHolder.txtViewTitle != null) {
