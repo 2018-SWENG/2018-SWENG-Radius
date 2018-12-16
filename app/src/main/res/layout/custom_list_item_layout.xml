@@ -18,13 +18,14 @@
         app:civ_border_width="2dp"
         app:civ_border_color="#ecf0f1"/>
 
-
     <!-- title -->
     <LinearLayout
-        android:layout_width="0dp"
+        android:id="@+id/container_name_status"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_gravity="center_vertical"
-        android:layout_weight="1"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
@@ -32,11 +33,13 @@
             android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="textStart"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:paddingTop="16dp"
             android:textColor="@android:color/black"
             android:textSize="24sp"
-            tools:text="@tools:sample/cities"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            tools:text="@tools:sample/cities" />
 
         <TextView
             android:id="@+id/status"
