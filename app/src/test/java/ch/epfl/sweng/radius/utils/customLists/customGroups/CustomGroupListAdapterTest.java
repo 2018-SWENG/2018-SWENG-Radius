@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.utils.MapUtilityTest;
 import ch.epfl.sweng.radius.utils.customLists.CustomListAdapter;
 import ch.epfl.sweng.radius.utils.customLists.CustomListItem;
@@ -24,6 +25,7 @@ public class CustomGroupListAdapterTest {
 
     @Before
     public void setUp() throws Exception {
+        Database.activateDebugMode();
         list.add(new CustomListItem("1","0", "3"));
         mockedView.txtViewTitle = mockedText;
         mockedView.imgViewIcon = mockedImg;
