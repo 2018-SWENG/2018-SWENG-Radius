@@ -10,6 +10,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,7 +26,6 @@ public class PreferencesActivity extends PreferenceActivity {
     private static final String INVISIBLE = "You are currently invisible, nobody can see you in the map.";
     private static final String VISIBLE = "You are visible, people can see your location in the map.";
     private static final String DELETINGACCOUNTMESSAGE = "All your conversations and friends will be deleted.";
-    private static boolean isVisible = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,13 +150,10 @@ public class PreferencesActivity extends PreferenceActivity {
         }
 
         private void initializeIncognitoPreference() {
-            isVisible = UserInfo.getInstance().getCurrentPosition().getVisible();
             SwitchPreference incognitoPref = (android.preference.SwitchPreference) findPreference(INCOGNITO);
-            if (isVisible) {
-                findPreference(INCOGNITO).setDefaultValue("false");
+            if (!incognitoPref.isChecked()) {
                 incognitoPref.setSummaryOff(VISIBLE);
             } else {
-                findPreference(INCOGNITO).setDefaultValue("true");
                 incognitoPref.setSummaryOn(INVISIBLE);
             }
         }
@@ -184,7 +181,7 @@ public class PreferencesActivity extends PreferenceActivity {
             //Log.println(Log.INFO,"Settings","change");
 
             switch (key){
-                case "incognitoSwitch": // TODO: set the incognito Mode
+                case "incognitoSwitch":
                     changeInvisibility();
                     //Preference pref = findPreference(key);
                     //Log.println(Log.INFO,"Settings", String.valueOf((sharedPreferences.getBoolean(key, false))));
@@ -192,18 +189,15 @@ public class PreferencesActivity extends PreferenceActivity {
                 case "notificationCheckbox": // TODO: set the notifications On/Off
                     //Log.println(Log.INFO,"Settings","notification");
                     break;
-                case "nightModeSwitch": // TODO: set the night Mode
-                    //Log.println(Log.INFO,"Settings","night mode");
-                    break;
             }
         }
 
         private void changeInvisibility() {
-            isVisible = !isVisible;
-            UserInfo.getInstance().getCurrentPosition().setVisible(isVisible);
-            UserInfo.getInstance().updateLocationInDB();
             SwitchPreference incognitoPref = (android.preference.SwitchPreference) findPreference(INCOGNITO);
-            if (isVisible) {
+            boolean invisible = incognitoPref.isChecked();
+            UserInfo.getInstance().getCurrentPosition().setVisible(!invisible);
+            UserInfo.getInstance().updateLocationInDB();
+            if (!invisible) {
                 incognitoPref.setSummaryOff(VISIBLE);
             } else {
                 incognitoPref.setSummaryOn(INVISIBLE);

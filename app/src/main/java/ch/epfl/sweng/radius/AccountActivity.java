@@ -179,7 +179,11 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private void enterApp(){
-        UserInfo.getInstance().getCurrentPosition().setVisible(true);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean incognito = settings.getBoolean("incognitoSwitch", false);
+        if (!incognito)
+            UserInfo.getInstance().getCurrentPosition().setVisible(true);
+
         Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(),
                 Database.Tables.LOCATIONS, "visible",
                 true);
