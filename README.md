@@ -14,7 +14,7 @@ An android app that connect people in the same area. Users can talk to other peo
 - Arthur Passuello
 - Berke Egeli
 - Efe Acer
-- François Quelec
+- François Quellec
 - Michael Spierer
 - Pinar Ayaz
 
