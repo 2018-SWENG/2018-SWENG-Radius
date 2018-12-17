@@ -171,9 +171,9 @@ public class DatabaseObjectsTest {
         assert(mLocation2.getLatitude() == 1.0);
         assert(mLocation2.getLongitude() == 4.0);
 
-        assertTrue(mLocation.isVisible());
+        assertTrue(mLocation.getVisible());
         mLocation.setVisible(false);
-        assertFalse(mLocation.isVisible());
+        assertFalse(mLocation.getVisible());
 
     }
 

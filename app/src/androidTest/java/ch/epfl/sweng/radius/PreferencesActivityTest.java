@@ -6,16 +6,23 @@ import android.preference.Preference;
 import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
+import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.FrameLayout;
 
 import org.hamcrest.core.AllOf;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.database.Database;
+import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.User;
 
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -73,11 +80,7 @@ public class PreferencesActivityTest  extends ActivityInstrumentationTestCase2<P
 
     @Test
     public void testIncognitoMode(){
-        try {
-            Thread.sleep(7000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         Espresso.onView(AllOf.allOf(withText(R.string.incognitoTitle)))
                 .perform(click());
     }
@@ -101,10 +104,33 @@ public class PreferencesActivityTest  extends ActivityInstrumentationTestCase2<P
     }
 
     @Test
+    public void testDeleteAccountDismiss(){
+        Espresso.onView(AllOf.allOf(withText(R.string.deleteAccountTitle)))
+                .perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Espresso.onView(withText("Dismiss")).perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*
+
+    @Test
+    @Ignore
     public void testDeleteAccount(){
         Espresso.onView(AllOf.allOf(withText(R.string.deleteAccountTitle)))
                 .perform(click());
+        Espresso.onView(withText("Delete")).perform(click());
+
     }
+*/
 
     @After
     public void tearDown() throws Exception {

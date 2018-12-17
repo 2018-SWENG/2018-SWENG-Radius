@@ -21,11 +21,8 @@ import ch.epfl.sweng.radius.utils.BrowseProfilesUtility;
 
 
 public class BrowseProfilesUnblockedActivity extends BrowseProfilesActivity{
-    //Might want to create and get the id of users along with their names.
-    //private BrowseProfilesUtility profileActivityListener;
-    //private Toolbar toolbar;
+
     private final Database database = Database.getInstance();
-    //private String userUID;
     private String userNickname;
 
     // UI elements
@@ -90,57 +87,38 @@ public class BrowseProfilesUnblockedActivity extends BrowseProfilesActivity{
         }
     }
 
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.profile_menu, menu);
-        setUpUnblockButton(menu);
-        return true;
-    }
-
-    private void setUpUnblockButton(Menu menu) {
-        if (UserInfo.getInstance().getCurrentUser().getBlockedUsers().contains(userUID)) {
-            menu.getItem(0).getSubMenu().getItem(0).setTitle("Unblock User");
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.block_user:
-                if (item.getTitle().toString().trim().equals("Block User")) {
-                    profileActivityListener.blockUser();
-                    item.setTitle("Unblock user");
-                } else if (item.getTitle().toString().trim().equals("Unblock User")) {
-                    profileActivityListener.unblockUser();
-                    item.setTitle("Block User");
-                }
-                return true;
-            case R.id.spam:
-                profileActivityListener.reportUser("spam");
-                return true;
-            case R.id.language:
-                profileActivityListener.reportUser("language");
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }*/
-
     private void setUpAddFriendButton(final User profileUser){
         final Button addFriendButton = findViewById(R.id.add_user);
         final User currentUser = UserInfo.getInstance().getCurrentUser();
-        if (currentUser.getFriends().containsKey(profileUser.getID())) {
+
+        setupAddFriendButtonText(addFriendButton, profileUser, currentUser);
+        setupAddFriendButtonListener(addFriendButton, profileUser, currentUser);
+    }
+
+    private void setupAddFriendButtonText(Button addFriendButton, User profileUser, User currentUser) {
+        if (OthersInfo.getInstance().getAllUserLocations().get(profileUser.getID()).getDeleted()
+                && currentUser.getFriends().containsKey(profileUser.getID())) {
+            addFriendButton.setText("This User Is Deleted - Remove Friend");
+        }
+        else if (OthersInfo.getInstance().getAllUserLocations().get(profileUser.getID()).getDeleted()) {
+            addFriendButton.setText("This User Is Deleted");
+            addFriendButton.setEnabled(false);
+        }
+        else if (currentUser.getFriends().containsKey(profileUser.getID())) {
             addFriendButton.setText("Remove friend"); addFriendButton.setEnabled(true);
         }
         else if (currentUser.getFriendsRequests().containsKey(profileUser.getID())) {
             addFriendButton.setText("Request sent"); addFriendButton.setEnabled(false);
         }
+    }
+
+    private void setupAddFriendButtonListener(final Button addFriendButton, final User profileUser, final User currentUser) {
         addFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentUser.getFriends().containsKey(profileUser.getID())) {
                     currentUser.removeFriend(profileUser);
+                    UserInfo.getInstance().updateUserInDB();
                     addFriendButton.setText("Removed !");
                     addFriendButton.setEnabled(false);
                 } else {

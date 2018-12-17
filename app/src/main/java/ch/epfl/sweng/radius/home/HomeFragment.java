@@ -141,8 +141,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
         mapView = view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
-        mapView.onResume();
-        mapView.getMapAsync(this);
+        mapView.onResume();mapView.getMapAsync(this);
 
         zoomInButton = view.findViewById(R.id.zoomButton);
         zoomInButton.setOnClickListener(new View.OnClickListener() {
@@ -205,8 +204,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
             MLocation curPos = UserInfo.getInstance().getCurrentPosition();
             coord = new LatLng(curPos.getLatitude(), curPos.getLongitude());
-            initCircle(coord);
-            moveCamera(coord, ZOOM);
+            initCircle(coord);moveCamera(coord, ZOOM);
 
             // Do locations here
             markNearbyUsers();
@@ -285,9 +283,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     }
 
     public void markNearbyUser(int indexOfUser, String status, String userName, String locID) {
-        if(!usersLoc.get(indexOfUser).isVisible()) return;
-        LatLng newPos = new LatLng(usersLoc.get(indexOfUser).getLatitude(), usersLoc.get(indexOfUser).getLongitude());
-        float color = friendsID.containsKey(locID) ? BitmapDescriptorFactory.HUE_BLUE : BitmapDescriptorFactory.HUE_RED;
+        if(!usersLoc.get(indexOfUser).getVisible()) return;
+        LatLng newPos = new LatLng(usersLoc.get(indexOfUser).getLatitude(),
+                                    usersLoc.get(indexOfUser).getLongitude()    );
+        float color = friendsID.containsKey(locID) ? BitmapDescriptorFactory.HUE_BLUE :
+                                                        BitmapDescriptorFactory.HUE_RED;
 
         //Change the marker color to green if users speak the same language but they are not friends
         if(color != BitmapDescriptorFactory.HUE_BLUE){
@@ -301,7 +301,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
         if(friendsID.containsKey(locID) && OthersInfo.getInstance().getNewUsersPos().containsKey(locID)){
             showNearFriendNotification(locID, userName);
-            //Log.d("NearFriendNotif", "There is friend nearby");
         }
 
         final MarkerOptions marker = new MarkerOptions().position(newPos)

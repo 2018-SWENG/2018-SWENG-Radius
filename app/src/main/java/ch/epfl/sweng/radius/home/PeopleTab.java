@@ -25,7 +25,7 @@ public class PeopleTab extends CustomUserTab implements DBLocationObserver {
         List<MLocation> usersInRadius = new ArrayList(OthersInfo.getInstance().getUsersInRadius().values());
         for(int i = 0; i < usersInRadius.size(); i++){
             MLocation loc = usersInRadius.get(i);
-            if(loc.isVisible())
+            if(loc.getVisible())
                 visibleUsers.add(loc);
         }
 
