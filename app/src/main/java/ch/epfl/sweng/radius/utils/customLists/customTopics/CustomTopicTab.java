@@ -36,10 +36,12 @@ public abstract class CustomTopicTab extends CustomTab {
 
                 String topicId;
                 String convId;
+                String topicName;
                 for (ChatLogs topics: (List<ChatLogs>) value) {
                     topicId = topics.getID();
                     convId = topics.getChatLogsId();
-                    topicItems.add(new CustomListItem(topicId, convId, topicId));
+                    topicName = OthersInfo.getInstance().getTopicsPos().get(topicId).getTitle();
+                    topicItems.add(new CustomListItem(topicId, convId, topicName));
                 }
                 if(adapter != null){
                     ArrayList<Integer> removableTopicPositions = getRemovableTopicPositions(topicItems);

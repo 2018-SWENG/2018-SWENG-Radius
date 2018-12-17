@@ -210,6 +210,7 @@ public class OthersInfo extends DBObservable{
     }
 
     public void removeFromTable(MLocation loc){
+        if(loc == null) return;
         switch (loc.getLocationType()){
             case 0:
                 if(loc.getID().equals(UserInfo.getInstance().getCurrentPosition().getID()))
