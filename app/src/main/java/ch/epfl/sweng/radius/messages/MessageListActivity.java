@@ -97,7 +97,7 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
     private void setInfo() {
         Bundle b = getIntent().getExtras();
 
-        //Get infos from parent fragme
+        //Get infos from parent fragment
 
         if (b != null) {
             chatId = b.getString("chatId"); locType = b.getInt("locType");
@@ -127,6 +127,7 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
 
        // Log.e("ChatlogsDebug", chatId);
         setContentView(R.layout.activity_message_list);
+        getSupportActionBar().setTitle(NotificationUtility.getChatTitle(chatLogs,locType));
         messageZone = (EditText) findViewById(R.id.edittext_chatbox);
         myMessageAdapter = new MessageListAdapter(this, chatLogs.getMessages(),chatLogs.getMembersId());
         myMessageRecycler = findViewById(R.id.reyclerview_message_list);

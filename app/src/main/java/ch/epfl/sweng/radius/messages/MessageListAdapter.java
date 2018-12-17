@@ -133,7 +133,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         TextView messageText;
         TextView timeText;
         TextView nameText;
-        ImageView profileImage;
 
         ReceivedMessageHolder(View itemView) {
             super(itemView);
