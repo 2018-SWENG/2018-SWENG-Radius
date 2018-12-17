@@ -155,7 +155,8 @@ public class HomeFragmentTest extends ActivityInstrumentationTestCase2<AccountAc
                 .check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
 
-        Espresso.onView(withText("testUser4"))
+        Espresso.onView(withText("TOPICS"))
+                .check(ViewAssertions.matches(isDisplayed()))
                 .perform(click());
     }
 
