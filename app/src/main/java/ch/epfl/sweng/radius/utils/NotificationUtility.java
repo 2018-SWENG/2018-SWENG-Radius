@@ -92,29 +92,40 @@ public class NotificationUtility {
         Log.d("NearFriendNotif", "Your friend " + userNickname + " (" + userID + ")" + "is in the Radius!");
     }
 
-    public static String getChatTitle(ChatLogs chatlogs, Message message, int chatType) {
+    public static String getChatTitle(ChatLogs chatlogs, int chatType) {
         String ret = "Anonymous";
         switch (chatType) {
             case 0: // user
                 ret = handleUserTitle(chatlogs);
                 break;
             case 1: // group
-                ret = chatlogs.getID() + " : " + OthersInfo.getInstance().getAllUserLocations().get(message.getSenderId()).getTitle() ;
+                ret = chatlogs.getID();
                 break;
             case 2: // topic
-                ret = handleTopicTitle(chatlogs, message);
+                ret = OthersInfo.getInstance().getTopicsPos().get(chatlogs.getID()).getTitle();
+                break;
+            default:
                 break;
         }
         return ret;
-
     }
 
-    private static String handleTopicTitle(ChatLogs chatLogs, Message message){
-        return  OthersInfo.getInstance().getTopicsPos().get(chatLogs.getID()).getTitle() + " : "
-                + OthersInfo.getInstance().getAllUserLocations().get(message.getSenderId()).getTitle();
+    public static String getChatTitleNotification(ChatLogs chatlogs, Message message, int chatType) {
+        String ret = getChatTitle(chatlogs, chatType);
+        switch (chatType) {
+            case 1: // group
+                ret = ret + " : " + OthersInfo.getInstance().getAllUserLocations().get(message.getSenderId()).getTitle();
+                break;
+            case 2: // topic
+                ret = ret + " : " + OthersInfo.getInstance().getAllUserLocations().get(message.getSenderId()).getTitle();
+                break;
+            default:
+                break;
+        }
+        return ret;
     }
 
-    private static String handleUserTitle(ChatLogs chatlogs){
+    private static String handleUserTitle(ChatLogs chatlogs) {
         String currentUserId = Database.getInstance().getCurrent_user_id();
         String otherUserId = "";
         String ret = "Anonymous";
@@ -129,6 +140,6 @@ public class NotificationUtility {
             ret = OthersInfo.getInstance().getAllUserLocations().get(otherUserId).getTitle();
         }
 
-        return  ret;
+        return ret;
     }
 }

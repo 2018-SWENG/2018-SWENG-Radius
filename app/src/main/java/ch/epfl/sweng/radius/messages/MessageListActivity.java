@@ -127,7 +127,7 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
 
        // Log.e("ChatlogsDebug", chatId);
         setContentView(R.layout.activity_message_list);
-        getSupportActionBar().setTitle(NotificationUtility.getChatTitle(chatLogs, null, locType));
+        getSupportActionBar().setTitle(NotificationUtility.getChatTitle(chatLogs, locType));
         messageZone = (EditText) findViewById(R.id.edittext_chatbox);
         myMessageAdapter = new MessageListAdapter(this, chatLogs.getMessages(),chatLogs.getMembersId());
         myMessageRecycler = findViewById(R.id.reyclerview_message_list);
