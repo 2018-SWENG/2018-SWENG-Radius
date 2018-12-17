@@ -34,12 +34,9 @@ public abstract class CustomTopicTab extends CustomTab {
                 //Add dummy first item
                 topicItems.add(0, new CustomListItem("Dummy","Dummy","Dummy"));
 
-                String topicId;
-                String convId;
-                String topicName;
+                String topicId, convId, topicName;
                 for (ChatLogs topics: (List<ChatLogs>) value) {
-                    topicId = topics.getID();
-                    convId = topics.getChatLogsId();
+                    topicId = topics.getID();convId = topics.getChatLogsId();
                     topicName = OthersInfo.getInstance().getTopicsPos().get(topicId).getTitle();
                     topicItems.add(new CustomListItem(topicId, convId, topicName));
                 }
