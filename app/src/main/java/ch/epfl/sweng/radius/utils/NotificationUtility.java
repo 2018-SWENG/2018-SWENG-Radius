@@ -99,7 +99,8 @@ public class NotificationUtility {
                 ret = handleUserTitle(chatlogs);
                 break;
             case 1: // group
-                ret = chatlogs.getID() + " : " + OthersInfo.getInstance().getAllUserLocations().get(message.getSenderId()).getTitle() ;
+                ret = chatlogs.getID();
+                if(message != null) ret+= " : " + OthersInfo.getInstance().getAllUserLocations().get(message.getSenderId()).getTitle() ;
                 break;
             case 2: // topic
                 ret = handleTopicTitle(chatlogs, message);
@@ -110,8 +111,10 @@ public class NotificationUtility {
     }
 
     private static String handleTopicTitle(ChatLogs chatLogs, Message message){
-        return  OthersInfo.getInstance().getTopicsPos().get(chatLogs.getID()).getTitle() + " : "
-                + OthersInfo.getInstance().getAllUserLocations().get(message.getSenderId()).getTitle();
+        String ret =  OthersInfo.getInstance().getTopicsPos().get(chatLogs.getID()).getTitle();
+        if(message != null) ret += " : " + OthersInfo.getInstance().getAllUserLocations().get(message.getSenderId()).getTitle();
+
+        return ret;
     }
 
     private static String handleUserTitle(ChatLogs chatlogs){
