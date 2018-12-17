@@ -44,7 +44,7 @@ public class MLocation implements DatabaseObject, Serializable {
         this.message = "Here I am";
         this.locationType = 0;
         this.radius = DEFAULT_LOCATION_RADIUS;
-        this.isVisible = true;
+        this.visible = true;
         this.urlProfilePhoto = DEFAULT_URL_PROFIL_PIC;
         this.spokenLanguages = "";
         this.interests = "";
