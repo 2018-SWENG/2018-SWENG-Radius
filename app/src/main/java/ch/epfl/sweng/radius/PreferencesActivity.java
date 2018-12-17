@@ -33,6 +33,14 @@ public class PreferencesActivity extends PreferenceActivity {
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment(), "preferencesFragment").commit();
     }
 
+    public static void deleteUser(){
+        MLocation currentLocation = UserInfo.getInstance().getCurrentPosition();
+        currentLocation.setDeleted(true);
+        currentLocation.setTitle("Deleted User - " + currentLocation.getTitle());
+        UserInfo.getInstance().updateLocationInDB();
+
+    }
+
     public static class MyPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener
     {
         @Override
@@ -57,6 +65,19 @@ public class PreferencesActivity extends PreferenceActivity {
                     return true;
                 }
             });
+        }
+
+        public void logOut() {
+            if (MainActivity.googleSignInClient != null) {
+                FirebaseAuth.getInstance().signOut();
+                MainActivity.googleSignInClient.signOut()
+                        .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                revokeAccess();
+                            }
+                        });
+            }
         }
 
         private void setupDeleteAccountButton() {
@@ -92,7 +113,7 @@ public class PreferencesActivity extends PreferenceActivity {
         /*
         * Deletes account and takes the user to the sign in page
         * */
-        private void setupPositiveButton(AlertDialog.Builder dialog) {
+        public void setupPositiveButton(AlertDialog.Builder dialog) {
             dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -101,13 +122,10 @@ public class PreferencesActivity extends PreferenceActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getActivity(), "Account Deleted", Toast.LENGTH_SHORT).show();
-
+                                deleteUser();
+                                logOut();
                                 //delete user
-                                MLocation currentLocation = UserInfo.getInstance().getCurrentPosition();
-                                currentLocation.setDeleted(true);
-                                currentLocation.setTitle("Deleted User - " + currentLocation.getTitle());
-                                UserInfo.getInstance().updateLocationInDB();
-                                logOut(); // might just want to change this line with startActivity
+
                             } else {
                                 Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
@@ -116,6 +134,8 @@ public class PreferencesActivity extends PreferenceActivity {
                 }
             });
         }
+
+
 
         /*
         * Cancels the operation to delete the account.
@@ -190,18 +210,7 @@ public class PreferencesActivity extends PreferenceActivity {
             }
         }
 
-        private void logOut() {
-            if (MainActivity.googleSignInClient != null) {
-                FirebaseAuth.getInstance().signOut();
-                MainActivity.googleSignInClient.signOut()
-                        .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                revokeAccess();
-                            }
-                        });
-            }
-        }
+
 
         private void revokeAccess() {
             MainActivity.googleSignInClient.revokeAccess()

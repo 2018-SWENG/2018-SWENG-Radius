@@ -107,6 +107,11 @@ public class PreferencesActivityTest  extends ActivityInstrumentationTestCase2<P
     public void testDeleteAccountDismiss(){
         Espresso.onView(AllOf.allOf(withText(R.string.deleteAccountTitle)))
                 .perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Espresso.onView(withText("Dismiss")).perform(click());
         try {
             Thread.sleep(1000);
@@ -115,42 +120,17 @@ public class PreferencesActivityTest  extends ActivityInstrumentationTestCase2<P
         }
     }
 
+    /*
+
     @Test
+    @Ignore
     public void testDeleteAccount(){
         Espresso.onView(AllOf.allOf(withText(R.string.deleteAccountTitle)))
                 .perform(click());
         Espresso.onView(withText("Delete")).perform(click());
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        restoreCurrentUser();
-    }
-
-    private void restoreCurrentUser() {
-
-        User currentUSer = new User("testUser1");
-        currentUSer.addChat("testUser2", "10");
-        currentUSer.addChat("testUser3", "11");
-        currentUSer.addChat("testUser5", "12");
-        currentUSer.addFriendRequest(new User("testUser5"));
-        ArrayList<String> blockedUser = new ArrayList<>();
-        blockedUser.add("testUser3");currentUSer.setBlockedUsers(blockedUser);
-
-        currentUSer.addFriendRequest(new User("testUser3"));
-
-        Database.getInstance().writeInstanceObj(currentUSer, Database.Tables.USERS);
-
-        MLocation currentLoc = new MLocation("testUser1");
-        currentLoc.setUrlProfilePhoto("./app/src/androidTest/java/ch/epfl/sweng/radius/utils/default.png");
-        currentLoc.setTitle("testUser1");
-        currentLoc.setRadius(30000); currentLoc.setMessage("Being tested on");
-        currentLoc.setInterests("Tests, mostly");
-
-        Database.getInstance().writeInstanceObj(currentLoc, Database.Tables.LOCATIONS);
 
     }
+*/
 
     @After
     public void tearDown() throws Exception {
