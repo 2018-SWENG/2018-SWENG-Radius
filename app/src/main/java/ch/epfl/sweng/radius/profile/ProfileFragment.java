@@ -34,7 +34,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment implements DBUserObserver {
     private final int MAX_SIZE_USERNAME = 20;
-    private final int MAX_SIZE_STATUS = 100;
+    private final int MAX_SIZE_STATUS = 50;
     private final int MAX_SIZE_INTERESTS = 100;
     private static int userRadius;
 
@@ -260,8 +260,8 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
 
         nicknameString = nicknameString.replaceAll("[^A-Za-z0-9_]", "");
         nicknameString = truncateText(nicknameString,MAX_SIZE_USERNAME);
-        statusString = truncateText(nicknameString,MAX_SIZE_STATUS);
-        interestsString = truncateText(nicknameString,MAX_SIZE_INTERESTS);
+        statusString = truncateText(statusString,MAX_SIZE_STATUS);
+        interestsString = truncateText(interestsString,MAX_SIZE_INTERESTS);
 
         if (!nicknameString.isEmpty()) {
             currentUser.setTitle(nicknameString);userNickname.setText(nicknameString);

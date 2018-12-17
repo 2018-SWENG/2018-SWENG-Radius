@@ -85,8 +85,6 @@ public class MLocation implements DatabaseObject, Serializable {
     }
 
     public void setInterests(String interests) {
-        if (interests.length() > 100)
-            throw new IllegalArgumentException("Interests input is limited to 100 characters");
         this.interests = interests;
     }
 
@@ -107,9 +105,6 @@ public class MLocation implements DatabaseObject, Serializable {
     }
 
     public void setMessage(String message) {
-
-        if (message.length() > 50) // TODO : config file with all the constants
-            throw new IllegalArgumentException("The status is limited to 50 characters");
         this.message = message;
     }
 
@@ -134,9 +129,7 @@ public class MLocation implements DatabaseObject, Serializable {
     }
 
     public void setRadius(double newRadius) {
-        //if (getLocationType() == 1) {
             radius = newRadius;
-        //}
     }
 
     public boolean getVisible() {
