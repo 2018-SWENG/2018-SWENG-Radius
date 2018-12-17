@@ -173,16 +173,16 @@ public class AccountActivity extends AppCompatActivity {
         Log.e("SAVE SATE", "save UserInfo in external storage");
         UserInfo.getInstance().saveState();
 
-        MLocation current_user_location = UserInfo.getInstance().getCurrentPosition();
-        current_user_location.setVisible(false);
-        Database.getInstance().writeInstanceObj(current_user_location, Database.Tables.LOCATIONS);
+        UserInfo.getInstance().getCurrentPosition().setVisible(false);
+        UserInfo.getInstance().updateLocationInDB();
     }
 
     private void enterApp(){
-        UserInfo.getInstance().getCurrentPosition().setVisible(true);
-        Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(),
-                Database.Tables.LOCATIONS, "visible",
-                true);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean incognito = settings.getBoolean("incognitoSwitch", false);
+        Log.e("VISIBILITY", "Setting Visible to " + !incognito);
+        UserInfo.getInstance().getCurrentPosition().setVisible(!incognito);
+        UserInfo.getInstance().updateLocationInDB();
     }
 
     @Override
