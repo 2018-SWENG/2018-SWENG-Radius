@@ -45,17 +45,17 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
     MaterialButton saveButton;
     TextView userInterests;
     TextInputEditText interestsInput;
+    TextView spokenLanguages;
 
     private Button selectLanguagesButton;
     private static ArrayList<String> selectableLanguages;
     private static boolean[] checkedLanguages;
-    private static ArrayList<Integer> spokenLanguages;
-    private static TextView selectedLanguages;
+    private static ArrayList<Integer> spokenLanguagesList;
     private static String languagesText;
     private static Uri mImageUri;
 
     public ProfileFragment() {
-        spokenLanguages = new ArrayList<Integer>();
+        spokenLanguagesList = new ArrayList<Integer>();
     }
 
     /**
@@ -87,7 +87,7 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         // Get the UI elements
         radiusBar = view.findViewById(R.id.radiusBar);
         radiusValue = view.findViewById(R.id.radiusValue);
-        selectedLanguages =  view.findViewById(R.id.spokenLanguages);
+        spokenLanguages =  view.findViewById(R.id.spokenLanguages);
         selectLanguagesButton = view.findViewById(R.id.languagesButton);
         userStatus = view.findViewById(R.id.userStatus);
         userNickname = view.findViewById(R.id.userNickname);
@@ -138,7 +138,8 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         userNickname.setText(current_user.getTitle());
         userStatus.setText(current_user.getMessage());
         userInterests.setText(current_user.getInterests());
-        selectedLanguages.setText(current_user.getSpokenLanguages());
+        languagesText = current_user.getSpokenLanguages();
+        spokenLanguages.setText(languagesText);
         radiusValue.setText(current_user.getRadius() + "m");
         radiusBar.setProgress((int) UserInfo.getInstance().getCurrentPosition().getRadius());
 
@@ -166,11 +167,11 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
                     @Override
                     public void onClick(DialogInterface dialog, int position, boolean isChecked) {
                         if (isChecked) {
-                            if (!spokenLanguages.contains(position)) {
-                                spokenLanguages.add(new Integer(position));
+                            if (!spokenLanguagesList.contains(position)) {
+                                spokenLanguagesList.add(new Integer(position));
                             }
-                        } else if (spokenLanguages.contains(position)) {
-                            spokenLanguages.remove(new Integer(position));
+                        } else if (spokenLanguagesList.contains(position)) {
+                            spokenLanguagesList.remove(new Integer(position));
                         }
                     }
                 });
@@ -200,16 +201,18 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         builder.setPositiveButton(R.string.ok_label, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String languagesText = UserInfo.getInstance().getCurrentPosition().getSpokenLanguages();
-                for (int i = 0; i < spokenLanguages.size() ; i++) {
-                    if (!languagesText.contains(selectableLanguages.get(spokenLanguages.get(i)))) {
-                        languagesText = languagesText + " " +selectableLanguages.get(spokenLanguages.get(i));
-                        if (i != spokenLanguages.size() - 1) {
+                //String languagesText = UserInfo.getInstance().getCurrentPosition().getSpokenLanguages();
+                for (int i = 0; i < spokenLanguagesList.size() ; i++) {
+                    if (!languagesText.contains(selectableLanguages.get(spokenLanguagesList.get(i)))) {
+                        languagesText = languagesText + " " + selectableLanguages.get(spokenLanguagesList.get(i));
+                        UserInfo.getInstance().getCurrentPosition()
+                                .addLanguage(selectableLanguages.get(spokenLanguagesList.get(i)));
+                        if (i != spokenLanguagesList.size() - 1) {
                             languagesText = languagesText + " ";
                         }
                     }
                 }
-                selectedLanguages.setText(languagesText);
+                spokenLanguages.setText(languagesText);
             }
         });
     }
@@ -230,9 +233,9 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
                 for (int i = 0; i < checkedLanguages.length; i++) {
                     checkedLanguages[i] = false;
                 }
-                spokenLanguages.clear();
+                spokenLanguagesList.clear();
                 languagesText = "";
-                selectedLanguages.setText(languagesText);
+                spokenLanguages.setText(languagesText);
             }
         });
     }
@@ -263,6 +266,7 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
 
         UserInfo.getInstance().getCurrentPosition().setRadius(userRadius);
         currentUser.setRadius(userRadius);currentUser.setSpokenLanguages(languagesText);
+        spokenLanguages.setText(languagesText);
         //Write to DB
         UserInfo.getInstance().updateUserInDB();UserInfo.getInstance().updateLocationInDB();
     }

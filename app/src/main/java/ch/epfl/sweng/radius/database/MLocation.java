@@ -1,6 +1,7 @@
 package ch.epfl.sweng.radius.database;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class MLocation implements DatabaseObject, Serializable {
 
@@ -22,6 +23,7 @@ public class MLocation implements DatabaseObject, Serializable {
     private double radius; // Use it only if the mLocation is a group.
     private String spokenLanguages;
     private String interests;
+    private ArrayList<String> languageList;
 
     private String ownerId = ""; // for topics, no significance for locations and groups (so default is "")
 
@@ -45,6 +47,7 @@ public class MLocation implements DatabaseObject, Serializable {
         this.urlProfilePhoto = DEFAULT_URL_PROFIL_PIC;
         this.spokenLanguages = "";
         this.interests = "";
+        this.languageList = new ArrayList<>();
     }
 
     public double getLatitude() {
@@ -154,6 +157,14 @@ public class MLocation implements DatabaseObject, Serializable {
     public boolean isRemovableTopic() { // Is Topic created by the current user?
         return this.locationType == 2 &&
                 this.getOwnerId().equals(UserInfo.getInstance().getCurrentUser().getID());
+    }
+
+    public ArrayList<String> getLanguageList(){
+        return languageList;
+    }
+
+    public void addLanguage(String language){
+        languageList.add(language);
     }
 
 }
