@@ -133,7 +133,7 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         myMessageRecycler = findViewById(R.id.reyclerview_message_list);
         myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         myMessageRecycler.setAdapter(myMessageAdapter);
-        myMessageRecycler.smoothScrollToPosition(chatLogs.getMessages().size());
+        myMessageRecycler.scrollToPosition(chatLogs.getMessages().size()-1);
 
         uiReady = true;
 
