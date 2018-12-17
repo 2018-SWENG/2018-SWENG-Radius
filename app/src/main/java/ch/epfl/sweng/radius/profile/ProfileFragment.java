@@ -34,7 +34,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment implements DBUserObserver {
     private final int MAX_SIZE_USERNAME = 20;
-    private final int MAX_SIZE_STATUS = 100;
+    private final int MAX_SIZE_STATUS = 50;
     private final int MAX_SIZE_INTERESTS = 100;
     private static int userRadius;
 
