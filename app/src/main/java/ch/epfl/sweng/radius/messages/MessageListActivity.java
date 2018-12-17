@@ -36,7 +36,7 @@ import ch.epfl.sweng.radius.utils.NotificationUtility;
  * MessageListActivity and MessageListAdapter and some layout files are inspired from https://blog.sendbird.com/android-chat-tutorial-building-a-messaging-ui
  */
 public class MessageListActivity extends AppCompatActivity implements DBLocationObserver, DBUserObserver {
-    private final int MAX_SIZE_MESSAGE = 12;
+    private final int MAX_SIZE_MESSAGE = 512;
     private RecyclerView myMessageRecycler;
     private MessageListAdapter myMessageAdapter;
     private EditText messageZone;
@@ -97,7 +97,7 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
     private void setInfo() {
         Bundle b = getIntent().getExtras();
 
-        //Get infos from parent fragme
+        //Get infos from parent fragment
 
         if (b != null) {
             chatId = b.getString("chatId"); locType = b.getInt("locType");
@@ -127,12 +127,13 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
 
        // Log.e("ChatlogsDebug", chatId);
         setContentView(R.layout.activity_message_list);
+        getSupportActionBar().setTitle(NotificationUtility.getChatTitle(chatLogs, locType));
         messageZone = (EditText) findViewById(R.id.edittext_chatbox);
         myMessageAdapter = new MessageListAdapter(this, chatLogs.getMessages(),chatLogs.getMembersId());
         myMessageRecycler = findViewById(R.id.reyclerview_message_list);
         myMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         myMessageRecycler.setAdapter(myMessageAdapter);
-        myMessageRecycler.smoothScrollToPosition(chatLogs.getMessages().size());
+        myMessageRecycler.scrollToPosition(chatLogs.getMessages().size()-1);
 
         uiReady = true;
 

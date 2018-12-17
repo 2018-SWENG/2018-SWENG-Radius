@@ -33,6 +33,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment implements DBUserObserver {
+    private final int MAX_SIZE_USERNAME = 20;
+    private final int MAX_SIZE_STATUS = 100;
+    private final int MAX_SIZE_INTERESTS = 100;
     private static int userRadius;
 
     CircleImageView userPhoto;
@@ -240,6 +243,13 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         });
     }
 
+    private String truncateText(String text, int maxSize){
+        if(text.length()>maxSize){
+            return text.substring(0,maxSize-1);
+        }
+        return text;
+    }
+
 
     private void onClickSaveButton() { // use upload file here
         String nicknameString = getDataFromTextInput(nicknameInput);
@@ -247,6 +257,11 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         String interestsString = getDataFromTextInput(interestsInput);
 
         MLocation currentUser = UserInfo.getInstance().getCurrentPosition();
+
+        nicknameString = nicknameString.replaceAll("[^A-Za-z0-9_]", "");
+        nicknameString = truncateText(nicknameString,MAX_SIZE_USERNAME);
+        statusString = truncateText(nicknameString,MAX_SIZE_STATUS);
+        interestsString = truncateText(nicknameString,MAX_SIZE_INTERESTS);
 
         if (!nicknameString.isEmpty()) {
             currentUser.setTitle(nicknameString);userNickname.setText(nicknameString);

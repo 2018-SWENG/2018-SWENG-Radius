@@ -153,7 +153,7 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         chatLogs.addMessage(message);
 
         // Setup Sender name to display
-        String senderData = NotificationUtility.getNickname(chatLogs, message, chatType);
+        String senderData = NotificationUtility.getChatTitleNotification(chatLogs, message, chatType);
     //    Log.e("RealTimeDebug", "ChatlogUtil " + chatLogs.getID());
 
         // Get ChatActivity instance if it exists

@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.ChatLogs;
@@ -82,6 +83,7 @@ public class CustomTopicListAdapter extends CustomListAdapter {
                 RemovableTopicItemHolder removableTopicItemHolder = (RemovableTopicItemHolder) viewHolder;
                 Log.e("CustomTopicListAdapter", "Items topics size :" + items.size());
                 removableTopicItemHolder.textViewTitle.setText(items.get(position).getItemName());
+                removableTopicItemHolder.topicID = items.get(position).getItemId();
                 item = items.get(position);
                 customListener =  new CustomTopicListListeners(item.getItemId(),
                         item.getItemName(), item.getConvId());
@@ -107,7 +109,7 @@ public class CustomTopicListAdapter extends CustomListAdapter {
     public static class RemovableTopicItemHolder extends ViewHolder {
         TextView textViewTitle;
         Button removeTopicButton;
-
+        String topicID;
         RemovableTopicItemHolder(View itemLayoutView) {
             super(itemLayoutView);
             textViewTitle = itemLayoutView.findViewById(R.id.topicName);
@@ -117,8 +119,9 @@ public class CustomTopicListAdapter extends CustomListAdapter {
                 public void onClick(View view) {
                     FirebaseDatabase.getInstance().
                             getReference(Database.Tables.LOCATIONS.toString())
-                            .child(textViewTitle.getText().toString()).removeValue();
-
+                            .child(topicID).removeValue();
+                    OthersInfo.getInstance().removeFromTable(OthersInfo.getInstance()
+                            .getTopicsPos().get(topicID));
                 }
             });
         }
@@ -158,6 +161,7 @@ public class CustomTopicListAdapter extends CustomListAdapter {
                             public void onClick(DialogInterface dialog, int id) {
                                 String topicName = userInput.getText().toString();
                                 topicName = topicName.replaceAll("[^A-Za-z0-9_ f]", "");
+
                                 pushTopicToDatabase(topicName);
                             }
                         })
@@ -175,10 +179,10 @@ public class CustomTopicListAdapter extends CustomListAdapter {
 
     private static void pushTopicToDatabase(String topicName) {
         if (!topicName.isEmpty()) {
-            MLocation newTopic = new MLocation(topicName);
+            MLocation newTopic = new MLocation(UUID.randomUUID().toString());
 
             // new topic is set by user location values
-            newTopic.setLocationType(2); // topic type
+            newTopic.setLocationType(2);newTopic.setTitle(topicName); // topic type
             newTopic.setOwnerId(UserInfo.getInstance().getCurrentUser().getID());
             newTopic.setLatitude(UserInfo.getInstance().getCurrentPosition().getLatitude());
             newTopic.setLongitude(UserInfo.getInstance().getCurrentPosition().getLongitude());
