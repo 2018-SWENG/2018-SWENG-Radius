@@ -92,21 +92,26 @@ public class NotificationUtility {
         Log.d("NearFriendNotif", "Your friend " + userNickname + " (" + userID + ")" + "is in the Radius!");
     }
 
-    public static String getChatTitle(ChatLogs chatlogs, int chatType) {
+    public static String getChatTitle(ChatLogs chatlogs, Message message, int chatType) {
         String ret = "Anonymous";
         switch (chatType) {
             case 0: // user
                 ret = handleUserTitle(chatlogs);
                 break;
             case 1: // group
-                ret = chatlogs.getID();
+                ret = chatlogs.getID() + " : " + OthersInfo.getInstance().getAllUserLocations().get(message.getSenderId()).getTitle() ;
                 break;
             case 2: // topic
-                ret = OthersInfo.getInstance().getTopicsPos().get(chatlogs.getID()).getTitle();
+                ret = handleTopicTitle(chatlogs, message);
                 break;
         }
         return ret;
 
+    }
+
+    private static String handleTopicTitle(ChatLogs chatLogs, Message message){
+        return  OthersInfo.getInstance().getTopicsPos().get(chatLogs.getID()).getTitle() + " : "
+                + OthersInfo.getInstance().getAllUserLocations().get(message.getSenderId()).getTitle();
     }
 
     private static String handleUserTitle(ChatLogs chatlogs){
