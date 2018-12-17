@@ -260,14 +260,16 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
 
         nicknameString = nicknameString.replaceAll("[^A-Za-z0-9_]", "");
         nicknameString = truncateText(nicknameString,MAX_SIZE_USERNAME);
-        statusString = truncateText(nicknameString,MAX_SIZE_STATUS);
-        interestsString = truncateText(nicknameString,MAX_SIZE_INTERESTS);
+        statusString = truncateText(statusString,MAX_SIZE_STATUS);
+        interestsString = truncateText(interestsString,MAX_SIZE_INTERESTS);
 
         if (!nicknameString.isEmpty()) {
-            currentUser.setTitle(nicknameString);userNickname.setText(nicknameString);
+            currentUser.setTitle(nicknameString);
+            userNickname.setText(nicknameString);
         }
         if (!statusString.isEmpty()) {
-            currentUser.setMessage(statusString);userStatus.setText(statusString);
+            currentUser.setMessage(statusString);
+            userStatus.setText(statusString);
         }
 
         if (!interestsString.isEmpty()) {
