@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.DBUserObserver;
@@ -34,9 +33,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment implements DBUserObserver {
-    private final int MAX_SIZE_USERNAME = 20;
-    private final int MAX_SIZE_STATUS = 100;
-    private final int MAX_SIZE_INTERESTS = 100;
     private static int userRadius;
 
     CircleImageView userPhoto;
@@ -241,12 +237,7 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         });
     }
 
-    private String truncateText(String text, int maxSize){
-        if(text.length()>maxSize){
-            return text.substring(0,maxSize-1);
-        }
-        return text;
-    }
+
     private void onClickSaveButton() { // use upload file here
         String nicknameString = getDataFromTextInput(nicknameInput);
         String statusString = getDataFromTextInput(statusInput);
@@ -254,19 +245,11 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
 
         MLocation currentUser = UserInfo.getInstance().getCurrentPosition();
 
-        //replace all nonalphanumeric char by an empty string and truncate size
-        nicknameString = nicknameString.replaceAll("[^A-Za-z0-9_]", "");
-        nicknameString = truncateText(nicknameString,MAX_SIZE_USERNAME);
-        statusString = truncateText(nicknameString,MAX_SIZE_STATUS);
-        interestsString = truncateText(nicknameString,MAX_SIZE_INTERESTS);
-
         if (!nicknameString.isEmpty()) {
-            currentUser.setTitle(nicknameString);
-            userNickname.setText(nicknameString);
+            currentUser.setTitle(nicknameString);userNickname.setText(nicknameString);
         }
         if (!statusString.isEmpty()) {
-            currentUser.setMessage(statusString);
-            userStatus.setText(statusString);
+            currentUser.setMessage(statusString);userStatus.setText(statusString);
         }
 
         if (!interestsString.isEmpty()) {
@@ -279,12 +262,10 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         }
 
         UserInfo.getInstance().getCurrentPosition().setRadius(userRadius);
-        currentUser.setRadius(userRadius);
-        currentUser.setSpokenLanguages(languagesText);
+        currentUser.setRadius(userRadius);currentUser.setSpokenLanguages(languagesText);
         //Write to DB
-        UserInfo.getInstance().updateUserInDB();
-        UserInfo.getInstance().updateLocationInDB();
-        }
+        UserInfo.getInstance().updateUserInDB();UserInfo.getInstance().updateLocationInDB();
+    }
 
     private String getDataFromTextInput(TextInputEditText input) {
         if (input != null) {
@@ -299,7 +280,7 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (resultCode == RESULT_OK && requestCode == 1) {
             mImageUri = intent.getData();
-           
+
             try {
                 Picasso.get().load(mImageUri).into(userPhoto);
             }// this is where we change the image - so use upload file method here

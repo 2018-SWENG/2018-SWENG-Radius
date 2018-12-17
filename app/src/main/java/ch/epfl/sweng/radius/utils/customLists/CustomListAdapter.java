@@ -74,16 +74,24 @@ public abstract class CustomListAdapter extends RecyclerView.Adapter<CustomListA
 
     //Set the icon
     protected void setIcon(ViewHolder viewHolder, int position, MLocation item) {
-        if (viewHolder.imgViewIcon != null) {
-            if (item != null) {
-                if (!item.getUrlProfilePhoto().isEmpty()) {
-                    Picasso.get().load(item.getUrlProfilePhoto()).into(viewHolder.imgViewIcon);
-                } else {
-                    viewHolder.imgViewIcon.setImageResource(items.get(position).getProfilePic());
-                }
-            } else {
-                Log.e("CustomUserListAdapter", "Item ID not found in Users");
-            }
+        if(viewHolder.imgViewIcon == null) return;
+        String url = handleUserUrlPhoto(item);
+        if(item == null){
+            Log.e("CustomUserListAdapter", "Item ID not found in Users");
+            viewHolder.imgViewIcon.setImageResource(items.get(position).getProfilePic());
         }
+        else
+            Picasso.get().load(url).into(viewHolder.imgViewIcon);
+
+
+    }
+
+
+    private String handleUserUrlPhoto(MLocation loc){
+        if(loc == null)
+            return null;
+        else
+            return loc.getUrlProfilePhoto().isEmpty() ? null
+                    : loc.getUrlProfilePhoto();
     }
 }
