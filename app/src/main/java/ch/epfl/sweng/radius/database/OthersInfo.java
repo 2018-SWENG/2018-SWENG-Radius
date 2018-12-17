@@ -188,7 +188,7 @@ public class OthersInfo extends DBObservable{
                 if(loc.getID().equals(UserInfo.getInstance().getCurrentPosition().getID()))
                     break;
                 // For near friend notifications
-                if(!usersPos.containsKey(loc.getID())) newUsersPos.put(loc.getID(), loc);
+                toggledVisibility(loc);
                 usersPos.put(loc.getID(), loc);
                 break;
             case 1:
@@ -198,6 +198,15 @@ public class OthersInfo extends DBObservable{
                 topicsPos.put(loc.getID(), loc);
                 break;
         }
+    }
+
+    private void toggledVisibility(MLocation loc) {
+
+            if(usersPos.containsKey(loc.getID())
+                    &&!usersPos.get(loc.getID()).getVisible()
+                    && loc.getVisible())
+                newUsersPos.put(loc.getID(), loc);
+
     }
 
     public void removeFromTable(MLocation loc){
