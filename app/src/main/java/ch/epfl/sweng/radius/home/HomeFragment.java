@@ -298,6 +298,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
                 }
             }
         }
+        Log.e("NotificationDebug", "friends : " + friendsID.containsKey(locID) + " isNew" + OthersInfo.getInstance().getNewUsersPos().containsKey(locID));
 
         if(friendsID.containsKey(locID) && OthersInfo.getInstance().getNewUsersPos().containsKey(locID)){
             showNearFriendNotification(locID, userName);
