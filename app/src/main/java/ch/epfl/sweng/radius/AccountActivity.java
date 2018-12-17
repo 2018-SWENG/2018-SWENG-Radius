@@ -173,9 +173,8 @@ public class AccountActivity extends AppCompatActivity {
         Log.e("SAVE SATE", "save UserInfo in external storage");
         UserInfo.getInstance().saveState();
 
-        MLocation current_user_location = UserInfo.getInstance().getCurrentPosition();
-        current_user_location.setVisible(false);
-        Database.getInstance().writeInstanceObj(current_user_location, Database.Tables.LOCATIONS);
+        UserInfo.getInstance().getCurrentPosition().setVisible(false);
+        UserInfo.getInstance().updateLocationInDB();
     }
 
     private void enterApp(){
