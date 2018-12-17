@@ -249,12 +249,10 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         MLocation currentUser = UserInfo.getInstance().getCurrentPosition();
 
         if (!nicknameString.isEmpty()) {
-            currentUser.setTitle(nicknameString);
-            userNickname.setText(nicknameString);
+            currentUser.setTitle(nicknameString);userNickname.setText(nicknameString);
         }
         if (!statusString.isEmpty()) {
-            currentUser.setMessage(statusString);
-            userStatus.setText(statusString);
+            currentUser.setMessage(statusString);userStatus.setText(statusString);
         }
 
         if (!interestsString.isEmpty()) {
@@ -267,13 +265,11 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         }
 
         UserInfo.getInstance().getCurrentPosition().setRadius(userRadius);
-        currentUser.setRadius(userRadius);
-        currentUser.setSpokenLanguages(languagesText);
+        currentUser.setRadius(userRadius);currentUser.setSpokenLanguages(languagesText);
         spokenLanguages.setText(languagesText);
         //Write to DB
-        UserInfo.getInstance().updateUserInDB();
-        UserInfo.getInstance().updateLocationInDB();
-        }
+        UserInfo.getInstance().updateUserInDB();UserInfo.getInstance().updateLocationInDB();
+    }
 
     private String getDataFromTextInput(TextInputEditText input) {
         if (input != null) {
@@ -288,7 +284,7 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (resultCode == RESULT_OK && requestCode == 1) {
             mImageUri = intent.getData();
-           
+
             try {
                 Picasso.get().load(mImageUri).into(userPhoto);
             }// this is where we change the image - so use upload file method here

@@ -5,7 +5,11 @@ import java.util.ArrayList;
 
 public class MLocation implements DatabaseObject, Serializable {
 
-    public final double DEFAULT_GROUP_LOCATION_RADIUS = 2000;
+    private final static double DEFAULT_LOCATION_RADIUS = 2000;
+    private final static double DEFAULT_LONGITUDE = 6.5681216000000004;
+    private final static double DEFAULT_lATITUDE = 46.5160698;
+    private final static String DEFAULT_URL_PROFIL_PIC = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
+
 
     private String userID;
     private String title;
@@ -25,35 +29,11 @@ public class MLocation implements DatabaseObject, Serializable {
     private String ownerId = ""; // for topics, no significance for locations and groups (so default is "")
 
     public MLocation(){
-        this.userID = Database.getInstance().getCurrent_user_id();
-        this.latitude = 46.5160698;
-        this.longitude = 6.5681216000000004;
-        this.title = "";
-        this.message = "";
-        this.locationType = 0;
-        this.radius = 5000;
-        this.visible = true;
-        this.deleted = false;
-        this.urlProfilePhoto = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
-        this.spokenLanguages = "";
-        this.interests = "";
-        this.languageList = new ArrayList<>();
+        this(Database.getInstance().getCurrent_user_id());
     }
 
     public MLocation(String userID){
-        this.userID = userID;
-        this.latitude = 46.5160698;
-        this.longitude = 6.5681216000000004;
-        this.title = "";
-        this.message = "";
-        this.locationType = 0;
-        this.radius = 5000;
-        this.visible = true;
-        this.deleted = false;
-        this.urlProfilePhoto = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
-        this.spokenLanguages = "";
-        this.interests = "";
-        this.languageList = new ArrayList<>();
+        this(userID,DEFAULT_LONGITUDE,DEFAULT_lATITUDE);
     }
 
     public MLocation(String userID, double longitude, double latitude){
@@ -63,9 +43,9 @@ public class MLocation implements DatabaseObject, Serializable {
         this.title = "New MLocation";
         this.message = "Here I am";
         this.locationType = 0;
-        this.radius = 5000;
-        this.visible = true;
-        this.urlProfilePhoto = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
+        this.radius = DEFAULT_LOCATION_RADIUS;
+        this.isVisible = true;
+        this.urlProfilePhoto = DEFAULT_URL_PROFIL_PIC;
         this.spokenLanguages = "";
         this.interests = "";
         this.languageList = new ArrayList<>();

@@ -36,7 +36,7 @@ import ch.epfl.sweng.radius.utils.NotificationUtility;
  * MessageListActivity and MessageListAdapter and some layout files are inspired from https://blog.sendbird.com/android-chat-tutorial-building-a-messaging-ui
  */
 public class MessageListActivity extends AppCompatActivity implements DBLocationObserver, DBUserObserver {
-
+    private final int MAX_SIZE_MESSAGE = 12;
     private RecyclerView myMessageRecycler;
     private MessageListAdapter myMessageAdapter;
     private EditText messageZone;
@@ -170,6 +170,9 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
      * @param date     the date
      */
     private void sendMessage(String senderId, String message, Date date) {
+        if(message.length()>MAX_SIZE_MESSAGE){
+            message = message.substring(0,MAX_SIZE_MESSAGE);
+        }
         if (!message.isEmpty()) {
             Message msg = new Message(senderId, message, date);
             chatLogs.addMessage(msg);
