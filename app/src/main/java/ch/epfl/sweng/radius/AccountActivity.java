@@ -181,12 +181,9 @@ public class AccountActivity extends AppCompatActivity {
     private void enterApp(){
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         boolean incognito = settings.getBoolean("incognitoSwitch", false);
-        if (!incognito)
-            UserInfo.getInstance().getCurrentPosition().setVisible(true);
-
-        Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(),
-                Database.Tables.LOCATIONS, "visible",
-                true);
+        Log.e("VISIBILITY", "Setting Visible to " + !incognito);
+        UserInfo.getInstance().getCurrentPosition().setVisible(!incognito);
+        UserInfo.getInstance().updateLocationInDB();
     }
 
     @Override

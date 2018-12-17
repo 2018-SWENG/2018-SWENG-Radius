@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.UserInfo;
 
@@ -169,6 +170,10 @@ public class PreferencesActivity extends PreferenceActivity {
         @Override
         public void onPause() {
             super.onPause();
+            UserInfo.getInstance().getCurrentPosition().setVisible(false);
+            Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(),
+                    Database.Tables.LOCATIONS, "visible",
+                    true);
             getPreferenceScreen()
                     .getSharedPreferences()
                     .unregisterOnSharedPreferenceChangeListener(this);
@@ -195,6 +200,7 @@ public class PreferencesActivity extends PreferenceActivity {
         private void changeInvisibility() {
             SwitchPreference incognitoPref = (android.preference.SwitchPreference) findPreference(INCOGNITO);
             boolean invisible = incognitoPref.isChecked();
+            Log.e("VISIBILITY", "Setting Visible to " + !invisible);
             UserInfo.getInstance().getCurrentPosition().setVisible(!invisible);
             UserInfo.getInstance().updateLocationInDB();
             if (!invisible) {
