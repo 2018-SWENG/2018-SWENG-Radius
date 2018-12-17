@@ -36,7 +36,7 @@ import ch.epfl.sweng.radius.utils.NotificationUtility;
  * MessageListActivity and MessageListAdapter and some layout files are inspired from https://blog.sendbird.com/android-chat-tutorial-building-a-messaging-ui
  */
 public class MessageListActivity extends AppCompatActivity implements DBLocationObserver, DBUserObserver {
-    private final int MAX_SIZE_MESSAGE = 12;
+    private final int MAX_SIZE_MESSAGE = 512;
     private RecyclerView myMessageRecycler;
     private MessageListAdapter myMessageAdapter;
     private EditText messageZone;
