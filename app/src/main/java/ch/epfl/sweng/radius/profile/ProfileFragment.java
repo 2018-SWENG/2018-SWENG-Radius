@@ -264,12 +264,10 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         interestsString = truncateText(interestsString,MAX_SIZE_INTERESTS);
 
         if (!nicknameString.isEmpty()) {
-            currentUser.setTitle(nicknameString);
-            userNickname.setText(nicknameString);
+            currentUser.setTitle(nicknameString);userNickname.setText(nicknameString);
         }
         if (!statusString.isEmpty()) {
-            currentUser.setMessage(statusString);
-            userStatus.setText(statusString);
+            currentUser.setMessage(statusString);userStatus.setText(statusString);
         }
 
         if (!interestsString.isEmpty()) {
