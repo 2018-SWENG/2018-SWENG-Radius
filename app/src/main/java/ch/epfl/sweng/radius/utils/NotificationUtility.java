@@ -96,18 +96,7 @@ public class NotificationUtility {
         String ret = "Anonymous";
         switch (chatType) {
             case 0: // user
-                String currentUserId = Database.getInstance().getCurrent_user_id();
-                String otherUserId = "";
-                for (String id : chatlogs.getMembersId()) {
-                    if (!id.equals(currentUserId)) {
-                        otherUserId = id;
-                    }
-                }
-
-                if (!otherUserId.isEmpty() && OthersInfo.getInstance().getAllUserLocations()
-                        .containsKey(otherUserId)) {
-                    ret = OthersInfo.getInstance().getAllUserLocations().get(otherUserId).getTitle();
-                }
+                ret = handleUserTitle(chatlogs);
                 break;
             case 1: // group
                 ret = chatlogs.getID();
@@ -118,5 +107,23 @@ public class NotificationUtility {
         }
         return ret;
 
+    }
+
+    private static String handleUserTitle(ChatLogs chatlogs){
+        String currentUserId = Database.getInstance().getCurrent_user_id();
+        String otherUserId = "";
+        String ret = "Anonymous";
+        for (String id : chatlogs.getMembersId()) {
+            if (!id.equals(currentUserId)) {
+                otherUserId = id;
+            }
+        }
+
+        if (!otherUserId.isEmpty() && OthersInfo.getInstance().getAllUserLocations()
+                .containsKey(otherUserId)) {
+            ret = OthersInfo.getInstance().getAllUserLocations().get(otherUserId).getTitle();
+        }
+
+        return  ret;
     }
 }
