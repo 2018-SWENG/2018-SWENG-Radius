@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static GoogleSignInClient googleSignInClient;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
