@@ -14,7 +14,7 @@ import java.util.TimerTask;
 import ch.epfl.sweng.radius.utils.MapUtility;
 
 public class OthersInfo extends DBObservable{
-    private final Timer timer = new Timer(true);
+    public Timer timer = new Timer(true);
     private final int REFRESH_PERIOD = 5; // in seconds
 
     private static OthersInfo othersInfo = null;
@@ -32,7 +32,7 @@ public class OthersInfo extends DBObservable{
     private static final HashMap<String, MLocation> requestList = new HashMap<>();
 
 
-    public static OthersInfo getInstance(){
+    public static OthersInfo getInstance() {
         if (othersInfo == null)
             othersInfo = new OthersInfo();
         return othersInfo;
@@ -49,6 +49,10 @@ public class OthersInfo extends DBObservable{
                 fetchRequest();
             }
         }, 0, REFRESH_PERIOD*1000);    }
+
+        public void clearInstance(){
+            othersInfo = null;
+        }
 
     public HashMap<String, MLocation> getUsersInRadius(){
         return usersPos;

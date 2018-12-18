@@ -54,12 +54,13 @@ import static org.powermock.api.mockito.PowerMockito.doAnswer;
 
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(JUnit4.class)
-@PrepareForTest({ FirebaseAuth.class, Toast.class })
+@PrepareForTest({ FirebaseAuth.class, Toast.class, FirebaseDatabase.class })
 public class PreferencesActivityTest {
     private  final String SAVE_PATH = "current_user_info.data";
 
     private PreferencesActivity test;
     private PreferencesActivity.MyPreferenceFragment test2;
+    private FirebaseDatabase mockedFB = Mockito.mock(FirebaseDatabase.class);
     FirebaseAuth        mockedAuth = Mockito.mock(FirebaseAuth.class);
     FirebaseUser mockedUser = Mockito.mock(FirebaseUser.class);
     Task mockedTask = Mockito.mock(Task.class);
@@ -68,6 +69,8 @@ public class PreferencesActivityTest {
     @Before
     public void setUp() throws Exception {
         Database.activateDebugMode();
+        PowerMockito.mockStatic(FirebaseDatabase.class);
+        when(FirebaseDatabase.getInstance()).thenReturn(mockedFB);
         test = new PreferencesActivity();
         test2 = new PreferencesActivity.MyPreferenceFragment();
         }

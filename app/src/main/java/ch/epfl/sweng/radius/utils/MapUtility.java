@@ -122,12 +122,12 @@ public class MapUtility implements DBLocationObserver {
         if (UserInfo.getInstance().getCurrentPosition().getID() != "") {
             UserInfo.getInstance().getCurrentPosition().setLatitude(currCoordinates.latitude);
             UserInfo.getInstance().getCurrentPosition().setLongitude(currCoordinates.longitude);
-            Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(), Database.Tables.LOCATIONS,
-                    "latitude",
-                    currCoordinates.latitude);
-            Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(), Database.Tables.LOCATIONS,
-                    "longitude",
-                    currCoordinates.longitude);
+       //     Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(), Database.Tables.LOCATIONS,
+      //              "latitude",
+      //              currCoordinates.latitude);
+      //      Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(), Database.Tables.LOCATIONS,
+      //              "longitude",
+      //              currCoordinates.longitude);
             currCoordinates = curCoordinates;
         }
     }
@@ -137,7 +137,6 @@ public class MapUtility implements DBLocationObserver {
     }
 
     public void getLocationPermission(Context context, FragmentActivity activity) {
-        Log.d( TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 
@@ -148,6 +147,8 @@ public class MapUtility implements DBLocationObserver {
                 && ContextCompat.checkSelfPermission( context, COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mblLocationPermissionGranted = true;
+            Log.d( TAG, "getLocationPermission: getting location permissions" + mblLocationPermissionGranted);
+
         }
         else {
             ActivityCompat.requestPermissions( activity, permissions, LOC_PERMIT_REQUEST_CODE);

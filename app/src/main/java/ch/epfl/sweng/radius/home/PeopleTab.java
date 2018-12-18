@@ -1,5 +1,7 @@
 package ch.epfl.sweng.radius.home;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +22,10 @@ public class PeopleTab extends CustomUserTab implements DBLocationObserver {
     public List<MLocation> getList(){
         List<MLocation> visibleUsers = new ArrayList<>();
         List<MLocation> usersInRadius = new ArrayList(OthersInfo.getInstance().getUsersInRadius().values());
+
         for(int i = 0; i < usersInRadius.size(); i++){
             MLocation loc = usersInRadius.get(i);
+
             if(loc.getVisible())
                 visibleUsers.add(loc);
         }

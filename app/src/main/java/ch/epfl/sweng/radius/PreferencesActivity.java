@@ -19,9 +19,11 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 
@@ -133,8 +135,11 @@ public class PreferencesActivity extends PreferenceActivity {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getActivity(), "Account Deleted", Toast.LENGTH_SHORT).show();
                                 deleteUser();
+                                OthersInfo.getInstance().removeAllObservers();
                                 UserInfo.deleteDataStorage();
                                 logOut();
+                                UserInfo.getInstance().resetCurrentData();
+                                FirebaseDatabase.getInstance().goOffline();
                                 //delete user
 
                             } else {

@@ -1,6 +1,7 @@
 package ch.epfl.sweng.radius.utils.customLists;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,7 +45,6 @@ public abstract class CustomTab extends Fragment {
         // Inflate the layout for this fragment
         return view;
     }
-
 
     protected void setUpAdapter() {
         setUpAdapterWithList(null);

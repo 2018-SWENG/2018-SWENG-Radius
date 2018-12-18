@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -91,6 +92,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         UserInfo.getInstance().addLocationObserver(this);
@@ -147,6 +149,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
             public void onClick(View v) {
                 if (coord != null) {
                     moveCamera(coord, ZOOM);
+
                 }
             }
         });
@@ -174,7 +177,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
         if (mapListener.getPermissionResult()) {
             mapListener.getDeviceLocation(getActivity()); // use map utility here
-
+            UserInfo.getInstance().getCurrentPosition().setLongitude(mapListener.getCurrCoordinates().longitude);
+            UserInfo.getInstance().getCurrentPosition().setLatitude(mapListener.getCurrCoordinates().latitude);
+            UserInfo.getInstance().updateLocationInDB();
             if (ActivityCompat.checkSelfPermission(getContext(),
                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                    && ActivityCompat.checkSelfPermission(getContext(),
@@ -194,6 +199,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
             }
     }
+
 
     public void initMap() {
 

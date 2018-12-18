@@ -1,6 +1,7 @@
 package ch.epfl.sweng.radius.database;
 
 import java.util.Queue;
+import java.util.Timer;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public abstract class DBObservable{
@@ -32,5 +33,13 @@ public abstract class DBObservable{
         for (DBLocationObserver observer: this.locationObservers) {
             observer.onLocationChange(id);
         }
+    }
+
+    public void removeAllObservers(){
+        this.userObservers.clear();
+        this.locationObservers.clear();
+        OthersInfo.getInstance().timer.cancel();
+        OthersInfo.getInstance().timer =  new Timer(true);
+        OthersInfo.getInstance().clearInstance();
     }
 }

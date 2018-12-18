@@ -158,7 +158,6 @@ public class AccountActivity extends AppCompatActivity {
             timer = new Timer();
             timerTask = new myTimer();
         }
-        UserInfo.getInstance().updateLocationInDB();
     }
 
     @Override
