@@ -12,6 +12,7 @@ import android.support.v4.util.Pair;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -67,7 +68,12 @@ public class FirebaseUtility extends Database{
 
     @Override
     public String getCurrent_user_id() {
-            return FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null)
+            return user.getUid();
+        else
+            return null;
+
 
     }
 

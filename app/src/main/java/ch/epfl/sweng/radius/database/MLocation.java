@@ -24,13 +24,11 @@ public class MLocation implements DatabaseObject, Serializable {
     private double radius; // Use it only if the mLocation is a group.
     private String spokenLanguages;
     private String interests;
-    private ArrayList<String> languageList;
+    private ArrayList<String> languageList = new ArrayList<>();
 
     private String ownerId = ""; // for topics, no significance for locations and groups (so default is "")
 
-    public MLocation(){
-        this(Database.getInstance().getCurrent_user_id());
-    }
+    public MLocation(){}
 
     public MLocation(String userID){
         this(userID,DEFAULT_LONGITUDE,DEFAULT_lATITUDE);
@@ -48,7 +46,6 @@ public class MLocation implements DatabaseObject, Serializable {
         this.urlProfilePhoto = DEFAULT_URL_PROFIL_PIC;
         this.spokenLanguages = "";
         this.interests = "";
-        this.languageList = new ArrayList<>();
     }
 
     public double getLatitude() {
