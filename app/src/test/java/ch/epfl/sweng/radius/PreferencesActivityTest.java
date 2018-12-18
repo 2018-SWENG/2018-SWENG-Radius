@@ -42,6 +42,7 @@ import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.FirebaseUtility;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.messages.ChatState;
 
 import static org.mockito.Matchers.any;
@@ -120,7 +121,7 @@ public class PreferencesActivityTest {
         try {
             File outFile = new File(SAVE_PATH);
             out = new ObjectOutputStream(new FileOutputStream(outFile));
-            out.writeObject(this);
+            out.writeObject(null);
             out.close();
         } catch (Exception e) {e.printStackTrace();}
 
@@ -129,7 +130,7 @@ public class PreferencesActivityTest {
         try {
             File outFile = new File(SAVE_PATH);
             out = new ObjectOutputStream(new FileOutputStream(outFile));
-            out.writeObject(this);
+            out.writeObject(UserInfo.getInstance());
             out.close();
         } catch (Exception e) {e.printStackTrace();}
     }
@@ -143,6 +144,7 @@ public class PreferencesActivityTest {
 
 
         when(mockedSignIn.signOut()).thenReturn(mockedTask);
+        when(mockedSignIn.revokeAccess()).thenReturn(mockedTask);
         Mockito.doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
