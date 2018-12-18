@@ -140,7 +140,7 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         // Fill the labels with the user info
         userNickname.setText(current_user.getTitle());
         userStatus.setText(current_user.getMessage());
-        userInterests.setText(current_user.getInterests());
+        userInterests.setText("Interests: " + current_user.getInterests());
         languagesText = current_user.getSpokenLanguages();
         spokenLanguages.setText(languagesText);
         radiusValue.setText(current_user.getRadius() + "m");
