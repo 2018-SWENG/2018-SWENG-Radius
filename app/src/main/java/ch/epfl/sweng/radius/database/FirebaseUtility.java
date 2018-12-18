@@ -56,7 +56,7 @@ class ChildListener implements ChildEventListener {
 
 public class FirebaseUtility extends Database{
 
-    public FirebaseUtility(   ){
+    public FirebaseUtility(){
         FirebaseDatabase.getInstance().goOnline();
     }
 
@@ -208,6 +208,7 @@ public class FirebaseUtility extends Database{
 
     @Override
     public void writeInstanceObj(final DatabaseObject obj, final Tables tableName){
+        Log.e("WriteDebug", getStack());
         if(obj.getClass() == ChatLogs.class) {
             ChatLogs test = (ChatLogs) obj;
         }
