@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 
 public class PreferencesActivity extends PreferenceActivity {
@@ -125,6 +126,7 @@ public class PreferencesActivity extends PreferenceActivity {
                                 Toast.makeText(getActivity(), "Account Deleted", Toast.LENGTH_SHORT).show();
                                 deleteUser();
                                 logOut();
+                                UserInfo.deleteDataStorage();
                                 //delete user
 
                             } else {

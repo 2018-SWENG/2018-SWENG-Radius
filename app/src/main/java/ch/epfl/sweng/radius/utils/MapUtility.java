@@ -119,15 +119,17 @@ public class MapUtility implements DBLocationObserver {
     }
 
     public void setCurrCoordinates(LatLng curCoordinates) {
-        UserInfo.getInstance().getCurrentPosition().setLatitude(currCoordinates.latitude);
-        UserInfo.getInstance().getCurrentPosition().setLongitude(currCoordinates.longitude);
-        Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(), Database.Tables.LOCATIONS,
-                "latitude",
-                currCoordinates.latitude);
-        Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(), Database.Tables.LOCATIONS,
-                "longitude",
-                currCoordinates.longitude);
-        currCoordinates = curCoordinates;
+        if (UserInfo.getInstance().getCurrentPosition().getID() != "") {
+            UserInfo.getInstance().getCurrentPosition().setLatitude(currCoordinates.latitude);
+            UserInfo.getInstance().getCurrentPosition().setLongitude(currCoordinates.longitude);
+            Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(), Database.Tables.LOCATIONS,
+                    "latitude",
+                    currCoordinates.latitude);
+            Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(), Database.Tables.LOCATIONS,
+                    "longitude",
+                    currCoordinates.longitude);
+            currCoordinates = curCoordinates;
+        }
     }
 
     public LatLng getCurrCoordinates() {

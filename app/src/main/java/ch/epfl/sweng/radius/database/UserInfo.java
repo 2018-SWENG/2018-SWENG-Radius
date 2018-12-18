@@ -1,6 +1,8 @@
 package ch.epfl.sweng.radius.database;
 
+import android.content.SharedPreferences;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseError;
@@ -19,17 +21,21 @@ public  class UserInfo extends DBObservable implements Serializable{
     private static UserInfo userInfo = loadState();
     private static final Database database = Database.getInstance();
 
-    private static User current_user = new User(Database.getInstance().getCurrent_user_id(),
-            "", "");
-    private static MLocation current_position = new MLocation(Database.getInstance().getCurrent_user_id());
+    private User current_user;
+    private MLocation current_position;
 
     public static UserInfo getInstance(){
-        if (userInfo == null)
+        if (userInfo == null) {
             userInfo = new UserInfo();
+        }
         return userInfo;
     }
 
     private UserInfo(){
+        current_user = new User(Database.getInstance().getCurrent_user_id());
+        current_position = new MLocation(Database.getInstance().getCurrent_user_id());
+        fetchDataFromDB();
+
     }
 
     public void fetchDataFromDB(){
@@ -50,6 +56,7 @@ public  class UserInfo extends DBObservable implements Serializable{
             @Override
             public void onFinish(Object user) {
                 current_user = (User) user;
+                Log.e("Firebase", "TEST");
                 notifyUserObservers(Database.Tables.USERS.toString());
             }
 
@@ -65,6 +72,7 @@ public  class UserInfo extends DBObservable implements Serializable{
             @Override
             public void onFinish(Object loc) {
                 current_position = (MLocation) loc;
+                Log.e("Firebase", ((MLocation) loc).getID());
                 notifyLocationObservers(Database.Tables.LOCATIONS.toString());
             }
 
@@ -97,6 +105,13 @@ public  class UserInfo extends DBObservable implements Serializable{
         } catch (Exception e) {e.printStackTrace();}
         Log.e("SAVE STATE", "Loading the state");
         return savedUserInfo;
+    }
+
+    public static void deleteDataStorage(){
+        try {
+            File inFile = new File(Environment.getExternalStorageDirectory(), SAVE_PATH);
+            inFile.delete();
+        } catch (Exception e) {e.printStackTrace();}
     }
 
     public void updateUserInDB(){

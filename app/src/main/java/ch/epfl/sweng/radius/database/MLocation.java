@@ -1,5 +1,7 @@
 package ch.epfl.sweng.radius.database;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -9,7 +11,6 @@ public class MLocation implements DatabaseObject, Serializable {
     private final static double DEFAULT_LONGITUDE = 6.5681216000000004;
     private final static double DEFAULT_lATITUDE = 46.5160698;
     private final static String DEFAULT_URL_PROFIL_PIC = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
-
 
     private String userID = "";
     private String title;
@@ -32,6 +33,8 @@ public class MLocation implements DatabaseObject, Serializable {
 
     public MLocation(String userID){
         this(userID,DEFAULT_LONGITUDE,DEFAULT_lATITUDE);
+
+        Log.e("Debug MLocation", "User ID is" + userID);
     }
 
     public MLocation(String userID, double longitude, double latitude){

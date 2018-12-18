@@ -199,6 +199,7 @@ public class FirebaseUtility extends Database{
 
     @Override
     public void readAllTableOnce(final Tables tableName, final CallBackDatabase callback) {
+     //   Log.e("Firebase Debug", "Caller :" + printStack());
         FirebaseDatabase.getInstance()
                 .getReference(tableName.toString())
                 .addListenerForSingleValueEvent( new ValueEventListener() {
@@ -243,13 +244,12 @@ public class FirebaseUtility extends Database{
 
 
 /*
+    private String printStack(){
         StackTraceElement[] trace = Thread.currentThread().getStackTrace();
         String res = "";
         for (int i = 0; i < trace.length  && i < 30; i++)
             res +=  trace[i].getClassName() + "." + trace[i].getMethodName() + ":" + trace[i].getLineNumber() + "\n";
         return res;
     }
-
-    */
-
+*/
 }
