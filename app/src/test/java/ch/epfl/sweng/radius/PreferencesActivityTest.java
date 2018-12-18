@@ -126,7 +126,6 @@ public class PreferencesActivityTest {
 
         test2.setupPositiveButton(mockedAler);
 
-        ObjectOutput out;
         try {
             File outFile = new File(Environment.getExternalStorageDirectory(), SAVE_PATH);
             out = new ObjectOutputStream(new FileOutputStream(outFile));
