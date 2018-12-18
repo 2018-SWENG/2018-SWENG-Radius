@@ -61,6 +61,9 @@ public class FirebaseUtilityTest {
 
     @Before
     public void setUp() throws Exception {
+        PowerMockito.mockStatic(FirebaseDatabase.class);
+        when(FirebaseDatabase.getInstance()).thenReturn(mockedFb);
+
         fbUtil = new FirebaseUtility();
         mockedData = new HashMap<>();
         for(int i = 0; i < 10; i++){
