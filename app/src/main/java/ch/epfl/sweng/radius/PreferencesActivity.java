@@ -71,6 +71,8 @@ public class PreferencesActivity extends PreferenceActivity {
 
         public void logOut() {
             if (MainActivity.googleSignInClient != null) {
+                UserInfo.getInstance().getCurrentPosition().setVisible(false);
+                UserInfo.getInstance().updateLocationInDB();
                 FirebaseAuth.getInstance().signOut();
                 MainActivity.googleSignInClient.signOut()
                         .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {

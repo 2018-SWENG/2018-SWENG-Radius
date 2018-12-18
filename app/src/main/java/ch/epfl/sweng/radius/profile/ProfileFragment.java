@@ -256,7 +256,6 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         String statusString = getDataFromTextInput(statusInput);
         String interestsString = getDataFromTextInput(interestsInput);
 
-        MLocation currentUser = UserInfo.getInstance().getCurrentPosition();
 
         nicknameString = nicknameString.replaceAll("[^A-Za-z0-9_]", "");
         nicknameString = truncateText(nicknameString,MAX_SIZE_USERNAME);
@@ -264,14 +263,16 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         interestsString = truncateText(interestsString,MAX_SIZE_INTERESTS);
 
         if (!nicknameString.isEmpty()) {
-            currentUser.setTitle(nicknameString);userNickname.setText(nicknameString);
+            UserInfo.getInstance().getCurrentPosition().setTitle(nicknameString);
+            userNickname.setText(nicknameString);
         }
         if (!statusString.isEmpty()) {
-            currentUser.setMessage(statusString);userStatus.setText(statusString);
+            UserInfo.getInstance().getCurrentPosition().setMessage(statusString);
+            userStatus.setText(statusString);
         }
 
         if (!interestsString.isEmpty()) {
-            currentUser.setInterests(interestsString);
+            UserInfo.getInstance().getCurrentPosition().setInterests(interestsString);
             userInterests.setText("Interests: " + interestsString);
         }
 
@@ -280,7 +281,8 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         }
 
         UserInfo.getInstance().getCurrentPosition().setRadius(userRadius);
-        currentUser.setRadius(userRadius);currentUser.setSpokenLanguages(languagesText);
+        UserInfo.getInstance().getCurrentPosition().setRadius(userRadius);
+        UserInfo.getInstance().getCurrentPosition().setSpokenLanguages(languagesText);
         spokenLanguages.setText(languagesText);
         //Write to DB
         UserInfo.getInstance().updateUserInDB();UserInfo.getInstance().updateLocationInDB();

@@ -145,6 +145,8 @@ public class AccountActivity extends AppCompatActivity {
         });
 
         // ToolBar initialization
+        enterApp();
+
 
     }
 
@@ -158,7 +160,7 @@ public class AccountActivity extends AppCompatActivity {
             timer = new Timer();
             timerTask = new myTimer();
         }
-        enterApp();
+        UserInfo.getInstance().updateLocationInDB();
     }
 
     @Override
@@ -183,11 +185,7 @@ public class AccountActivity extends AppCompatActivity {
         boolean incognito = settings.getBoolean("incognitoSwitch", false);
         Log.e("VISIBILITY", "Setting Visible to " + !incognito);
         UserInfo.getInstance().getCurrentPosition().setVisible(!incognito);
-        /*
-        Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(),
-                Database.Tables.LOCATIONS, "visible",
-                !incognito);*/
-
+        UserInfo.getInstance().setIncognitoMode(incognito);
     }
 
     @Override

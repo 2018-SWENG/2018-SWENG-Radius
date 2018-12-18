@@ -23,6 +23,7 @@ public  class UserInfo extends DBObservable implements Serializable{
 
     private User current_user;
     private MLocation current_position;
+    private boolean incognitoMode;
 
     public static UserInfo getInstance(){
         if (userInfo == null) {
@@ -36,6 +37,10 @@ public  class UserInfo extends DBObservable implements Serializable{
         current_position = new MLocation(Database.getInstance().getCurrent_user_id());
         fetchDataFromDB();
 
+    }
+
+    public void setIncognitoMode(boolean incognitoMode) {
+        this.incognitoMode = incognitoMode;
     }
 
     public void fetchDataFromDB(){
@@ -74,6 +79,9 @@ public  class UserInfo extends DBObservable implements Serializable{
                 current_position = (MLocation) loc;
                 Log.e("Firebase", ((MLocation) loc).getID());
                 notifyLocationObservers(Database.Tables.LOCATIONS.toString());
+
+                if (incognitoMode == current_position.getVisible())
+                    updateLocationInDB();
             }
 
             @Override
