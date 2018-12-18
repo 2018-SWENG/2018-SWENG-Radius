@@ -69,7 +69,18 @@ public  class UserInfo extends DBObservable implements Serializable{
         });
     }
 
+    public void resetCurrentData(){
+    //    current_user = null;
+    //    current_position = null;
+        this.removeAllObservers();
+        userInfo = null;
+    }
+
     private void fetchUserPosition(){
+        if(!Database.getInstance().getCurrent_user_id().equals(current_user.getID())){
+            current_position.setID(Database.getInstance().getCurrent_user_id());
+            current_user.setID(Database.getInstance().getCurrent_user_id());
+        }
         database.readObj(current_position, Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object loc) {

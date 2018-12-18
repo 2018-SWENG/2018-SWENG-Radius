@@ -56,7 +56,9 @@ class ChildListener implements ChildEventListener {
 
 public class FirebaseUtility extends Database{
 
-    public FirebaseUtility(){}
+    public FirebaseUtility(   ){
+        FirebaseDatabase.getInstance().goOnline();
+    }
 
     @Override
     public String getCurrent_user_id() {

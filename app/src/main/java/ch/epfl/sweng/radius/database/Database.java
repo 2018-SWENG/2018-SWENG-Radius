@@ -45,6 +45,10 @@ public abstract class Database {
         return false;
     }
 
+
+    public void clearDatabase(){
+        database = null;
+    }
     /**
      * Get the singleton instance of the DBUtility
      * @return the singleton instance of the DBUtility
