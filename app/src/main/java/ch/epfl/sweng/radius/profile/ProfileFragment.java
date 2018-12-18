@@ -256,32 +256,28 @@ public class ProfileFragment extends Fragment implements DBUserObserver {
         String statusString = getDataFromTextInput(statusInput);
         String interestsString = getDataFromTextInput(interestsInput);
 
-        MLocation currentUser = UserInfo.getInstance().getCurrentPosition();
-
         nicknameString = nicknameString.replaceAll("[^A-Za-z0-9_]", "");
         nicknameString = truncateText(nicknameString,MAX_SIZE_USERNAME);
         statusString = truncateText(statusString,MAX_SIZE_STATUS);
         interestsString = truncateText(interestsString,MAX_SIZE_INTERESTS);
 
         if (!nicknameString.isEmpty()) {
-            currentUser.setTitle(nicknameString);userNickname.setText(nicknameString);
+            UserInfo.getInstance().getCurrentPosition().setTitle(nicknameString); userNickname.setText(nicknameString);
         }
         if (!statusString.isEmpty()) {
-            currentUser.setMessage(statusString);userStatus.setText(statusString);
+            UserInfo.getInstance().getCurrentPosition().setMessage(statusString); userStatus.setText(statusString);
         }
 
         if (!interestsString.isEmpty()) {
-            currentUser.setInterests(interestsString);
-            userInterests.setText("Interests: " + interestsString);
+            UserInfo.getInstance().getCurrentPosition().setInterests(interestsString);userInterests.setText("Interests: " + interestsString);
         }
 
         if (Storage.getInstance().getStorageTask() == null || !Storage.getInstance().getStorageTask().isInProgress()) { // Upload the photo and its uri to storage and db
             Storage.getInstance().uploadFile( mImageUri, this.getActivity());
         }
 
-        UserInfo.getInstance().getCurrentPosition().setRadius(userRadius);
-        currentUser.setRadius(userRadius);currentUser.setSpokenLanguages(languagesText);
-        spokenLanguages.setText(languagesText);
+        UserInfo.getInstance().getCurrentPosition().setRadius(userRadius);UserInfo.getInstance().getCurrentPosition().setRadius(userRadius);
+        UserInfo.getInstance().getCurrentPosition().setSpokenLanguages(languagesText);spokenLanguages.setText(languagesText);
         //Write to DB
         UserInfo.getInstance().updateUserInDB();UserInfo.getInstance().updateLocationInDB();
     }

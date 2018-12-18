@@ -1,6 +1,9 @@
 package ch.epfl.sweng.radius;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
+import ch.epfl.sweng.radius.database.User;
 import ch.epfl.sweng.radius.database.UserInfo;
 
 public class PreferencesActivity extends PreferenceActivity {
@@ -70,6 +74,8 @@ public class PreferencesActivity extends PreferenceActivity {
 
         public void logOut() {
             if (MainActivity.googleSignInClient != null) {
+                UserInfo.getInstance().getCurrentPosition().setVisible(false);
+                UserInfo.getInstance().updateLocationInDB();
                 FirebaseAuth.getInstance().signOut();
                 MainActivity.googleSignInClient.signOut()
                         .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
@@ -79,6 +85,8 @@ public class PreferencesActivity extends PreferenceActivity {
                             }
                         });
             }
+
+
         }
 
         private void setupDeleteAccountButton() {
@@ -115,15 +123,17 @@ public class PreferencesActivity extends PreferenceActivity {
         * Deletes account and takes the user to the sign in page
         * */
         public void setupPositiveButton(AlertDialog.Builder dialog) {
+            final FirebaseAuth auth = FirebaseAuth.getInstance();
             dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    auth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getActivity(), "Account Deleted", Toast.LENGTH_SHORT).show();
                                 deleteUser();
+                                UserInfo.deleteDataStorage();
                                 logOut();
                                 //delete user
 
@@ -170,10 +180,6 @@ public class PreferencesActivity extends PreferenceActivity {
         @Override
         public void onPause() {
             super.onPause();
-            UserInfo.getInstance().getCurrentPosition().setVisible(false);
-            Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(),
-                    Database.Tables.LOCATIONS, "visible",
-                    true);
             getPreferenceScreen()
                     .getSharedPreferences()
                     .unregisterOnSharedPreferenceChangeListener(this);
@@ -217,7 +223,10 @@ public class PreferencesActivity extends PreferenceActivity {
                     .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            startActivity(new Intent(getActivity(), MainActivity.class));
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
                         }
                     });
         }

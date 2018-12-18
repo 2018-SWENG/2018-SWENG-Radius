@@ -1,5 +1,7 @@
 package ch.epfl.sweng.radius.database;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -10,8 +12,7 @@ public class MLocation implements DatabaseObject, Serializable {
     private final static double DEFAULT_lATITUDE = 46.5160698;
     private final static String DEFAULT_URL_PROFIL_PIC = "https://firebasestorage.googleapis.com/v0/b/radius-1538126456577.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=ccd39de0-9921-487b-90e7-3501262d7835";
 
-
-    private String userID;
+    private String userID = "";
     private String title;
     private String message;
     private double longitude;
@@ -24,16 +25,16 @@ public class MLocation implements DatabaseObject, Serializable {
     private double radius; // Use it only if the mLocation is a group.
     private String spokenLanguages;
     private String interests;
-    private ArrayList<String> languageList;
+    private ArrayList<String> languageList = new ArrayList<>();
 
-    private String ownerId = ""; // for topics, no significance for locations and groups (so default is "")
+    private String ownerId; // for topics, no significance for locations and groups (so default is "")
 
-    public MLocation(){
-        this(Database.getInstance().getCurrent_user_id());
-    }
+    public MLocation(){this("");}
 
     public MLocation(String userID){
         this(userID,DEFAULT_LONGITUDE,DEFAULT_lATITUDE);
+
+        Log.e("Debug MLocation", "User ID is" + userID);
     }
 
     public MLocation(String userID, double longitude, double latitude){
@@ -48,7 +49,6 @@ public class MLocation implements DatabaseObject, Serializable {
         this.urlProfilePhoto = DEFAULT_URL_PROFIL_PIC;
         this.spokenLanguages = "";
         this.interests = "";
-        this.languageList = new ArrayList<>();
     }
 
     public double getLatitude() {

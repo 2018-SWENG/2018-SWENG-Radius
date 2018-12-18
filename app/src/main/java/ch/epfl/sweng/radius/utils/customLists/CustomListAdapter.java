@@ -82,8 +82,6 @@ public abstract class CustomListAdapter extends RecyclerView.Adapter<CustomListA
         }
         else
             Picasso.get().load(url).into(viewHolder.imgViewIcon);
-
-
     }
 
 

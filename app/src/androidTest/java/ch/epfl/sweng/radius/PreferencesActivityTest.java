@@ -119,18 +119,21 @@ public class PreferencesActivityTest  extends ActivityInstrumentationTestCase2<P
             e.printStackTrace();
         }
     }
-
-    /*
-
+/*
     @Test
     @Ignore
-    public void testDeleteAccount(){
+    public void testZDeleteAccount(){
         Espresso.onView(AllOf.allOf(withText(R.string.deleteAccountTitle)))
                 .perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Espresso.onView(withText("Delete")).perform(click());
 
     }
-*/
+    */
 
     @After
     public void tearDown() throws Exception {

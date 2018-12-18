@@ -12,6 +12,7 @@ import android.support.v4.util.Pair;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -67,7 +68,12 @@ public class FirebaseUtility extends Database{
 
     @Override
     public String getCurrent_user_id() {
-            return FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null)
+            return user.getUid();
+        else
+            return null;
+
 
     }
 
@@ -193,6 +199,7 @@ public class FirebaseUtility extends Database{
 
     @Override
     public void readAllTableOnce(final Tables tableName, final CallBackDatabase callback) {
+     //   Log.e("Firebase Debug", "Caller :" + printStack());
         FirebaseDatabase.getInstance()
                 .getReference(tableName.toString())
                 .addListenerForSingleValueEvent( new ValueEventListener() {
@@ -236,7 +243,7 @@ public class FirebaseUtility extends Database{
 
 
 
-/*
+    public String getStack(){
         StackTraceElement[] trace = Thread.currentThread().getStackTrace();
         String res = "";
         for (int i = 0; i < trace.length  && i < 30; i++)
@@ -244,6 +251,6 @@ public class FirebaseUtility extends Database{
         return res;
     }
 
-    */
+
 
 }

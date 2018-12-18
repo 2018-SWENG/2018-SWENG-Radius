@@ -100,7 +100,7 @@ public class AccountActivity extends AppCompatActivity {
 
         timer = new Timer();
         // To load the current user infos
-        UserInfo.getInstance().fetchDataFromDB();
+        UserInfo.getInstance();//.fetchDataFromDB();
         OthersInfo.getInstance().fetchUsersInMyRadius();
         ChatlogsUtil.getInstance(getApplicationContext());
         // Set the layout
@@ -145,6 +145,8 @@ public class AccountActivity extends AppCompatActivity {
         });
 
         // ToolBar initialization
+        enterApp();
+
 
     }
 
@@ -158,7 +160,7 @@ public class AccountActivity extends AppCompatActivity {
             timer = new Timer();
             timerTask = new myTimer();
         }
-        enterApp();
+        UserInfo.getInstance().updateLocationInDB();
     }
 
     @Override
@@ -178,13 +180,12 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private void enterApp(){
+        Log.e("AccountActivity", "id: " + UserInfo.getInstance().getCurrentUser().getID());
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         boolean incognito = settings.getBoolean("incognitoSwitch", false);
         Log.e("VISIBILITY", "Setting Visible to " + !incognito);
         UserInfo.getInstance().getCurrentPosition().setVisible(!incognito);
-        Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(),
-                Database.Tables.LOCATIONS, "visible",
-                !incognito);
+        UserInfo.getInstance().setIncognitoMode(incognito);
     }
 
     @Override

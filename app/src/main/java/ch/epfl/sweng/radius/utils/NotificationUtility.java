@@ -10,6 +10,7 @@ import ch.epfl.sweng.radius.database.ChatLogs;
 import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.Message;
 import ch.epfl.sweng.radius.database.OthersInfo;
+import ch.epfl.sweng.radius.database.UserInfo;
 
 public class NotificationUtility {
 
@@ -126,7 +127,7 @@ public class NotificationUtility {
     }
 
     private static String handleUserTitle(ChatLogs chatlogs) {
-        String currentUserId = Database.getInstance().getCurrent_user_id();
+        String currentUserId = UserInfo.getInstance().getCurrentUser().getID();
         String otherUserId = "";
         String ret = "Anonymous";
         for (String id : chatlogs.getMembersId()) {
