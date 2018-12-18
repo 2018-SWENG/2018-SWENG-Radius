@@ -13,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -167,8 +166,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(getContext(), "Map is ready", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "onMapReady: map is ready");
-
         if(googleMap == null)
             return;
 
@@ -234,8 +231,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     }
 
     private void moveCamera(final LatLng latLng, final float zoom) {
-        Log.d( TAG, "moveCamera: moving the camera to: lat: "
-                + latLng.latitude + " long: " + latLng.longitude);
         try
         {
             getActivity().runOnUiThread(new Runnable(){
@@ -265,10 +260,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
             });
         }catch(NullPointerException e){/* Only happens in Unit Test*/}
 
-    usersLoc = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().values());
-
-        if(usersLoc.size() > 3)
-            Log.d( TAG, "moveCamera: moving the camera to: lat: " + usersLoc.size());
+        usersLoc = new ArrayList<>(OthersInfo.getInstance().getUsersInRadius().values());
 
         getFriendsID();
         if(usersLoc != null) {
@@ -298,7 +290,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
                 }
             }
         }
-        Log.e("NotificationDebug", "friends : " + friendsID.containsKey(locID) + " isNew" + OthersInfo.getInstance().getNewUsersPos().containsKey(locID));
 
         if(friendsID.containsKey(locID) && OthersInfo.getInstance().getNewUsersPos().containsKey(locID)){
             showNearFriendNotification(locID, userName);
@@ -322,9 +313,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
 
     @Override
     public void onLocationChange(String id) {
-
         radius = UserInfo.getInstance().getCurrentPosition().getRadius();
-        Log.e("OnLocationChange", "radius : " + radius);
         coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(), UserInfo.getInstance().getCurrentPosition().getLongitude());
         if (getActivity() != null && !Database.DEBUG_MODE) {
             initCircle(coord);

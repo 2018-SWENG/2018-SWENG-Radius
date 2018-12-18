@@ -1,7 +1,5 @@
 package ch.epfl.sweng.radius.database;
 
-import android.util.Log;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -33,8 +31,6 @@ public class MLocation implements DatabaseObject, Serializable {
 
     public MLocation(String userID){
         this(userID,DEFAULT_LONGITUDE,DEFAULT_lATITUDE);
-
-        Log.e("Debug MLocation", "User ID is" + userID);
     }
 
     public MLocation(String userID, double longitude, double latitude){

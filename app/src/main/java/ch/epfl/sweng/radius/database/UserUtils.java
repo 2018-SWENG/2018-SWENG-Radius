@@ -18,39 +18,6 @@ public class UserUtils extends DBObservable{
         return userUtils;
     }
 
-    private UserUtils(){ }
-/*
-    public HashMap<String, MLocation> getSpecificsUsers(List<String> membersId){
-        fetchSpeficitsOtherUsers(membersId);
-        return users;
-    }
-
-    public HashMap<String, MLocation> getUsers(){
-        return users;
-    }
-
-
-    public void fetchSpeficitsOtherUsers(List<String> membersId){
-        database.readListObjOnce(membersId,Database.Tables.LOCATIONS, new CallBackDatabase() {
-            @Override
-            public void onFinish(Object value) {
-                users.clear();
-                String currentUserId = UserInfo.getInstance().getCurrentUser().getID();
-                for (MLocation user : (ArrayList<MLocation>) value) {
-                    if(!currentUserId.equals(user.getID())) {
-                        users.put(user.getID(), user);
-                    }
-                }
-                notifyLocationObservers(Database.Tables.LOCATIONS.toString());
-            }
-
-            @Override
-            public void onError(DatabaseError error) {
-                Log.e("FetchUserRadius", error.getMessage());
-            }
-        });
-    }
-
-*/
+    private UserUtils() {}
 
 }

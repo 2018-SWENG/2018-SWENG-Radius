@@ -3,7 +3,6 @@ package ch.epfl.sweng.radius.browseProfiles;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -46,7 +45,6 @@ public abstract class BrowseProfilesActivity extends AppCompatActivity {
                 } else if (item.getTitle().toString().trim().equals("Unblock User")) {
                     profileActivityListener.unblockUser();
                     item.setTitle("Block User");
-                    Log.e("BrowseProfilesActivity:", "Unblocking user");
                 }
                 return true;
             case R.id.spam:

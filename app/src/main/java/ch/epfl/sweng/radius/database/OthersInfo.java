@@ -103,12 +103,10 @@ public class OthersInfo extends DBObservable{
 
     private void fetchConvUsers(){
         List<String> ids = new ArrayList<>(UserInfo.getInstance().getCurrentUser().getChatList().keySet());
-        Log.e("Refactor OthersInfo", "Size of ids is" + ids.size());
         database.readListObjOnce(ids, Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
                 for(MLocation loc : (ArrayList<MLocation>) value){
-                    Log.e("Refactor OthersInfo", "Current userID is" + loc.getID());
                     if(!usersPos.containsKey(loc.getID()));
                         convUsers.put(loc.getID(), loc);
                 }
@@ -120,6 +118,7 @@ public class OthersInfo extends DBObservable{
             }
         });
     }
+
     public void fetchUserObjects(){
         database.readAllTableOnce(Database.Tables.USERS, new CallBackDatabase() {
             @Override
@@ -127,8 +126,6 @@ public class OthersInfo extends DBObservable{
                 for (User user : (ArrayList<User>) value) {
                     users.put(user.getID(), user);
                 }
-                Log.e("DEBUGG0", "Fetching the users " + users.size());
-
                 notifyLocationObservers(Database.Tables.LOCATIONS.toString());
             }
 
@@ -144,13 +141,7 @@ public class OthersInfo extends DBObservable{
         database.readListObjOnce(ids, Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
-                friendList.clear();
-                for(MLocation loc : (ArrayList<MLocation>) value){
-                    Log.e("Refactor OthersInfo", "Current userID is" + loc.getID());
-                    if(!friendList.containsKey(loc.getID()));
-                    friendList.put(loc.getID(), loc);
-                    notifyUserObservers("");
-                }
+                editList(friendList, value);
             }
 
             @Override
@@ -160,19 +151,12 @@ public class OthersInfo extends DBObservable{
         });
     }
 
-
     public void fetchRequest(){
         List<String> ids = new ArrayList<>(UserInfo.getInstance().getCurrentUser().getFriendsInvitations().values());
         database.readListObjOnce(ids, Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
-                requestList.clear();
-                for(MLocation loc : (ArrayList<MLocation>) value){
-                    Log.e("Refactor OthersInfo", "Current userID is" + loc.getID());
-                    if(!requestList.containsKey(loc.getID()));
-                    requestList.put(loc.getID(), loc);
-                    notifyUserObservers("");
-                }
+                editList(requestList, value);
             }
 
             @Override
@@ -180,6 +164,14 @@ public class OthersInfo extends DBObservable{
                 Log.e("FetchRequests", error.getMessage());
             }
         });
+    }
+
+    private void editList(HashMap<String, MLocation> list, Object value) {
+        list.clear();
+        for(MLocation loc : (ArrayList<MLocation>) value){
+            list.put(loc.getID(), loc);
+            notifyUserObservers("");
+        }
     }
 
     public void putInTable(MLocation loc){

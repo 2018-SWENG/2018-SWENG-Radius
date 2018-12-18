@@ -2,7 +2,6 @@ package ch.epfl.sweng.radius.storage;
 
 import android.app.Activity;
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.firebase.storage.StorageTask;
 
@@ -27,7 +26,6 @@ public abstract class Storage {
     }
 
     public static Storage getInstance() {
-        Log.e("DEBUG", "Value of debug is " + DEBUG_MODE);
         if (storage == null)
             return new FirebaseStorageUtility();
 

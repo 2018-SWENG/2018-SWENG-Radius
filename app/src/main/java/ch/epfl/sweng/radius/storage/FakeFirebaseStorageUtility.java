@@ -5,6 +5,6 @@ import android.net.Uri;
 
 public class FakeFirebaseStorageUtility extends Storage{
 
-
     public void uploadFile(Uri uri, Activity activity) {}
+
 }

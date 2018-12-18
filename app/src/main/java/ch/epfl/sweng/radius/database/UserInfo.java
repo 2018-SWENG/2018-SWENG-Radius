@@ -1,8 +1,6 @@
 package ch.epfl.sweng.radius.database;
 
-import android.content.SharedPreferences;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseError;
@@ -61,7 +59,6 @@ public  class UserInfo extends DBObservable implements Serializable{
             @Override
             public void onFinish(Object user) {
                 current_user = (User) user;
-                Log.e("Firebase", "TEST");
                 notifyUserObservers(Database.Tables.USERS.toString());
             }
 
@@ -77,7 +74,6 @@ public  class UserInfo extends DBObservable implements Serializable{
             @Override
             public void onFinish(Object loc) {
                 current_position = (MLocation) loc;
-                Log.e("Firebase", ((MLocation) loc).getID());
                 notifyLocationObservers(Database.Tables.LOCATIONS.toString());
 
                 if (incognitoMode == current_position.getVisible())
@@ -111,7 +107,6 @@ public  class UserInfo extends DBObservable implements Serializable{
             savedUserInfo = (UserInfo) in.readObject();
             in.close();
         } catch (Exception e) {e.printStackTrace();}
-        Log.e("SAVE STATE", "Loading the state");
         return savedUserInfo;
     }
 
@@ -129,7 +124,5 @@ public  class UserInfo extends DBObservable implements Serializable{
     public void updateLocationInDB(){
         Database.getInstance().writeInstanceObj(current_position, Database.Tables.LOCATIONS);
     }
-
-
 
 }

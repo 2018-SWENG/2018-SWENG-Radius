@@ -58,11 +58,7 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         // Just create entry to avoid duplicate activities
         OthersInfo.getInstance().addLocationObserver(this);
         if(MessageListActivity.getChatInstance(chatLogs.getID()) == null){
-            Log.e("message", "Construcor called with " + chatLogs.getID() + " " + locType);
-
             this.otherUserId = ChatLogs.getOtherID(chatLogs);
-            Log.e("RealTimeDebug", "MLA : Param of otherUsedId " + otherUserId);
-
             this.chatId = chatLogs.getID();
             this.chatLogs = chatLogs;
             this.locType =locType;
@@ -124,8 +120,6 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
      */
     private void setUpUI() {
         if(chatLogs == null) chatLogs = ChatlogsUtil.getInstance().getChat(chatId, locType);
-
-       // Log.e("ChatlogsDebug", chatId);
         setContentView(R.layout.activity_message_list);
         getSupportActionBar().setTitle(NotificationUtility.getChatTitle(chatLogs, locType));
         messageZone = (EditText) findViewById(R.id.edittext_chatbox);
@@ -160,7 +154,6 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         myMessageAdapter.setMembersIds(chatLogs.getMembersId());
         myMessageRecycler.smoothScrollToPosition(chatLogs.getMessages().size());
         myMessageAdapter.notifyDataSetChanged();
-      //  Log.e("RealTimeDebug", "MLA Member received !");
     }
 
     /**
@@ -179,7 +172,6 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
             chatLogs.addMessage(msg);
 
             List<Message> newList = chatLogs.getMessages();
-       //     Log.e("message", "NewList size is " + newList.size());
             Database.getInstance().writeToInstanceChild(chatLogs, Database.Tables.CHATLOGS, "messages",
                     chatLogs.getMessages());
 
@@ -196,7 +188,6 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  Log.e("message", "Message Sent ");
                 String message = messageZone.getText().toString();
                 sendMessage(myID, message, new Date());
             }
@@ -210,8 +201,6 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
     }
 
     private void compareLocation() {
-        //TODO check if other users radius contains current user.
-       // Log.e("RealTimeDebug", "User is in table : " + String.valueOf(OthersInfo.getInstance().getUsersInRadius().containsKey(otherUserId)) + otherUserId);
         if(locType != 0) {// || chatLogs.getMembersId().size() != 2 ) {
             toggleFlagAndSendingFields(true);
         }
@@ -306,8 +295,6 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
         }
         this.context = this;
 
-        Log.e("NIGHT", nightMode + "");
-        Log.e("message", "Construcor oNStart with " +temp + " " + locType);
         if(isChatRunning == null) isChatRunning = new ChatState();
         myID = UserInfo.getInstance().getCurrentUser().getID();
         setContentView(R.layout.activity_message_list);
