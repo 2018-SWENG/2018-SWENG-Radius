@@ -170,10 +170,6 @@ public class PreferencesActivity extends PreferenceActivity {
         @Override
         public void onPause() {
             super.onPause();
-            UserInfo.getInstance().getCurrentPosition().setVisible(false);
-            Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(),
-                    Database.Tables.LOCATIONS, "visible",
-                    true);
             getPreferenceScreen()
                     .getSharedPreferences()
                     .unregisterOnSharedPreferenceChangeListener(this);
