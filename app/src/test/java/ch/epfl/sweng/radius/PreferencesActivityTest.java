@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Environment;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -29,6 +30,10 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -50,6 +55,7 @@ import static org.powermock.api.mockito.PowerMockito.doAnswer;
 @PowerMockRunnerDelegate(JUnit4.class)
 @PrepareForTest({ FirebaseAuth.class, Toast.class })
 public class PreferencesActivityTest {
+    private  final String SAVE_PATH = "current_user_info.data";
 
     private PreferencesActivity test;
     private PreferencesActivity.MyPreferenceFragment test2;
@@ -111,6 +117,14 @@ public class PreferencesActivityTest {
         when(Toast.makeText(any(Context.class), any(CharSequence.class), anyInt())).thenReturn(mockedToast);
 
         test2.setupPositiveButton(mockedAler);
+
+        ObjectOutput out;
+        try {
+            File outFile = new File(Environment.getExternalStorageDirectory(), SAVE_PATH);
+            out = new ObjectOutputStream(new FileOutputStream(outFile));
+            out.writeObject(this);
+            out.close();
+        } catch (Exception e) {e.printStackTrace();}
     }
 
     @Test
