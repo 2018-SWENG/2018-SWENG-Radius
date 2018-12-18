@@ -116,6 +116,14 @@ public class PreferencesActivityTest {
         PowerMockito.mockStatic(Toast.class);
         when(Toast.makeText(any(Context.class), any(CharSequence.class), anyInt())).thenReturn(mockedToast);
 
+        ObjectOutput out;
+        try {
+            File outFile = new File(Environment.getExternalStorageDirectory(), SAVE_PATH);
+            out = new ObjectOutputStream(new FileOutputStream(outFile));
+            out.writeObject(this);
+            out.close();
+        } catch (Exception e) {e.printStackTrace();}
+
         test2.setupPositiveButton(mockedAler);
 
         ObjectOutput out;
