@@ -92,10 +92,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         return fragment;
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
