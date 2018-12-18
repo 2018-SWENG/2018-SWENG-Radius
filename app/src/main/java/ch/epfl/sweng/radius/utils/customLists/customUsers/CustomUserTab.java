@@ -29,11 +29,10 @@ public abstract class CustomUserTab extends CustomTab implements DBLocationObser
     protected void setUpAdapterWithList(List<String> listIds){
         ArrayList<CustomListItem> usersItems = new ArrayList<>();
         List<MLocation> locs = getList();
-        for(MLocation loc : locs)
-                usersItems.add(new CustomListItem(loc.getID(), UserInfo.getInstance().getCurrentUser().getConvFromUser(loc.getID())
-                        , loc.getTitle()));
-              //  Log.e("Setupadapterwith list: ", "--------------------------------------" + loc.getID() +"----------------------------------------");
-
+        for(MLocation loc : locs) {
+            usersItems.add(new CustomListItem(loc.getID(), UserInfo.getInstance().getCurrentUser().getConvFromUser(loc.getID())
+                    , loc.getTitle()));
+        }
 
         if (adapter != null) {
             adapter.setItems(usersItems);
