@@ -1,6 +1,9 @@
 package ch.epfl.sweng.radius;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -82,6 +85,8 @@ public class PreferencesActivity extends PreferenceActivity {
                             }
                         });
             }
+
+
         }
 
         private void setupDeleteAccountButton() {
@@ -118,10 +123,11 @@ public class PreferencesActivity extends PreferenceActivity {
         * Deletes account and takes the user to the sign in page
         * */
         public void setupPositiveButton(AlertDialog.Builder dialog) {
+            final FirebaseAuth auth = FirebaseAuth.getInstance();
             dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    auth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
@@ -217,7 +223,13 @@ public class PreferencesActivity extends PreferenceActivity {
                     .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            startActivity(new Intent(getActivity(), MainActivity.class));
+                            Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+                            int mPendingIntentId = 182;
+                            PendingIntent mPendingIntent = PendingIntent.getActivity(getActivity().getApplicationContext(), mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                            AlarmManager mgr = (AlarmManager) getActivity().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+                            System.exit(0);
+
                         }
                     });
         }
