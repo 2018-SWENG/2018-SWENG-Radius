@@ -1,5 +1,10 @@
 package ch.epfl.sweng.radius;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,18 +35,22 @@ import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.FirebaseUtility;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.User;
+import ch.epfl.sweng.radius.messages.ChatState;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.doAnswer;
 
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(JUnit4.class)
-@PrepareForTest({ FirebaseAuth.class, FirebaseDatabase.class })
+@PrepareForTest({ FirebaseAuth.class, Toast.class })
 public class PreferencesActivityTest {
 
     private PreferencesActivity test;
+    private PreferencesActivity.MyPreferenceFragment test2;
     FirebaseAuth        mockedAuth = Mockito.mock(FirebaseAuth.class);
     FirebaseUser mockedUser = Mockito.mock(FirebaseUser.class);
     Task mockedTask = Mockito.mock(Task.class);
@@ -51,6 +60,7 @@ public class PreferencesActivityTest {
     public void setUp() throws Exception {
         Database.activateDebugMode();
         test = new PreferencesActivity();
+        test2 = new PreferencesActivity.MyPreferenceFragment();
         }
 
     @Test
@@ -80,6 +90,25 @@ public class PreferencesActivityTest {
             }
 
         }).when(mockedTask).addOnCompleteListener(any(OnCompleteListener.class));
+
+        AlertDialog.Builder mockedAler = Mockito.mock(AlertDialog.Builder.class);
+        final DialogInterface mockedDialog = Mockito.mock(DialogInterface.class);
+        doAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                DialogInterface.OnClickListener onCompleteListener = (DialogInterface.OnClickListener) invocation.getArguments()[1];
+
+                onCompleteListener.onClick(mockedDialog, 0);
+                return null;
+            }
+
+        }).when(mockedAler).setPositiveButton(any(CharSequence.class), any(DialogInterface.OnClickListener.class));
+
+        Toast mockedToast = Mockito.mock(Toast.class);
+        PowerMockito.mockStatic(Toast.class);
+        when(Toast.makeText(any(Context.class), any(CharSequence.class), anyInt())).thenReturn(mockedToast);
+
+        test2.setupPositiveButton(mockedAler);
     }
 
     private void restoreCurrentUser() {
