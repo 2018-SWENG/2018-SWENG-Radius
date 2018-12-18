@@ -182,7 +182,9 @@ public class AccountActivity extends AppCompatActivity {
         boolean incognito = settings.getBoolean("incognitoSwitch", false);
         Log.e("VISIBILITY", "Setting Visible to " + !incognito);
         UserInfo.getInstance().getCurrentPosition().setVisible(!incognito);
-        UserInfo.getInstance().updateLocationInDB();
+        Database.getInstance().writeToInstanceChild(UserInfo.getInstance().getCurrentPosition(),
+                Database.Tables.LOCATIONS, "visible",
+                !incognito);
     }
 
     @Override
