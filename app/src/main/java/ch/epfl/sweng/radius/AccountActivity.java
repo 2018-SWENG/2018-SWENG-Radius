@@ -14,7 +14,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -95,7 +94,6 @@ public class AccountActivity extends AppCompatActivity {
             setTheme(R.style.DarkTheme);
         else
             setTheme(R.style.LightTheme);
-        Log.e("NIGHT", nightMode + "");
         super.onCreate(savedInstanceState);
 
         timer = new Timer();
@@ -172,7 +170,6 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private static void leaveApp(){
-        Log.e("SAVE SATE", "save UserInfo in external storage");
         UserInfo.getInstance().saveState();
 
         UserInfo.getInstance().getCurrentPosition().setVisible(false);
@@ -180,10 +177,8 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private void enterApp(){
-        Log.e("AccountActivity", "id: " + UserInfo.getInstance().getCurrentUser().getID());
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         boolean incognito = settings.getBoolean("incognitoSwitch", false);
-        Log.e("VISIBILITY", "Setting Visible to " + !incognito);
         UserInfo.getInstance().getCurrentPosition().setVisible(!incognito);
         UserInfo.getInstance().setIncognitoMode(incognito);
     }

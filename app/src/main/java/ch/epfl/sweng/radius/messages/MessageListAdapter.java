@@ -3,7 +3,6 @@ package ch.epfl.sweng.radius.messages;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,8 +77,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        Log.e("message", "Updates view and message size is " + messages.size());
-
         if (viewType == VIEW_TYPE_MESSAGE_SENT) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_message_sent, parent, false);
@@ -149,16 +146,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             timeText.setText(DateUtils.formatDateTime(context, message.getSendingTime().getTime(), flags));
             MLocation currentUser = OthersInfo.getInstance().getUsersInRadius().get(message.getSenderId());
             if (currentUser != null) {
-                Log.e("RealTimeDebug", "User is not null !");
                 nameText.setText(currentUser.getTitle());
                 setPicture(currentUser.getUrlProfilePhoto(),itemView);
             }
-            else{
-                Log.e("RealTimeDebug", "User is null !");
-
-            }
-
-
         }
     }
 

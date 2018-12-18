@@ -34,29 +34,21 @@ class ChildListener implements ChildEventListener {
 
     @Override
     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        Log.e("Notification", "CHild added !" + child.first);
         callback.onFinish(dataSnapshot.getValue(child.second));
     }
 
     @Override
-    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        Log.e("Firebase", "Child Changed !");
-    }
+    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
 
     @Override
-    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-    }
+    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
 
     @Override
-    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-    }
+    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
 
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
         callback.onError(databaseError);
-
     }
 
 
@@ -134,9 +126,6 @@ public class FirebaseUtility extends Database{
     public void readObj(final DatabaseObject obj,
                         final Tables tableName,
                         final CallBackDatabase callback) {
-
-  //      Log.w("Firebase Message", "Read " + obj.getClass() + "Called by "+ getLogTagWithMethod());
-
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -145,9 +134,7 @@ public class FirebaseUtility extends Database{
                     callback.onFinish(obj);
                 }
                 else{
-            //        Log.e("FirebaseDebug", "Object is " + obj.getID() + "Objtype is " + tableName.toString());
                     callback.onFinish(dataSnapshot.getValue(obj.getClass()));
-
                 }
             }
 
@@ -173,11 +160,8 @@ public class FirebaseUtility extends Database{
                 .addListenerForSingleValueEvent( new ValueEventListener() {
             @Override
             public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            //    Log.e("DEBUG", getLogTagWithMethod());
-
                 List<DatabaseObject> allItems = new ArrayList<>();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-              //      Log.e("FirebaseDebug", postSnapshot.getKey());
                     DatabaseObject snap = (DatabaseObject)postSnapshot
                             .getValue(tableName.getTableClass());
                     if (ids.contains(snap.getID())) {
@@ -185,7 +169,6 @@ public class FirebaseUtility extends Database{
                                 .getValue(tableName.getTableClass()));
                     }
                 }
-
                 callback.onFinish(allItems);
             }
 
@@ -199,15 +182,11 @@ public class FirebaseUtility extends Database{
 
     @Override
     public void readAllTableOnce(final Tables tableName, final CallBackDatabase callback) {
-     //   Log.e("Firebase Debug", "Caller :" + printStack());
         FirebaseDatabase.getInstance()
                 .getReference(tableName.toString())
                 .addListenerForSingleValueEvent( new ValueEventListener() {
                     @Override
                     public void  onDataChange(@NonNull DataSnapshot dataSnapshot) {
-           //             Log.e("FirebaseDebug", "Objtype is " + tableName.toString());
-
-     //                   Log.d("DEBUG", getLogTagWithMethod());
                         List<DatabaseObject> allItems = new ArrayList<>();
                         for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                             DatabaseObject snap = (DatabaseObject)postSnapshot
@@ -215,41 +194,24 @@ public class FirebaseUtility extends Database{
                                 allItems.add((DatabaseObject)postSnapshot
                                         .getValue(tableName.getTableClass()));
                         }
-              //          Log.e("DEBUGG0", "Real Firebase my man");
                         callback.onFinish(allItems);
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         callback.onError(databaseError);
-
                     }
                 });
     }
 
     @Override
     public void writeInstanceObj(final DatabaseObject obj, final Tables tableName){
-
-    //    Log.d("Firebase Message", "Called for " + obj.getID());
         if(obj.getClass() == ChatLogs.class) {
             ChatLogs test = (ChatLogs) obj;
-  //          Log.d("Firebase Message", "Called for " + ((ChatLogs) obj).getMessages().size() +getLogTagWithMethod());
         }
-  //      Log.d( "writeInstance", "moveCamerafetchh: ");
         FirebaseDatabase.getInstance()
                 .getReference(tableName.toString())
                 .child(obj.getID()).setValue(obj);
     }
 
-
-
-/*
-    private String printStack(){
-        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
-        String res = "";
-        for (int i = 0; i < trace.length  && i < 30; i++)
-            res +=  trace[i].getClassName() + "." + trace[i].getMethodName() + ":" + trace[i].getLineNumber() + "\n";
-        return res;
-    }
-*/
 }

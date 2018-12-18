@@ -188,17 +188,11 @@ public class PreferencesActivity extends PreferenceActivity {
         // TODO: New File with settings actions and call also in mainActivity
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            //System.out.println(key);
-            //Log.println(Log.INFO,"Settings","change");
-
             switch (key){
                 case "incognitoSwitch":
                     changeInvisibility();
-                    //Preference pref = findPreference(key);
-                    //Log.println(Log.INFO,"Settings", String.valueOf((sharedPreferences.getBoolean(key, false))));
                     break;
-                case "notificationCheckbox": // TODO: set the notifications On/Off
-                    //Log.println(Log.INFO,"Settings","notification");
+                case "notificationCheckbox":
                     break;
             }
         }
@@ -206,7 +200,6 @@ public class PreferencesActivity extends PreferenceActivity {
         private void changeInvisibility() {
             SwitchPreference incognitoPref = (android.preference.SwitchPreference) findPreference(INCOGNITO);
             boolean invisible = incognitoPref.isChecked();
-            Log.e("VISIBILITY", "Setting Visible to " + !invisible);
             UserInfo.getInstance().getCurrentPosition().setVisible(!invisible);
             UserInfo.getInstance().updateLocationInDB();
             if (!invisible) {
