@@ -1,10 +1,13 @@
 package ch.epfl.sweng.radius;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -20,11 +23,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -37,12 +43,14 @@ public class MainActivityTest {
     private Auth mock = Mockito.mock(Auth.class);
     private Intent mockedIntent = Mockito.mock(Intent.class);
     private MainActivity activity;
+    GoogleSignInClient mockedSignIn = Mockito.mock(GoogleSignInClient.class);
     private GoogleSignInResult mockedRes = Mockito.mock(GoogleSignInResult.class);
     private GoogleSignInAccount mockedAccount = Mockito.mock(GoogleSignInAccount.class);
     private FirebaseAuth mockedAuth = Mockito.mock(FirebaseAuth.class);
     ArgumentCaptor< OnCompleteListener> onCompleteArg = ArgumentCaptor.forClass(OnCompleteListener.class);
     ArgumentCaptor<Activity> aArg = ArgumentCaptor.forClass(Activity.class);
     Task<AuthResult> authRes = Mockito.mock(Task.class);
+    Task mockedTask = Mockito.mock(Task.class);
     @Before
     public void setUp() throws Exception {
         PowerMockito.mockStatic(FirebaseAuth.class);
@@ -61,6 +69,7 @@ public class MainActivityTest {
         when(authRes.isSuccessful()).thenReturn(true);
         activity = new MainActivity();
 
+
     }
 
     @After
@@ -70,6 +79,7 @@ public class MainActivityTest {
     @Test
     @Ignore
     public void onCreate() {
+
     }
 
     @Test

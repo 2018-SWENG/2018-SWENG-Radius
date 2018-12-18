@@ -462,6 +462,8 @@ public class FirebaseUtilityTest {
 
         }))).thenReturn(mockedDb);
 
+        ((FirebaseUtility) fbUtil).getStack();
+
     //   fbUtil.stopListening("test", Tables.CHATLOGS);
 
     }

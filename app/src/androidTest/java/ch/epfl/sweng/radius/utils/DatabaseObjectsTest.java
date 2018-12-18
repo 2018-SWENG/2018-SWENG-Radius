@@ -151,6 +151,7 @@ public class DatabaseObjectsTest {
 
     @Test
     public void testMLocation(){
+        MLocation loc = new MLocation();
         MLocation mLocation = new MLocation("testLoc0");
         MLocation mLocation1 = new MLocation("locTest");
         MLocation mLocation2 = new MLocation("locTest2", 2.0, 3.0);
