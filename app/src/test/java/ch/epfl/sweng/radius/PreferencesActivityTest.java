@@ -118,7 +118,7 @@ public class PreferencesActivityTest {
 
         ObjectOutput out;
         try {
-            File outFile = new File(Environment.getExternalStorageDirectory(), SAVE_PATH);
+            File outFile = new File(SAVE_PATH);
             out = new ObjectOutputStream(new FileOutputStream(outFile));
             out.writeObject(this);
             out.close();
@@ -127,7 +127,7 @@ public class PreferencesActivityTest {
         test2.setupPositiveButton(mockedAler);
 
         try {
-            File outFile = new File(Environment.getExternalStorageDirectory(), SAVE_PATH);
+            File outFile = new File(SAVE_PATH);
             out = new ObjectOutputStream(new FileOutputStream(outFile));
             out.writeObject(this);
             out.close();
