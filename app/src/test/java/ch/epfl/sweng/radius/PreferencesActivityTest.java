@@ -1,10 +1,12 @@
 package ch.epfl.sweng.radius;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -109,6 +111,26 @@ public class PreferencesActivityTest {
         when(Toast.makeText(any(Context.class), any(CharSequence.class), anyInt())).thenReturn(mockedToast);
 
         test2.setupPositiveButton(mockedAler);
+    }
+
+    @Test
+    public void logOut(){
+        GoogleSignInClient mockedSignIn = Mockito.mock(GoogleSignInClient.class);
+        final Task mockedTask = Mockito.mock(Task.class);
+
+        MainActivity.googleSignInClient = mockedSignIn;
+
+
+        when(mockedSignIn.signOut()).thenReturn(mockedTask);
+        Mockito.doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                OnCompleteListener onCompleteListener = (OnCompleteListener) invocation.getArguments()[1];
+                onCompleteListener.onComplete(mockedTask);
+                return null;
+            }
+        }).when(mockedTask).addOnCompleteListener(any(Activity.class), any(OnCompleteListener.class));
+
     }
 
     private void restoreCurrentUser() {
