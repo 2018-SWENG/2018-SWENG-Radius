@@ -204,7 +204,10 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
             toggleFlagAndSendingFields(true);
         }
         else{
-            handleUserChat();
+            if(otherUserId != null)
+                handleUserChat();
+            else
+                toggleFlagAndSendingFields(false);
         }
     }
 
