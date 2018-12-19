@@ -31,13 +31,19 @@ public class OthersInfo extends DBObservable{
     private static final HashMap<String, MLocation> friendList = new HashMap<>();
     private static final HashMap<String, MLocation> requestList = new HashMap<>();
 
-
+    /**
+     * Static singleton method to return the instance of OthersInfo
+     * @return othersInfo: the singleton instance of OthersInfo
+     */
     public static OthersInfo getInstance() {
         if (othersInfo == null)
             othersInfo = new OthersInfo();
         return othersInfo;
     }
 
+    /**
+     * Private constructor for OthersInfo
+     */
     private OthersInfo(){
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -48,39 +54,76 @@ public class OthersInfo extends DBObservable{
                 fetchFriends();
                 fetchRequest();
             }
-        }, 0, REFRESH_PERIOD*1000);    }
+        }, 0, REFRESH_PERIOD*1000);
+    }
 
-        public void clearInstance(){
-            othersInfo = null;
-        }
+    /**
+     * Set the instance of OthersInfo to null
+     */
+    public void clearInstance(){
+        othersInfo = null;
+    }
 
+    /**
+     * Getter for usersPos
+     * @return: users in radius
+     */
     public HashMap<String, MLocation> getUsersInRadius(){
         return usersPos;
     }
 
+    /**
+     * Getter for allUserPos
+     * @return: all user locations
+     */
     public HashMap<String, MLocation> getAllUserLocations(){
         return allUserPos;
     }
 
+    /**
+     * Getter for groupsPos
+     * @return: groups positions
+     */
     public HashMap<String, MLocation> getGroupsPos(){
         return groupsPos;
     }
 
+    /**
+     * Getter for topicsPos
+     * @return: topics positions
+     */
     public HashMap<String, MLocation> getTopicsPos(){
         return topicsPos;
     }
 
-    public HashMap<String, MLocation> getNewUsersPos() { return newUsersPos; }
+    /**
+     * Getter for newUsersPos
+     * @return: new users positions
+     */
+    public HashMap<String, MLocation> getNewUsersPos() {
+        return newUsersPos;
+    }
 
+    /**
+     * Getter for users
+     * @return: users
+     */
     public HashMap<String, User> getUsers(){
         return users;
     }
 
+    /**
+     * Getter for convUsers
+     * @return: convUsers
+     */
     public HashMap<String, MLocation> getConvUsers() {
         return convUsers;
     }
 
-    public void fetchUsersInMyRadius(){ // Might want to change the name of this method later on.
+    /**
+     * Fetch the users according to the new location and radius value for the current user
+     */
+    public void fetchUsersInMyRadius(){
         database.readAllTableOnce(Database.Tables.LOCATIONS, new CallBackDatabase() {
             @Override
             public void onFinish(Object value) {
@@ -105,6 +148,9 @@ public class OthersInfo extends DBObservable{
         });
     }
 
+    /**
+     * Fetch the users that the current user has a conversation with
+     */
     private void fetchConvUsers(){
         List<String> ids = new ArrayList<>(UserInfo.getInstance().getCurrentUser().getChatList().keySet());
         database.readListObjOnce(ids, Database.Tables.LOCATIONS, new CallBackDatabase() {
@@ -123,6 +169,9 @@ public class OthersInfo extends DBObservable{
         });
     }
 
+    /**
+     * Fetch all user objects from the USERS table of the database
+     */
     public void fetchUserObjects(){
         database.readAllTableOnce(Database.Tables.USERS, new CallBackDatabase() {
             @Override
@@ -140,6 +189,9 @@ public class OthersInfo extends DBObservable{
         });
     }
 
+    /**
+     * Fetch the friends for the current user
+     */
     public void fetchFriends(){
         List<String> ids = new ArrayList<>(UserInfo.getInstance().getCurrentUser().getFriends().values());
         database.readListObjOnce(ids, Database.Tables.LOCATIONS, new CallBackDatabase() {
@@ -155,6 +207,9 @@ public class OthersInfo extends DBObservable{
         });
     }
 
+    /**
+     * Fetch the friends requests
+     */
     public void fetchRequest(){
         List<String> ids = new ArrayList<>(UserInfo.getInstance().getCurrentUser().getFriendsInvitations().values());
         database.readListObjOnce(ids, Database.Tables.LOCATIONS, new CallBackDatabase() {
@@ -170,6 +225,11 @@ public class OthersInfo extends DBObservable{
         });
     }
 
+    /**
+     * Change the locations list
+     * @param list: list to change
+     * @param value: the MLocation parameter
+     */
     private void editList(HashMap<String, MLocation> list, Object value) {
         list.clear();
         for(MLocation loc : (ArrayList<MLocation>) value){
@@ -178,6 +238,10 @@ public class OthersInfo extends DBObservable{
         }
     }
 
+    /**
+     * Save the given MLocation to a table according to type
+     * @param loc: MLocation to put
+     */
     public void putInTable(MLocation loc){
         switch (loc.getLocationType()){
             case 0:
@@ -196,14 +260,21 @@ public class OthersInfo extends DBObservable{
         }
     }
 
+    /**
+     * Put the new users position to the locations when visibility changes
+     * @param loc: MLocation
+     */
     private void toggledVisibility(MLocation loc) {
             if(!usersPos.containsKey(loc.getID())
                     || (!friendList.get(loc.getID()).getVisible()
                     && loc.getVisible()))
                 newUsersPos.put(loc.getID(), loc);
-
     }
 
+    /**
+     * Remove MLocation from table according to type
+     * @param loc: MLocation to put
+     */
     public void removeFromTable(MLocation loc){
         if(loc == null) return;
         switch (loc.getLocationType()){
@@ -222,10 +293,18 @@ public class OthersInfo extends DBObservable{
         }
     }
 
+    /**
+     * Getter for values of friend list
+     * @return: Values of friendList
+     */
     public Collection<MLocation> getFriendList() {
         return friendList.values();
     }
 
+    /**
+     * Getter for values of requests list
+     * @return: Values of requestList
+     */
     public Collection<MLocation> getRequestList() {
         return requestList.values();
     }
