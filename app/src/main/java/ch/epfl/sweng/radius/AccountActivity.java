@@ -29,6 +29,10 @@ import ch.epfl.sweng.radius.messages.MessagesFragment;
 import ch.epfl.sweng.radius.profile.ProfileFragment;
 import ch.epfl.sweng.radius.utils.NotificationUtility;
 
+/**
+ * Account Activity is the main activity that handle all the fragment Home,
+ * Messages, Friends and Profile
+ */
 public class AccountActivity extends AppCompatActivity {
     private Fragment homeFragment;
     private Fragment messageFragment;

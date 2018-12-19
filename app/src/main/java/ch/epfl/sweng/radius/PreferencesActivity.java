@@ -21,6 +21,9 @@ import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.UserInfo;
 
+/**
+ * Activity that handle all the users preferences
+ */
 public class PreferencesActivity extends PreferenceActivity {
 
     private static final String INCOGNITO = "incognitoSwitch";

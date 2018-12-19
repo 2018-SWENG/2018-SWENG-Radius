@@ -23,6 +23,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+/**
+ * This class is the entry point of our App, shows the connexion screen if the user is not already
+ * logged, and go to the Account activity otherwise
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 1;
