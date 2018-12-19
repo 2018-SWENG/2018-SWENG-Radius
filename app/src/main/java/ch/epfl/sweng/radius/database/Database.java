@@ -1,3 +1,10 @@
+/**
+ * This file contains a Singleton Class to use Firebase or FakeFirebase
+ * in test cases.
+ * @author RADIUS
+ * @version 1.0
+ */
+
 package ch.epfl.sweng.radius.database;
 
 import android.support.v4.util.Pair;
@@ -5,9 +12,10 @@ import android.support.v4.util.Pair;
 import java.util.List;
 
 /**
- * Singleton Class to use Firebase or FakeFirebase in case of testing
+ * Singleton Class to use Firebase or FakeFirebase in case of testing.
  */
 public abstract class Database {
+
     // The database singleton instance
     private static Database database = null;
     public static boolean DEBUG_MODE = false;
@@ -35,6 +43,7 @@ public abstract class Database {
             return tableClass;
         }
     }
+
     /**
      * Modify the singleton instance of the DBUtility, with a FakeDatabase instance
      * Call this method only for testing purpose.
@@ -45,13 +54,16 @@ public abstract class Database {
         return false;
     }
 
-
+    /**
+     * Clears the database by setting the particular instance to null.
+     */
     public void clearDatabase(){
         database = null;
     }
+
     /**
-     * Get the singleton instance of the DBUtility
-     * @return the singleton instance of the DBUtility
+     * Gets the singleton instance of the DBUtility
+     * @return The singleton instance of the DBUtility
      */
     public static Database getInstance(){
         if(database == null)
@@ -60,8 +72,8 @@ public abstract class Database {
     }
 
     /**
-     * Get the current user id.
-     * @return the current user id
+     * Gets the current user id.
+     * @return The current user id
      */
     public abstract String getCurrent_user_id();
 
@@ -107,7 +119,6 @@ public abstract class Database {
     public abstract void readAllTableOnce(final Tables tableName,
                                          final CallBackDatabase callback);
 
-
     /**
      * Write/Update obj in the table mentioned of the DB
      * @param obj the obj to write in the DB
@@ -116,11 +127,26 @@ public abstract class Database {
     public abstract void writeInstanceObj(final DatabaseObject obj, Tables tableName);
 
 
+    /**
+     * Append a child object to the object in the table mentioned in the DB
+     * @param obj The obj to write in the DB
+     * @param tablename The name of the table in which we want to store obj
+     * @param childName The name of the child object to append
+     * @param child The child object itself
+     */
     public abstract void writeToInstanceChild(final DatabaseObject obj, Tables tablename,
                                               final String childName, final Object child);
 
+    /**
+     * Retrieve, listen a child object of the object in the table mentioned in the DB
+     * @param obj The obj whose child will be listened.
+     * @param tablename The name of the table in which we store obj
+     * @param childName The name of the child object to listen
+     * @param child The child object itself
+     */
     public abstract void listenObjChild(final DatabaseObject obj,
                                final Tables tableName,
                                final Pair<String, Class> child,
                                final CallBackDatabase callback);
+
 }
