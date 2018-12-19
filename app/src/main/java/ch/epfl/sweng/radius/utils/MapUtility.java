@@ -146,16 +146,11 @@ public class MapUtility implements DBLocationObserver {
                 && ContextCompat.checkSelfPermission( context, COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mblLocationPermissionGranted = true;
-            Log.d( TAG, "getLocationPermission: getting location permissions" + mblLocationPermissionGranted);
-
         }
         else {
             ActivityCompat.requestPermissions( activity, permissions, LOC_PERMIT_REQUEST_CODE);
         }
-
     }
-
-
 
     /**
      * Checks if the other users in the list of users are within the specified distance of the user.
