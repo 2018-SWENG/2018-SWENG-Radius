@@ -45,12 +45,14 @@ import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.NotificationUtility;
 import ch.epfl.sweng.radius.utils.TabAdapter;
 
+/**
+ * This Class represent the Home
+ */
 public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLocationObserver {
 
     //constants
     private static final String TAG = "HomeFragment";
     private static float ZOOM = 13f/2;
-    private static final int REFRESH_PERIOD = 5; // Refresh period of localization
 
     //properties
     private static GoogleMap mobileMap; //make sure the fragment doesn't crash if the map is null
@@ -68,20 +70,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     private static Map<String, String> friendsID;
     private static ArrayList<MLocation> usersLoc;
     private static List<MarkerOptions> mapMarkers = new ArrayList<>();
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment SettingsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    /*public static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
-        radius = UserInfo.getInstance().getCurrentPosition().getRadius(); // converting to meters.
-        coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
-                UserInfo.getInstance().getCurrentPosition().getLongitude());
-        return fragment;
-    }*/
 
     // For debug purpose only
     public static HomeFragment newInstance(MapUtility mapUtility, GoogleMap googleMap, int radiusValue){
@@ -156,17 +144,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
             }
         });
     }
-
-    /*private void setUpZoomButton(View view) {
-        zoomInButton = view.findViewById(R.id.zoomButton);
-        zoomInButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (coord != null) {
-                    moveCamera(coord, ZOOM);
-                }
-            }
-        });
-    }*/
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
