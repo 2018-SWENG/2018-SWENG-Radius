@@ -46,7 +46,7 @@ import ch.epfl.sweng.radius.utils.NotificationUtility;
 import ch.epfl.sweng.radius.utils.TabAdapter;
 
 /**
- * This Class represent the Home
+ * This Class represent the HomeFragment and handle all actions  for the map and people/topics nearby
  */
 public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLocationObserver {
 
@@ -82,7 +82,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         UserInfo.getInstance().addLocationObserver(this);
@@ -114,6 +113,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         return view;
     }
 
+    /**
+     * Get the permission from the user to write data in their external storage
+     * @param context the context of the app
+     * @param activity the current activity
+     */
     public void getReadWritePermission(Context context, FragmentActivity activity){
         String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -176,6 +180,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         }
     }
 
+    /**
+     * Fetch the location of the device and update it in the Database
+     */
     private void updateLocation(){
         mapListener.getDeviceLocation(getActivity()); // use map utility here
         UserInfo.getInstance().getCurrentPosition().setLongitude(mapListener.getCurrCoordinates().longitude);
@@ -183,9 +190,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         UserInfo.getInstance().updateLocationInDB();
     }
 
-
+    /**
+     * Initialize the map once we got the permissions and the position
+     */
     public void initMap() {
-
         if (mapListener.getCurrCoordinates() != null) {
             updateLocation();
             MLocation curPos = UserInfo.getInstance().getCurrentPosition();
@@ -197,6 +205,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         }
     }
 
+    /**
+     * Draw the circle representing the radius of the user on the map
+     * @param currentCoordinates the coordinate of the center
+     */
     private void initCircle(LatLng currentCoordinates) {
         radiusOptions = new CircleOptions().center(currentCoordinates)
                 .strokeColor(Color.RED)
@@ -219,6 +231,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         }
     }
 
+    /**
+     * Move the Map camera to the corresponding coordinates
+     * @param latLng the coordinate
+     * @param zoom the zoom of the camera
+     */
     private void moveCamera(final LatLng latLng, final float zoom) {
         try
         {
@@ -259,10 +276,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         }
     }
 
+    /**
+     * Getter
+     */
     public void getFriendsID() {
         friendsID = UserInfo.getInstance().getCurrentUser().getFriends();
     }
 
+    /**
+     * Marks a user that are within the distance specified by the users.
+     * @param indexOfUser index of user to mark
+     * @param status status of this user
+     * @param userName username of the user
+     * @param locID id of his location
+     */
     public void markNearbyUser(int indexOfUser, String status, String userName, String locID) {
         if(!usersLoc.get(indexOfUser).getVisible()) return;
         LatLng newPos = new LatLng(usersLoc.get(indexOfUser).getLatitude(),
@@ -310,6 +337,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         }
     }
 
+    /**
+     * Show notification if a friend is nearby
+     * @param userID the userId we want to show
+     * @param userNickname his nickname
+     */
     public void showNearFriendNotification(String userID, String userNickname) {
         // Setup Intent to end here in case of click
         Intent notifIntent = new Intent(this.getActivity(), HomeFragment.class);
