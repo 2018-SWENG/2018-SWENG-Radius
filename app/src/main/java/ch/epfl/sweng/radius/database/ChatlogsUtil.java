@@ -2,7 +2,6 @@ package ch.epfl.sweng.radius.database;
 
 import android.content.Context;
 import android.support.v4.util.Pair;
-import android.util.Log;
 
 import com.google.firebase.database.DatabaseError;
 

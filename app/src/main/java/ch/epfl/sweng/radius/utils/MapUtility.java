@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import ch.epfl.sweng.radius.database.DBLocationObserver;
-import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.UserInfo;

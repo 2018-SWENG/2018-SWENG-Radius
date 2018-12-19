@@ -1,9 +1,6 @@
 package ch.epfl.sweng.radius.utils.customLists.customUsers;
 
 import android.content.Context;
-import android.util.Log;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 

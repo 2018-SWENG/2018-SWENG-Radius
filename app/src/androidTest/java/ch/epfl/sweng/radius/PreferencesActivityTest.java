@@ -6,23 +6,16 @@ import android.preference.Preference;
 import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
-import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.FrameLayout;
 
 import org.hamcrest.core.AllOf;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import java.util.ArrayList;
 
 import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.MLocation;
-import ch.epfl.sweng.radius.database.User;
 
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
