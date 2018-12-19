@@ -23,6 +23,10 @@ public  class UserInfo extends DBObservable implements Serializable{
     private MLocation current_position;
     private boolean incognitoMode;
 
+    /**
+     * Static singleton method to return the instance of UserInfo
+     * @return userInfo: the singleton instance of UserInfo
+     */
     public static UserInfo getInstance(){
         if (userInfo == null) {
             userInfo = new UserInfo();
@@ -30,30 +34,48 @@ public  class UserInfo extends DBObservable implements Serializable{
         return userInfo;
     }
 
+    //Private constructor since UserUtils is singleton
     private UserInfo(){
         current_user = new User(Database.getInstance().getCurrent_user_id());
         current_position = new MLocation(Database.getInstance().getCurrent_user_id());
         fetchDataFromDB();
-
     }
 
+    /**
+     * Setter for incognitoMode variable
+     * @param incognitoMode: boolean value to set incognitoMode variable
+     */
     public void setIncognitoMode(boolean incognitoMode) {
         this.incognitoMode = incognitoMode;
     }
 
+    /**
+     * Calls fetch methods for user and position
+     */
     public void fetchDataFromDB(){
         fetchCurrentUser();
         fetchUserPosition();
     }
 
+    /**
+     * Getter for current user
+     * @return current_user: The current user instance
+     */
     public User getCurrentUser(){
         return current_user;
     }
 
+    /**
+     * Getter for current position
+     * @return current_psoition: The current position instance
+     */
     public MLocation getCurrentPosition(){
         return current_position;
     }
 
+    /**
+     * Sets the current_user variable as the current user instance from the database
+     */
     private void fetchCurrentUser(){
         database.readObj(current_user, Database.Tables.USERS, new CallBackDatabase() {
             @Override
@@ -69,13 +91,17 @@ public  class UserInfo extends DBObservable implements Serializable{
         });
     }
 
+    /**
+     * Resets all the data regarding the UserInfo instance
+     */
     public void resetCurrentData(){
-    //    current_user = null;
-    //    current_position = null;
         this.removeAllObservers();
         userInfo = null;
     }
 
+    /**
+     * Sets the current_position variable as the current location instance from the database
+     */
     private void fetchUserPosition(){
         if(!Database.getInstance().getCurrent_user_id().equals(current_user.getID())){
             current_position.setID(Database.getInstance().getCurrent_user_id());
@@ -98,7 +124,9 @@ public  class UserInfo extends DBObservable implements Serializable{
         });
     }
 
-
+    /**
+     * Writes the UserInfo data to an external file
+     */
     public void saveState(){
         ObjectOutput out;
         try {
@@ -109,6 +137,10 @@ public  class UserInfo extends DBObservable implements Serializable{
         } catch (Exception e) {e.printStackTrace();}
     }
 
+    /**
+     * Fetches the saved UserInfo data from an external file
+     * @return savedUserInfo: The fetched instance of the UserInfo
+     */
     private static UserInfo loadState(){
         ObjectInput in;
         UserInfo savedUserInfo=null;
@@ -121,6 +153,9 @@ public  class UserInfo extends DBObservable implements Serializable{
         return savedUserInfo;
     }
 
+    /**
+     * Deletes the external file that UserInfo data is saved in
+     */
     public static void deleteDataStorage(){
         try {
             File inFile = new File(Environment.getExternalStorageDirectory(), SAVE_PATH);
@@ -128,12 +163,17 @@ public  class UserInfo extends DBObservable implements Serializable{
         } catch (Exception e) {e.printStackTrace();}
     }
 
+    /**
+     * Calls the method to write the current_user object to the USERS table of the database
+     */
     public void updateUserInDB(){
         Database.getInstance().writeInstanceObj(current_user, Database.Tables.USERS);
     }
 
+    /**
+     * Calls the method to write the current_position object to the LOCATIONS table of the database
+     */
     public void updateLocationInDB(){
         Database.getInstance().writeInstanceObj(current_position, Database.Tables.LOCATIONS);
     }
-
 }
