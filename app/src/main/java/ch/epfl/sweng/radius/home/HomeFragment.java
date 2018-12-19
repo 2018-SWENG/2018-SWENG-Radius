@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.DBLocationObserver;
@@ -48,6 +50,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     //constants
     private static final String TAG = "HomeFragment";
     private static float ZOOM = 13f/2;
+    private static final int REFRESH_PERIOD = 5; // Refresh period of localization
 
     //properties
     private static GoogleMap mobileMap; //make sure the fragment doesn't crash if the map is null
@@ -175,35 +178,39 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         mapListener.getLocationPermission(getContext(), getActivity());
 
         if (mapListener.getPermissionResult()) {
-            mapListener.getDeviceLocation(getActivity()); // use map utility here
-            UserInfo.getInstance().getCurrentPosition().setLongitude(mapListener.getCurrCoordinates().longitude);
-            UserInfo.getInstance().getCurrentPosition().setLatitude(mapListener.getCurrCoordinates().latitude);
-            UserInfo.getInstance().updateLocationInDB();
+            updateLocation();
             if (ActivityCompat.checkSelfPermission(getContext(),
-                   Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                   && ActivityCompat.checkSelfPermission(getContext(),
-                   Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
 
             //mobileMap.setMyLocationEnabled(true);
-            try
-            {
-                getActivity().runOnUiThread(new Runnable(){
-                    public void run(){
+
+            try {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
                         initMap();
                     }
                 });
-            }catch(NullPointerException e){/* Only happens in Unit Test*/}
+            } catch (NullPointerException e) {/* Only happens in Unit Test*/}
 
-            }
+        }
+    }
+
+    private void updateLocation(){
+        mapListener.getDeviceLocation(getActivity()); // use map utility here
+        UserInfo.getInstance().getCurrentPosition().setLongitude(mapListener.getCurrCoordinates().longitude);
+        UserInfo.getInstance().getCurrentPosition().setLatitude(mapListener.getCurrCoordinates().latitude);
+        UserInfo.getInstance().updateLocationInDB();
     }
 
 
     public void initMap() {
 
         if (mapListener.getCurrCoordinates() != null) {
-
+            updateLocation();
             MLocation curPos = UserInfo.getInstance().getCurrentPosition();
             coord = new LatLng(curPos.getLatitude(), curPos.getLongitude());
             initCircle(coord);moveCamera(coord, ZOOM);
