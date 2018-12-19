@@ -2,7 +2,6 @@ package ch.epfl.sweng.radius.database;
 
 import android.content.Context;
 import android.support.v4.util.Pair;
-import android.util.Log;
 
 import com.google.firebase.database.DatabaseError;
 
@@ -14,11 +13,11 @@ import java.util.Map;
 import ch.epfl.sweng.radius.messages.MessageListActivity;
 import ch.epfl.sweng.radius.utils.NotificationUtility;
 
+/**
+ * This class is an utility to handle conversations
+ * Set up the listeners to get Notified when a message is sent
+ */
 public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
-
-    /**
-     * TODO Implement new OnChildEventListener to enable removing conversations
-     */
     private static ChatlogsUtil instance = null;
     private static Map<String, ChatLogs> userChat = new HashMap<>();
     private static Map<String, ChatLogs> topicChat = new HashMap<>();
@@ -26,12 +25,18 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
     public int upToDate = -1;
 
     private Context context;
+
+    /**
+     * The singleton constructor
+     * @return the only instance of ChatLogsUtil
+     */
     public static ChatlogsUtil getInstance(){
         if(instance == null)
             instance = new ChatlogsUtil(null);
 
         return instance;
     }
+
     public static ChatlogsUtil getInstance(Context ... context){
         if(instance == null)
             instance = context == null ? new ChatlogsUtil(null) : new ChatlogsUtil(context[0]);
@@ -39,6 +44,10 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         return instance;
     }
 
+    /**
+     * Private contructor, add the class as an observer of OthersInfo and UserInfo
+     * @param context
+     */
     private ChatlogsUtil(Context context){
         this.context = context;
         OthersInfo.getInstance().addLocationObserver(this);
@@ -52,6 +61,9 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
     }
 
+    /**
+     * Fetch all chats and add listeners for Topics and Groups
+     */
     public void fetchChatsAndListen(){
         final List<String> topicChatsID = new ArrayList<>(OthersInfo.getInstance().getTopicsPos().keySet());
         List<String> groupChatsID = new ArrayList<>(OthersInfo.getInstance().getGroupsPos().keySet());
@@ -82,8 +94,9 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
 
     }
 
-
-
+    /**
+     * Fetch all chats and add listeners private messages
+     */
     public void fetchUserChats(){
         Pair<String,Class> chatlistChild = new Pair<String, Class>("chatList", String.class);
         System.out.print(chatlistChild.first);
@@ -105,12 +118,14 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         );
     }
 
+    /**
+     * Getter for the ChatLogs
+     * @param chatID the id of the chatlog we want
+     * @param chatType the type of chatlog, GROUP, TOPICS or PRIVATE
+     * @return the corresponding chatlog or null if it doesn't exist
+     */
     public ChatLogs getChat(String chatID, int chatType){
-
-//        if(Database.DEBUG_MODE)
-//            return new ChatLogs("10");
         ChatLogs ret = null;
-        // TODO UTILISER RET ET SI NULL ON CHANGE ET BOU
         switch (chatType){
             case 0:
                 ret = userChat.get(chatID);break;
@@ -127,6 +142,11 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         return ret;
     }
 
+    /**
+     * Listen to a particular chat session
+     * @param chatLogs the chatlogs in witch we want to be notified when a message is sent
+     * @param chatType the type of chatlog, GROUP, TOPICS or PRIVATE
+     */
     public void listenToChatMessages(final ChatLogs chatLogs, final int chatType){
         Pair<String, Class> child = new Pair<String, Class>("messages", Message.class);
         Database.getInstance().listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
@@ -141,6 +161,12 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         });
     }
 
+    /**
+     * Handle Notifications when a message is receive
+     * @param chatLogs the chatlogs in witch a message is sent
+     * @param message the message itself
+     * @param chatType the type of chatlog, GROUP, TOPICS or PRIVATE
+     */
     public void receiveMessage(ChatLogs chatLogs, Message message, int chatType){
         MessageListActivity messageActivity = MessageListActivity.getChatInstance(chatLogs.getID());
         if(chatLogs.getMessages().contains(message)) return;
@@ -169,6 +195,11 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         }
     }
 
+    /**
+     * Create a new ChatLog between 2 users
+     * @param otherUserId the id of the other user
+     * @return the is of the chatlog that we just created
+     */
     public String getNewChat(String otherUserId){
         ChatLogs newChat = new ChatLogs();
         newChat.addMembersId(UserInfo.getInstance().getCurrentUser().getID());
@@ -188,6 +219,10 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         return newChat.getID();
     }
 
+    /**
+     * Listen every member of a chat to make sure there are still in radius
+     * @param chatLogs the chatlog id we want to listen
+     */
     public void listenToChatMembers(final ChatLogs chatLogs){
         Pair<String, Class> child = new Pair<String, Class>("membersId", String.class);
         Database.getInstance().listenObjChild(chatLogs, Database.Tables.CHATLOGS, child, new CallBackDatabase() {
@@ -206,6 +241,11 @@ public class ChatlogsUtil implements DBLocationObserver, DBUserObserver{
         });
     }
 
+    /**
+     * Fetch a chat and listen for new messages and users modifications
+     * @param chatID the chatlog id we want to listen
+     * @param chatType chatType the type of chatlog, GROUP, TOPICS or PRIVATE
+     */
     public void fetchSingleChatAndListen(final String chatID, final int chatType){
         Database.getInstance().readObjOnce(new ChatLogs(chatID),
                 Database.Tables.CHATLOGS,

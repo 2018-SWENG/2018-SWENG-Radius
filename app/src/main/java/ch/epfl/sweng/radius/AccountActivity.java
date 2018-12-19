@@ -21,8 +21,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import ch.epfl.sweng.radius.database.ChatlogsUtil;
-import ch.epfl.sweng.radius.database.Database;
-import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.UserInfo;
 import ch.epfl.sweng.radius.friends.FriendsFragment;
@@ -31,6 +29,10 @@ import ch.epfl.sweng.radius.messages.MessagesFragment;
 import ch.epfl.sweng.radius.profile.ProfileFragment;
 import ch.epfl.sweng.radius.utils.NotificationUtility;
 
+/**
+ * Account Activity is the main activity that handle all the fragment Home,
+ * Messages, Friends and Profile
+ */
 public class AccountActivity extends AppCompatActivity {
     private Fragment homeFragment;
     private Fragment messageFragment;

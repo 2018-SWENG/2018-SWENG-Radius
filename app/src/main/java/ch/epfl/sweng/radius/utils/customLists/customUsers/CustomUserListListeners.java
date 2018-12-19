@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesBlockedActivity;
 import ch.epfl.sweng.radius.browseProfiles.BrowseProfilesUnblockedActivity;

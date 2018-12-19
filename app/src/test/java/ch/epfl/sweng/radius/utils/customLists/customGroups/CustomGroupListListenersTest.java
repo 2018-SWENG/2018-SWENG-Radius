@@ -2,7 +2,6 @@ package ch.epfl.sweng.radius.utils.customLists.customGroups;
 
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.junit.After;
 import org.junit.Before;

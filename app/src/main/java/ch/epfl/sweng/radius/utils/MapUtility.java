@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import ch.epfl.sweng.radius.database.DBLocationObserver;
-import ch.epfl.sweng.radius.database.Database;
 import ch.epfl.sweng.radius.database.MLocation;
 import ch.epfl.sweng.radius.database.OthersInfo;
 import ch.epfl.sweng.radius.database.UserInfo;
@@ -147,16 +146,11 @@ public class MapUtility implements DBLocationObserver {
                 && ContextCompat.checkSelfPermission( context, COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mblLocationPermissionGranted = true;
-            Log.d( TAG, "getLocationPermission: getting location permissions" + mblLocationPermissionGranted);
-
         }
         else {
             ActivityCompat.requestPermissions( activity, permissions, LOC_PERMIT_REQUEST_CODE);
         }
-
     }
-
-
 
     /**
      * Checks if the other users in the list of users are within the specified distance of the user.
@@ -210,6 +204,5 @@ public class MapUtility implements DBLocationObserver {
     public void onLocationChange(String id){
         myPos = UserInfo.getInstance().getCurrentPosition();
         otherPos = OthersInfo.getInstance().getUsersInRadius();
-
     }
 }

@@ -1,7 +1,5 @@
 package ch.epfl.sweng.radius.home;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 

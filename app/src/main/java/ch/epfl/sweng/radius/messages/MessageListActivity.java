@@ -9,7 +9,6 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -205,7 +204,10 @@ public class MessageListActivity extends AppCompatActivity implements DBLocation
             toggleFlagAndSendingFields(true);
         }
         else{
-            handleUserChat();
+            if(otherUserId != null)
+                handleUserChat();
+            else
+                toggleFlagAndSendingFields(false);
         }
     }
 

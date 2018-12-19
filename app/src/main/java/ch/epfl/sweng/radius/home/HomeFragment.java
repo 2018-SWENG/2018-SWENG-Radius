@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -33,6 +32,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ch.epfl.sweng.radius.R;
 import ch.epfl.sweng.radius.database.DBLocationObserver;
@@ -44,6 +45,9 @@ import ch.epfl.sweng.radius.utils.MapUtility;
 import ch.epfl.sweng.radius.utils.NotificationUtility;
 import ch.epfl.sweng.radius.utils.TabAdapter;
 
+/**
+ * This Class represent the HomeFragment and handle all actions  for the map and people/topics nearby
+ */
 public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLocationObserver {
 
     //constants
@@ -66,20 +70,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
     private static Map<String, String> friendsID;
     private static ArrayList<MLocation> usersLoc;
     private static List<MarkerOptions> mapMarkers = new ArrayList<>();
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment SettingsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    /*public static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
-        radius = UserInfo.getInstance().getCurrentPosition().getRadius(); // converting to meters.
-        coord = new LatLng(UserInfo.getInstance().getCurrentPosition().getLatitude(),
-                UserInfo.getInstance().getCurrentPosition().getLongitude());
-        return fragment;
-    }*/
 
     // For debug purpose only
     public static HomeFragment newInstance(MapUtility mapUtility, GoogleMap googleMap, int radiusValue){
@@ -91,7 +81,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
                 UserInfo.getInstance().getCurrentPosition().getLongitude());
         return fragment;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,6 +113,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         return view;
     }
 
+    /**
+     * Get the permission from the user to write data in their external storage
+     * @param context the context of the app
+     * @param activity the current activity
+     */
     public void getReadWritePermission(Context context, FragmentActivity activity){
         String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -155,17 +149,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         });
     }
 
-    /*private void setUpZoomButton(View view) {
-        zoomInButton = view.findViewById(R.id.zoomButton);
-        zoomInButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (coord != null) {
-                    moveCamera(coord, ZOOM);
-                }
-            }
-        });
-    }*/
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(getContext(), "Map is ready", Toast.LENGTH_SHORT).show();
@@ -176,35 +159,43 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         mapListener.getLocationPermission(getContext(), getActivity());
 
         if (mapListener.getPermissionResult()) {
-            mapListener.getDeviceLocation(getActivity()); // use map utility here
-            UserInfo.getInstance().getCurrentPosition().setLongitude(mapListener.getCurrCoordinates().longitude);
-            UserInfo.getInstance().getCurrentPosition().setLatitude(mapListener.getCurrCoordinates().latitude);
-            UserInfo.getInstance().updateLocationInDB();
+            updateLocation();
             if (ActivityCompat.checkSelfPermission(getContext(),
-                   Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                   && ActivityCompat.checkSelfPermission(getContext(),
-                   Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
 
             //mobileMap.setMyLocationEnabled(true);
-            try
-            {
-                getActivity().runOnUiThread(new Runnable(){
-                    public void run(){
+
+            try {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
                         initMap();
                     }
                 });
-            }catch(NullPointerException e){/* Only happens in Unit Test*/}
+            } catch (NullPointerException e) {/* Only happens in Unit Test*/}
 
-            }
+        }
     }
 
+    /**
+     * Fetch the location of the device and update it in the Database
+     */
+    private void updateLocation(){
+        mapListener.getDeviceLocation(getActivity()); // use map utility here
+        UserInfo.getInstance().getCurrentPosition().setLongitude(mapListener.getCurrCoordinates().longitude);
+        UserInfo.getInstance().getCurrentPosition().setLatitude(mapListener.getCurrCoordinates().latitude);
+        UserInfo.getInstance().updateLocationInDB();
+    }
 
+    /**
+     * Initialize the map once we got the permissions and the position
+     */
     public void initMap() {
-
         if (mapListener.getCurrCoordinates() != null) {
-
+            updateLocation();
             MLocation curPos = UserInfo.getInstance().getCurrentPosition();
             coord = new LatLng(curPos.getLatitude(), curPos.getLongitude());
             initCircle(coord);moveCamera(coord, ZOOM);
@@ -214,6 +205,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         }
     }
 
+    /**
+     * Draw the circle representing the radius of the user on the map
+     * @param currentCoordinates the coordinate of the center
+     */
     private void initCircle(LatLng currentCoordinates) {
         radiusOptions = new CircleOptions().center(currentCoordinates)
                 .strokeColor(Color.RED)
@@ -236,6 +231,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         }
     }
 
+    /**
+     * Move the Map camera to the corresponding coordinates
+     * @param latLng the coordinate
+     * @param zoom the zoom of the camera
+     */
     private void moveCamera(final LatLng latLng, final float zoom) {
         try
         {
@@ -276,10 +276,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         }
     }
 
+    /**
+     * Getter
+     */
     public void getFriendsID() {
         friendsID = UserInfo.getInstance().getCurrentUser().getFriends();
     }
 
+    /**
+     * Marks a user that are within the distance specified by the users.
+     * @param indexOfUser index of user to mark
+     * @param status status of this user
+     * @param userName username of the user
+     * @param locID id of his location
+     */
     public void markNearbyUser(int indexOfUser, String status, String userName, String locID) {
         if(!usersLoc.get(indexOfUser).getVisible()) return;
         LatLng newPos = new LatLng(usersLoc.get(indexOfUser).getLatitude(),
@@ -327,6 +337,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, DBLoca
         }
     }
 
+    /**
+     * Show notification if a friend is nearby
+     * @param userID the userId we want to show
+     * @param userNickname his nickname
+     */
     public void showNearFriendNotification(String userID, String userNickname) {
         // Setup Intent to end here in case of click
         Intent notifIntent = new Intent(this.getActivity(), HomeFragment.class);

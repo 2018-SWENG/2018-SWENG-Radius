@@ -90,27 +90,6 @@ public class FakeFirebaseUtility extends Database {
         callback.onFinish(objsRead);
     }
 
-/*
-    public void printDBtoJSON(){
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            mapper.writeValue(new File("./user-db.json"), usersTable);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            mapper.writeValue(new File("./loc-db.json"), locationsTable);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            mapper.writeValue(new File("./chat-db.json"), chatLogsTable);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-*/
     @Override
     public void readAllTableOnce(Tables tableName, CallBackDatabase callback) {
 
@@ -155,23 +134,6 @@ public class FakeFirebaseUtility extends Database {
         for(Object o : (List<Object>) getList(child.first, curobj))
             callback.onFinish(o);
         return;
-      /*  if(child.first.equals("messages")){
-            for(Message m : ((ChatLogs) curobj).getMessages())
-                callback.onFinish(m);
-            return;
-        }
-        else if(child.first.equals("membersId")){
-            for(String m : ((ChatLogs) curobj).getMembersId())
-                callback.onFinish(m);
-            return;
-        }
-        else if(child.first.equals("chatList")){
-            List<String> chatIDs = new ArrayList<>(((User) curobj).getChatList().values());
-            for(String m : chatIDs) callback.onFinish(m);
-            return;
-        }
-
-        callback.onFinish(ret);*/
     }
 
 
